@@ -6,15 +6,26 @@ use App\Http\Controllers\Controller;
 class HomeController extends Controller
 {
 
-    /**
-     * Show the application home.
+     /**
+     * Create a new controller instance.
      *
-     * @return \Illuminate\View\View
+     * @return void
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function adminHome()
+    {
+        return view('backend.pages.adminHome');
+    }
+
     public function index()
     {
        // BAckend page
-        return view('backend.pages.home');
+         $title = 'Dashboard';
+        return view('backend.pages.home', compact('title'));
     }
 
     /**
@@ -24,8 +35,7 @@ class HomeController extends Controller
      */
     public function contact()
     { 
-        //contact page
-       
-       return view('backend.pages.contact');
+        $title = 'Contact';
+       return view('backend.pages.contact', compact('title'));
     }
 }

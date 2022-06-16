@@ -1,7 +1,4 @@
-@extends('layouts.app', [
-    'class' => '',
-    'elementActive' => 'contact'
-])
+@extends('backend.layouts.app')
 
 @section('content')
 <div class="card">

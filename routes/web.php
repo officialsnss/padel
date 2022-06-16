@@ -18,5 +18,17 @@ use App\Http\Controllers\backend\HomeController;
 //     return view('welcome');
 // });
 
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/', 'App\Http\Controllers\Backend\HomeController@index');
+Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
+
+
+Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('paddle_admin');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Users
+Route::prefix('users')->group(function () {
+    Route::get('/customers', [UserController::class, 'customers'])->name('customers');
+    Route::get('/court-owners', [UserController::class, 'courtOwners'])->name('court-owners');
+});
