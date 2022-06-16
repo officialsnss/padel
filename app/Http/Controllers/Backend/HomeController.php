@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-       
+       // BAckend page
         return view('backend.pages.home');
     }
 
