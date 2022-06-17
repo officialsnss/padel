@@ -23,6 +23,7 @@ class HomeController extends Controller
 
     public function index()
     {
+    
        // BAckend page
          $title = 'Dashboard';
         return view('backend.pages.home', compact('title'));

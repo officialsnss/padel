@@ -31,7 +31,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     
-    @include('backend.layouts.partials.breadcrumb')
+  @include('backend.layouts.partials.breadcrumb')
     <!-- Main content -->
     <section class="content">
       <!-- Default box -->

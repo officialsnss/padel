@@ -18,22 +18,36 @@ use App\Http\Controllers\backend\UserController;
 //     return view('welcome');
 // });
 
+// Website Homepage
+Route::get('/', function(){
+    return view('frontend.pages.index');
+});
 
 
-Route::get('admin/home', 'App\Http\Controllers\Backend\HomeController@adminHome')->name('admin.home')->middleware('paddle_admin');
+//Route::get('admin/home', 'App\Http\Controllers\Backend\HomeController@adminHome')->name('admin.home')->middleware('paddle_admin');
+Route::get('/admin/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard')->middleware('paddle_admin');
+
 
 Auth::routes();
 
 Route::group(['middleware' => ['auth','paddle_admin']], function(){
-    Route::get('/', function(){
-        return view('backend.pages.home');
-    });
-    Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
+    // Route::get('/admin', function(){
+    //     return view('backend.pages.home');
+    // });
+    Route::prefix('/admin')->group(function () {
+        //Default Admin Route
+        Route::get('/', 'App\Http\Controllers\Backend\HomeController@index');
 
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        //Dashboard Route
+        Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+
+        //Contact Page Route
+        Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
+
+     });
     
-    //Users
-    Route::prefix('users')->group(function () {
+    //Users Route
+    Route::prefix('/admin/users')->group(function () {
         Route::get('/customers', 'App\Http\Controllers\Backend\UserController@customers')->name('customers');
         Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('court-owners');
     });
