@@ -46,7 +46,7 @@
 
           <li class="nav-item">
             <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners'))? 'active' : '' }}">
-              <i class="nav-icon fas fa-table"></i>
+              <i class="nav-icon 	fas fa-users"></i>
               <p>
                 Users
                 <i class="fas fa-angle-left right"></i>
@@ -55,19 +55,36 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{url('/admin/users/customers')}}" class="nav-link  {{ (request()->segment(3) == 'customers') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Customer</p>
+                  <i class="fas fa-user-tie nav-icon"></i>
+                  <p>Customers</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners') ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-user-graduate nav-icon"></i>
                   <p>Court Owners</p>
                 </a>
               </li>
             </ul>
           </li>
-
+  
+          <li class="nav-item">
+            <a href="{{url('/admin/bookings')}}" class="nav-link  {{ request()->segment(2) == 'bookings' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-user-edit"></i>
+              <p>
+                Bookings
+              </p>
+            </a>
+          </li>   
+          
+          <li class="nav-item">
+            <a href="{{url('/admin/courts')}}" class="nav-link  {{ request()->segment(2) == 'courts' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-user-graduate"></i>
+              <p>
+                Courts
+              </p>
+            </a>
+          </li>    
 
           <li class="nav-item">
             <a href="{{url('/admin/contact')}}" class="nav-link  {{ request()->segment(2) == 'contact' ? 'active' : '' }}">

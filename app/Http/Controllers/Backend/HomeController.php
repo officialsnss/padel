@@ -15,11 +15,7 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-
-    public function adminHome()
-    {
-        return view('backend.pages.adminHome');
-    }
+   
 
     public function index()
     {
