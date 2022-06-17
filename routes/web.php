@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\HomeController; 
 use App\Http\Controllers\backend\UserController; 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +45,11 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
         //Contact Page Route
         Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
 
+        //Bookings
+        Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
+
+         //Courts
+        Route::get('/courts', 'App\Http\Controllers\Backend\CourtController@index')->name('courts');
      });
     
     //Users Route
@@ -51,4 +57,6 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
         Route::get('/customers', 'App\Http\Controllers\Backend\UserController@customers')->name('customers');
         Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('court-owners');
     });
+
+    
 });

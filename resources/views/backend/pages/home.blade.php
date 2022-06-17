@@ -1,7 +1,4 @@
-@extends('backend.layouts.app', [
-    'class' => '',
-    'elementActive' => 'Dashboared'
-])
+@extends('backend.layouts.app')
 
 @section('content')
 
