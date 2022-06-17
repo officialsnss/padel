@@ -36,7 +36,7 @@
                with font-awesome or any other icon font library -->
           
           <li class="nav-item">
-            <a href="/" class="nav-link {{ $elementActive ?? '' == 'home' ? 'active' : '' }}">
+            <a href="{{url('/')}}" class="nav-link {{ request()->segment(1) == '' ? 'active' : '' }}">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Home
@@ -70,7 +70,7 @@
 
 
           <li class="nav-item">
-            <a href="/contact" class="nav-link  {{ $elementActive ?? '' == 'contact' ? 'active' : '' }}">
+            <a href="{{url('/contact')}}" class="nav-link  {{ request()->segment(1) == 'contact' ? 'active' : '' }}">
             <i class="nav-icon fas fa-id-card-alt"></i>
               <p>
                 Contact us
