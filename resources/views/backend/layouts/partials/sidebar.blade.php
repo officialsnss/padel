@@ -36,16 +36,16 @@
                with font-awesome or any other icon font library -->
           
           <li class="nav-item">
-            <a href="{{url('/')}}" class="nav-link {{ request()->segment(1) == '' ? 'active' : '' }}">
+            <a href="{{url('admin/dashboard')}}" class="nav-link {{ (request()->segment(2) == 'dashboard') || (request()->segment(2) == '') ? 'active' : '' }}">
               <i class="nav-icon fas fa-home"></i>
               <p>
-                Home
+                Dashboard
               </p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(2) == 'customers') || (request()->segment(2) == 'court-owners'))? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners'))? 'active' : '' }}">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Users
@@ -54,13 +54,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{url('/users/customers')}}" class="nav-link  {{ (request()->segment(2) == 'customers') ? 'active' : '' }}">
+                <a href="{{url('/admin/users/customers')}}" class="nav-link  {{ (request()->segment(3) == 'customers') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Customer</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('users/court-owners')}}" class="nav-link {{ (request()->segment(2) == 'court-owners') ? 'active' : '' }}">
+                <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Court Owners</p>
                 </a>
@@ -70,7 +70,7 @@
 
 
           <li class="nav-item">
-            <a href="{{url('/contact')}}" class="nav-link  {{ request()->segment(1) == 'contact' ? 'active' : '' }}">
+            <a href="{{url('/admin/contact')}}" class="nav-link  {{ request()->segment(2) == 'contact' ? 'active' : '' }}">
             <i class="nav-icon fas fa-id-card-alt"></i>
               <p>
                 Contact us
