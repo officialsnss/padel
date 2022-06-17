@@ -33,11 +33,14 @@
             </div>
           </div>
           @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+          @enderror
         </div>
+        @if($errors->any())
+            <p style="color:red"><span>{{$errors->first()}}</span></p>
+        @endif
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
