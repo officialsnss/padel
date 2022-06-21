@@ -50,6 +50,12 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
 
          //Courts
         Route::get('/courts', 'App\Http\Controllers\Backend\CourtController@index')->name('courts');
+
+         //Reports
+        Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
+
+        //Pages
+        Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages');
      });
     
     //Users Route

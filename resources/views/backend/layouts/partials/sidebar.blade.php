@@ -84,7 +84,25 @@
                 Courts
               </p>
             </a>
-          </li>    
+          </li>   
+          
+          <li class="nav-item">
+            <a href="{{url('/admin/pages')}}" class="nav-link  {{ request()->segment(2) == 'pages' ? 'active' : '' }}">
+            <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Pages
+              </p>
+            </a>
+          </li>  
+
+          <li class="nav-item">
+            <a href="{{url('/admin/reports')}}" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
+            <i class="nav-icon 	far fa-file"></i>
+              <p>
+                Reports
+              </p>
+            </a>
+          </li>  
 
           <li class="nav-item">
             <a href="{{url('/admin/contact')}}" class="nav-link  {{ request()->segment(2) == 'contact' ? 'active' : '' }}">
