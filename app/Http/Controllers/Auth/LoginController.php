@@ -48,7 +48,7 @@ class LoginController extends Controller
         ]);
    
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
-            if (auth()->user()->paddle_admin == 1) {
+            if (auth()->user()->role == 1) {
                 return redirect()->route('dashboard');
             } else {
                 return redirect()->route('dashboard');
