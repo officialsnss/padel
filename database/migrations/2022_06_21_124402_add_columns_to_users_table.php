@@ -13,16 +13,17 @@ class AddColumnsToUsersTable extends Migration
      */
     public function up()
     {
+       
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone');
-            $table->string('profile_pic');
-            $table->string('address');
-            $table->Integer('region_id');
-            $table->Integer('city_id');
-            $table->bigInteger('zip_code');
-            $table->string('country');
-            $table->enum('notification',['0' , '1']);
-            $table->enum('status',['active' , 'deactive']);
+            $table->string('phone')->nullable();
+            $table->string('profile_pic')->nullable();
+            $table->string('address')->nullable();
+            $table->integer('region_id')->nullable();
+            $table->integer('city_id')->nullable();
+            $table->bigInteger('zip_code')->nullable();
+            $table->string('country')->nullable();
+            $table->enum('notification',['0' , '1'])->default(0)->comment("0=>'off', 1 =>'on'");
+            $table->enum('status',['1' , '2'])->default(1)->comment("1=>'Active', 2 =>'Deactive'");
         });
     }
 
