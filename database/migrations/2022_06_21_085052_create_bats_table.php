@@ -18,6 +18,7 @@ class CreateBatsTable extends Migration
             $table->string('featured_image')->nullable();
             $table->text('description');
             $table->decimal('price', $precision = 8, $scale = 2);
+            $table->tinyInteger('currency_id');
             $table->timestamps();
         });
     }
