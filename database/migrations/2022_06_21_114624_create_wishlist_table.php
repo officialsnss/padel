@@ -33,7 +33,7 @@ class CreateWishlistTable extends Migration
             ->onDelete('cascade');
             $table->tinyInteger('quantity');
             $table->decimal('price', $precision = 8, $scale = 2);
-            $table->tinyInteger('currency_id');
+            $table->integer('currency_id'); 
             $table->timestamps();
         });
     }

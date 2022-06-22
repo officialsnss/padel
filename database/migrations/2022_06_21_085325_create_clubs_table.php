@@ -17,12 +17,9 @@ class CreateClubsTable extends Migration
             $table->id();
             $table->string('name', 100);
             $table->text('description');
-            $table->foreignId('bat_id')
-                  ->constrained('bats')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
+            $table->integer('bat_id')->nullable();
             $table->decimal('service_charge', $precision = 8, $scale = 2); 
-            $table->tinyInteger('currency_id')->nullable();  
+            $table->integer('currency_id');  
             $table->string('address')->nullable();
             $table->tinyInteger('region_id')->nullable();
             $table->tinyInteger('city_id')->nullable();

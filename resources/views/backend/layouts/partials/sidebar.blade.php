@@ -78,10 +78,10 @@
           </li>   
           
           <li class="nav-item">
-            <a href="{{url('/admin/courts')}}" class="nav-link  {{ request()->segment(2) == 'courts' ? 'active' : '' }}">
+            <a href="{{url('/admin/clubs')}}" class="nav-link  {{ request()->segment(2) == 'clubs' ? 'active' : '' }}">
             <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-                Courts
+                Clubs
               </p>
             </a>
           </li>   

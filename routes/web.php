@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
 
          //Courts
-        Route::get('/courts', 'App\Http\Controllers\Backend\CourtController@index')->name('courts');
+        Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');
 
          //Reports
         Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
