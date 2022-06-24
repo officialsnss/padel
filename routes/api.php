@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('login', 'App\Http\Controllers\Api\UsersController@login');
+Route::post('reset-password', 'App\Http\Controllers\Api\ResetPasswordController@sendMail');
+Route::post('password-update', 'App\Http\Controllers\Api\ResetPasswordController@reset')->name('password-update');
+// Route::put('reset-password/{token}', 'App\Http\Controllers\Api\ResetPasswordController@reset');
+
+
+Route::post('register', [RegisterController::class, 'register']);
+     
+Route::middleware('auth:api')->group( function () {
+    Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
+
+    Route::resource('products', ProductController::class);
 });
