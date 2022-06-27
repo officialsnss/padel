@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Court;
 
 class Club extends Model
 {
@@ -24,4 +25,9 @@ class Club extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function court()
+    {
+        return $this->hasMany(Court::class);
+    }
 }

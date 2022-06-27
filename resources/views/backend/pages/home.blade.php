@@ -137,18 +137,30 @@
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content p-0">
-                  <table style="width:100%">
-                    <tr>
-                      <td>1.</td>
-                      <td>Court1</td>
-                      <td>2345KWD</td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Court1</td>
-                      <td>4545KWD</td>
-                    </tr>
-                  </table>
+                <table style="width:100%">
+                <thead>
+                  <tr>
+                     <th>S.no</th>
+                     <th>Club Name</th>
+                     <th>Court Number</th>
+                     <th>Amount</th>
+                 </tr>
+                </thead>
+                  <?php
+                  $i = 1; 
+                 foreach($topBooking as $data) { ?>
+                       <tr>
+                      <td>{{  $i }}</td>
+                      <td>{{$data->name}}</td>
+                      <td>{{$data->court_number}}</td>
+                      <td>{{ $data->price}} KWD</td>
+                      </tr>
+                    
+                 <?php   $i++;  }
+
+                       ?>
+                       </table>
+                
                 </div>
               </div><!-- /.card-body -->
             </div>

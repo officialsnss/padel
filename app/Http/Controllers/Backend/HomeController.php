@@ -32,7 +32,22 @@ class HomeController extends Controller
          $sale = DB::table('payments')->where('payment_status', 1 )->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
          $cancel= DB::table('payments')->whereIn('payment_status', [3,4] )->count();
          $refund= DB::table('payments')->where('payment_status',3)->count();
-         return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale'));
+         //$topBooking = Booking::with('courts');
+        
+         $topBooking = DB::table('bookings')
+         ->leftjoin('courts', 'bookings.court_id', '=', 'courts.id')
+         ->leftjoin('clubs', 'courts.club_id', '=', 'clubs.id')
+         ->where('bookings.status', '=', 1)
+         ->orderBy('bookings.id', 'desc')
+         ->get()
+         ->take(3);
+
+        // $topBooking = Booking::where('bookings.status', '=', 1)
+        //    //->with('club')
+        //    ->with('court')
+        //    ->get();
+         
+         return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
     }
 
     /**

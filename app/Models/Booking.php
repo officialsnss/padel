@@ -15,5 +15,15 @@ class Booking extends Model
         'bat_id' => '0',
         'slot_id' => '0',
     ];
+
+    public function court()
+    {
+        return $this->belongsTo(Court::class,'court_id', 'id');
+       
+    
+    }
+
+
+
    
 }
