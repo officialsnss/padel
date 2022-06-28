@@ -17,7 +17,7 @@ class PaymentsSeeder extends Seeder
         DB::table('payments')->insert([
             [
             'user_id' => '3',
-            'booking_id' => '1',
+            'booking_id' => '6',
             'price' => 100,
             'payment_method' => '1',
             'advance_price' => '0.00',
@@ -30,7 +30,7 @@ class PaymentsSeeder extends Seeder
             ],
             [
             'user_id' => '3',
-            'booking_id' => '2',
+            'booking_id' => '7',
             'price' => 100,
             'payment_method' => '2',
             'advance_price' => '12.00',

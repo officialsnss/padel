@@ -16,7 +16,7 @@ class CourtsSeeder extends Seeder
         DB::table('courts')->insert([
             [
             'user_id' => '5',
-            'club_id' => '3',
+            'club_id' => '1',
             'currency_id'=> 129,
             'game_type' => 1,
             'single_price'=>'100',
@@ -25,7 +25,7 @@ class CourtsSeeder extends Seeder
             ],
             [
                 'user_id' => '5',
-                'club_id' => '3',
+                'club_id' => '2',
                 'currency_id'=> 129,
                 'game_type' => 2,
                 'single_price'=>'0.00',

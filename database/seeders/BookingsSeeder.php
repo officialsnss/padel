@@ -15,13 +15,12 @@ class BookingsSeeder extends Seeder
     public function run()
     {
 
-        Booking::truncate();
         $bookings = [
             [
                'user_id'=>'3',
-               'court_id'=>'1',
+               'court_id'=>'7',
                'bat_id' => '1',
-               'slot_id' => '1',
+               'slot_id' => '9',
                'currency_id'=> 129,
                'status'=> 1,
                'price'=> '200',
@@ -30,9 +29,9 @@ class BookingsSeeder extends Seeder
             ],
             [
                 'user_id'=>'3',
-                'court_id'=>'2', 
+                'court_id'=>'8', 
                 'bat_id' => '1',
-                'slot_id' => '2',
+                'slot_id' => '10',
                 'currency_id'=> 129,
                 'status'=>1,
                 'price'=> '100',
