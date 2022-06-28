@@ -29,7 +29,7 @@ class CreateCourtsTable extends Migration
             $table->enum('game_type', ['1', '2'])->default(1)->comment("1=>'single', 2=>'Doubles'");
             $table->decimal('single_price', $precision = 8, $scale = 2);
             $table->decimal('double_price', $precision = 8, $scale = 2);
-            $table->tinyInteger('currency_id');
+            $table->integer('currency_id'); 
             $table->string('featured_image')->nullable();
             $table->enum('status', ['1', '2'])->default(2)->comment('1=>"Active", 2=>"Inactive"');
             $table->timestamps();

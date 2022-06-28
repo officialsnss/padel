@@ -23,7 +23,7 @@ class CreateTeamsTable extends Migration
             ->constrained('matches')
             ->onUpdate('cascade')
             ->onDelete('cascade');
-            $table->tinyInteger('total_players');
+            $table->integer('total_players');
             $table->string('players_id');
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ class CourtController extends Controller
      */
     public function index()
     {
-        $title = 'Courts';
+        $title = 'Clubs';
         return view('backend.pages.courts', compact('title'));
     }
 

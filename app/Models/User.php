@@ -10,6 +10,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
+    public $timestamps = true;
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -45,4 +46,6 @@ class User extends Authenticatable
     ];
 
     protected $table = "users";
+
+   
 }

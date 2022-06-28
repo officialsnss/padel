@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
 
          //Courts
-        Route::get('/courts', 'App\Http\Controllers\Backend\CourtController@index')->name('courts');
+        Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');
 
          //Reports
         Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
@@ -61,6 +61,8 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
     //Users Route
     Route::prefix('/admin/users')->group(function () {
         Route::get('/customers', 'App\Http\Controllers\Backend\UserController@customers')->name('customers');
+        Route::get('/{id}', 'App\Http\Controllers\Backend\UserController@view')->name('customer.view');
+        Route::get('/status/update', 'App\Http\Controllers\Backend\UserController@updateStatus')->name('users.update.status');
         Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('court-owners');
     });
 

@@ -13,14 +13,14 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3>{{  $regUsers }}</h3>
 
-                <p>User Registrations</p>
+                <p>Users Registrations</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/users/customers')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -29,14 +29,14 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{ $regClubs }}</h3>
 
-                <p>Courts registerations</p>
+                <p>Total Clubs Registrations</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/clubs')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -44,14 +44,14 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53</h3>
+                <h3>{{ $totalBooking }}</h3>
 
                 <p>Total Booking</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/bookings')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           
@@ -59,14 +59,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $todayBooking }}</h3>
 
                 <p>Today's Booking</p>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/bookings')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -79,7 +79,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $sale }} KWD</h3>
 
                 <p>Today's sale</p>
               </div>
@@ -95,7 +95,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $cancel }}</h3>
 
                 <p>Cancellation</p>
               </div>
@@ -110,7 +110,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $refund }}</h3>
 
                 <p>Refunds pending</p>
               </div>
@@ -137,18 +137,30 @@
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content p-0">
-                  <table style="width:100%">
-                    <tr>
-                      <td>1.</td>
-                      <td>Court1</td>
-                      <td>2345KWD</td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>Court1</td>
-                      <td>4545KWD</td>
-                    </tr>
-                  </table>
+                <table style="width:100%">
+                <thead>
+                  <tr>
+                     <th>S.no</th>
+                     <th>Club Name</th>
+                     <th>Court Number</th>
+                     <th>Amount</th>
+                 </tr>
+                </thead>
+                  <?php
+                  $i = 1; 
+                 foreach($topBooking as $data) { ?>
+                       <tr>
+                      <td>{{  $i }}</td>
+                      <td>{{$data->name}}</td>
+                      <td>{{$data->court_number}}</td>
+                      <td>{{ $data->price}} KWD</td>
+                      </tr>
+                    
+                 <?php   $i++;  }
+
+                       ?>
+                       </table>
+                
                 </div>
               </div><!-- /.card-body -->
             </div>

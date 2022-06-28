@@ -1,0 +1,14 @@
+table.details {
+    width: 100%;
+}
+table.details td {
+    width: 50%;
+}
+table.details tr, table.details td {
+    border: 1px solid #f2f2f2;
+    padding: 10px 20px;
+}
+.bk-btn {
+    margin-top: 20px;
+    text-align: right;
+}
