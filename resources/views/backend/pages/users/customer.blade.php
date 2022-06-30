@@ -5,10 +5,6 @@
 <div class="row">
         <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Customers Listing</h3>
-              </div>
-              <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
@@ -33,9 +29,9 @@
                         <td>Inactive</td>
                        @endif -->
                        <td><input type="checkbox" data-id="{{ $appUser->id }}" name="status" class="js-switch" {{ $appUser->status == 1 ? 'checked' : '' }}></td>
-                       <td><a href="{{ route('customer.view',$appUser->id)}}" class="btn btn-success">View</a>
-                      <a href="#" class="btn btn-info">Edit</a>
-                      <a href="#" class="btn btn-danger">Delete</a></td>
+                       <td><a href="{{ route('customer.view',$appUser->id)}}" class="btn btn-secondary">View</a>
+                      <a href="{{ route('customer.resetPassword',$appUser->id)}}" class="btn btn-info">Reset Password</a>
+                     
                   </tr>
                   @endforeach
                   

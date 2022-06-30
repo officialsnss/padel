@@ -12,3 +12,13 @@ table.details tr, table.details td {
     margin-top: 20px;
     text-align: right;
 }
+.form-error {
+    color: red;
+    font-size: 14px;
+}
+.add {
+    text-align: right;
+}
+ul.nav.nav-treeview {
+    margin-left: 20px;
+}

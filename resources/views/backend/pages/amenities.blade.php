@@ -7,7 +7,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="add">
-                 <a href="{{ route('page.create')}}" class="btn btn-info">Add New</a>
+                 <a href="{{ route('amenity.create')}}" class="btn btn-info">Add New</a>
                 </div>
               </div>
               <div class="card-body">
@@ -15,29 +15,20 @@
                   <thead>
                   <tr>
                     <th>Sr.no</th>
-                    <th>Page Title</th>
-                    <th>Slug</th>
-                    
-                    <th>Status</th>
+                    <th>Name</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
                   <tbody>
                     
-                  @foreach ($pages as $page)
+                  @foreach ($amenities as $amenity)
                     <tr>
                       <td></td>
-                      <td>{{ $page->title }}</td>
-                      <td>{{ $page->slug }}</td>
+                      <td>{{ $amenity->name }}</td>
                      
-                     @if($page->status === '1')
-                        <td >Active</td>
-                      @else
-                        <td>Inactive</td>
-                       @endif 
                        
-                       <td><a href="{{ route('page.view',$page->id)}}" class="btn btn-success">View</a>
-                        <a href="{{ route('page.edit',$page->id)}}" class="btn btn-secondary">Edit</a>
+                       <td>
+                        <a href="{{ route('amenity.edit',$amenity->id)}}" class="btn btn-secondary">Edit</a>
                      
                   </tr>
                   @endforeach

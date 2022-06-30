@@ -15,9 +15,7 @@ use App\Http\Controllers\backend\UserController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
 
 // Website Homepage
 Route::get('/', function(){
@@ -31,10 +29,9 @@ Route::get('/admin/dashboard', 'App\Http\Controllers\Backend\HomeController@inde
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth','paddle_admin']], function(){
-    // Route::get('/admin', function(){
-    //     return view('backend.pages.home');
-    // });
+Route::group(['middleware' =>['role:1,2']], function(){
+      
+  
     Route::prefix('/admin')->group(function () {
         //Default Admin Route
         Route::get('/', 'App\Http\Controllers\Backend\HomeController@index');
@@ -53,18 +50,43 @@ Route::group(['middleware' => ['auth','paddle_admin']], function(){
 
          //Reports
         Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
+       
+    //System Settings
+      //Pages
+      Route::get('/page/create', 'App\Http\Controllers\Backend\PageController@create')->name('page.create');
+      Route::post('/page/add', 'App\Http\Controllers\Backend\PageController@add')->name('page.add');
+      Route::get('page/view/{id}', 'App\Http\Controllers\Backend\PageController@view')->name('page.view');
+      Route::get('/page/edit/{id}', 'App\Http\Controllers\Backend\PageController@edit')->name('page.edit');
+      Route::post('/page/update/{id}', 'App\Http\Controllers\Backend\PageController@update')->name('page.update');
+      Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages'); 
+      
+      //Amenities
+      Route::get('/amenities', 'App\Http\Controllers\Backend\PageController@amenities')->name('amenities'); 
+      Route::get('/amenities/create', 'App\Http\Controllers\Backend\PageController@amenitiesCreate')->name('amenity.create');
+      Route::post('/amenities/add', 'App\Http\Controllers\Backend\PageController@amenitiesAdd')->name('amenity.add');
+      Route::get('/amenities/edit/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesEdit')->name('amenity.edit');
+      Route::post('/amenities/update/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesUpdate')->name('amenity.update');
+    });
 
-        //Pages
-        Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages');
-     });
-    
-    //Users Route
+   //Users Route
     Route::prefix('/admin/users')->group(function () {
         Route::get('/customers', 'App\Http\Controllers\Backend\UserController@customers')->name('customers');
-        Route::get('/{id}', 'App\Http\Controllers\Backend\UserController@view')->name('customer.view');
+        Route::get('/view/{id}', 'App\Http\Controllers\Backend\UserController@view')->name('customer.view');
+        Route::get('/reset-password/{id}', 'App\Http\Controllers\Backend\UserController@resetPassword')->name('customer.resetPassword');
+        Route::post('/newPassword/{id}', 'App\Http\Controllers\Backend\UserController@newPassword')->name('customer.newPassword');
         Route::get('/status/update', 'App\Http\Controllers\Backend\UserController@updateStatus')->name('users.update.status');
-        Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('court-owners');
+        Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('courtOwners');
+        Route::get('/create', 'App\Http\Controllers\Backend\UserController@create')->name('create');
+        Route::post('/add', 'App\Http\Controllers\Backend\UserController@add')->name('user.add');
     });
 
     
+});
+
+
+Route::group(['middleware' =>['role:1,2,5']], function(){
+    Route::prefix('/admin')->group(function () {
+      //Dashboard Route
+      Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+    });
 });
