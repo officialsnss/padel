@@ -22,7 +22,7 @@ class HomeController extends Controller
 
     public function index()
     {
-      
+      try{
        // Backend page
          $title = 'Dashboard';
          $regUsers = User::whereIn('role', [3, 4])->where('status', 1)->count();
@@ -40,14 +40,13 @@ class HomeController extends Controller
          ->where('bookings.status', '=', 1)
          ->orderBy('bookings.id', 'desc')
          ->get()
-         ->take(3);
+         ->take(10);
 
-        // $topBooking = Booking::where('bookings.status', '=', 1)
-        //    //->with('club')
-        //    ->with('court')
-        //    ->get();
-         
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
+       }
+       catch (\Exception $e) {
+        return redirect('/')->with('error', 'Something went wrong.');
+       }
     }
 
     /**

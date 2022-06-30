@@ -36,7 +36,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest' )->except('logout');
     }
 
     public function login(Request $request)
@@ -48,10 +48,11 @@ class LoginController extends Controller
         ]);
    
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
-            if (auth()->user()->role == 1) {
+            if (auth()->user()->role == 1 || auth()->user()->role == 2 ||auth()->user()->role == 5) {
                 return redirect()->route('dashboard');
             } else {
-                return redirect()->route('dashboard');
+                Auth::logout();
+                return redirect('login')->withErrors(['msg' => 'Wrong email or password']);;
             }
         } else {
             return redirect()->back()->withErrors(['msg' => 'Wrong email or password']);

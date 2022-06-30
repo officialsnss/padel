@@ -45,7 +45,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners'))? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-users"></i>
               <p>
                 Users
@@ -86,14 +86,46 @@
             </a>
           </li>   
           
+      
+
           <li class="nav-item">
-            <a href="{{url('/admin/pages')}}" class="nav-link  {{ request()->segment(2) == 'pages' ? 'active' : '' }}">
-            <i class="nav-icon fas fa-edit"></i>
+            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(3) == 'regions') || (request()->segment(3) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
+              <i class="nav-icon 	fas fa-plug"></i>
               <p>
-                Pages
+                System Settings
+                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-          </li>  
+            <ul class="nav nav-treeview">
+             <li class="nav-item">
+                <a href="" class="nav-link {{ (request()->segment(3) == 'regions') ? 'active' : '' }}">
+                  <i class="fas fa-building nav-icon"></i>
+                  <p>Region</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="" class="nav-link {{ (request()->segment(3) == 'cities') ? 'active' : '' }}">
+                  <i class="fas fa-calendar nav-icon"></i>
+                  <p>City</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('/admin/amenities')}}" class="nav-link {{ ((request()->segment(2) == 'amenities') || (request()->segment(2) == 'amenity')) ? 'active' : '' }}">
+                  <i class="fas fa-clone nav-icon"></i>
+                  <p>Amenities</p>
+                </a>
+              </li>
+            
+              <li class="nav-item">
+                <a href="{{url('/admin/pages')}}" class="nav-link  {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'page'))? 'active' : '' }}">
+                <i class="nav-icon fas fa-edit"></i>
+                  <p>
+                    Pages
+                  </p>
+                </a>
+             </li> 
+            </ul>
+          </li>
 
           <li class="nav-item">
             <a href="{{url('/admin/reports')}}" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
