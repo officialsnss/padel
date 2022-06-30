@@ -15,6 +15,8 @@ use App\Models\User;
 use App\Permissions;
 use Session;
 use App\Notifications\Register as NewRegister;
+use Exception;
+use Twilio\Rest\Client;
 
 class UsersController extends Controller
 {
@@ -36,7 +38,7 @@ class UsersController extends Controller
             return response()->json(['status' => 'fail','message' => "Login failed: The email_id or password is incorrect."], 422);
         }
         $user = Auth::user();
-        if($user['status'] == 'active') {
+        if($user['status'] == 1) {
             $token = $this->createToken($user);
             return response()->json([
                 'status' => 'success',
@@ -113,6 +115,45 @@ class UsersController extends Controller
     {
         $otp = rand(1000,9999);
         $user = User::where('id', $request->id)->first();
+
+        // Send Otp to Phone number
+        // $receiverNumber = "+91".$user->phone;
+        // $message = "This the otp for you registration. " . $otp;
+        // try {
+        //     $account_sid = getenv("TWILIO_SID");
+        //     $auth_token = getenv("TWILIO_TOKEN");
+        //     $twilio_number = getenv("TWILIO_FROM");
+
+        //     $client = new Client($account_sid, $auth_token);
+        //     $client->messages->create($receiverNumber, [
+        //         'from' => $twilio_number, 
+        //         'body' => $message]);
+  
+        //     // dd('SMS Sent Successfully.');
+  
+        // } catch (Exception $e) {
+        //     dd("Error: ". $e->getMessage());
+        // }
+
+
+        try {
+  
+            $basic  = new \Nexmo\Client\Credentials\Basic(getenv("NEXMO_KEY"), getenv("NEXMO_SECRET"));
+            $client = new \Nexmo\Client($basic);
+  
+        $receiverNumber = "+91".$user->phone;
+        $message = "This the otp for you registration. " . $otp;
+  
+            $message = $client->message()->send([
+                'to' => $receiverNumber,
+                'from' => 'Anmol Chugh',
+                'text' => $message
+            ]);
+  
+        } catch (Exception $e) {
+            dd("Error: ". $e->getMessage());
+        }
+        // Send Otp to Email
         $user->notify(new NewRegister($otp));
         User::where('id', $request->id)->update(['otp' => $otp]);
         return response()->json([
