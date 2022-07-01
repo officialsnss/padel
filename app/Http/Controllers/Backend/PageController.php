@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Models\Amenities;
+use App\Models\Countries;
+use App\Models\Regions;
+use App\Models\Cities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class PageController extends Controller
@@ -14,6 +17,8 @@ class PageController extends Controller
      *
      * @return \Illuminate\View\View
      */
+
+     //Page Listing
     public function index()
     {
         try{
@@ -25,6 +30,9 @@ class PageController extends Controller
             return redirect('/admin')->with('error', 'Something went wrong.');
         }    
     }
+
+    // Page Create
+
     public function create()
     { 
         try{
@@ -71,6 +79,8 @@ class PageController extends Controller
         }
     }
 
+     // Page Edit 
+
     public function edit($id)
     {
         try{
@@ -102,6 +112,8 @@ class PageController extends Controller
         }
     }
 
+    // Amenities Listing 
+
     public function amenities()
     {
         try{
@@ -113,6 +125,8 @@ class PageController extends Controller
             return redirect('/admin')->with('error', 'Something went wrong.');
         }
     }
+
+     // Amenities Create 
     
     public function amenitiesCreate()
     {
@@ -124,6 +138,8 @@ class PageController extends Controller
             return redirect('/admin/amenities')->with('error', 'Something went wrong.');
         }
     }
+
+  
 
     public function amenitiesAdd(Request $request)
     {
@@ -145,6 +161,7 @@ class PageController extends Controller
         }
     }
     
+     // Amenities Edit
     
     public function amenitiesEdit(Request $request, $id)
     {
@@ -175,5 +192,202 @@ class PageController extends Controller
            
         }
     }
-   
+
+     // Region Listing 
+
+     public function regions()
+     {
+        try{
+            $title = 'Regions';
+          
+            $regions = Regions::leftJoin('countries', 'regions.country_id', '=', 'countries.id')
+                      ->select('regions.*','countries.name as cname')
+                      ->get();
+    
+            return view('backend.pages.regions', compact('title','regions'));
+         }
+         catch (\Exception $e) {
+            return redirect('/admin')->with('error', 'Something went wrong.');
+        }    
+     }
+
+     // Region Create 
+
+     public function regionsCreate()
+     {
+        try{
+            $title = 'Create Region';
+            $countries = Countries::all();
+           
+            return view('backend.pages.regionCreate', compact('title','countries'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/regions')->with('error', 'Something went wrong.');
+        } 
+     }
+
+     public function regionsAdd(Request $request)
+    {
+        try{
+            $request->validate([
+                'country_name' => 'required',
+                'region' => 'required|string',
+            ]);
+
+                $result = Regions::create([
+                    'country_id' => $request->country_name,
+                    'name' => $request->region,
+            ]);
+
+           // dd($request->country_name);
+      
+            if($result){
+                return redirect('/admin/regions')->with('success', 'Region Created Successfully.');
+            }
+       }
+        catch (ValidationException   $e) {
+        
+           return redirect('/admin/regions')->with('error', 'Something went wrong.');
+        }
+    }
+
+   // Region Edit 
+
+   public function regionsEdit($id)
+   {
+    try{
+        $regionsData = Regions::where('id', $id)->get();
+        $countries = Countries::all();
+        $title = 'Edit Region';
+        return view('backend.pages.regionEdit', compact('title','regionsData', 'countries'));
+    }
+    catch (\Exception $e) {
+        return redirect('/admin/regions')->with('error', 'Something went wrong.');
+    }
+   }
+
+   public function regionsUpdate(Request $request, $id){
+    try
+    { 
+        $request->validate([
+            'country_name' => 'required',
+            'region' => 'required|string',
+        ]);
+      
+        $region = Regions::findOrFail($id);
+        $region->country_id = $request->country_name;
+        $region->name = $request->region;
+        $region->save(); 
+        return redirect('/admin/regions')->with('success', 'Region Updated successfully');
+    }
+    catch (\Exception $e) {
+        return redirect('/admin/regions')->with('error', 'Something went wrong.');
+       
+    }
+}
+
+// Cities
+  public function cities()
+     {
+        try{
+            $title = 'Cities';
+            $cities = Cities::leftJoin('regions', 'cities.region_id', '=', 'regions.id')
+                             ->leftJoin('countries', 'regions.country_id', '=', 'countries.id')
+                             ->select('cities.*','countries.name as cname','regions.name as regionname')
+                             ->get();
+    
+            return view('backend.pages.cities', compact('title','cities'));
+         }
+         catch (\Exception $e) {
+            return redirect('/admin')->with('error', 'Something went wrong.');
+        }    
+     }
+
+     // City Create
+     public function citiesCreate(){
+        try{
+            $title = 'Create City';
+            $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
+                        ->select('regions.*','countries.name as cname')
+                        ->get();
+          
+            return view('backend.pages.cityCreate', compact('title','regions'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/cities')->with('error', 'Something went wrong.');
+        } 
+     }
+
+     public function citiesAdd(Request $request){
+        try{
+            
+            $request->validate([
+                'region_name' => 'required',
+                'city' => 'required|string',
+            ]);
+            
+                $result = Cities::create([
+                    'region_id' => $request->region_name,
+                    'name' => $request->city,
+                  
+            ]);
+           
+            if($result){
+                return redirect('/admin/cities')->with('success', 'City Created Successfully.');
+            }
+       }
+        catch (ValidationException  $e) {
+        
+           return redirect('/admin/cities')->with('error', 'Something went wrong.');
+        }
+     }
+
+      // City Edit
+      public function citiesEdit($id){
+        try{
+            $cityData = Cities::where('id', $id)->get();
+            $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
+                        ->select('regions.*','countries.name as cname')
+                        ->get();
+            $title = 'Edit City';
+            return view('backend.pages.cityEdit', compact('title','cityData', 'regions'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/cities')->with('error', 'Something went wrong.');
+        }
+     }
+     public function citiesUpdate(Request $request, $id){
+        try
+    { 
+        $request->validate([
+            'region_name' => 'required',
+            'city' => 'required|string',
+        ]);
+      
+        $city = Cities::findOrFail($id);
+        $city->region_id = $request->region_name;
+        $city->name = $request->city;
+        $city->save(); 
+        return redirect('/admin/cities')->with('success', 'City Updated successfully');
+    }
+        catch (\Exception $e) {
+            return redirect('/admin/cities')->with('error', 'Something went wrong.');
+        
+        }
+    }
+
+    // City Delete
+    public function citiesDelete(Request $request, $id)
+    {
+        try{
+            $res= Cities::where('id',$id)->delete();
+           if($res){
+              return redirect('/admin/cities')->with('success', 'Deleted Successfully.');
+           }
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/cities')->with('error', 'Something went wrong.');
+        
+         }
+        }
 }
