@@ -89,7 +89,7 @@
       
 
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(3) == 'regions') || (request()->segment(3) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-plug"></i>
               <p>
                 System Settings
@@ -98,15 +98,15 @@
             </a>
             <ul class="nav nav-treeview">
              <li class="nav-item">
-                <a href="" class="nav-link {{ (request()->segment(3) == 'regions') ? 'active' : '' }}">
+                <a href="{{url('/admin/regions')}}" class="nav-link {{ (request()->segment(2) == 'regions') ? 'active' : '' }}">
                   <i class="fas fa-building nav-icon"></i>
-                  <p>Region</p>
+                  <p>Regions</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link {{ (request()->segment(3) == 'cities') ? 'active' : '' }}">
+                <a href="{{url('/admin/cities')}}" class="nav-link {{ (request()->segment(2) == 'cities') ? 'active' : '' }}">
                   <i class="fas fa-calendar nav-icon"></i>
-                  <p>City</p>
+                  <p>Cities</p>
                 </a>
               </li>
               <li class="nav-item">

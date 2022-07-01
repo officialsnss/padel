@@ -66,6 +66,23 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/amenities/add', 'App\Http\Controllers\Backend\PageController@amenitiesAdd')->name('amenity.add');
       Route::get('/amenities/edit/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesEdit')->name('amenity.edit');
       Route::post('/amenities/update/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesUpdate')->name('amenity.update');
+    
+      //Regions
+      Route::get('/regions', 'App\Http\Controllers\Backend\PageController@regions')->name('regions'); 
+      Route::get('/regions/create', 'App\Http\Controllers\Backend\PageController@regionsCreate')->name('region.create');
+      Route::post('/regions/add', 'App\Http\Controllers\Backend\PageController@regionsAdd')->name('region.add');
+      Route::get('/regions/edit/{id}', 'App\Http\Controllers\Backend\PageController@regionsEdit')->name('region.edit');
+      Route::post('/regions/update/{id}', 'App\Http\Controllers\Backend\PageController@regionsUpdate')->name('region.update');
+      Route::get('/city/delete/{id}', 'App\Http\Controllers\Backend\PageController@citiesDelete')->name('city.delete');
+      
+      //Cities
+      Route::get('/cities', 'App\Http\Controllers\Backend\PageController@cities')->name('cities'); 
+      Route::get('/cities/create', 'App\Http\Controllers\Backend\PageController@citiesCreate')->name('city.create');
+      Route::post('/cities/add', 'App\Http\Controllers\Backend\PageController@citiesAdd')->name('city.add');
+      Route::get('/cities/edit/{id}', 'App\Http\Controllers\Backend\PageController@citiesEdit')->name('city.edit');
+      Route::post('/cities/update/{id}', 'App\Http\Controllers\Backend\PageController@citiesUpdate')->name('city.update');
+      Route::get('/city/delete/{id}', 'App\Http\Controllers\Backend\PageController@citiesDelete')->name('city.delete');
+    
     });
 
    //Users Route

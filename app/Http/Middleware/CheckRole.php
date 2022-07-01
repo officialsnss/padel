@@ -24,8 +24,13 @@ class CheckRole
         if( in_array($role, $allowed_roles) ) {
             return $next($request);
         }
-       
-        return redirect('admin/dashboard')->with('error', 'No Access!');
+        if(Auth::check()){
+            return redirect('admin/dashboard')->with('error', 'No Access!');
+        }
+        else{
+            return redirect('/login')->with('error', 'No Access!');
+        }
+        
         //throw new AuthenticationException();
     }
 }

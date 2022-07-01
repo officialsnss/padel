@@ -13,16 +13,18 @@ class CreateCitiesTable extends Migration
      */
     public function up()
     {
+       
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('region_id')
-            ->constrained('regions')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+            ->references('id')
+            ->on('regions');
+          
             $table->string('name', 100);
             $table->enum('status', ['1', '2'])->default(1)->comment('1=>"Active", 2=>"Inactive"');
             $table->timestamps();
         });
+          
     }
 
     /**
