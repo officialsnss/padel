@@ -39,8 +39,16 @@ class ClubDataServiceImpl implements ClubDataService
     {
         $data = $this->clubDataRepository->getClubs($request);
         $dataPacket = [];
-        
-        return $data;
+        $i =0;
+        foreach($data as $i => $row) {
+            $dataPacket[$i]['name'] = $row['name'];
+            $dataPacket[$i]['description'] = $row['description'];
+            $dataPacket[$i]['service_charge'] = $row['service_charge'];
+            $dataPacket[$i]['address'] = $row['address'];
+            $dataPacket[$i]['zipcode'] = $row['zipcode'];
+            $i++;
+        }
+        return $dataPacket;
     }
 
     public function getClubData($id)
