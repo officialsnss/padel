@@ -119,15 +119,15 @@ class UserController extends Controller
 
     public function add(Request $request)
     {
-        try{
             $request->validate([
                 'fullname' => 'required|string',
                 'email'=> 'required|email|unique:users' , 
                 'password' => 'required|min:8',
                 'password_confirmation' => 'required|same:password'
             ]);
-
-         $result = User::create([
+        try{
+         
+           $result = User::create([
             'name' => $request->fullname,
             'email' => $request->email,
             'phone' => $request->phone,

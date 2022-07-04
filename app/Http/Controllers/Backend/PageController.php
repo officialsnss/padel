@@ -46,11 +46,13 @@ class PageController extends Controller
 
     public function add(Request $request)
     {
-        try{
+        
             $request->validate([
              'title' => 'required|string',
              'content' => 'required'
             ]);
+            
+            try{
 
             $result = Page::create([
                 'title' => $request->title,
@@ -94,11 +96,12 @@ class PageController extends Controller
     }
     public function update(Request $request, $id)
        {
-        try{
+        
             $request->validate([
                 'title' => 'required|string',
                 'content' => 'required'
             ]);
+        try{ 
           
            $page = Page::findOrFail($id);
            $page->title = $request->title;
@@ -143,11 +146,11 @@ class PageController extends Controller
 
     public function amenitiesAdd(Request $request)
     {
-        try{
+        
             $request->validate([
                 'desc' => 'required|string',
             ]);
-
+        try{
                 $result = Amenities::create([
                 'name' => $request->desc,
             ]);
@@ -176,12 +179,11 @@ class PageController extends Controller
     }
 
     public function amenitiesUpdate(Request $request, $id){
-        try
-        { 
+        
             $request->validate([
                 'desc' => 'required|string',
             ]);
-          
+        try{ 
             $amenity = Amenities::findOrFail($id);
             $amenity->name = $request->desc;
             $amenity->save(); 
@@ -228,13 +230,12 @@ class PageController extends Controller
 
      public function regionsAdd(Request $request)
     {
-        try{
-            $request->validate([
+        $request->validate([
                 'country_name' => 'required',
                 'region' => 'required|string',
             ]);
-
-                $result = Regions::create([
+         try{
+            $result = Regions::create([
                     'country_id' => $request->country_name,
                     'name' => $request->region,
             ]);
@@ -245,8 +246,8 @@ class PageController extends Controller
                 return redirect('/admin/regions')->with('success', 'Region Created Successfully.');
             }
        }
-        catch (ValidationException   $e) {
-        
+        catch (\Exception  $e) {
+         dd($e->getMessage());
            return redirect('/admin/regions')->with('error', 'Something went wrong.');
         }
     }
@@ -267,13 +268,12 @@ class PageController extends Controller
    }
 
    public function regionsUpdate(Request $request, $id){
-    try
-    { 
+     
         $request->validate([
             'country_name' => 'required',
             'region' => 'required|string',
         ]);
-      
+    try{
         $region = Regions::findOrFail($id);
         $region->country_id = $request->country_name;
         $region->name = $request->region;
@@ -319,13 +319,11 @@ class PageController extends Controller
      }
 
      public function citiesAdd(Request $request){
-        try{
-            
-            $request->validate([
+         $request->validate([
                 'region_name' => 'required',
                 'city' => 'required|string',
             ]);
-            
+        try{ 
                 $result = Cities::create([
                     'region_id' => $request->region_name,
                     'name' => $request->city,
@@ -335,7 +333,7 @@ class PageController extends Controller
             if($result){
                 return redirect('/admin/cities')->with('success', 'City Created Successfully.');
             }
-       }
+        }
         catch (ValidationException  $e) {
         
            return redirect('/admin/cities')->with('error', 'Something went wrong.');
@@ -357,19 +355,18 @@ class PageController extends Controller
         }
      }
      public function citiesUpdate(Request $request, $id){
-        try
-    { 
+        
         $request->validate([
             'region_name' => 'required',
             'city' => 'required|string',
         ]);
-      
-        $city = Cities::findOrFail($id);
-        $city->region_id = $request->region_name;
-        $city->name = $request->city;
-        $city->save(); 
-        return redirect('/admin/cities')->with('success', 'City Updated successfully');
-    }
+        try { 
+            $city = Cities::findOrFail($id);
+            $city->region_id = $request->region_name;
+            $city->name = $request->city;
+            $city->save(); 
+              return redirect('/admin/cities')->with('success', 'City Updated successfully');
+        }
         catch (\Exception $e) {
             return redirect('/admin/cities')->with('error', 'Something went wrong.');
         
