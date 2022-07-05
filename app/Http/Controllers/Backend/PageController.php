@@ -195,6 +195,21 @@ class PageController extends Controller
         }
     }
 
+    // Amenity Delete
+     public function amenitiesDelete(Request $request, $id)
+     {
+         try{
+             $res= Amenities::where('id',$id)->delete();
+            if($res){
+               return redirect('/admin/amenities')->with('success', 'Deleted Successfully.');
+            }
+         }
+         catch (\Exception $e) {
+             return redirect('/admin/amenities')->with('error', 'Something went wrong.');
+         
+          }
+        }
+
      // Region Listing 
 
      public function regions()
@@ -247,7 +262,7 @@ class PageController extends Controller
             }
        }
         catch (\Exception  $e) {
-         dd($e->getMessage());
+        
            return redirect('/admin/regions')->with('error', 'Something went wrong.');
         }
     }
@@ -285,6 +300,21 @@ class PageController extends Controller
        
     }
 }
+
+    // Region Delete
+    public function regionsDelete(Request $request, $id)
+    {
+    try{
+        $res= Regions::where('id',$id)->delete();
+       if($res){
+          return redirect('/admin/regions')->with('success', 'Deleted Successfully.');
+       }
+    }
+    catch (\Exception $e) {
+        return redirect('/admin/regions')->with('error', 'Something went wrong.');
+    
+     }
+   }
 
 // Cities
   public function cities()

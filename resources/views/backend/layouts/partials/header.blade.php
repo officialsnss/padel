@@ -8,7 +8,7 @@
         <a href="{{url('/')}}" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Settings</a>
+        <a href="{{url('/admin/settings')}}" class="nav-link">Settings</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/admin/contact')}}" class="nav-link">Contact</a>
