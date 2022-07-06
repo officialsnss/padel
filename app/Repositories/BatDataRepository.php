@@ -24,6 +24,10 @@ class BatDataRepository extends BaseRepository
      */
     public function getBatDetails($clubId)
     {
-      return VendorBats::where('club_id', $clubId)->get(); 
+      return VendorBats::where('club_id', $clubId)
+              ->with('club')
+              ->with('bats')
+              ->with('currencies')
+              ->get(); 
     }
 }
