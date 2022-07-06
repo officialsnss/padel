@@ -16,7 +16,7 @@
                   <tr>
                     <th>Sr.no</th>
                     <th>Page Title</th>
-                    <th>Slug</th>
+                    <th>Content</th>
                     
                     <th>Status</th>
                     <th>Actions</th>
@@ -28,7 +28,8 @@
                     <tr>
                       <td></td>
                       <td>{{ $page->title }}</td>
-                      <td>{{ $page->slug }}</td>
+                     
+                      <td>{{ str_replace("&nbsp;", "", substr(strip_tags($page->content),0, 100)) }} ...</td>
                      
                      @if($page->status === '1')
                         <td >Active</td>
@@ -38,7 +39,7 @@
                        
                        <td><a href="{{ route('page.view',$page->id)}}" class="btn btn-success">View</a>
                         <a href="{{ route('page.edit',$page->id)}}" class="btn btn-secondary">Edit</a>
-                     
+                        <a href="{{ route('page.delete',$page->id)}}" class="btn btn-danger">Delete</a>
                   </tr>
                   @endforeach
                   

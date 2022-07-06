@@ -30,7 +30,7 @@
                       <td>{{ $region->name }}</td>
                      <td>
                         <a href="{{ route('region.edit',$region->id)}}" class="btn btn-secondary">Edit</a>
-                     
+                        <a href="{{ route('region.delete',$region->id)}}" class="btn btn-danger">Delete</a>
                   </tr>
                   @endforeach
                   

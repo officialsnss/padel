@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Club;
 use App\Models\Booking;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -58,5 +59,31 @@ class HomeController extends Controller
     { 
         $title = 'Contact';
        return view('backend.pages.contact', compact('title'));
+    }
+
+    //Refunds Settings
+    public function settings()
+    { 
+       $title = 'Refunds Settings';
+       $settings = DB::table('settings')->select('id', 'value')->where('label' ,'refund_amount')->get();
+    
+       return view('backend.pages.settings', compact('title','settings'));
+    }
+    public function settingsUpdate(Request $request, $id)
+    { 
+        $request->validate([
+        'amount' => 'required|numeric',
+        ]);
+      try{
+     
+        DB::table('settings')->where('id', $id)->update(['value' => $request->amount]);
+        
+        return redirect('/admin/settings')->with('success', 'Settings Updated!');
+      }
+      catch (\Exception $e) {
+        dd(getMessage());
+        return redirect('/admin/settings')->with('error', 'Something went wrong.');
+      
+      }
     }
 }

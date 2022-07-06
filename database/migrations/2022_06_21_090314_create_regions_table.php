@@ -15,7 +15,8 @@ class CreateRegionsTable extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 100);
+            $table->string('name', 100);
+            $table->bigInteger('country_id');
             $table->enum('status', ['1', '2'])->default(1)->comment('1=>"Active", 2=>"Inactive"');
             $table->timestamps();
         });

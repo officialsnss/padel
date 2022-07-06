@@ -29,7 +29,7 @@
                        
                        <td>
                         <a href="{{ route('amenity.edit',$amenity->id)}}" class="btn btn-secondary">Edit</a>
-                     
+                        <a href="{{ route('amenity.delete',$amenity->id)}}" class="btn btn-danger">Delete</a>
                   </tr>
                   @endforeach
                   

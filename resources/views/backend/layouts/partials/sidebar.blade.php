@@ -136,6 +136,15 @@
             </a>
           </li>  
 
+          
+          <li class="nav-item">
+            <a href="{{url('/admin/refunds')}}" class="nav-link  {{ request()->segment(2) == 'refunds' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-money-bill-alt"></i>
+              <p>
+               Refunds              </p>
+            </a>
+          </li>  
+
           <li class="nav-item">
             <a href="{{url('/admin/contact')}}" class="nav-link  {{ request()->segment(2) == 'contact' ? 'active' : '' }}">
             <i class="nav-icon fas fa-id-card-alt"></i>

@@ -5,38 +5,38 @@
 <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-body">
-                   <table id="example1" class="table table-bordered table-striped">
+         
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Sr.no</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Club Name</th>
-                    <th>Court Number</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                 </tr>
+                    <th>transaction id</th>
+                    <th>Total Amount Paid</th>
+                   
+                  </tr>
                   </thead>
                   <tbody>
                     
-                  @foreach ($bookings as $booking)
+                  @foreach ($payments as $payment)
                     <tr>
                       <td></td>
-                      <td>{{ $booking->usrname }}</td>
-                      <td>{{ $booking->usremail }}</td>
-                      <td>{{ $booking->clubname }}</td>
-                      <td>{{ $booking->court_number }}</td>
-                     @if($booking->payment_status == '1')
+                      <td>{{ $payment->name }}</td>
+                      <td>{{ $payment->email }}</td>
+                      <td>{{ $payment->transaction_id }}</td>
+                      <td>{{ $payment->total_amount }} {{ $payment->code }}</td>
+                     <!-- @if($payment->payment_status === '1')
                         <td >Completed</td>
-                      @elseif($booking->payment_status == '2')
+                      @elseif($payment->payment_status === '2')
                         <td>Pending</td>
-                      @elseif($booking->payment_status == '3')
+                      @elseif($payment->payment_status === '3')
                         <td>Cancellation</td>
                       @else
                        <td>Refunded</td>
-                       @endif 
-                     <td><a href="{{ route('booking.view',$booking->bookId)}}" class="btn btn-success">View Details</a></td>
+                       @endif; -->
+                     
                   </tr>
                   @endforeach
                   

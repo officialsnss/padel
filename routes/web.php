@@ -44,8 +44,9 @@ Route::group(['middleware' =>['role:1,2']], function(){
 
         //Bookings
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
-
-         //Courts
+        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+         
+        //Courts
         Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');
 
          //Reports
@@ -59,21 +60,21 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::get('/page/edit/{id}', 'App\Http\Controllers\Backend\PageController@edit')->name('page.edit');
       Route::post('/page/update/{id}', 'App\Http\Controllers\Backend\PageController@update')->name('page.update');
       Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages'); 
-      
+      Route::get('/pages/delete/{id}', 'App\Http\Controllers\Backend\PageController@pageDelete')->name('page.delete');
       //Amenities
       Route::get('/amenities', 'App\Http\Controllers\Backend\PageController@amenities')->name('amenities'); 
       Route::get('/amenities/create', 'App\Http\Controllers\Backend\PageController@amenitiesCreate')->name('amenity.create');
       Route::post('/amenities/add', 'App\Http\Controllers\Backend\PageController@amenitiesAdd')->name('amenity.add');
       Route::get('/amenities/edit/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesEdit')->name('amenity.edit');
       Route::post('/amenities/update/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesUpdate')->name('amenity.update');
-    
+      Route::get('/amenities/delete/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesDelete')->name('amenity.delete');
       //Regions
       Route::get('/regions', 'App\Http\Controllers\Backend\PageController@regions')->name('regions'); 
       Route::get('/regions/create', 'App\Http\Controllers\Backend\PageController@regionsCreate')->name('region.create');
       Route::post('/regions/add', 'App\Http\Controllers\Backend\PageController@regionsAdd')->name('region.add');
       Route::get('/regions/edit/{id}', 'App\Http\Controllers\Backend\PageController@regionsEdit')->name('region.edit');
       Route::post('/regions/update/{id}', 'App\Http\Controllers\Backend\PageController@regionsUpdate')->name('region.update');
-      Route::get('/city/delete/{id}', 'App\Http\Controllers\Backend\PageController@citiesDelete')->name('city.delete');
+      Route::get('/regions/delete/{id}', 'App\Http\Controllers\Backend\PageController@regionsDelete')->name('region.delete');
       
       //Cities
       Route::get('/cities', 'App\Http\Controllers\Backend\PageController@cities')->name('cities'); 
@@ -83,6 +84,13 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/cities/update/{id}', 'App\Http\Controllers\Backend\PageController@citiesUpdate')->name('city.update');
       Route::get('/city/delete/{id}', 'App\Http\Controllers\Backend\PageController@citiesDelete')->name('city.delete');
     
+      //Settings
+      Route::get('/settings', 'App\Http\Controllers\Backend\HomeController@settings')->name('settings');
+      Route::post('/settings/update/{id}', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
+     
+     //Refunds Listing
+     Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index')->name('refunds');
+
     });
 
    //Users Route

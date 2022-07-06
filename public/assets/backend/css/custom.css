@@ -22,3 +22,8 @@ table.details tr, table.details td {
 ul.nav.nav-treeview {
     margin-left: 20px;
 }
+.bookingdetails tr td, .bookingdetails tr {
+    border: none !important;
+    padding: 5px 10px;
+    vertical-align: top;
+}
