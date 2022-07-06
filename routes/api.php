@@ -28,6 +28,10 @@ Route::get('verifyOtp/{id}/{otp}', 'App\Http\Controllers\Api\UsersController@ver
 Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
 
+    //CLUBS
     Route::post('clubs', 'App\Http\Controllers\Api\ClubsController@getClubs');
-    Route::post('get/club/{id}', 'App\Http\Controllers\Api\ClubsController@getClubData');
+    Route::get('get/club/{id}', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
+
+    //BATS
+    Route::get('get/bat_list/{club_id}', 'App\Http\Controllers\Api\BatsController@getBatDetails');
 });

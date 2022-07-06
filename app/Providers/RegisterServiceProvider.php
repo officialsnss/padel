@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use App\Services\ClubDataService;
 use App\Services\ClubDataServiceImpl;
+use App\Services\BatDataService;
+use App\Services\BatDataServiceImpl;
 
 class RegisterServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class RegisterServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(ClubDataService::class, ClubDataServiceImpl::class);
+        $this->app->singleton(BatDataService::class, BatDataServiceImpl::class);
     }
 
     /**

@@ -4,6 +4,9 @@ namespace App\Repositories;
 use Auth;
 use App\Utils\ResponseUtil;
 use App\Models\Club; 
+use App\Models\Court; 
+use App\Models\ClubRating; 
+use App\Models\Cities; 
 
 /**
  * Class PropertyRepository
@@ -23,14 +26,26 @@ class ClubDataRepository extends BaseRepository
      */
     public function getClubs($request)
     {
-        $data = Club::get();
-        return $data;
+        return Club::with('court')
+                ->with('club_rating')
+                ->with('currencies')
+                ->with('cities')
+                ->get();
     }
 
-    public function getClubData($id)
+    public function getSingleClub($id)
     {
-        $data = Club::where('id', $id)->get();
-        return response()->json($data);
+        return Club::where('id', $id)
+                ->with('court')
+                ->with('club_rating')
+                ->with('currencies')
+                ->with('cities')
+                ->get();
+    }
+
+    public function getCourtsCount($id)
+    {
+        return Court::where('club_id', $id)->count();
     }
 
 }

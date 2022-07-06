@@ -5,12 +5,12 @@ namespace App\Services;
 /**
  * Interface ClubDataService
  *
- * @package App\Services\WCAD
+ * @package App\Services
  */
 interface ClubDataService
 {
     /**
-     * Method used to fetch the clun data
+     * Method used to fetch the club data
      *
      * @param $request
      *
@@ -18,6 +18,6 @@ interface ClubDataService
      */
     public function getClubs($request);
 
-    public function getClubData($id);
+    public function getSingleClub($id);
 
 }
