@@ -44,8 +44,9 @@ Route::group(['middleware' =>['role:1,2']], function(){
 
         //Bookings
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
-
-         //Courts
+        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+         
+        //Courts
         Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');
 
          //Reports
@@ -59,7 +60,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::get('/page/edit/{id}', 'App\Http\Controllers\Backend\PageController@edit')->name('page.edit');
       Route::post('/page/update/{id}', 'App\Http\Controllers\Backend\PageController@update')->name('page.update');
       Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages'); 
-      
+      Route::get('/pages/delete/{id}', 'App\Http\Controllers\Backend\PageController@pageDelete')->name('page.delete');
       //Amenities
       Route::get('/amenities', 'App\Http\Controllers\Backend\PageController@amenities')->name('amenities'); 
       Route::get('/amenities/create', 'App\Http\Controllers\Backend\PageController@amenitiesCreate')->name('amenity.create');

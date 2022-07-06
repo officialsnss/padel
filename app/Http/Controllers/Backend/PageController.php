@@ -106,13 +106,28 @@ class PageController extends Controller
            $page = Page::findOrFail($id);
            $page->title = $request->title;
            $page->content = $request->content;
-           $page->slug = Str::slug($request->title);
+          // $page->slug = Str::slug($request->title);
            $page->save(); 
            return redirect('/admin/pages')->with('success', 'Page Updated successfully');
         }
         catch (\Exception $e) {
             return redirect('/admin/pages')->with('error', 'Something went wrong.');
         }
+    }
+
+    // page Delete
+    public function pageDelete(Request $request, $id)
+    {
+    try{
+        $res= Page::where('id',$id)->delete();
+       if($res){
+          return redirect('/admin/pages')->with('success', 'Deleted Successfully.');
+       }
+    }
+    catch (\Exception $e) {
+        return redirect('/admin/pages')->with('error', 'Something went wrong.');
+    
+     }
     }
 
     // Amenities Listing 
