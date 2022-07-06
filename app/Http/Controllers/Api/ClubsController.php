@@ -16,7 +16,7 @@ class ClubsController extends Controller
     private $clubDataService;
 
     /**
-     * tcadJsonDataController constructor.
+     * ClubsController constructor.
      *
      */
     public function __construct(ClubDataService $clubDataService)    
@@ -26,14 +26,12 @@ class ClubsController extends Controller
 
     public function getClubs(Request $request)
     {
-        $data = $this->clubDataService->getClubs($request);
-        return ResponseUtil::successWithData($data, true, 200);
-
+        return $this->clubDataService->getClubs($request);
     }
 
-    public function getClubData($id)
+    public function getSingleClub($id)
     {
-        $data = $this->clubDataService->getClubData($id);
+        $data = $this->clubDataService->getSingleClub($id);
         return ResponseUtil::successWithData($data, true, 200);
 
     }

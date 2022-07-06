@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Club;
-use App\Booking;
+use App\Models\CourtRating;
 
 class Court extends Model
 {
@@ -26,12 +25,13 @@ class Court extends Model
         'updated_at'
     ];
 
-    public function Booking()
+    public function court_rating()
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(CourtRating::class, 'court_id', 'id');
     }
+
     public function club()
     {
-        return $this->belongsTo(Club::class);
+        return $this->hasMany(Club::class, 'id', 'club_id');
     }
 }
