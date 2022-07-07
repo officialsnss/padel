@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use Illuminate\Http\Request;
+use PDF;
 
 class BookingController extends Controller
 {
@@ -22,14 +24,13 @@ class BookingController extends Controller
         ->leftJoin('courts','courts.id', '=', 'bookings.court_id')
         ->leftJoin('clubs','clubs.id', '=', 'courts.club_id')
         ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-        ->whereIn('payments.payment_status',[1,2])
+        ->whereIn('payments.payment_status',[1,2,3,4])
         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname', 'courts.*')
         ->get();
-      
         return view('backend.pages.bookings', compact('title','bookings'));
     }
     catch (\Exception $e) {
-      dd($e->getMessage());
+     // dd($e->getMessage());
         return redirect('/admin')->with('error', 'Something went wrong.');
     }    
    }
@@ -44,17 +45,26 @@ class BookingController extends Controller
           ->leftJoin('clubs','clubs.id', '=', 'courts.club_id')
           ->leftJoin('court_timeslots as slots','slots.id', '=', 'bookings.slot_id')
           ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-          ->whereIn('payments.payment_status',[1,2])
+          ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
+          ->whereIn('payments.payment_status',[1,2,3,4])
           ->where('bookings.id', $id)
-          ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'users.name as phone', 'bookings.id as bookid','clubs.name as clubname', 'slots.*','courts.*')
+          ->select('payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'payments.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.name as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'slots.*','courts.*', 'currencies.code as unit')
           ->get();
-       
+          //dd( $bookingInfo[0]->clubamenities);
           return view('backend.pages.bookingDetails', compact('title','bookingInfo'));
       }
       catch (\Exception $e) {
         dd($e->getMessage());
           return redirect('/admin/bookings')->with('error', 'Something went wrong.');
       }
+  }
+
+  //PDF
+  public function generateInvoicePDF()
+  {
+      $pdf = PDF::loadView('myPDF');
+
+      return $pdf->download('nicesnippets.pdf');
   }
    
 }

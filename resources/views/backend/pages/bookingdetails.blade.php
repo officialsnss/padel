@@ -1,9 +1,7 @@
 @extends('backend.layouts.app')
 @section('content')
 <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Booking Details</h3>
-         </div>
+   
         <div class="card-body">
           <div class="row">
             <div class="col-4 col-md-4 col-lg-4">
@@ -49,10 +47,63 @@
                  </div>
                 <div class="col-3 col-md-3 col-lg-3">
                 <h5 class="text-primary">Amenities Included</h5>
+                    <?php $lists = explode(',', $bookingInfo[0]->clubamenities);
+                     ?>
+                     @foreach($lists as $list)
+                     <p>{{ $list }} </p>
+                    @endforeach
+              
                 </div>
             </div> 
+            <hr>
+            <div class="row paymentinfo">
+                <div class="col-8 col-md-8 col-lg-8">
+                 
+                </div>
+                <div class="col-4 col-md-4 col-lg-4">
+               
+                <table class="details bookingdetails">
+                  <tr>
+                    <td><strong>Price:</strong></td>
+                    <td>{{ $bookingInfo[0]->cprice }} {{ $bookingInfo[0]->unit }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Payments Method:</strong></td>
+                    <td>{{ ($bookingInfo[0]->payment_method == 1)?'Instant':'Later' }}</td>
+                  </tr>
+                  @if($bookingInfo[0]->payment_method == '2')
+                  <tr>
+                    <td><strong>Advance Payment:</strong></td>
+                    <td>{{ $bookingInfo[0]->advance_price }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pending Price:</strong></td>
+                    <td>{{ $bookingInfo[0]->pending_amount }} {{ $bookingInfo[0]->unit }}</td>
+                  </tr>
+                  @endif
+                  
+                  <tr>
+                    <td><strong>Service Charge:</strong></td>
+                    <td>{{ $bookingInfo[0]->service_charge }} {{ $bookingInfo[0]->unit }}</td>
+                  </tr>
+                  @if($bookingInfo[0]->discount_price)
+                  <tr>
+                    <td><strong>Discount:</strong></td>
+                    <td>{{ $bookingInfo[0]->discount_price }} {{ $bookingInfo[0]->unit }}</td>
+                  </tr>
+                  @endif
+
+                  <tr>
+                    <td><strong>Total Amount:</strong></td>
+                    <td>{{ $bookingInfo[0]->total_amount }} {{ $bookingInfo[0]->unit }}</td>
+                  </tr>
+                </table>
+                </div>
+            </div>
+
             <div class="row">    
                 <div class="bk-btn">
+                <a href="{{ url('admin/generate-invoice-pdf')}}" onclick="#" class="btn btn-success">Print Invoice</a>
                   <a href="#" onclick="history.go(-1)" class="btn btn-info">BACK</a>
                 </div>
             </div>
