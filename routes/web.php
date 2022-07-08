@@ -46,7 +46,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
         Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
           // Pdf 
-     Route::get('generate-invoice-pdf', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF')); 
+         Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF')); 
 
         //Courts
         Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');

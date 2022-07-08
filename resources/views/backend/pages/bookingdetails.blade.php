@@ -3,6 +3,26 @@
 <div class="card">
    
         <div class="card-body">
+        <div class="row" style="margin-bottom:22px;font-size:18px;">
+        
+          <div class="col-4 col-md-4 col-lg-4">
+                <table class="details bookingdetails">
+                  <tr>
+                    <td><strong>Invoice ID:</strong></td>
+                    <td>{{ $bookingInfo[0]->invoice }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Booking Id:</strong></td>
+                    <td>{{ $bookingInfo[0]->bookingorderId }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Order Date:</strong></td>
+                    <td>{{ date('d-m-Y', strtotime($bookingInfo[0]->orderDate)) }}</td>
+                  </tr>
+                </table>
+          </div>
+        </div>
+        <div class="clear"></div>
           <div class="row">
             <div class="col-4 col-md-4 col-lg-4">
                 <h5 class="text-primary">Customer Details</h5>
@@ -47,10 +67,10 @@
                  </div>
                 <div class="col-3 col-md-3 col-lg-3">
                 <h5 class="text-primary">Amenities Included</h5>
-                    <?php $lists = explode(',', $bookingInfo[0]->clubamenities);
+                    <?php $lists = explode(',', $amenityList);
                      ?>
                      @foreach($lists as $list)
-                     <p>{{ $list }} </p>
+                     <p>- {{ $list }} </p>
                     @endforeach
               
                 </div>
@@ -103,7 +123,7 @@
 
             <div class="row">    
                 <div class="bk-btn">
-                <a href="{{ url('admin/generate-invoice-pdf')}}" onclick="#" class="btn btn-success">Print Invoice</a>
+                <a href="{{ url ('admin/generate-invoice-pdf') }}/{{ $bookingInfo[0]->bookingid }}" onclick="#" class="btn btn-success">Print Invoice</a>
                   <a href="#" onclick="history.go(-1)" class="btn btn-info">BACK</a>
                 </div>
             </div>
