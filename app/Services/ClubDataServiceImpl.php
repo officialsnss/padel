@@ -47,7 +47,7 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket[$i]['name'] = $row['name'];
             $dataPacket[$i]['description'] = $row['description'];
             $address = $row['address'];
-            $city = $row['cities'][0]['name'];
+            $city = $row['cities'] == '' ? $row['cities'][0]['name'] : null;
             $dataPacket[$i]['address'] = $address . ',' . $city;
             $clubPrice = $this->getClubPrice($row['court']);
             $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
