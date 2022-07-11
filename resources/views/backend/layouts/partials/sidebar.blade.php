@@ -75,7 +75,9 @@
                 Bookings
               </p>
             </a>
-          </li>   
+          </li>
+          
+          
           
           <li class="nav-item">
             <a href="{{url('/admin/clubs')}}" class="nav-link  {{ request()->segment(2) == 'clubs' ? 'active' : '' }}">
@@ -144,6 +146,15 @@
                Refunds              </p>
             </a>
           </li>  
+
+          <li class="nav-item">
+            <a href="{{url('/admin/cancel-request')}}" class="nav-link  {{ request()->segment(2) == 'cancel-request' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-money-bill-alt"></i>
+              <p>
+               Cancellation Requests  </p>
+            </a>
+          </li>  
+
 
           <li class="nav-item">
             <a href="{{url('/admin/contact')}}" class="nav-link  {{ request()->segment(2) == 'contact' ? 'active' : '' }}">

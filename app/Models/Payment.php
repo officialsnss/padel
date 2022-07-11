@@ -22,6 +22,7 @@ class Payment extends Model
         'payment_status',
         'coupons_id',
         'total_amount',
+        'refund_price',
         'currency_id',
         'created_at',
         'updated_at'
