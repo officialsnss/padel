@@ -45,7 +45,9 @@ Route::group(['middleware' =>['role:1,2']], function(){
         //Bookings
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
         Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
-         
+          // Pdf 
+         Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF')); 
+
         //Courts
         Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');
 
@@ -89,7 +91,9 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/settings/update/{id}', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
      
      //Refunds Listing
-     Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index')->name('refunds');
+      Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index')->name('refunds');
+
+   
 
     });
 
