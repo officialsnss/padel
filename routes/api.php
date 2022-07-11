@@ -35,6 +35,14 @@ Route::middleware('auth:api')->group( function () {
     //BATS
     Route::get('get/bat_list/{club_id}', 'App\Http\Controllers\Api\BatsController@getBatDetails');
 
-     //LEVELS
-     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
+    //LEVELS
+    Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
+
+    //PLAYERS
+    Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
+    Route::get('get/player/{id}', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
+
+    //MATCHES
+    Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatchesList');
+    Route::get('get/match/{id}', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
 });
