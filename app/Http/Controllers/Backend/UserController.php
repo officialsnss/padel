@@ -33,7 +33,7 @@ class UserController extends Controller
     public function view($id){
         try{
             $title = 'User Detail';
-            $userInfo = User::where('id', $id)->get();
+            $userInfo = User::where('id', $id)->first();
             return view('backend.pages.users.details', compact('title','userInfo'));
         } 
         catch (\Exception $e) {

@@ -6,11 +6,11 @@
           <div class="card card-primary">
            
             <div class="card-body reset-form">
-         <form method="post" action="{{ route('page.update', $pageData[0]->id) }}">
+         <form method="post" action="{{ route('page.update', $pageData->id) }}">
             {{ csrf_field() }}
              <div class="form-group">
                 <label for="inputName">Title</label>
-                <input type="text" id="title" class="form-control" value="{{ $pageData[0]->title }}" name="title">
+                <input type="text" id="title" class="form-control" value="{{ $pageData->title }}" name="title">
                 @error('title')
                 <div class="form-error">{{ $message }}</div>
                 @enderror
@@ -19,7 +19,7 @@
               <div class="form-group">
                
                 <label for="inputName">Content</label>
-                <textarea id="content" class="ckeditor form-control" name="content">{{ $pageData[0]->content }}</textarea>
+                <textarea id="content" class="ckeditor form-control" name="content">{{ $pageData->content }}</textarea>
                @error('content')
                 <div class="form-error">{{ $message }}</div>
                @enderror

@@ -9,15 +9,15 @@
                 <table class="details bookingdetails">
                   <tr>
                     <td><strong>Invoice ID:</strong></td>
-                    <td>{{ $bookingInfo[0]->invoice }}</td>
+                    <td>{{ $bookingInfo->invoice }}</td>
                   </tr>
                   <tr>
                     <td><strong>Booking Id:</strong></td>
-                    <td>{{ $bookingInfo[0]->bookingorderId }}</td>
+                    <td>{{ $bookingInfo->bookingorderId }}</td>
                   </tr>
                   <tr>
                     <td><strong>Order Date:</strong></td>
-                    <td>{{ date('d-m-Y', strtotime($bookingInfo[0]->orderDate)) }}</td>
+                    <td>{{ date('d-m-Y', strtotime($bookingInfo->orderDate)) }}</td>
                   </tr>
                 </table>
           </div>
@@ -29,23 +29,23 @@
                 <table class="details bookingdetails">
                   <tr>
                     <td><strong>Full Name:</strong></td>
-                    <td>{{ $bookingInfo[0]->usrname }}</td>
+                    <td>{{ $bookingInfo->usrname }}</td>
                   </tr>
                   <tr>
                     <td><strong>Email:</strong></td>
-                    <td>{{ $bookingInfo[0]->usremail }}</td>
+                    <td>{{ $bookingInfo->usremail }}</td>
                   </tr>
                   <tr>
                     <td><strong>Phone:</strong></td>
-                    <td>{{ $bookingInfo[0]->phone }}</td>
+                    <td>{{ $bookingInfo->phone }}</td>
                   </tr>
                   <tr>
                   <td><strong>Address:</strong></td>
-                    <td>{{ $bookingInfo[0]->address }}<br>
-                    {{ $bookingInfo[0]->region_id }}<br>
-                    {{ $bookingInfo[0]->city_id }}<br>
-                    {{ $bookingInfo[0]->zipcode }}<br>
-                    {{ $bookingInfo[0]->county }}
+                    <td>{{ $bookingInfo->address }}<br>
+                    {{ $bookingInfo->region_id }}<br>
+                    {{ $bookingInfo->city_id }}<br>
+                    {{ $bookingInfo->zipcode }}<br>
+                    {{ $bookingInfo->county }}
                     </td>
                   </tr>
                 </table>
@@ -55,13 +55,13 @@
 
                 <div class="col-3 col-md-3 col-lg-3">
                   <h5 class="text-primary">Booking Date</h5>
-                  <p>{{ $bookingInfo[0]->date }}</p>
+                  <p>{{ $bookingInfo->date }}</p>
                   
                   <h5 class="text-primary">Booking Time</h5>
-                  <p>{{ $bookingInfo[0]->start_time }} - {{ $bookingInfo[0]->end_time }}</p>
+                  <p>{{ $bookingInfo->start_time }} - {{ $bookingInfo->end_time }}</p>
 
                   <h5 class="text-primary">Club Name</h5>
-                  <p>{{ $bookingInfo[0]->clubname }}</p>
+                  <p>{{ $bookingInfo->clubname }}</p>
                 </div>  
                 <div class="col-1 col-md-1 col-lg-1">
                  </div>
@@ -70,7 +70,9 @@
                     <?php $lists = explode(',', $amenityList);
                      ?>
                      @foreach($lists as $list)
+                        @if($list != '')
                      <p>- {{ $list }} </p>
+                        @endif
                     @endforeach
               
                 </div>
@@ -85,37 +87,37 @@
                 <table class="details bookingdetails">
                   <tr>
                     <td><strong>Price:</strong></td>
-                    <td>{{ $bookingInfo[0]->cprice }} {{ $bookingInfo[0]->unit }}</td>
+                    <td>{{ $bookingInfo->cprice }} {{ $bookingInfo->unit }}</td>
                   </tr>
                   <tr>
                     <td><strong>Payments Method:</strong></td>
-                    <td>{{ ($bookingInfo[0]->payment_method == 1)?'Instant':'Later' }}</td>
+                    <td>{{ ($bookingInfo->payment_method == 1)?'Instant':'Later' }}</td>
                   </tr>
-                  @if($bookingInfo[0]->payment_method == '2')
+                  @if($bookingInfo->payment_method == '2')
                   <tr>
                     <td><strong>Advance Payment:</strong></td>
-                    <td>{{ $bookingInfo[0]->advance_price }}</td>
+                    <td>{{ $bookingInfo->advance_price }}</td>
                   </tr>
                   <tr>
                     <td><strong>Pending Price:</strong></td>
-                    <td>{{ $bookingInfo[0]->pending_amount }} {{ $bookingInfo[0]->unit }}</td>
+                    <td>{{ $bookingInfo->pending_amount }} {{ $bookingInfo->unit }}</td>
                   </tr>
                   @endif
                   
                   <tr>
                     <td><strong>Service Charge:</strong></td>
-                    <td>{{ $bookingInfo[0]->service_charge }} {{ $bookingInfo[0]->unit }}</td>
+                    <td>{{ $bookingInfo->service_charge }} {{ $bookingInfo->unit }}</td>
                   </tr>
-                  @if($bookingInfo[0]->discount_price)
+                  @if($bookingInfo->discount_price)
                   <tr>
                     <td><strong>Discount:</strong></td>
-                    <td>{{ $bookingInfo[0]->discount_price }} {{ $bookingInfo[0]->unit }}</td>
+                    <td>{{ $bookingInfo->discount_price }} {{ $bookingInfo->unit }}</td>
                   </tr>
                   @endif
 
                   <tr>
                     <td><strong>Total Amount:</strong></td>
-                    <td>{{ $bookingInfo[0]->total_amount }} {{ $bookingInfo[0]->unit }}</td>
+                    <td>{{ $bookingInfo->total_amount }} {{ $bookingInfo->unit }}</td>
                   </tr>
                 </table>
                 </div>
@@ -123,7 +125,7 @@
 
             <div class="row">    
                 <div class="bk-btn">
-                <a href="{{ url ('admin/generate-invoice-pdf') }}/{{ $bookingInfo[0]->bookingid }}" onclick="#" class="btn btn-success">Print Invoice</a>
+                <a href="{{ url ('admin/generate-invoice-pdf') }}/{{ $bookingInfo->bookingid }}" onclick="#" class="btn btn-success">Print Invoice</a>
                   <a href="#" onclick="history.go(-1)" class="btn btn-info">BACK</a>
                 </div>
             </div>

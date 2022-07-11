@@ -7,12 +7,12 @@
           <div class="card card-primary">
            
             <div class="card-body reset-form">
-         <form method="post" action="{{ route('amenity.update', $amenitityData[0]->id) }}">
+         <form method="post" action="{{ route('amenity.update', $amenitityData->id) }}">
             {{ csrf_field() }}
            
             <div class="form-group">
                 <label for="inputName">Name</label>
-                <textarea id="desc" class="form-control" name="desc">{{ $amenitityData[0]->name }}</textarea>
+                <textarea id="desc" class="form-control" name="desc">{{ $amenitityData->name }}</textarea>
                @error('desc')
                 <div class="form-error">{{ $message }}</div>
                @enderror

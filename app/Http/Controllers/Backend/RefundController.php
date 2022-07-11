@@ -23,10 +23,10 @@ class RefundController extends Controller
     {
      
         try{
-            $title = 'Cancellation';
+            $title = 'Cancellations';
             $payments = Payment::leftJoin('users','users.id', '=', 'payments.user_id')
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-            ->where('payments.payment_status','3')
+            ->where('payments.payment_status',5)
              ->select('payments.*', 'users.name', 'users.email','currencies.code')
             ->get();
           
