@@ -18,7 +18,6 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Club Name</th>
-                    <th>Court Number</th>
                     <th>Status</th>
                     <th>Actions</th>
                  </tr>
@@ -31,15 +30,11 @@
                       <td>{{ $booking->usrname }}</td>
                       <td>{{ $booking->usremail }}</td>
                       <td>{{ $booking->clubname }}</td>
-                      <td>{{ $booking->court_number }}</td>
                      @if($booking->payment_status == '1')
                         <td >Completed</td>
-                      @elseif($booking->payment_status == '2')
-                        <td>Pending</td>
-                      @elseif($booking->payment_status == '3')
-                        <td>Cancellation</td>
                       @else
-                       <td>Refunded</td>
+                        <td>Pending</td>
+                      
                        @endif 
                      <td><a href="{{ route('booking.view',$booking->bookId)}}" class="btn btn-success">View Details</a></td>
                   </tr>

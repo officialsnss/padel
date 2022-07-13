@@ -96,7 +96,7 @@
                   @if($bookingInfo->payment_method == '2')
                   <tr>
                     <td><strong>Advance Payment:</strong></td>
-                    <td>{{ $bookingInfo->advance_price }}</td>
+                    <td>{{ $bookingInfo->advance_price }}  {{ $bookingInfo->unit }}</td>
                   </tr>
                   <tr>
                     <td><strong>Pending Price:</strong></td>

@@ -86,7 +86,7 @@
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/bookings')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -97,12 +97,12 @@
               <div class="inner">
                 <h3>{{ $cancel }}</h3>
 
-                <p>Cancellation</p>
+                <p>Cancellation Requests</p>
               </div>
               <div class="icon">
                 <i class="ion ion-alert"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/cancel-request')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -112,12 +112,12 @@
               <div class="inner">
                 <h3>{{ $refund }}</h3>
 
-                <p>Refunds pending</p>
+                <p>Total Refunds</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/refunds')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -142,8 +142,7 @@
                   <tr>
                      <th>S.no</th>
                      <th>Club Name</th>
-                     <th>Court Number</th>
-                     <th>Amount</th>
+                      <th>Amount</th>
                  </tr>
                 </thead>
                   <?php
@@ -152,7 +151,6 @@
                        <tr>
                       <td>{{  $i }}</td>
                       <td>{{$data->name}}</td>
-                      <td>{{$data->court_number}}</td>
                       <td>{{ $data->price}} KWD</td>
                       </tr>
                     

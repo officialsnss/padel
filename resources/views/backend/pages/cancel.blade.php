@@ -3,11 +3,10 @@
 @section('content')
 
 <div class="row">
-        <div class="col-12">
-            <div class="card">
-         
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+  <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Sr.no</th>
@@ -37,10 +36,8 @@
                      
                        <a class="btn btn-success" style="cursor: pointer" data-toggle="modal" data-target="#refundModal{{ $payment->id }}">Approve</a>
                        <a class="btn btn-danger" style="cursor: pointer" data-toggle="modal" data-target="#rejectModal{{ $payment->id }}">Rejected</a>
-                      </li>
-                      </td>
-                       <!--Refund Modal -->
-                          <div class="modal fade" id="refundModal{{ $payment->id }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+                    <!--Refund Modal -->
+                    <div class="modal fade" id="refundModal{{ $payment->id }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                       <div class="modal-header">
@@ -50,7 +47,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form method="post" action="{{ route('refund.add') }}">
+                                          <form method="post" action="{{ route('refund.add') }}" id="refundform">
                                               @csrf
                                               <div class="form-group">
                                                 <label for="inputName">Amount Paid (In {{ $payment->code }})</label>
@@ -79,16 +76,16 @@
                                                       </button>
                                                   </div>
                                               </div>
+                                              </div>
                                           </form>
                                       </div>
                                   </div>
                               </div>
                           </div>
                    <!--  End of refund modal-->
-
-                   <!-- Reject MODAL -->
+                    <!-- Reject MODAL -->
                    
-                     <div class="modal fade" id="rejectModal{{ $payment->id }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+                    <div class="modal fade" id="rejectModal{{ $payment->id }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                       <div class="modal-header">
@@ -131,22 +128,14 @@
                           </div>
 
                 <!--  End of POPUP-->
-                   <!-- End Reject Modal -->
-                  </tr>
+                      </td>
+                    </tr>
                   @endforeach
-                  
-                  </tbody>
-                
-                </table>
-                </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
+              </tbody>
+          </table>        
         </div>
-   
-        <!-- /.row -->
-
-        @endsection
+      </div> 
+  </div>
+</div>
+@endsection
   

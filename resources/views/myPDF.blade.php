@@ -116,7 +116,7 @@ table.details {
 
               <div class="col-3 col-md-3 col-lg-3">
                 <h5 class="text-primary">Booking Date</h5>
-                <p>{{ $bookingInfo->date }}</p>
+                <p>{{ date('d-m-Y', strtotime($bookingInfo->bookdate)) }}</p>
                 
                 <h5 class="text-primary">Booking Time</h5>
                 <p>{{ $bookingInfo->start_time }} - {{ $bookingInfo->end_time }}</p>

@@ -17,29 +17,20 @@ class PaymentsSeeder extends Seeder
         DB::table('payments')->insert([
             [
             'user_id' => '3',
-            'booking_id' => '6',
-            'price' => 100,
+            'booking_id' => '1',
+            'invoice'=> 'INV1',
+            'price' => 200,
             'payment_method' => '1',
             'advance_price' => '0.00',
-            'transaction_id'=>'TRA23193',
+            'isRefunded' => '0',
+            'isCancellationRequest'=> '0',
+            'transaction_id'=>'TRAC1',
             'payment_status' => '1',
-            'coupons_id' => '1',
             'total_amount' => '120',
             'currency_id'=> '129',
             
             ],
-            [
-            'user_id' => '3',
-            'booking_id' => '7',
-            'price' => 100,
-            'payment_method' => '2',
-            'advance_price' => '12.00',
-            'transaction_id'=>'TRA23193',
-            'payment_status' => '2',
-            'coupons_id' => '2',
-            'total_amount' => '120',
-            'currency_id'=> '129',
-            ],
+           
         ]); 
     }
 }

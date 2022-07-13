@@ -27,3 +27,8 @@ ul.nav.nav-treeview {
     padding: 5px 0px;
     vertical-align: top;
 }
+label#refund_amt-error, label#messagebody-error {
+    color: red;
+    font-size: 14px;
+    font-weight: 400;
+}

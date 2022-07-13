@@ -28,16 +28,29 @@ class HomeController extends Controller
          $title = 'Dashboard';
          $regUsers = User::whereIn('role', [3, 4])->where('status', 1)->count();
          $regClubs = Club::where('status', 1)->count();
-         $totalBooking = Booking::where('status', 1)->count();
-         $todayBooking = Booking::where('created_at', '>=', date('Y-m-d').' 00:00:00')->where('status', 1)->count();
-         $sale = DB::table('payments')->where('payment_status', 1 )->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
-         $cancel= DB::table('payments')->whereIn('payment_status', [3,4] )->count();
-         $refund= DB::table('payments')->where('payment_status',3)->count();
+         $totalBooking =  DB::table('payments')
+         ->where('payments.isRefunded', '0')
+         ->count();
+         $todayBooking = DB::table('payments')
+         ->where('payments.isRefunded', '0')
+         ->where('created_at', '>=', date('Y-m-d').' 00:00:00')
+         ->count();
+         $sale = DB::table('payments')
+                 ->where('payments.isRefunded', '0')
+                 ->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
+         $cancel= DB::table('payments')
+                 ->where('payments.isCancellationRequest', '1')
+                 ->where('payments.isRefunded', '0')
+                 ->count();
+         $refund= DB::table('payments')
+                 ->where('payments.isCancellationRequest', '1')
+                 ->where('payments.isRefunded', '1')
+                  ->count();
          //$topBooking = Booking::with('courts');
         
          $topBooking = DB::table('bookings')
-         ->leftjoin('courts', 'bookings.court_id', '=', 'courts.id')
-         ->leftjoin('clubs', 'courts.club_id', '=', 'clubs.id')
+        // ->leftjoin('courts', 'bookings.club_id', '=', 'courts.id')
+         ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
          ->where('bookings.status', '=', 1)
          ->orderBy('bookings.id', 'desc')
          ->get()
@@ -46,6 +59,7 @@ class HomeController extends Controller
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
        }
        catch (\Exception $e) {
+       // dd($e->getMessage());
         return redirect('/')->with('error', 'Something went wrong.');
        }
     }

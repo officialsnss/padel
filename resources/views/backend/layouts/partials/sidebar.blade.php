@@ -69,7 +69,7 @@
           </li>
   
           <li class="nav-item">
-            <a href="{{url('/admin/bookings')}}" class="nav-link  {{ request()->segment(2) == 'bookings' ? 'active' : '' }}">
+            <a href="{{url('/admin/bookings')}}" class="nav-link  {{ (request()->segment(2) == 'bookings' || request()->segment(2) == 'calendar' || (request()->segment(3) == 'view' &&  request()->segment(2) == 'booking' )) ? 'active' : '' }}">
             <i class="nav-icon fas fa-user-edit"></i>
               <p>
                 Bookings
