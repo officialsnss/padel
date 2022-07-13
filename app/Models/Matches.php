@@ -22,4 +22,9 @@ class Matches extends Model
     {
         return $this->hasMany(Club::class, 'id', 'club_id');
     }
+
+    public function players()
+    {
+        return $this->hasMany(Players::class, 'id', 'player_id');
+    }
 }

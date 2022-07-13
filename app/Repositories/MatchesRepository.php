@@ -26,12 +26,38 @@ class MatchesRepository extends BaseRepository
     public function getMatchesList()
     {
       return Matches::with('slots')
-              ->with('clubs')
+              ->with('clubs.cities')
               ->get(); 
     }
 
     public function getMatchDetails($matchId)
     {
-      return Matches::where('id', $matchId)->with('users')->get(); 
+      return Matches::where('id', $matchId)
+              ->with('slots')
+              ->with('clubs.cities')
+              ->with('clubs.images')
+              ->with('players')
+              ->first(); 
+    }
+
+    public function getMatchData($matchId)
+    {
+      return Matches::where('id', $matchId)->first();
+    }
+
+    public function requestAddPlayer($matchId, $playerId) 
+    {
+      return Matches::where('id', $matchId)
+                ->update(['requestedPlayersIds' => $playerId]);
+    }
+
+    public function acceptRequest($isAccept, $matchId, $ids, $dataSet) 
+    {
+      if($isAccept) {
+        Matches::where('id', $matchId)
+                ->update(['playersIds' => $ids]);
+      }
+      return Matches::where('id', $matchId)
+                ->update(['requestedPlayersIds' => $dataSet]);   
     }
 }
