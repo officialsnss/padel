@@ -98,7 +98,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                          <form method="post" action="{{ route('refund.reject') }}">
+                                          <form method="post" action="{{ route('refund.reject') }}" id="rejectform">
                                               @csrf
                                             <div class="form-group">
                                                 <label for="inputName">To</label>

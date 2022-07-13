@@ -65,7 +65,7 @@ class RefundController extends Controller
     
     public function add(Request $request){
         $request->validate([
-            'refund_amt' => 'required',
+            'refund_amt' => 'required|numeric',
         ]);
         try{ 
             $result = Wallets::create([

@@ -21,7 +21,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  {!! \Helpers::test(); !!}
+                
                   @foreach ($regions as $region)
 
                     <tr>
