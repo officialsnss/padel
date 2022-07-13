@@ -20,4 +20,8 @@ interface MatchesService
 
     public function getMatchDetails($matchId);
 
+    public function sendRequest($request);
+
+    public function acceptRequest($request);
+
 }

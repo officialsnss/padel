@@ -30,6 +30,27 @@ class MatchesController extends Controller
 
     public function getMatchDetails($matchId)
     {
-        return $this->matchesService->getMatchDetails($MatchId);
+        return $this->matchesService->getMatchDetails($matchId);
+    }
+
+    public function sendRequest(Request $request)
+    {
+        $data = $this->matchesService->sendRequest($request);
+        if($data) {
+            return ['message' => 'Request sent successfully'];
+        }
+        return ['message' => 'Request has already being sent!'];
+    }
+
+    public function acceptRequest(Request $request)
+    {
+        $data = $this->matchesService->acceptRequest($request);
+        if(isset($data['message'])) {
+            return $data;
+        }
+        if($request->isAccept) {
+            return ['message' => 'Request Accepted.'];
+        }
+        return ['message' => 'Request rejected.'];
     }
 }

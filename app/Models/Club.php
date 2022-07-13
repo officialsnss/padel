@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Court;
 use App\Models\Currencies;
 use App\Models\ClubRating;
+use App\Models\Cities;
+use App\Models\ClubImages;
 
 class Club extends Model
 {
@@ -46,5 +48,10 @@ class Club extends Model
     public function cities()
     {
         return $this->hasMany(Cities::class, 'id', 'city_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ClubImages::class, 'club_id', 'id');
     }
 }

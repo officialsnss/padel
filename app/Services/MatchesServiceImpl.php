@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\MatchesRepository;
-use App\Services\PlayersServiceImpl;
+use App\Repositories\PlayersRepository;
+// use App\Services\PlayersServiceImpl;
 /**
  * Class MatchesServiceImpl
  *
@@ -15,10 +16,10 @@ class MatchesServiceImpl implements MatchesService
      * MatchesServiceImpl constructor.
      *
      */
-    public function __construct(MatchesRepository $matchesRepository, PlayersServiceImpl $playersServiceImpl)
+    public function __construct(MatchesRepository $matchesRepository, PlayersRepository $playersRepository)
     {
         $this->matchesRepository = $matchesRepository;
-        $this->playersServiceImpl = $playersServiceImpl;
+        $this->playersRepository = $playersRepository;
     }
 
 
@@ -30,7 +31,6 @@ class MatchesServiceImpl implements MatchesService
     public function getMatchesList()
     {
         $data = $this->matchesRepository->getMatchesList();
-        // dd($data);
         $dataArray = [];
 
         foreach($data as $i => $row) {
@@ -40,44 +40,110 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['endTime'] = $row['slots'] ? $row['slots'][0]['end_time']: null;  
             $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
+            $dataArray[$i]['minimum_level'] = $row['level'];  
+            
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds); 
         }
-        return ['Players' => $dataArray];
+        return ['status' => 'success', 'data' => $dataArray];
     }
 
     public function getMatchDetails($matchId)
     {
-        $data = $this->matchesRepository->getMatchDetails($playerId);
+        $data = $this->matchesRepository->getMatchDetails($matchId);
         $dataArray = [];
 
-        foreach($data as $i => $row) {
-            $dataArray[$i]['id'] = $row['id'];            
-            $dataArray[$i]['name'] = $row['users'][0]['name'];  
-            $dataArray[$i]['level'] = $row['levels'];  
-            $dataArray[$i]['image'] = $row['users'][0]['profile_pic'];  
-            $dataArray[$i]['instagram_url'] = $row['instagram_url'];  
-            $dataArray[$i]['snapchat'] = $row['snapchat'];  
-            $dataArray[$i]['match_played'] = $row['match_played'];  
-            $dataArray[$i]['match_won'] = $row['match_won'];  
-            $dataArray[$i]['match_loose'] = $row['match_loose'];  
-            $dataArray[$i]['match_draw'] = $row['match_played'] - ($row['match_loose'] + $row['match_won']);  
-            $dataArray[$i]['followers'] = $row['followers'];  
-            $dataArray[$i]['following'] = $row['following'];  
-            $dataArray[$i]['court_side'] = $row['court_side'];  
-            $dataArray[$i]['best_shot'] = $row['best_shot'];  
-            $dataArray[$i]['gender'] = $row['gender'] == 1 ? "Female" : "Male";  
-            $dataArray[$i]['status'] = $row['status'] == 1 ? "Active" : "Deactive";  
+        $dataArray['id'] = $data['id'];            
+        $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
+        $dataArray['date'] = $data['slots'] ? $data['slots'][0]['date'] : null;  
+        $dataArray['startTime'] = $data['slots'] ? $data['slots'][0]['start_time'] : null;  
+        $dataArray['endTime'] = $data['slots'] ? $data['slots'][0]['end_time']: null;  
+        $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
+        $dataArray['game_type'] = $data['is_friendly'] == 0 ? 'Game': 'Friendly';
+
+        $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
+        $city = $data['clubs'][0]['cities'] ? $data['clubs'][0]['cities'][0]['name'] : null;
+        $dataArray['address'] = $address . ', ' . $city;
+        $dataArray['minimum_level'] = $data['level'];  
+        
+        $images = $data['clubs'][0]['images'];
+        foreach($images as $i => $image) {
+            $dataArray['images'][$i] = $image['image'];
         }
-        return ['data' => $dataArray];
+
+        $arrayIds = explode(',', $data['playersIds']); 
+        $dataArray['players'] = $this->getPlayersList($arrayIds); 
+
+        $requestIds = explode(',', $data['requestedPlayersIds']);
+        $dataArray['requestedPlayers'] = $this->getPlayersList($requestIds); 
+
+        return ['status' => 'success', 'data' => $dataArray];
     }
 
     public function getPlayersList($playersIds)
     {
         $dataArray = [];
         foreach($playersIds as $key => $playerId) {
-            $dataArray[$key] = (object)$this->playersServiceImpl->getPlayerDetails($playerId);
+            $data = $this->playersRepository->getPlayerDetails($playerId);
+            $dataArray[$key]['id'] = $data[0]['id'];
+            $dataArray[$key]['name'] = $data[0]['users'][0]['name'];
+            $dataArray[$key]['image'] = $data[0]['users'][0]['profile_pic'];
+            $dataArray[$key]['level'] = $data[0]['levels'];
         }
         return $dataArray;
+    }
+
+    public function sendRequest($request)
+    {
+        $matchId = $request->match_id;
+        $playerId =$request->player_id;
+
+        $data = $this->matchesRepository->getMatchData($matchId);
+        $idsPacket = explode(',',$data['requestedPlayersIds']);
+        if($idsPacket[0] == 0) {
+            array_shift($idsPacket);
+        }
+        $finalPacket = implode(',', $idsPacket);
+        if(!$finalPacket) {
+            return $this->matchesRepository->requestAddPlayer($matchId, $playerId);
+        }
+        if(!in_array($playerId, $idsPacket)) {
+            $ids = $finalPacket . ',' . $playerId;
+            return $this->matchesRepository->requestAddPlayer($matchId, $ids);
+        }
+    }
+
+    public function acceptRequest($request) 
+    {
+        $matchId = $request->match_id;
+        $playerId =$request->player_id;
+        $finalPacket = [];
+
+        $data = $this->matchesRepository->getMatchData($matchId);
+            
+        $idsPacket = explode(',',$data['requestedPlayersIds']);
+        $arrayIds = explode(',', $data['playersIds']);
+
+        if(!$data['requestedPlayersIds']) {
+            return ['message' => 'No such request for this player'];
+        }
+        if($request->isAccept) {
+            foreach($idsPacket as $row) {
+                if($playerId == $row) {
+                    array_push($arrayIds, $row);
+                }
+            }
+            $finalPacket = implode(',', $arrayIds);
+        }
+
+        foreach($idsPacket as $key => $row) {
+            if($playerId == $row) {
+                unset($idsPacket[$key]);
+            }
+        }
+        $dataSet = implode(',', $idsPacket);
+
+        $data = $this->matchesRepository->acceptRequest($request->isAccept, $matchId, $finalPacket, $dataSet);
+        return $data;
     }
 }

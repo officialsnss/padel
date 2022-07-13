@@ -29,7 +29,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
 
     //CLUBS
-    Route::post('clubs', 'App\Http\Controllers\Api\ClubsController@getClubs');
+    Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubs');
     Route::get('get/club/{id}', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
 
     //BATS
@@ -45,4 +45,9 @@ Route::middleware('auth:api')->group( function () {
     //MATCHES
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatchesList');
     Route::get('get/match/{id}', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
+
+    //REQUEST PLAYER
+    Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
+    Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
+
 });
