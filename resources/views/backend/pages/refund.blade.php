@@ -13,8 +13,10 @@
                     <th>Sr.no</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>transaction id</th>
                     <th>Total Amount Paid</th>
+                    <th>Total Amount Refunded</th>
+                    <th>Booking On</th>
+                   
                    
                   </tr>
                   </thead>
@@ -25,31 +27,26 @@
                       <td></td>
                       <td>{{ $payment->name }}</td>
                       <td>{{ $payment->email }}</td>
-                      <td>{{ $payment->transaction_id }}</td>
                       <td>{{ $payment->total_amount }} {{ $payment->code }}</td>
-                     <!-- @if($payment->payment_status === '1')
-                        <td >Completed</td>
-                      @elseif($payment->payment_status === '2')
-                        <td>Pending</td>
-                      @elseif($payment->payment_status === '3')
-                        <td>Cancellation</td>
-                      @else
-                       <td>Refunded</td>
-                       @endif; -->
+                      <td>{{ $payment->refund_price }} {{ $payment->code }}</td>
+                      <td>{{ date('d-m-Y', strtotime($payment->created_at)) }}</td>
                      
+                      
+                      
                   </tr>
                   @endforeach
                   
                   </tbody>
                 
                 </table>
-              </div>
+                </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
           </div>
           <!-- /.col -->
         </div>
+   
         <!-- /.row -->
 
         @endsection

@@ -7,7 +7,7 @@
           <div class="card card-primary">
            
             <div class="card-body reset-form">
-         <form method="post" action="{{ route('city.update', $cityData[0]->id) }}">
+         <form method="post" action="{{ route('city.update', $cityData->id) }}">
             {{ csrf_field() }}
             <div class="form-group">
                 <label for="inputName">Select Region</label>
@@ -15,7 +15,7 @@
                   <option value="">---Select Region---</option>
                     @foreach ($regions as $region)
                     
-                    <option value="{{$region->id}}" {{ ($cityData[0]->region_id  == $region->id)?'selected':'' }}>{{$region->name}} ( {{$region->cname}} )</option>
+                    <option value="{{$region->id}}" {{ ($cityData->region_id  == $region->id)?'selected':'' }}>{{$region->name}} ( {{$region->cname}} )</option>
                     @endforeach
                 </select>
                 @error('region_name')
@@ -25,7 +25,7 @@
 
              <div class="form-group">
                 <label for="inputName">City Name</label>
-                <input type="text" id="city" class="form-control" value="{{$cityData[0]->name  }}" name="city">
+                <input type="text" id="city" class="form-control" value="{{$cityData->name  }}" name="city">
                 @error('city')
                 <div class="form-error">{{ $message }}</div>
                 @enderror

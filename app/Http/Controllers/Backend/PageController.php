@@ -73,7 +73,7 @@ class PageController extends Controller
     public function view($id){
         try{
             $title = 'Page View';
-            $pageInfo = Page::where('id', $id)->get();
+            $pageInfo = Page::where('id', $id)->first();
             return view('backend.pages.pageView', compact('title','pageInfo'));
         }
         catch (\Exception $e) {
@@ -86,7 +86,7 @@ class PageController extends Controller
     public function edit($id)
     {
         try{
-            $pageData= Page::where('id', $id)->get();
+            $pageData= Page::where('id', $id)->first();
             $title = 'Edit Page';
             return view('backend.pages.pageEdit', compact('title','pageData'));
         }
@@ -184,7 +184,7 @@ class PageController extends Controller
     public function amenitiesEdit(Request $request, $id)
     {
         try{
-            $amenitityData = Amenities::where('id', $id)->get();
+            $amenitityData = Amenities::where('id', $id)->first();
             $title = 'Edit Amenities';
         return view('backend.pages.amenityEdit', compact('title','amenitityData'));
         }
@@ -287,7 +287,7 @@ class PageController extends Controller
    public function regionsEdit($id)
    {
     try{
-        $regionsData = Regions::where('id', $id)->get();
+        $regionsData = Regions::where('id', $id)->first();
         $countries = Countries::all();
         $title = 'Edit Region';
         return view('backend.pages.regionEdit', compact('title','regionsData', 'countries'));
@@ -388,7 +388,7 @@ class PageController extends Controller
       // City Edit
       public function citiesEdit($id){
         try{
-            $cityData = Cities::where('id', $id)->get();
+            $cityData = Cities::where('id', $id)->first();
             $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
                         ->select('regions.*','countries.name as cname')
                         ->get();
