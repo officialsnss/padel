@@ -20,4 +20,6 @@ interface PlayersService
 
     public function getPlayerDetails($playerId);
 
+    public function followPlayer($request);
+
 }

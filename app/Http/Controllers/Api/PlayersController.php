@@ -32,4 +32,13 @@ class PlayersController extends Controller
     {
         return $this->playersService->getPlayerDetails($playerId);
     }
+
+    public function followPlayer(Request $request)
+    {
+        $data = $this->playersService->followPlayer($request);
+        if($request->isFollow) {
+            return ['status' => 'success', 'message' => 'Followed successfully'];
+        }
+        return ['status' => 'success', 'message' => 'Unfollowed successfully'];
+    }
 }

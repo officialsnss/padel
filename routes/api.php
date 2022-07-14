@@ -50,4 +50,6 @@ Route::middleware('auth:api')->group( function () {
     Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
     Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
 
+    //Follow
+    Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
 });
