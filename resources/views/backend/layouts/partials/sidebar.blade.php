@@ -139,25 +139,17 @@
           </li>  
 
           
-          <li class="nav-item">
-            <a href="{{url('/admin/refunds')}}" class="nav-link  {{ request()->segment(2) == 'refunds' ? 'active' : '' }}">
-            <i class="nav-icon 	fas fa-money-bill-alt"></i>
-              <p>
-               Refunds              </p>
-            </a>
-          </li>  
-
-          <li class="nav-item">
+         <li class="nav-item">
             <a href="{{url('/admin/cancel-request')}}" class="nav-link  {{ request()->segment(2) == 'cancel-request' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
               <p>
-               Cancellation Requests  </p>
+                Refunds </p>
             </a>
           </li>  
 
 
           <li class="nav-item">
-            <a href="{{url('/admin/contact')}}" class="nav-link  {{ request()->segment(2) == 'contact' ? 'active' : '' }}">
+            <a href="{{url('/admin/contact')}}" class="nav-link  {{(request()->segment(2) == 'contact' || (request()->segment(3) == 'contact' && request()->segment(2) == 'view')) ? 'active' : '' }}">
             <i class="nav-icon fas fa-id-card-alt"></i>
               <p>
                 Contact us

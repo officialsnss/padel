@@ -40,11 +40,11 @@ class HomeController extends Controller
                  ->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
          $cancel= DB::table('payments')
                  ->where('payments.isCancellationRequest', '1')
-                 ->where('payments.isRefunded', '0')
+                 ->where('payments.isRefunded', '1')
                  ->count();
          $refund= DB::table('payments')
                  ->where('payments.isCancellationRequest', '1')
-                 ->where('payments.isRefunded', '1')
+                 ->where('payments.isRefunded', '0')
                   ->count();
          //$topBooking = Booking::with('courts');
         
@@ -71,8 +71,35 @@ class HomeController extends Controller
      */
     public function contact()
     { 
+      try{
         $title = 'Contact';
-       return view('backend.pages.contact', compact('title'));
+        $information = DB::table('contact_us')->leftJoin('users', 'users.id', '=', 'contact_us.sender_id')
+                         ->leftJoin('users as receiver', 'receiver.id', '=', 'contact_us.receiver_id')
+                         ->select('users.*','contact_us.*', 'contact_us.id as contactid', 'contact_us.created_at as send_time')
+                         ->get();
+
+        return view('backend.pages.contact', compact('title','information'));
+     }
+      catch (\Exception $e) {
+       // dd($e->getMessage());
+          return redirect('/admin')->with('error', 'Something went wrong.');
+      }    
+    }
+
+    public function contactView($id){
+      try{
+        $title = 'Contact Details';
+        $contactInfo = DB::table('contact_us')->where('contact_us.id', $id)
+        ->leftJoin('users as receiver', 'receiver.id', '=', 'contact_us.receiver_id')
+        ->leftJoin('users', 'users.id', '=', 'contact_us.sender_id')
+        ->select('users.*','contact_us.*', 'contact_us.id as contactid', 'contact_us.created_at as send_time')
+        ->first();
+        return view('backend.pages.contactView', compact('title','contactInfo'));
+    }
+    catch (\Exception $e) {
+      //dd($e->getMessage());
+        return redirect('/admin/contact')->with('error', 'Something went wrong.');
+    }
     }
 
     //Refunds Settings
@@ -95,7 +122,7 @@ class HomeController extends Controller
         return redirect('/admin/settings')->with('success', 'Settings Updated!');
       }
       catch (\Exception $e) {
-        dd(getMessage());
+       // dd(getMessage());
         return redirect('/admin/settings')->with('error', 'Something went wrong.');
       
       }

@@ -97,7 +97,7 @@
               <div class="inner">
                 <h3>{{ $cancel }}</h3>
 
-                <p>Cancellation Requests</p>
+                <p>Cancellation</p>
               </div>
               <div class="icon">
                 <i class="ion ion-alert"></i>
@@ -112,7 +112,7 @@
               <div class="inner">
                 <h3>{{ $refund }}</h3>
 
-                <p>Total Refunds</p>
+                <p>Refunds Pending</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>

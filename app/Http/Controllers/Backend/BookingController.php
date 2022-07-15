@@ -133,10 +133,10 @@ class BookingController extends Controller
           $event['booking_date'] = date('d-m-Y', strtotime($values->booking_date));
           $event['uname'] = $values->uname;
           $events[] = $event;
-          $desc = "hello world".$eventtext;
+         
          // Debugbar::info($events);
       }
-      return view('backend.pages.calendar' ,['events' => $events, 'desc' => $desc]);
+      return view('backend.pages.calendar' ,['events' => $events]);
      
 
 

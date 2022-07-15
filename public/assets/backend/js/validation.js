@@ -41,3 +41,44 @@ $("#rejectform").validate({
   },
   
 })
+
+// Vendor Form
+jQuery.validator.addMethod("lettersonly", function(value, element) 
+{
+return this.optional(element) || /^[a-z," "]+$/i.test(value);
+}, "Please enter Letters only"); 
+$("#vendorform").validate({
+
+  rules: {
+    fullname: {
+    required: true,
+    lettersonly: true
+    },
+    phone: {
+      digits: true
+    },
+    email: {
+    required: true,
+    email: true
+    },
+    clubname: {
+    required: true,
+    },
+    password: {
+    required: true,
+    minlength: 8
+    },
+    password_confirmation: {
+    required: true,
+    equalTo: "#password"
+    },
+    
+  },
+  messages: {
+    password_confirmation: {
+      required: "Please enter same password",
+      }
+  
+  },
+  
+})

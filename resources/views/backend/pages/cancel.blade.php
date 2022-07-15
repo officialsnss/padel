@@ -14,7 +14,7 @@
                     <th>Email</th>
                     <th>Total Amount Paid</th>
                     <th>Booking On</th>
-                    <th>Payment Status</th>
+                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -27,16 +27,17 @@
                       <td>{{ $payment->email }}</td>
                       <td>{{ $payment->total_amount }} {{ $payment->code }}</td>
                       <td>{{ date('d-m-Y', strtotime($payment->created_at)) }}</td>
-                      @if($payment->payment_status === '1')
-                        <td >Completed</td>
+                      @if($payment->isRefunded === '1')
+                        <td><span class="st">Refunded</span></td>
                       @else
-                        <td>Pending</td>
+                        <td><span class="st scancel">Cancel Request</span></td>
                       @endif
                        <td>
-                     
+                       @if($payment->isRefunded === '0')
                        <a class="btn btn-success" style="cursor: pointer" data-toggle="modal" data-target="#refundModal{{ $payment->id }}">Approve</a>
                        <a class="btn btn-danger" style="cursor: pointer" data-toggle="modal" data-target="#rejectModal{{ $payment->id }}">Rejected</a>
-                    <!--Refund Modal -->
+                      @endif
+                     <!--Refund Modal -->
                     <div class="modal fade" id="refundModal{{ $payment->id }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
