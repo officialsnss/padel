@@ -28,7 +28,7 @@ class RefundController extends Controller
             $title = 'Refunds';
             $payments = Payment::leftJoin('users','users.id', '=', 'payments.user_id')
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-            ->where('payments.isCancellationRequest', '1')
+            ->wherez('payments.isCancellationRequest', '1')
             ->where('payments.isRefunded', '1')
              ->select('payments.*', 'users.name', 'users.email','currencies.code')
             ->get();
@@ -45,11 +45,11 @@ class RefundController extends Controller
     public function cancel()
     {
      try{
-            $title = 'Cancellation Requests';
+            $title = 'Refunds';
             $payments = Payment::leftJoin('users','users.id', '=', 'payments.user_id')
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
             ->where('payments.isCancellationRequest', '1')
-            ->where('payments.isRefunded', '0')
+           // ->where('payments.isRefunded', '0')
              ->select('payments.*', 'users.name', 'users.email','currencies.code')
             ->get();
           

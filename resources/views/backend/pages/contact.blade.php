@@ -1,30 +1,46 @@
+
 @extends('backend.layouts.app')
-
 @section('content')
-<div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Contact Us</h3>
 
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-              <i class="fas fa-times"></i>
-            </button>
+<div class="row">
+        <div class="col-12">
+            <div class="card">
+             
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Sr.no</th>
+                    <th>Name</th>
+                    <th>Message</th>
+                    <th>Date-Time</th>
+                    <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    
+                  @foreach ($information as $info)
+                    <tr>
+                      <td></td>
+                      <td>{{ $info->name }}</td>
+                      <td>{{ str_replace("&nbsp;", "", substr(strip_tags($info->message),0, 100)) }} ...</td>
+                      <td>{{ $info->send_time }}</td>
+                      <td><a href="{{  route('contact.view',$info->contactid) }}" class="btn btn-success">View</a>
+                       
+                  </tr>
+                  @endforeach
+                  
+                  </tbody>
+                
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
           </div>
+          <!-- /.col -->
         </div>
-        <div class="card-body">
-        If you have any questions, queries or suggestions regarding the content here on phpflow.com, please feel free to get in touch.
+        <!-- /.row -->
 
-Email: phpflow(at)gmail(dot)com
-
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-          Footer
-        </div>
-        <!-- /.card-footer-->
-      </div>
-      <!-- /.card -->
-@endsection
+        @endsection
+  

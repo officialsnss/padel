@@ -7,7 +7,7 @@
           <div class="card card-primary">
            
             <div class="card-body reset-form">
-         <form method="post" action="{{ route('user.add') }}">
+         <form method="post" action="{{ route('user.add') }}" id="vendorform">
             {{ csrf_field() }}
           <div class="row">  
             
@@ -28,10 +28,17 @@
               </div>
              </div>  
              <div class="row"> 
-               <div class="form-group col-md-12">
+               <div class="form-group col-md-6">
                 <label for="inputName">Email</label>
                 <input type="text" id="Email" class="form-control" value="" name="email">
                 @error('email')
+                <div class="form-error">{{ $message }}</div>
+                @enderror
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputName">Club Name</label>
+                <input type="text" id="clubname" class="form-control" value="" name="clubname">
+                @error('clubname')
                 <div class="form-error">{{ $message }}</div>
                 @enderror
               </div>

@@ -41,7 +41,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
 
         //Contact Page Route
         Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
-
+        Route::get('contact/view/{id}', 'App\Http\Controllers\Backend\HomeController@contactView')->name('contact.view');
         //Bookings
         Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
         Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');

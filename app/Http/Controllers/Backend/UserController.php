@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Club;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -121,6 +122,7 @@ class UserController extends Controller
     {
             $request->validate([
                 'fullname' => 'required|string',
+                'clubname' => 'required|string',
                 'email'=> 'required|email|unique:users' , 
                 'password' => 'required|min:8',
                 'password_confirmation' => 'required|same:password'
@@ -134,11 +136,17 @@ class UserController extends Controller
             'role'=> 5,
             'password' => Hash::make($request->password),
         ]);
+       
         if($result){
+          $result = Club::create([
+            'name' => $request->clubname,
+            'user_id' => $result->id,
+        ]);
           return redirect('/admin/users/court-owners')->with('success', 'Court Owner Created Successfully.');
         }
       }
         catch (\Exception $e) {
+        
             return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
          }
     }

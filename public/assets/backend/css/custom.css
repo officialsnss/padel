@@ -27,3 +27,15 @@ ul.nav.nav-treeview {
     padding: 5px 0px;
     vertical-align: top;
 }
+label#refund_amt-error, label#messagebody-error, form .error {
+    color: red;
+    font-size: 14px;
+    font-weight: 400;
+}
+span.st {
+    color: #28a745;
+    font-weight: 800;
+}
+span.st.scancel {
+    color: red;
+}

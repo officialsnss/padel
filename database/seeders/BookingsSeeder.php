@@ -18,24 +18,40 @@ class BookingsSeeder extends Seeder
         $bookings = [
             [
                'user_id'=>'3',
-               'court_id'=>'7',
+               'club_id'=>'1',
                'bat_id' => '1',
-               'slot_id' => '9',
+               'slot_id' => '1',
                'currency_id'=> 129,
                'status'=> 1,
                'price'=> '200',
-               
+               'booking_date'=>'2022-07-22',
+               'order_id' => 'ORDRER1',
+               'quantity' => '2',
               
             ],
             [
                 'user_id'=>'3',
-                'court_id'=>'8', 
+                'club_id'=>'2', 
                 'bat_id' => '1',
-                'slot_id' => '10',
+                'slot_id' => '2',
                 'currency_id'=> 129,
                 'status'=>1,
                 'price'=> '100',
-               
+                'booking_date'=>'2022-07-21',
+                'order_id' => 'ORDRER2',
+                'quantity' => '1',
+             ],
+             [
+                'user_id'=>'3',
+                'club_id'=>'2', 
+                'bat_id' => '1',
+                'slot_id' => '6',
+                'currency_id'=> 129,
+                'status'=>1,
+                'price'=> '100',
+                'booking_date'=>'2022-07-21',
+                'order_id' => 'ORDRER2',
+                'quantity' => '1',
              ],
         ];
   
