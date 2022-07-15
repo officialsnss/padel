@@ -59,7 +59,7 @@ class HomeController extends Controller
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
        }
        catch (\Exception $e) {
-       // dd($e->getMessage());
+       //dd($e->getMessage());
         return redirect('/')->with('error', 'Something went wrong.');
        }
     }
