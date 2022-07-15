@@ -43,7 +43,8 @@
               </p>
             </a>
           </li>
-
+          @if ( auth()->user()->role != '5')
+            
           <li class="nav-item">
             <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-users"></i>
@@ -67,7 +68,7 @@
               </li>
             </ul>
           </li>
-  
+          @endif
           <li class="nav-item">
             <a href="{{url('/admin/bookings')}}" class="nav-link  {{ (request()->segment(2) == 'bookings' || request()->segment(2) == 'calendar' || (request()->segment(3) == 'view' &&  request()->segment(2) == 'booking' )) ? 'active' : '' }}">
             <i class="nav-icon fas fa-user-edit"></i>
@@ -89,7 +90,7 @@
           </li>   
           
       
-
+          @if ( auth()->user()->role != '5')
           <li class="nav-item">
             <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-plug"></i>
@@ -129,6 +130,8 @@
             </ul>
           </li>
 
+          @endif
+
           <li class="nav-item">
             <a href="{{url('/admin/reports')}}" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
             <i class="nav-icon 	far fa-file"></i>
@@ -138,6 +141,8 @@
             </a>
           </li>  
 
+         
+         @if ( auth()->user()->role != '5')
           
          <li class="nav-item">
             <a href="{{url('/admin/cancel-request')}}" class="nav-link  {{ request()->segment(2) == 'cancel-request' ? 'active' : '' }}">
@@ -156,6 +161,8 @@
               </p>
             </a>
           </li>  
+
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

@@ -37,7 +37,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/', 'App\Http\Controllers\Backend\HomeController@index');
 
         //Dashboard Route
-        Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+        //Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
 
         //Contact Page Route
         Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');

@@ -23,8 +23,10 @@ class HomeController extends Controller
 
     public function index()
     {
+     
       try{
        // Backend page
+         $userId = auth()->user()->id;
          $title = 'Dashboard';
          $regUsers = User::whereIn('role', [3, 4])->where('status', 1)->count();
          $regClubs = Club::where('status', 1)->count();
@@ -49,13 +51,25 @@ class HomeController extends Controller
          //$topBooking = Booking::with('courts');
         
          $topBooking = DB::table('bookings')
-        // ->leftjoin('courts', 'bookings.club_id', '=', 'courts.id')
+         ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
          ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
          ->where('bookings.status', '=', 1)
          ->orderBy('bookings.id', 'desc')
+         ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
          ->get()
          ->take(10);
-
+         if(auth()->user()->role == 5){
+          $topBooking = DB::table('bookings')
+              ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+              ->leftjoin('users', 'users.id', '=', 'bookings.user_id')
+              ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+              ->where('bookings.status', '=', 1)
+              ->where('clubs.user_id', '=', $userId)
+              ->orderBy('bookings.id', 'desc')
+              ->select('clubs.*','bookings.*','users.name as clubname','payments.*','users.email as playeremail')
+              ->get()
+              ->take(10);
+         }
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
        }
        catch (\Exception $e) {
@@ -127,4 +141,6 @@ class HomeController extends Controller
       
       }
     }
+
+    
 }
