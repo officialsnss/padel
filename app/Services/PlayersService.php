@@ -18,6 +18,10 @@ interface PlayersService
      */
     public function getPlayersList();
 
-    public function getPlayerDetails($playerId);
+    public function getPlayerDetails();
+
+    public function followPlayer($request);
+
+    public function addPlayerDetails($request);
 
 }

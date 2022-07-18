@@ -25,11 +25,31 @@ class PlayersController extends Controller
 
     public function getPlayersList()
     {
-        return $this->playersService->getPlayersList();
+        $data =  $this->playersService->getPlayersList();
+        return ['status' => 'success', 'data' => $data];
     }
 
-    public function getPlayerDetails($playerId)
+    public function getPlayerDetails()
     {
-        return $this->playersService->getPlayerDetails($playerId);
+        $data = $this->playersService->getPlayerDetails();
+        return ['status' => 'success', 'data' => $data];
+    }
+
+    public function followPlayer(Request $request)
+    {
+        $data = $this->playersService->followPlayer($request);
+        if($request->isFollow) {
+            return ['status' => 'success', 'message' => 'Followed successfully'];
+        }
+        return ['status' => 'success', 'message' => 'Unfollowed successfully'];
+    }
+
+    public function addPlayerDetails(Request $request)
+    {
+        $data = $this->playersService->addPlayerDetails($request);
+        if($data) {
+            return ['status' => 'success', 'message' => 'Data inserted successfully.'];
+        }
+        return ['status' => 'fail', 'message' => 'Data is not inserted.'];
     }
 }

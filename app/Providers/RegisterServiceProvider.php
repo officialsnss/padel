@@ -14,6 +14,8 @@ use App\Services\PlayersService;
 use App\Services\PlayersServiceImpl;
 use App\Services\MatchesService;
 use App\Services\MatchesServiceImpl;
+use App\Services\BookingService;
+use App\Services\BookingServiceImpl;
 
 class RegisterServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,7 @@ class RegisterServiceProvider extends ServiceProvider
         $this->app->singleton(LevelsService::class, LevelsServiceImpl::class);
         $this->app->singleton(PlayersService::class, PlayersServiceImpl::class);
         $this->app->singleton(MatchesService::class, MatchesServiceImpl::class);
+        $this->app->singleton(BookingService::class, BookingServiceImpl::class);
     }
 
     /**

@@ -19,11 +19,10 @@ class Booking extends Model
     public function court()
     {
         return $this->belongsTo(Court::class,'court_id', 'id');
-       
-    
     }
 
-
-
-   
+    public function slots()
+    {
+        return $this->belongsTo(TimeSlots::class,'id', 'slot_id');
+    }
 }

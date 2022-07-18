@@ -40,14 +40,19 @@ Route::middleware('auth:api')->group( function () {
 
     //PLAYERS
     Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
-    Route::get('get/player/{id}', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
+    Route::get('get/playerDetails', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
 
     //MATCHES
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatchesList');
     Route::get('get/match/{id}', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
 
-    //REQUEST PLAYER
+    //PLAYERS
     Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
     Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
+    Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
+    Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
+
+    //NOTIFICATION
+    Route::get('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');
 
 });

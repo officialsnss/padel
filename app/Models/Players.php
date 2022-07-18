@@ -10,8 +10,17 @@ class Players extends Model
     use HasFactory;
     protected $table = 'players_details';
 
+    protected $fillable = [
+        'user_id'
+    ];
+    
     public function users()
     {
         return $this->hasMany(User::class, 'id', 'user_id');
+    }
+
+    public function matches()
+    {
+        return $this->hasMany(Matches::class, 'player_id', 'id');
     }
 }
