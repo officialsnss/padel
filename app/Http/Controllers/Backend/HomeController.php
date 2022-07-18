@@ -25,51 +25,87 @@ class HomeController extends Controller
     {
      
       try{
-       // Backend page
-         $userId = auth()->user()->id;
-         $title = 'Dashboard';
-         $regUsers = User::whereIn('role', [3, 4])->where('status', 1)->count();
-         $regClubs = Club::where('status', 1)->count();
-         $totalBooking =  DB::table('payments')
-         ->where('payments.isRefunded', '0')
-         ->count();
-         $todayBooking = DB::table('payments')
-         ->where('payments.isRefunded', '0')
-         ->where('created_at', '>=', date('Y-m-d').' 00:00:00')
-         ->count();
-         $sale = DB::table('payments')
+      
+          // Backend page
+          $userId = auth()->user()->id;
+          $title = 'Dashboard';
+          $regUsers = User::whereIn('role', [3, 4])->where('status', 1)->count();
+          $regClubs = Club::where('status', 1)->count();
+          $totalBooking =  DB::table('payments')
+          ->where('payments.isRefunded', '0')
+          ->count();
+
+          $cancel= DB::table('payments')
+          ->where('payments.isCancellationRequest', '1')
+          ->where('payments.isRefunded', '1')
+          ->count();
+
+          $refund= DB::table('payments')
+          ->where('payments.isCancellationRequest', '1')
+          ->where('payments.isRefunded', '0')
+           ->count();
+  
+
+        if(auth()->user()->role == 5){
+          $totalBooking =  DB::table('bookings')
+           ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+           ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+           ->where('payments.isRefunded', '0')
+           ->where('clubs.user_id', '=', $userId)
+           ->count();
+
+          $todayBooking = DB::table('bookings')
+            ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+            ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+            ->where('payments.isRefunded', '0')
+            ->where('clubs.user_id', '=', $userId)
+            ->where('payments.created_at', '>=', date('Y-m-d').' 00:00:00')
+            ->count();
+            
+
+          $sale = DB::table('bookings')
+                 ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+                 ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
                  ->where('payments.isRefunded', '0')
-                 ->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
-         $cancel= DB::table('payments')
-                 ->where('payments.isCancellationRequest', '1')
-                 ->where('payments.isRefunded', '1')
-                 ->count();
-         $refund= DB::table('payments')
-                 ->where('payments.isCancellationRequest', '1')
-                 ->where('payments.isRefunded', '0')
-                  ->count();
-         //$topBooking = Booking::with('courts');
+                 ->where('clubs.user_id', '=', $userId)
+                 ->where('payments.created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
         
-         $topBooking = DB::table('bookings')
-         ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
-         ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
-         ->where('bookings.status', '=', 1)
-         ->orderBy('bookings.id', 'desc')
-         ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
-         ->get()
-         ->take(10);
-         if(auth()->user()->role == 5){
           $topBooking = DB::table('bookings')
-              ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
-              ->leftjoin('users', 'users.id', '=', 'bookings.user_id')
-              ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
-              ->where('bookings.status', '=', 1)
-              ->where('clubs.user_id', '=', $userId)
-              ->orderBy('bookings.id', 'desc')
-              ->select('clubs.*','bookings.*','users.name as clubname','payments.*','users.email as playeremail')
-              ->get()
-              ->take(10);
+                 ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+                 ->leftjoin('users', 'users.id', '=', 'bookings.user_id')
+                 ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+                 ->where('payments.isRefunded', '0')
+                 ->where('clubs.user_id', '=', $userId)
+                 ->orderBy('bookings.id', 'desc')
+                 ->select('clubs.*','bookings.*','users.name as clubname','payments.*','users.email as playeremail')
+                 ->get()
+                 ->take(10);       
+        
+        }
+        else{
+          $todayBooking = DB::table('payments')
+          ->where('isRefunded', '0')
+          ->where('created_at', '>=', date('Y-m-d').' 00:00:00')
+          ->count();
+
+         $sale = DB::table('payments')
+                  ->where('isRefunded', '0')
+                  ->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
+        
+          //$topBooking = Booking::with('courts');
+         
+          $topBooking = DB::table('bookings')
+          ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+          ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+          ->where('payments.isRefunded', '0')
+          ->orderBy('bookings.id', 'desc')
+          ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
+          ->get()
+          ->take(10);  
+
          }
+        
+        
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
        }
        catch (\Exception $e) {

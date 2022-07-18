@@ -41,7 +41,7 @@
         @if($errors->any())
             <p style="color:red"><span>{{$errors->first()}}</span></p>
         @endif
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
@@ -49,7 +49,7 @@
                                         {{ __('Remember Me') }}
                                     </label>
             </div>
-          </div>
+          </div> -->
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">{{ __('Login') }}</button>

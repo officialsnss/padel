@@ -24,27 +24,7 @@ class RefundController extends Controller
 
     public function index()
     {
-     try{
-            $title = 'Refunds';
-            $payments = Payment::leftJoin('users','users.id', '=', 'payments.user_id')
-            ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-            ->wherez('payments.isCancellationRequest', '1')
-            ->where('payments.isRefunded', '1')
-             ->select('payments.*', 'users.name', 'users.email','currencies.code')
-            ->get();
-          
-            return view('backend.pages.refund', compact('title','payments'));
-        }
-        catch (\Exception $e) {
-          //dd($e->getMessage());
-            return redirect('/admin')->with('error', 'Something went wrong.');
-        }    
-    }
-
-    //Cancel requests
-    public function cancel()
-    {
-     try{
+        try{
             $title = 'Refunds';
             $payments = Payment::leftJoin('users','users.id', '=', 'payments.user_id')
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
@@ -58,8 +38,10 @@ class RefundController extends Controller
         catch (\Exception $e) {
           //dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }    
+        }      
     }
+
+    
 
     // Add Refunds
     

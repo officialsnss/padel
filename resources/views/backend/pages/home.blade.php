@@ -104,7 +104,7 @@
               <div class="icon">
                 <i class="ion ion-alert"></i>
               </div>
-              <a href="{{url('/admin/cancel-request')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/refunds')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -150,14 +150,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{ $cancel }}</h3>
+                <h3>{{ $totalBooking }}</h3>
 
-                <p>Cancellation</p>
+                <p>Total Bookings</p>
               </div>
               <div class="icon">
                 <i class="ion ion-alert"></i>
               </div>
-              <a href="{{url('/admin/cancel-request')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/bookings')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -165,14 +165,14 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{ $refund }}</h3>
+                <h3>{{ $todayBooking }}</h3>
 
-                <p>Refunds Pending</p>
+                <p>Today's Booking</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="{{url('/admin/refunds')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('/admin/bookings')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

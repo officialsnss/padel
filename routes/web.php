@@ -42,9 +42,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
         //Contact Page Route
         Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
         Route::get('contact/view/{id}', 'App\Http\Controllers\Backend\HomeController@contactView')->name('contact.view');
-        //Bookings
-        Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
-        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+       
         // Pdf 
          Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF')); 
         // Calender
@@ -93,13 +91,12 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::get('/settings', 'App\Http\Controllers\Backend\HomeController@settings')->name('settings');
       Route::post('/settings/update/{id}', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
      
-     //Cancellation Listing
-      Route::get('/cancel-request', 'App\Http\Controllers\Backend\RefundController@cancel')->name('cancel');
+     //Refunds Listing
+      Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index')->name('index');
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
       Route::post('/refunds/reject', 'App\Http\Controllers\Backend\RefundController@reject')->name('refund.reject');
     
-    //Refunds Listing
-    Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index')->name('refunds');
+    
    
 
     });
@@ -124,5 +121,10 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
     Route::prefix('/admin')->group(function () {
       //Dashboard Route
       Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+     
+       //Bookings
+       Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
+       Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+    
     });
 });
