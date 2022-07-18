@@ -16,6 +16,12 @@ use App\Services\MatchesService;
 use App\Services\MatchesServiceImpl;
 use App\Services\BookingService;
 use App\Services\BookingServiceImpl;
+use App\Services\PolicyService;
+use App\Services\PolicyServiceImpl;
+use App\Services\ContactUsService;
+use App\Services\ContactUsServiceImpl;
+
+
 
 class RegisterServiceProvider extends ServiceProvider
 {
@@ -32,6 +38,8 @@ class RegisterServiceProvider extends ServiceProvider
         $this->app->singleton(PlayersService::class, PlayersServiceImpl::class);
         $this->app->singleton(MatchesService::class, MatchesServiceImpl::class);
         $this->app->singleton(BookingService::class, BookingServiceImpl::class);
+        $this->app->singleton(PolicyService::class, PolicyServiceImpl::class);
+        $this->app->singleton(ContactUsService::class, ContactUsServiceImpl::class);
     }
 
     /**

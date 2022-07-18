@@ -23,6 +23,7 @@ Route::get('sendOtp/{id}', 'App\Http\Controllers\Api\UsersController@sendOtp'); 
 Route::get('verifyOtp/{id}/{otp}', 'App\Http\Controllers\Api\UsersController@verifyOtp'); // verifyOtp
 
 
+
 // Route::post('register', [RegisterController::class, 'register']);
      
 Route::middleware('auth:api')->group( function () {
@@ -55,4 +56,9 @@ Route::middleware('auth:api')->group( function () {
     //NOTIFICATION
     Route::get('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');
 
+    //POLICIES
+    Route::get('policy/{id}', 'App\Http\Controllers\Api\PolicyController@getPolicies');
+
+    //Contact_Us
+    Route::get('contact-us', 'App\Http\Controllers\Api\ContactUsController@contactUs');
 });
