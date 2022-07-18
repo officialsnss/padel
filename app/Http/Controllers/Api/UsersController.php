@@ -12,6 +12,7 @@ use App\Http\Resources\User as UserResource;
 use Carbon\Carbon;
 use Str;
 use App\Models\User;
+use App\Models\Players;
 use App\Permissions;
 use Session;
 use App\Notifications\Register as NewRegister;
@@ -88,7 +89,7 @@ class UsersController extends Controller
     public function register(Request $request)
     {
         $rules = [
-            'name' => 'unique:users|required',
+            'name' => 'required',
             'email'    => 'unique:users|required',
             'password' => 'required',
             'phone' => 'required|',
@@ -104,7 +105,9 @@ class UsersController extends Controller
         $email    = $request->email;
         $password = $request->password;
         $phone = $request->phone;
+        $role = $request->role;
         $user = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password), 'phone' => $phone]);
+        $player = Players::create(['user_id' => $user['id']]);
         return response()->json([
             'status' => 'success',
             'message' => __('Registerd Successfully'),
@@ -180,5 +183,17 @@ class UsersController extends Controller
         else{
             return response(["status" => 401, 'message' => 'Invalid OTP']);
         }
+    }
+
+    public function notificationSettings()
+    {
+        $userId = auth()->user()->id;
+        $user = User::where('id', $userId)->first();
+        if($user['notification']) {
+            User::where('id', $userId)->update(['notification' => '0']);
+            return ['status' => 'success', 'message' => 'Notification settings updated!'];
+        }
+        User::where('id', $userId)->update(['notification' => '1']);
+        return ['status' => 'success', 'message' => 'Notification settings updated!'];
     }
 }

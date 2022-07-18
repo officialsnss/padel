@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\PlayersRepository;
-
+use Carbon;
 /**
  * Class PlayersServiceImpl
  *
@@ -41,9 +41,12 @@ class PlayersServiceImpl implements PlayersService
         return ['Players' => $dataArray];
     }
 
-    public function getPlayerDetails($playerId)
+    public function getPlayerDetails()
     {
-        $data = $this->playersRepository->getPlayerDetails($playerId);
+        $userId = auth()->user()->id;
+        $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+
+        $data = $this->playersRepository->getPlayerDetails($userData['id']);
         $dataArray = [];
 
         $dataArray['id'] = $data['id'];            
@@ -58,12 +61,32 @@ class PlayersServiceImpl implements PlayersService
         $dataArray['match_draw'] = $data['match_played'] - ($data['match_loose'] + $data['match_won']);
         
         $followers = explode(',',$data['followers']);
+        if($followers[0] == "") {
+            array_shift($followers);
+        }
         $dataArray['followers'] = count($followers);  
         
         $followings = explode(',',$data['following']);
+        if($followings[0] == "") {
+            array_shift($followings);
+        }
         $dataArray['following'] = count($followings);  
         
-        $dataArray['court_side'] = $data['court_side'];  
+        $currentDate = Carbon\Carbon::now()->toDateTimeString();
+        // dd($currentDate->toDateTimeString());
+        foreach($data['matches'] as $i => $row) {
+            dd($row);
+            $bookingDate[$row['id']] = $row['booking'][0]['booking_date'];
+        }
+
+        foreach($bookingDate as $booking) {
+            if($booking > $currentDate) {
+                dd($booking);
+            }
+        }
+        dd($bookingDate);
+
+        $dataArray['court_side'] = $data['court_side'] == 1 ? 'Left': 'Right';  
         $dataArray['best_shot'] = $data['best_shot'];  
         $dataArray['gender'] = $data['gender'] == 1 ? "Female" : "Male";  
         $dataArray['status'] = $data['status'] == 1 ? "Active" : "Deactive";  
@@ -107,5 +130,40 @@ class PlayersServiceImpl implements PlayersService
 
         $data = $this->playersRepository->followPlayer($playerId, $followersPacket, $followingsPacket);
         return $data;
+    }
+
+    public function addPlayerDetails($request)
+    {
+        $dataArray = [];
+
+        if($request->gender != null) {
+            $dataArray['gender'] = $request->gender;
+        }
+        if($request->instagram_url != null) {
+            $dataArray['instagram_url'] = $request->instagram_url;
+        }
+        if($request->whatsapp_no != null) {
+            $dataArray['whatsapp_no'] = $request->whatsapp_no;
+        }
+        if($request->dob != null) {
+            $dataArray['dob'] = $request->dob;
+        }
+        if($request->court_side != null) {
+            $dataArray['court_side'] = $request->court_side;
+        }
+        if($request->play_time != null) {
+            $dataArray['play_time'] = $request->play_time;
+        }
+        if($request->best_shot != null) {
+            $dataArray['best_shot'] = $request->best_shot;
+        }
+        if($request->levels != null) {
+            $dataArray['levels'] = $request->levels;
+        }
+        
+        $userId = auth()->user()->id;
+        $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+
+        return $this->playersRepository->addPlayerDetails($dataArray, $userData['id']);
     }
 }
