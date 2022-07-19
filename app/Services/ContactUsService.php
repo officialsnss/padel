@@ -17,4 +17,6 @@ interface ContactUsService
      * @return mixed
      */
     public function getContactDetails();
+    
+    public function sendMessage($request);
 }

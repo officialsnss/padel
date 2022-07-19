@@ -31,5 +31,14 @@ class ContactUsController extends Controller
         }
         return ['status' => 'Fail', 'message' => 'No data found'];
     }
+
+    public function sendMessage(Request $request)
+    {
+        $data =  $this->contactUsService->sendMessage($request);
+        if($data){
+            return ['status' => 'Success', 'message' => 'Message stored successfully'];
+        }
+        return ['status' => 'Fail', 'message' => 'No message found'];
+    }
 }
 
