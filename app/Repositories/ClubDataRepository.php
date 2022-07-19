@@ -20,11 +20,10 @@ class ClubDataRepository extends BaseRepository
     /**
      * Method used to fetch the Club Data
      *
-     * @param $request
      *
      * @return mixed
      */
-    public function getClubs($request)
+    public function getClubs()
     {
         return Club::with('court')
                 ->with('club_rating')

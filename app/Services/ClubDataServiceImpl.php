@@ -26,9 +26,9 @@ class ClubDataServiceImpl implements ClubDataService
      *
      * @return mixed
      */
-    public function getClubs($request)
+    public function getClubs()
     {
-        $data = $this->clubDataRepository->getClubs($request);
+        $data = $this->clubDataRepository->getClubs();
         return $this->getClubData($data);
     }
 

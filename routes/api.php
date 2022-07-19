@@ -60,5 +60,5 @@ Route::middleware('auth:api')->group( function () {
     Route::get('policy/{id}', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
     //Contact_Us
-    Route::get('contact-us', 'App\Http\Controllers\Api\ContactUsController@contactUs');
+    Route::get('contact_us', 'App\Http\Controllers\Api\ContactUsController@contactUs');
 });
