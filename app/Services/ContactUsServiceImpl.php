@@ -1,8 +1,20 @@
 <?php
 
 namespace App\Services;
-
+use App\Notifications\SendMessage;
 use App\Repositories\ContactUsRepository;
+use Notification;
+use App\Notifications\SendContactMail;
+use App\Models\User; 
+
+
+/**
+     * Create token password reset.s
+     *
+     * @param  SendMessage $request
+     * @return JsonResponse
+     */
+
 /**
  * Class ContactUsServiceImpl
  *
@@ -25,7 +37,7 @@ class ContactUsServiceImpl implements ContactUsService
      *
      * @return mixed
      */
-    public function getContactDetails()
+    public function sendMessage($request)
     {
         $data = $this->contactUsRepository->getContactDetails();
         $dataPacket = [];
@@ -33,7 +45,13 @@ class ContactUsServiceImpl implements ContactUsService
         $dataPacket['name'] = $data['name'];
         $dataPacket['email'] = $data['email'];
         $dataPacket['phone'] = $data['phone'];
+        $dataPacket['message'] = $request->message;
+        
+        $data = $this->contactUsRepository->sendMessage($request->message);
 
-        return $dataPacket;
+        $admin = User::where('id', '1')->first();
+        $admin->notify(new SendContactMail($dataPacket));
+
+        return ['status' => 'success', 'data' => $dataPacket];
     }
 }

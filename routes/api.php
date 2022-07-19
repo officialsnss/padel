@@ -61,4 +61,6 @@ Route::middleware('auth:api')->group( function () {
 
     //Contact_Us
     Route::get('contact_us', 'App\Http\Controllers\Api\ContactUsController@contactUs');
+    Route::post('store_message', 'App\Http\Controllers\Api\ContactUsController@storeMessage');
+    Route::post('send_message', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
 });

@@ -23,13 +23,9 @@ class ContactUsController extends Controller
         $this->contactUsService = $contactUsService;
     }
 
-    public function contactUs()
+    public function sendMessage(Request $request)
     {
-        $data =  $this->contactUsService->getContactDetails();
-        if($data){
-            return ['status' => 'Success', 'data' => $data];
-        }
-        return ['status' => 'Fail', 'message' => 'No data found'];
+        return $this->contactUsService->sendMessage($request);
     }
 }
 
