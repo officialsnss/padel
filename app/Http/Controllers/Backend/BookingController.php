@@ -78,7 +78,7 @@ class BookingController extends Controller
           return view('backend.pages.bookingDetails', compact('title','bookingInfo', 'amenityList'));
       }
       catch (\Exception $e) {
-        dd($e->getMessage());
+       // dd($e->getMessage());
           return redirect('/admin/bookings')->with('error', 'Something went wrong.');
       }
   }

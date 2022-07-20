@@ -75,12 +75,12 @@ class UserController extends Controller
     // Reset Password
     public function newPassword(Request $request, $id)
     {
-        try{
+       
             $request->validate([
                 'password' => 'required|min:8',
                 'password_confirmation' => 'required|same:password'
             ]);
-           
+          try{
             $user = User::findOrFail($id);
             $user->password = bcrypt($request->password);
        

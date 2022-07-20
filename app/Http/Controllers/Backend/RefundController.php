@@ -64,12 +64,12 @@ class RefundController extends Controller
                 $paymentInfo->isRefunded = '1';
                 $paymentInfo->refund_price = $request->refund_amt;
                 $paymentInfo->save();
-                return redirect('/admin/cancel-request')->with('success', 'Amount Refunded Successfully.');
+                return redirect('/admin/refunds')->with('success', 'Amount Refunded Successfully.');
             }
         }
         catch (ValidationException  $e) {
 
-        return redirect('/admin/cancel-request')->with('error', 'Something went wrong.');
+        return redirect('/admin/refunds')->with('error', 'Something went wrong.');
         }
     }    
 
@@ -100,12 +100,13 @@ class RefundController extends Controller
             $paymentInfo->isCancellationRequest = '2';
             $paymentInfo->save();
           
-            return redirect('/admin/cancel-request')->with('success', 'Email send successfully.');
+            return redirect('/admin/refunds')->with('success', 'Email send successfully.');
             
         }
         catch (ValidationException  $e) {
-
-        return redirect('/admin/cancel-request')->with('error', 'Something went wrong.');
+           return redirect('/admin/refunds')->with('error', 'Something went wrong.');
         }
     }    
 }
+
+

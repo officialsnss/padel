@@ -48,10 +48,6 @@ Route::group(['middleware' =>['role:1,2']], function(){
         // Calender
          Route::get('calendar', 'App\Http\Controllers\Backend\BookingController@calendar')->name('bookings.calendar');
 
-
-        //Courts
-        Route::get('/clubs', 'App\Http\Controllers\Backend\CourtController@index')->name('clubs');
-
          //Reports
         Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
        
@@ -126,5 +122,18 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
        Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
     
+      //Clubs
+      Route::get('/clubs', 'App\Http\Controllers\Backend\ClubController@index')->name('clubs');
+      Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
+      Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
+      Route::get('/clubs/gallery/{id}', 'App\Http\Controllers\Backend\ClubController@gallery')->name('club.images');
+      Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
+      Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
+      Route::get('/club/timeslots/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlots')->name('club.timeslots');
+      Route::post('/club/timeslots/save/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsSave')->name('club.timeslots.save');
+
+      //Get Region
+      Route::get('/get-region', 'App\Http\Controllers\Backend\ClubController@getRegion')->name('regionlist');
+      Route::get('/get-city', 'App\Http\Controllers\Backend\ClubController@getCity')->name('citylist');
     });
 });

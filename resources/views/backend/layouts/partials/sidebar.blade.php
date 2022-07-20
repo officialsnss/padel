@@ -7,28 +7,20 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="assets/backend/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+     @if(auth()->user()->role == '5')
+     <!-- Sidebar user panel (optional) -->
+     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+     <div class="image">
+          <i class="fas fa-table-tennis"></i>
+      </div>
+       <div class="info">
+       <?php   $userId = auth()->user()->id; 
+        $res =  \App\Models\Club::where(['user_id' => $userId])->pluck('name')->first();
+        ?>
+         <a>{{ $res }}</a>
         </div>
-        <div class="info">
-          <a href="#" class="d-block">Sp</a>
-        </div>
-      </div> -->
-
-      <!-- SidebarSearch Form -->
-      <!-- <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div><div class="sidebar-search-results"><div class="list-group"><a href="#" class="list-group-item"><div class="search-title"><strong class="text-light"></strong>N<strong class="text-light"></strong>o<strong class="text-light"></strong> <strong class="text-light"></strong>e<strong class="text-light"></strong>l<strong class="text-light"></strong>e<strong class="text-light"></strong>m<strong class="text-light"></strong>e<strong class="text-light"></strong>n<strong class="text-light"></strong>t<strong class="text-light"></strong> <strong class="text-light"></strong>f<strong class="text-light"></strong>o<strong class="text-light"></strong>u<strong class="text-light"></strong>n<strong class="text-light"></strong>d<strong class="text-light"></strong>!<strong class="text-light"></strong></div><div class="search-path"></div></a></div></div>
-      </div> -->
-
+      </div>
+    @endif
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -78,16 +70,18 @@
             </a>
           </li>
           
-          
+          @if ( auth()->user()->role == '5')    
           
           <li class="nav-item">
             <a href="{{url('/admin/clubs')}}" class="nav-link  {{ request()->segment(2) == 'clubs' ? 'active' : '' }}">
             <i class="nav-icon fas fa-user-graduate"></i>
               <p>
-                Clubs
+                Club
               </p>
             </a>
-          </li>   
+          </li> 
+          
+          @endif
           
       
           @if ( auth()->user()->role != '5')

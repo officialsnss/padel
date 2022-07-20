@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{{asset('assets/backend/css/adminlte.min.css')}}">
   <!-- Custom css -->
   <link rel="stylesheet" href="{{asset('assets/backend/css/custom.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/backend/css/timePicker.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
@@ -57,11 +58,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 <!-- Bootstrap 4 -->
 <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('assets/backend/js/adminlte.min.js') }}"></script>
+
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('assets/backend/js/demo.js') }}"></script>
 <!-- DataTables  & Plugins -->
@@ -82,6 +84,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="{{asset('assets/backend/js/validation.js')}}"></script>
+<!-- Timepicker -->
+
+<script src="{{asset('assets/backend/js/jquery-timepicker.js') }}"></script>
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -142,6 +147,9 @@ elems.forEach(function(html) {
   }
   		toastr.success("{{ session('success') }}");
   @endif
+
+  $(".timePicker").hunterTimePicker();
+  
 </script>
 
 </body>

@@ -82,3 +82,51 @@ $("#vendorform").validate({
   },
   
 })
+
+// Clubs
+   
+  
+
+$("#club-edit").validate({
+  ignore: [],
+  rules: {
+    clubname: {
+    required: true,
+    },
+    service_charge: {
+      required: true,
+      number: true,
+    },
+    single_price: {
+      required: true,
+      number: true,
+    },
+    double_price: {
+      required: true,
+      number: true,
+    },
+    indoor_courts: {
+     required: true,
+     number: true,
+   },
+    outdoor_courts: {
+    required: true,
+    number: true,
+    },
+    zipcode: {
+      number: true,
+    },
+    featured_image: {
+      extension: "jpg|jpeg|png"
+    }
+    
+  },
+  messages: {
+    featured_image: {
+        extension: "Please upload file in these format only (jpg, jpeg, png)."
+    }
+ },
+ 
+
+  
+})
