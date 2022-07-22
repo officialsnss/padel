@@ -122,7 +122,7 @@ class UserController extends Controller
     {
             $request->validate([
                 'fullname' => 'required|string',
-                'clubname' => 'required|string',
+                'clubname' => 'required|string|unique:clubs,name',
                 'email'=> 'required|email|unique:users' , 
                 'password' => 'required|min:8',
                 'password_confirmation' => 'required|same:password'

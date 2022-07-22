@@ -84,9 +84,7 @@ $("#vendorform").validate({
 })
 
 // Clubs
-   
   
-
 $("#club-edit").validate({
   ignore: [],
   rules: {
@@ -126,6 +124,89 @@ $("#club-edit").validate({
         extension: "Please upload file in these format only (jpg, jpeg, png)."
     }
  },
+ 
+
+  
+})
+
+// Time Slots
+
+$.validator.addMethod("endtime", function(value, element, params){
+ 
+  var j = $(element).closest('tr').attr('id');
+  if(j){
+    var startclass = "#start"+j;
+  }
+  else{
+    var startclass = "#start";
+  }
+  var startvalue = $(startclass).val();
+
+var stt = new Date("November 13, 2013 " + startvalue);
+stt = stt.getTime();
+
+var endt = new Date("November 13, 2013 " + value);
+endt = endt.getTime();
+
+   return stt <= endt;
+}, 'End Time should be greater than equal to Start Time.');
+
+$.validator.addMethod(
+  "regex",
+  function(value, element, regexp) {
+    var re = new RegExp(regexp);
+    return this.optional(element) || re.test(value);
+  },
+  "Invalid Time format"
+);
+
+$("#time_save").validate({
+  //ignore: [],
+  rules: {
+    'start_time[]': {
+        required: true,
+        regex: "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$"
+    },
+    'end_time[]': {
+       required: true,
+       regex: "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$",
+       endtime:true,
+    },
+    
+  },
+  
+})
+
+
+$.validator.addMethod("endtimeupdate", function(value, element, params){
+ 
+  var startvalue = $('#start').val();
+
+var stt = new Date("November 13, 2013 " + startvalue);
+stt = stt.getTime();
+
+var endt = new Date("November 13, 2013 " + value);
+endt = endt.getTime();
+
+   return stt <= endt;
+}, 'End Time should be greater than equal to Start Time.');
+
+$("#time_update").validate({
+  //ignore: [],
+  rules: {
+    'start_time': {
+        required: true,
+        regex: "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$"
+    },
+    'end_time': {
+       required: true,
+       regex: "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$",
+       endtimeupdate:true
+     
+    },
+    
+  },
+  
  
 
   

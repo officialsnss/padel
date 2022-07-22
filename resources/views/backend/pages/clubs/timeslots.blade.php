@@ -1,74 +1,53 @@
+
 @extends('backend.layouts.app')
 @section('content')
-    <div class="row">
-      <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-body reset-form">
-              <form method="post" action="{{ route('club.timeslots.save',  $clubId) }}">
-              {{ csrf_field() }}
-              <table class="table table-bordered">
-                <tr>
-                    <th><input class='check_all' type='checkbox' onclick="select_all()"/></th>
-                    <th>S. No</th>
+
+<div class="row">
+        <div class="col-12">
+            <div class="card">
+            <div class="card-header">
+                <div class="add">
+                 <a href="{{ route('club.timeslots.add', $clubId )}}" class="btn btn-info">Add New</a>
+                </div>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Sr.no</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                </tr>
-                  <tr>
-                      <td><input type='checkbox' class='chkbox'/></td>
-                      <td><span id='sn'>1.</span></td>
-                      <td><input class="form-control timePicker" type='text' id='start' name='start_time[]'/></td>
-                      <td><input class="form-control timePicker" type='text' id='end' name='end_time[]'/> </td>
-                    </tr>
-                  </table>
-                  <button type="button" class='btn btn-danger delete'>- Delete</button>
-                  <button type="button" class='btn btn-success addbtn'>+ Add More</button>
-                  <button type="submit" class="btn btn-success save">Save</button>
-                          </form>
-                        </div>
-                      </div>
-                  </div>
-                </div>
+                     <th>Actions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    
+                  @foreach($clubtimings as $clubtime)
+                    <tr>
+                      <td></td>
+                      <td>{{  date('H:i', strtotime($clubtime->start_time)) }}</td>
+                      <td>{{ date('H:i', strtotime($clubtime->end_time)) }}</td>
+                     
+                     <td><a href="{{ route('club.timeslots.edit', $clubtime->id)}}" class="btn btn-secondary">Edit</a>
+                     <a href="{{ route('club.timeslots.delete', $clubtime->id)}}" class="btn btn-danger">Delete</a>
+                  @endforeach     
+                      
+                      
+                       
+                      </tr>
+               
+                  
+                  </tbody>
+                
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
 
-    <script type="text/javascript">
-          
-          $(".delete").on('click', function() {
-           $('.chkbox:checkbox:checked').parents("tr").remove();
-           $('.check_all').prop("checked", false); 
-           updateSerialNo();
-         });
-         var i=$('table tr').length;
-         $(".addbtn").on('click',function(){
-           count=$('table tr').length;
-           
-             var data="<tr><td><input type='checkbox' class='chkbox'/></td>";
-               data+="<td><span id='sn"+i+"'>"+count+".</span></td>";
-               data+="<td><input class='form-control timePicker' type='text' id='start"+i+"' name='start_time[]'/></td>";
-               data+="<td><input class='form-control timePicker' type='text' id='end"+i+"' name='end_time[]'/></td></tr>";
-           $('table').append(data);
-           i++;
-           $(".timePicker").hunterTimePicker();
-         });
-                 
-         function select_all() {
-           $('input[class=chkbox]:checkbox').each(function(){ 
-             if($('input[class=check_all]:checkbox:checked').length == 0){ 
-               $(this).prop("checked", false); 
-             } else {
-               $(this).prop("checked", true); 
-             } 
-           });
-         }
-         function updateSerialNo(){
-           obj=$('table tr').find('span');
-           $.each( obj, function( key, value ) {
-             id=value.id;
-             $('#'+id).html(key+1);
-           });
-         }
-
-      
-         </script>
- 
         @endsection
-
-        
+  

@@ -15,6 +15,7 @@ class TimeSlots extends Model
         'club_id',
         'start_time',
         'end_time',
+        'status',
         'created_at',
         'updated_at',
     ];

@@ -6,6 +6,7 @@ use App\Models\Club;
 use App\Models\Regions;
 use App\Models\Cities;
 use App\Models\Amenities;
+use App\Models\Booking;
 use App\Models\Countries;
 use App\Models\TimeSlots;
 use App\Models\ClubImages;
@@ -115,7 +116,7 @@ class ClubController extends Controller
           ); 
           ClubImages::insert($imageData);
         }
-            return redirect('/admin/clubs')->with('success', 'Images uploaded successfully');
+        return Redirect::back()->with('success', 'Images uploaded successfully');
        
     }
         catch (\Exception $e) {
@@ -138,42 +139,112 @@ class ClubController extends Controller
          }
         }
 
+   //Time Slots
+   public function timeSlots()
+   {
+      
+       $userId = auth()->user()->id;
+       $club =  Club::where('user_id',$userId)
+                     ->first();
+       $clubId = $club->id;
+       $title = "Club Timing Slots";
+       $clubtimings =  TimeSlots::where('club_id',$clubId)
+                    ->where('status',1)
+                    ->get();
+      
+       return view('backend.pages.clubs.timeslots', compact('title','clubtimings','clubId'));
+   }
+
     // Add Time slots
-    public function timeSlots(Request $request, $id){
+    public function timeSlotsAdd(Request $request, $id){
+       
        try{
             $clubId = $id;
             $title = 'Add Time Slots';
             $timeslots = TimeSlots::where('club_id',$id)->get();
-            return view('backend.pages.clubs.timeslots', compact('title','clubId','timeslots'));
+            return view('backend.pages.clubs.timeslotsAdd', compact('title','clubId','timeslots'));
         }
         catch (\Exception $e) {
-          return redirect('/admin/clubs')->with('error', 'Something went wrong.');
+          return redirect('/admin/club/timeslots')->with('error', 'Something went wrong.');
         }
     }
 
     
     // Save Time slots
     public function timeSlotsSave(Request $request, $id){
-        
+        $data = $request->all();
+        $startTimeData = $data['start_time'];
+        $endTimeData = $data['end_time'];
         try{
-            
-        foreach ($imgaeview as $key => $val) 
-        {
-            
-         $imageData = array(
-             'club_id' => $id,
-             'start_time' => $filename,
-             'end_time' => $filename,
-           ); 
-           TimeSlots::insert($imageData);
-         }
-             return redirect('/admin/clubs')->with('success', 'Time Slots Added.');
+            foreach ($request->start_time as $index => $start_time) {
+                $savedata = TimeSlots::create([
+                    "start_time" => $request->start_time[$index],
+                    "end_time" => $request->end_time[$index],
+                     "club_id" => $id,
+                    
+                ]);
+            }
+
+         return redirect('/admin/club/timeslots')->with('success', 'Time Slots Added.');
         
      }
          catch (\Exception $e) {
-           return redirect('/admin/clubs')->with('error', 'Something went wrong.');
+         
+           return redirect('/admin/club/timeslots')->with('error', 'Something went wrong.');
          }
      }
+
+     //Edit Timeslots
+     public function timeSlotsEdit($id)
+    {
+        try{
+            $timeslot = TimeSlots::where('id',$id)->first();
+
+             $title = 'Edit Timeslot';
+            return view('backend.pages.clubs.timeslotsEdit', compact('title','timeslot'));
+        }
+        catch (\Exception $e) {
+           // dd($e->getMessage());
+            return redirect('/admin/club/timeslots')->with('error', 'Something went wrong.');
+        }
+    }
+
+    public function timeSlotsUpdate(Request $request, $id){
+        
+        $request->validate([
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ]);
+        try { 
+            $timeSlots = TimeSlots::findOrFail($id);
+            $timeSlots->start_time = $request->start_time;
+            $timeSlots->end_time = $request->end_time;
+            $timeSlots->save(); 
+              return redirect('/admin/club/timeslots')->with('success', 'Timeslot  Updated successfully');
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/club/timeslots')->with('error', 'Something went wrong.');
+        
+        }
+    }
+
+     // Timeslots Delete
+     public function timeSlotsdelete(Request $request, $id)
+     {
+         try{
+             $timeSlots = TimeSlots::findOrFail($id);
+             $timeSlots->status = '2';
+             $timeSlots->save(); 
+          
+            return redirect('/admin/club/timeslots')->with('success', 'Deleted Successfully.');
+            
+         }
+         catch (\Exception $e) {
+             return redirect('/admin/cities')->with('error', 'Something went wrong.');
+         
+          }
+         }
+
         
 
     public function getRegion(Request $request){
@@ -229,6 +300,69 @@ class ClubController extends Controller
             echo '<option value="">City not available</option>'; 
         }
       // return $regions;
+    }
+
+    //Booking Timeslots
+    public function bookTimeSlots(){
+        $userId = auth()->user()->id;
+        $club =  Club::where('user_id',$userId)
+                      ->first();
+        $clubId = $club->id;
+        $title = "Book Timing Slots";
+        $clubtimings =  TimeSlots::where('club_id',$clubId)
+                     ->where('status',1)
+                     ->get();
+
+        $indoorCourts = $club->indoor_courts;
+        $outdoorCourts = $club->outdoor_courts;
+
+        return view('backend.pages.clubs.bookTimeslots', compact('title','clubtimings','clubId','indoorCourts','outdoorCourts'));
+    }
+
+    public function fetchList(Request $request)
+    {
+        $userId = auth()->user()->id;
+        $club =  Club::where('user_id',$userId)
+                      ->first();
+        $clubId = $club->id;
+        $clubtimings =  TimeSlots::where('club_id',$clubId)
+                     ->where('status',1)
+                     ->get();
+        $indoorCourts = $club->indoor_courts;
+        $outdoorCourts = $club->outdoor_courts;
+        $bookingdate = date('Y-m-d', strtotime($request->inputData));
+        
+        foreach($clubtimings as $clubtime){
+          $indoorbooking =  Booking::where(['slot_id' => $clubtime->id, 'booking_date'=> $bookingdate,'court_type' => '1'])
+           ->count();
+          $outdoorbooking =   Booking::where(['slot_id' => $clubtime->id, 'booking_date'=>$bookingdate,'court_type' => '2'])
+           ->count();
+           
+          $rem_indoor = $indoorCourts -  $indoorbooking;
+          $rem_outdoor = $outdoorCourts - $outdoorbooking;
+           if($rem_indoor != '0' && $rem_outdoor != '0'){
+             $bg = "background:#fff";
+             $info = '<p class="inner-des">
+             <small><b>Courts Available:</b><br>';
+             if($rem_indoor != 0){
+                $info.= $rem_indoor.' Indoor<br>';
+             }
+             if($rem_outdoor != 0){
+                $info.= $rem_outdoor.' Outdoor<br>';
+             }
+             $info.= '</small></p>';
+           }
+           else{
+            $bg = "background:#e74c3c; color:#fff";
+            $info = '<h4>Booked</h4>';
+           }
+
+           
+         $data=  '<li><div class="b-time" style="'.$bg.'"><strong>'.date("H:i",strtotime($clubtime->start_time)) .' - '.date("H:i", strtotime($clubtime->end_time)) .'</strong>'. $info.'</div></li>';
+         echo $data;
+        }
+       
+    
     }
 
    

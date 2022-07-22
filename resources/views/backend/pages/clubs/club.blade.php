@@ -25,7 +25,7 @@
                      
                      <td><a href="{{ route('club.edit', $club->id )}}" class="btn btn-secondary">Edit</a>
                         <a href="{{ route('club.images', $club->id )}}" class="btn btn-warning">Upload Images</a>
-                        <a href="{{ route('club.timeslots', $club->id )}}" class="btn btn-success">Time Slots</a>
+                       
                       
                       
                        

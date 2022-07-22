@@ -129,8 +129,14 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
       Route::get('/clubs/gallery/{id}', 'App\Http\Controllers\Backend\ClubController@gallery')->name('club.images');
       Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
       Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
-      Route::get('/club/timeslots/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlots')->name('club.timeslots');
+      Route::get('/club/timeslots/add/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsAdd')->name('club.timeslots.add');
       Route::post('/club/timeslots/save/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsSave')->name('club.timeslots.save');
+      Route::get('/club/timeslots', 'App\Http\Controllers\Backend\ClubController@timeSlots')->name('club.timeslots');
+      Route::get('/club/timeslots/edit/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsEdit')->name('club.timeslots.edit');
+      Route::post('/club/timeslots/update/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsUpdate')->name('club.timeslots.update');
+      Route::get('/club/timeslots/delete/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsdelete')->name('club.timeslots.delete');
+      Route::get('/club/timeslots/book', 'App\Http\Controllers\Backend\ClubController@bookTimeSlots')->name('club.timeslots.book');
+      Route::get('/club/timeslots/book/fetch', 'App\Http\Controllers\Backend\ClubController@fetchList')->name('club.timeslots.book.fetch');
 
       //Get Region
       Route::get('/get-region', 'App\Http\Controllers\Backend\ClubController@getRegion')->name('regionlist');

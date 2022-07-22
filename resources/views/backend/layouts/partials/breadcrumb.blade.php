@@ -6,7 +6,7 @@
             <h1>{{ $title ?? '' }}</h1>
            
           </div>
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('/admin/')}}">Admin</a></li>
             
@@ -18,7 +18,7 @@
             @endif
             @endforeach
             </ol>
-          </div>
+          </div> -->
           
         </div>
       </div><!-- /.container-fluid -->

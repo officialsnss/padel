@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Backend;
 use DB;
 use Auth;
 use App\Models\Wallets;
+use App\Models\Booking;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -64,7 +65,12 @@ class RefundController extends Controller
                 $paymentInfo->isRefunded = '1';
                 $paymentInfo->refund_price = $request->refund_amt;
                 $paymentInfo->save();
-                return redirect('/admin/refunds')->with('success', 'Amount Refunded Successfully.');
+
+               $bookinginfo  = Booking::where('id',$paymentInfo->booking_id)->first();
+              
+               $bookinginfo->status = '3';
+               $bookinginfo->save();
+               return redirect('/admin/refunds')->with('success', 'Amount Refunded Successfully.');
             }
         }
         catch (ValidationException  $e) {

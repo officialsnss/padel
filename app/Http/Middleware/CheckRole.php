@@ -28,7 +28,7 @@ class CheckRole
              
             return $next($request);
         }
-     
+        
             return redirect('admin/dashboard')->with('error', 'No Access!');
         }
         else{

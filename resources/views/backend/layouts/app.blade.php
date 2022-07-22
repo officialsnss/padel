@@ -23,10 +23,12 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+  <link rel="stylesheet" href="{{asset('assets/plugins/jquery-ui/jquery-ui.min.css')}}">
   <!-- jQuery -->
   <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/additional-methods.min.js"></script>
+  <script src="{{asset('assets/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+  <script src="{{asset('assets/plugins/jquery-validation/jquery.validate.js')}}"></script>
+  <script src="{{asset('assets/plugins/jquery-validation/additional-methods.js')}}"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -149,6 +151,7 @@ elems.forEach(function(html) {
   @endif
 
   $(".timePicker").hunterTimePicker();
+  
   
 </script>
 

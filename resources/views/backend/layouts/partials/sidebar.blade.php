@@ -73,14 +73,42 @@
           @if ( auth()->user()->role == '5')    
           
           <li class="nav-item">
-            <a href="{{url('/admin/clubs')}}" class="nav-link  {{ request()->segment(2) == 'clubs' ? 'active' : '' }}">
-            <i class="nav-icon fas fa-user-graduate"></i>
+            <a href="#" class="nav-link  {{ (request()->segment(2) == 'clubs' || request()->segment(3) == 'timeslots') ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-building"></i>
               <p>
                 Club
+                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-          </li> 
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+               <a href="{{url('/admin/clubs')}}" class="nav-link  {{ request()->segment(2) == 'clubs' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-info-circle"></i>
+                <p>
+                  Details
+                  
+                </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('/admin/club/timeslots')}}" class="nav-link  {{ (request()->segment(3) == 'timeslots') ? 'active' : '' }}">
+                  <i class="fas fa-clock nav-icon"></i>
+                  <p>Timeslots</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{url('/admin/club/timeslots/book')}}" class="nav-link  {{ (request()->segment(3) == 'book') ? 'active' : '' }}">
+                  <i class="fas fa-book nav-icon"></i>
+                  <p>Book Timeslots</p>
+                </a>
+              </li>
+             
           
+            </ul>
+          </li> 
+
+       
           @endif
           
       
