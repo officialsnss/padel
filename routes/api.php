@@ -19,8 +19,8 @@ Route::post('reset-password', 'App\Http\Controllers\Api\ResetPasswordController@
 Route::post('password-update', 'App\Http\Controllers\Api\ResetPasswordController@reset')->name('password-update');
 // Route::put('reset-password/{token}', 'App\Http\Controllers\Api\ResetPasswordController@reset');
 Route::post('register', 'App\Http\Controllers\Api\UsersController@register'); // Signup
-Route::get('sendOtp/{id}', 'App\Http\Controllers\Api\UsersController@sendOtp'); // SendOTP
-Route::get('verifyOtp/{id}/{otp}', 'App\Http\Controllers\Api\UsersController@verifyOtp'); // verifyOtp
+Route::post('resendOtp', 'App\Http\Controllers\Api\UsersController@resendOtp'); // ResendOTP
+Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); // verifyOtp
 
 
 
@@ -60,7 +60,8 @@ Route::middleware('auth:api')->group( function () {
     Route::get('policy/{id}', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
     //Contact_Us
-    Route::get('contact_us', 'App\Http\Controllers\Api\ContactUsController@contactUs');
-    Route::post('store_message', 'App\Http\Controllers\Api\ContactUsController@storeMessage');
-    Route::post('send_message', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
+    Route::post('contact_us', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
+
+    //Change Password
+    Route::post('change_password', 'App\Http\Controllers\Api\UsersController@changePassword');
 });

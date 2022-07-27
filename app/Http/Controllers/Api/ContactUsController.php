@@ -25,7 +25,8 @@ class ContactUsController extends Controller
 
     public function sendMessage(Request $request)
     {
-        return $this->contactUsService->sendMessage($request);
+        $this->contactUsService->sendMessage($request);
+        return ResponseUtil::successWithMessage('Message sent successfully!', true, 200);
     }
 }
 

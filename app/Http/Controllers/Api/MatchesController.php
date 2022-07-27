@@ -25,32 +25,35 @@ class MatchesController extends Controller
 
     public function getMatchesList()
     {
-        return $this->matchesService->getMatchesList();
+        $data = $this->matchesService->getMatchesList();
+        return ResponseUtil::successWithData($data, true, 200);
     }
 
     public function getMatchDetails($matchId)
     {
-        return $this->matchesService->getMatchDetails($matchId);
+        $data = $this->matchesService->getMatchDetails($matchId);
+        return ResponseUtil::successWithData($data, true, 200);
     }
 
     public function sendRequest(Request $request)
     {
         $data = $this->matchesService->sendRequest($request);
         if($data) {
-            return ['message' => 'Request sent successfully'];
+            return ResponseUtil::successWithMessage('Request sent successfully', true, 200);
         }
-        return ['message' => 'Request has already being sent!'];
+        return ResponseUtil::successWithMessage('Request has already being sent!', true, 200);
     }
 
     public function acceptRequest(Request $request)
     {
         $data = $this->matchesService->acceptRequest($request);
         if(isset($data['message'])) {
-            return $data;
+        return ResponseUtil::successWithData($data, true, 200);
+        return $data;
         }
         if($request->isAccept) {
-            return ['message' => 'Request Accepted.'];
+            return ResponseUtil::successWithMessage('The request has been accepted!', true, 200);
         }
-        return ['message' => 'Request rejected.'];
+        return ResponseUtil::successWithMessage('The request has been rejected!', true, 200);
     }
 }

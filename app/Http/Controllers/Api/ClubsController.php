@@ -28,10 +28,9 @@ class ClubsController extends Controller
     {
         $data = $this->clubDataService->getClubs();
         if($data) {
-            // return ['status' => 'success', 'data' => $data];
             return ResponseUtil::successWithData($data, true, 200);
         }
-        return ['status' => 'fail', 'message' => 'No Clubs found.'];
+        return ResponseUtil::successWithMessage('No Clubs found.', true, 200);
     }
 
     public function getSingleClub($id)

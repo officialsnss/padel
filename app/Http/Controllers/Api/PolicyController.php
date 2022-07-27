@@ -27,8 +27,8 @@ class PolicyController extends Controller
     {
         $data =  $this->policyService->getPolicies($id);
         if($data){
-            return ['status' => 'Success', 'data' => $data];
+            return ResponseUtil::successWithData($data, true, 200);
         }
-        return ['status' => 'Fail', 'message' => 'No data found'];
+        return ResponseUtil::successWithData($data, true, 200);
     }
 }

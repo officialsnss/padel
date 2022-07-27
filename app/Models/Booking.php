@@ -23,6 +23,11 @@ class Booking extends Model
 
     public function slots()
     {
-        return $this->belongsTo(TimeSlots::class,'id', 'slot_id');
+        return $this->belongsTo(TimeSlots::class,'slot_id', 'id');
+    }
+
+    public function players()
+    {
+        return $this->hasMany(Players::class, 'player_id', 'id');
     }
 }
