@@ -1,0 +1,167 @@
+<?php
+namespace App\Http\Controllers\Backend;
+use DB;
+use Auth;
+use App\Models\Bat; 
+use App\Models\VendorBats; 
+use App\Models\Club; 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
+class BatController extends Controller
+{
+
+     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+   
+
+    public function index()
+    {
+        try{
+            $title = 'Bats Listing';
+            $bats =  Bat::where('status', 1)->get();
+           return view('backend.pages.bat', compact('title','bats'));
+        }
+        catch (\Exception $e) {
+          //dd($e->getMessage());
+            return redirect('/admin')->with('error', 'Something went wrong.');
+        }      
+    }
+
+    // Bat Create
+
+    public function create()
+    { 
+        try{
+            $title = 'Create Bat';
+            return view('backend.pages.batCreate', compact('title'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/bats/')->with('error', 'Something went wrong.');
+        }
+    }
+
+
+    public function add(Request $request)
+    {
+       $request->validate([
+             'bat_name' => 'required|string',
+     ]);
+            
+         try{
+            $data['name'] = $request->bat_name;
+            $data['description'] = $request->desc;
+               
+             if($request->file('featured_image')){
+                $file= $request->file('featured_image');
+                $filename= date('YmdHi').$file->getClientOriginalName();
+                $file->move(public_path('Images/bat_images'), $filename);
+                $data['featured_image']= $filename;
+                 }
+               $result =  Bat::insert($data);  
+        
+            if($result){
+            return redirect('/admin/bats')->with('success', 'Bat Created Successfully.');
+            }
+        }
+        catch (\Exception $e) {
+            //dd($e->getMessage());
+            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+        }
+
+    
+    }
+
+    //  Delete
+    public function delete(Request $request, $id)
+    {
+        try{
+            $bats = Bat::findOrFail($id);
+            $bats->status = '2';
+            $bats->save(); 
+         
+           return redirect('/admin/bats')->with('success', 'Deleted Successfully.');
+           
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+        
+         }
+    }
+
+    public function edit($id)
+    {
+        try{
+            $batData= Bat::where('id', $id)->first();
+            $title = 'Edit Bat';
+            return view('backend.pages.batEdit', compact('title','batData'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+        }
+    }
+
+    public function update(Request $request, $id)
+       {
+        
+            $request->validate([
+                'bat_name' => 'required|string',
+              
+            ]);
+        try{ 
+          
+           $bat = Bat::findOrFail($id);
+          // $data = $request->except('_method','_token','submit');
+         
+           if($request->file('featured_image')){
+            $file= $request->file('featured_image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file->move(public_path('Images/bat_images'), $filename);
+            $bat->featured_image= $filename;
+             }
+           $bat->name = $request->bat_name;
+           $bat->description = $request->desc;
+          // $page->slug = Str::slug($request->title);
+           $bat->save(); 
+           return redirect('/admin/bats')->with('success', 'Bat Updated successfully');
+        }
+        catch (\Exception $e) {
+           // dd($e->getMessage());
+            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+        }
+    }
+
+    //Vendor Bats
+    public function vendorBats()
+    {
+        try{
+            $title = 'Bats';
+            $userId = auth()->user()->id;
+            $club =  Club::where('user_id',$userId)
+                     ->first();
+            $clubId = $club->id;
+            $bats =  VendorBats::leftJoin('bats','bats.id','=', 'vendor_bats.bat_id')
+                     ->leftJoin('currencies', 'currencies.id' ,'=', 'vendor_bats.currency_id')
+                     ->where('vendor_bats.club_id', $clubId)
+                     ->get();
+           return view('backend.pages.vendorBats', compact('title','bats'));
+        }
+        catch (\Exception $e) {
+          dd($e->getMessage());
+            return redirect('/admin')->with('error', 'Something went wrong.');
+        }      
+    }
+
+   
+     
+}
+
+

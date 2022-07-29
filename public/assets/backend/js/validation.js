@@ -211,3 +211,58 @@ $("#time_update").validate({
 
   
 })
+$(".bookforms").each(function() { 
+   var form = $(this);
+form.validate({
+
+  rules: {
+    user_email: {
+    required: true,
+    email:true,
+   }
+    
+  },
+
+  
+})
+});
+
+$(".bookforms").each(function() { 
+   var form = $(this);
+form.validate({
+
+  rules: {
+    user_email: {
+    required: true,
+    email:true,
+   }
+    
+  },
+
+  
+})
+});
+
+
+$("#batform").validate({
+  //ignore: [],
+  rules: {
+    bat_name: {
+        required: true,
+        
+    },
+    featured_image: {
+      extension: "jpg|jpeg|png"
+     
+    },
+    
+  },
+  
+  messages: {
+    featured_image: {
+        extension: "Please upload file in these format only (jpg, jpeg, png)."
+    }
+  }
+
+  
+})

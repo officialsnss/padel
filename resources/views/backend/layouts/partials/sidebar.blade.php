@@ -107,7 +107,15 @@
           
             </ul>
           </li> 
+         
 
+          <li class="nav-item">
+            <a href="{{url('/admin/vendor/bats')}}" class="nav-link  {{ request()->segment(2) == 'bats' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-table-tennis"></i>
+              <p>
+                Bats </p>
+            </a>
+          </li>  
        
           @endif
           
@@ -171,6 +179,14 @@
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
               <p>
                 Refunds </p>
+            </a>
+          </li>  
+
+          <li class="nav-item">
+            <a href="{{url('/admin/bats')}}" class="nav-link  {{ request()->segment(2) == 'bats' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-table-tennis"></i>
+              <p>
+                Bats </p>
             </a>
           </li>  
 

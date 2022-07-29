@@ -134,7 +134,7 @@ class ClubController extends Controller
            }
         }
         catch (\Exception $e) {
-            return redirect('/admin/cities')->with('error', 'Something went wrong.');
+            return redirect('/admin/clubs')->with('error', 'Something went wrong.');
         
          }
         }
@@ -240,7 +240,7 @@ class ClubController extends Controller
             
          }
          catch (\Exception $e) {
-             return redirect('/admin/cities')->with('error', 'Something went wrong.');
+             return redirect('/admin/club/timeslots')->with('error', 'Something went wrong.');
          
           }
          }
@@ -331,38 +331,167 @@ class ClubController extends Controller
         $indoorCourts = $club->indoor_courts;
         $outdoorCourts = $club->outdoor_courts;
         $bookingdate = date('Y-m-d', strtotime($request->inputData));
-        
+        $x= 25;
         foreach($clubtimings as $clubtime){
-          $indoorbooking =  Booking::where(['slot_id' => $clubtime->id, 'booking_date'=> $bookingdate,'court_type' => '1'])
-           ->count();
-          $outdoorbooking =   Booking::where(['slot_id' => $clubtime->id, 'booking_date'=>$bookingdate,'court_type' => '2'])
+            
+        $indoorbooking =  Booking::where(['slot_id' => $clubtime->id, 'booking_date'=> $bookingdate,'court_type' => '1'])
            ->count();
            
-          $rem_indoor = $indoorCourts -  $indoorbooking;
-          $rem_outdoor = $outdoorCourts - $outdoorbooking;
-           if($rem_indoor != '0' && $rem_outdoor != '0'){
-             $bg = "background:#fff";
+        $outsideindoorbooking =  DB::table('outside_bookings')->where(['slot_id' => $clubtime->id, 'booking_date'=> $bookingdate,'court_type' => '1'])
+           ->count();
+
+        $totalindoorbooking =  $indoorbooking+$outsideindoorbooking;
+
+        $outdoorbooking =   Booking::where(['slot_id' => $clubtime->id, 'booking_date'=>$bookingdate,'court_type' => '2'])
+           ->count();
+
+        $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['slot_id' => $clubtime->id, 'booking_date'=>$bookingdate,'court_type' => '2'])
+           ->count();
+
+        $totalOutdoorbooking = $outdoorbooking+$outsideoutdoorbooking;
+      
+           
+          $rem_indoor = $indoorCourts -  $totalindoorbooking;
+          $rem_outdoor = $outdoorCourts - $totalOutdoorbooking;
+          
+           if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0){
+            $bg = "background:#fff; cursor: pointer";
              $info = '<p class="inner-des">
              <small><b>Courts Available:</b><br>';
-             if($rem_indoor != 0){
+             if($rem_indoor > 0){
                 $info.= $rem_indoor.' Indoor<br>';
+                $courttype = '<input type="radio" class="ctype" name="court_type" value="1" checked><span class="indoor_court">Indoor</span>';
              }
-             if($rem_outdoor != 0){
+             if($rem_outdoor > 0){
                 $info.= $rem_outdoor.' Outdoor<br>';
+                $courttype = '<input type="radio" class="ctype" name="court_type" value="2" checked ><span class="outdoor_court">Outdoor</span>';
+             }
+             if($rem_indoor > 0 && $rem_outdoor > 0){
+                $courttype = '<input type="radio" class="ctype" name="court_type" value="1" checked><span class="indoor_court">Indoor</span><input type="radio" class="ctype" name="court_type" value="2"><span class="outdoor_court">Outdoor</span>';
              }
              $info.= '</small></p>';
            }
            else{
-            $bg = "background:#e74c3c; color:#fff";
+            $bg = "background:#e74c3c; color:#fff;";
             $info = '<h4>Booked</h4>';
+          
            }
 
            
-         $data=  '<li><div class="b-time" style="'.$bg.'"><strong>'.date("H:i",strtotime($clubtime->start_time)) .' - '.date("H:i", strtotime($clubtime->end_time)) .'</strong>'. $info.'</div></li>';
+         $data=  '<li><div style="'.$bg.'" data-toggle="modal" data-target="#bookModal'. $x.'"class="b-time"><strong>'.date("H:i",strtotime($clubtime->start_time)) .' - '.date("H:i", strtotime($clubtime->end_time)) .'</strong>'. $info.'</div>';
+         
+         if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0){
+         $data.= '<div class="modal fade" id="bookModal'.$x.'" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Slot Booking</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <div class="modal-body">
+               
+                     <form method="post" action="'.route('club.timeslots.booking.slot', $clubtime->id) .'" id="bookform" class="bookforms">'.csrf_field().'
+                         <div class="form-group row">
+                             <div class="col-md-6">
+                               <div class="form-group">
+                                   <label for="inputName">Booking Date</label>
+                                   <input type="text" id="book_date" class="form-control" value="'. date('d-m-Y', strtotime($bookingdate)) .'" name="book_date" readonly>
+                                      
+                                 </div>
+                             </div>
+                             <div class="col-md-6">
+                                <div class="form-group">
+                                   <label for="inputName">Time Slot</label>
+                                   <input type="text" id="book_slot" class="form-control" value="'.date('H:i',strtotime($clubtime->start_time)).' - '.date('H:i', strtotime($clubtime->end_time)).'" name="book_slot" readonly>
+                                      
+                                 </div>
+                               </div>
+                             </div>
+
+                            <div class="form-group row">
+                             <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="inputName">Court Type</label>
+                                    <div class="ctype">'.$courttype.'</div> 
+                                  </div>
+                              </div>
+                          </div>
+
+                       <div class="form-group row">
+                          <div class="col-md-12">
+                          <div class="form-group">
+                                   <label for="inputName">User Email</label>
+                                   <input type="text" id="user_email" class="form-control" value="" name="user_email">
+                                  
+                                 </div>
+                           </div>
+                       </div>
+
+                       <div class="form-group row">
+                          <div class="col-md-12">
+                             <div class="form-group">
+                                 <label for="inputName">Notes</label>
+                                 <textarea rows="4" id="messagebody" class="form-control" value="" name="messagebody"></textarea>
+                                  
+                               </div>
+                           </div>
+                       </div>
+
+   
+
+
+                       <div class="form-group row">
+                             <div class="col-md-12">
+                                 <button type="submit" class="btn btn-primary">
+                                   Book
+                                 </button>
+                             </div>
+                         </div>
+                     </form>
+                  
+                 </div>
+             </div>
+         </div>
+     </div>';
+         }
+         
+     $data.= '</li>';
          echo $data;
+         $x++; 
         }
        
     
+    }
+
+    public function bookingSlot(Request $request, $id){
+        
+   
+        try { 
+          
+            $userId = auth()->user()->id;
+            $club =  Club::where('user_id',$userId)
+                        ->first();
+            $clubId = $club->id;
+
+            $clubtimings =  TimeSlots::where('club_id',$clubId)
+            ->where('status',1)
+            ->get();
+        
+           $data['slot_id'] = $id;
+           $data['club_id'] = $clubId;
+           $data['court_type'] = $request->court_type;
+           $data['booking_date'] = date('Y-m-d', strtotime($request->book_date));
+           $data['user_email'] = $request->user_email;
+           $data['notes'] = $request->messagebody;
+
+            DB::table('outside_bookings')->insert($data); 
+             return Redirect::back()->with('success', 'Slot Booked');
+        }
+         catch (\Exception $e) {
+            return Redirect::back()->with('error', 'Something went wrong.');
+        
+        }
     }
 
    

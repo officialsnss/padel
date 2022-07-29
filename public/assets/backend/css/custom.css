@@ -165,5 +165,19 @@ ul.time-list li .b-time{
     color: #6b6666;
 }
 p.inner-des b {
-    color: #ff5000;
+    color: #1fa922;
+}
+.b-time:hover {
+    background: #f2f2f2;
+}
+form#bookform label {
+    text-align: left !important;
+    width: 100%;
+}
+.ctype {
+    text-align: left;
+}
+.ctype input[type=radio] {
+    margin: 0 3px 0 15px;
+    vertical-align: middle;
 }

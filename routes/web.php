@@ -88,13 +88,17 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/settings/update/{id}', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
      
      //Refunds Listing
-      Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index')->name('index');
+      Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
       Route::post('/refunds/reject', 'App\Http\Controllers\Backend\RefundController@reject')->name('refund.reject');
     
-    
-   
-
+      //Bats
+     Route::get('/bats', 'App\Http\Controllers\Backend\BatController@index');
+     Route::get('/bat/create', 'App\Http\Controllers\Backend\BatController@create')->name('bat.create');
+     Route::post('/bat/add', 'App\Http\Controllers\Backend\BatController@add')->name('bat.add');
+     Route::get('/bat/delete/{id}', 'App\Http\Controllers\Backend\BatController@delete')->name('bat.delete');
+     Route::get('/bat/edit/{id}', 'App\Http\Controllers\Backend\BatController@edit')->name('bat.edit');
+     Route::post('/bat/update/{id}', 'App\Http\Controllers\Backend\BatController@update')->name('bat.update');
     });
 
    //Users Route
@@ -122,7 +126,14 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
        Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
     
-      //Clubs
+      
+    });
+});
+
+Route::group(['middleware' =>['role:5']], function(){
+    Route::prefix('/admin')->group(function () {
+
+        //Clubs
       Route::get('/clubs', 'App\Http\Controllers\Backend\ClubController@index')->name('clubs');
       Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
       Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
@@ -137,9 +148,14 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
       Route::get('/club/timeslots/delete/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsdelete')->name('club.timeslots.delete');
       Route::get('/club/timeslots/book', 'App\Http\Controllers\Backend\ClubController@bookTimeSlots')->name('club.timeslots.book');
       Route::get('/club/timeslots/book/fetch', 'App\Http\Controllers\Backend\ClubController@fetchList')->name('club.timeslots.book.fetch');
+      Route::post('/club/timeslots/booking/{id}', 'App\Http\Controllers\Backend\ClubController@bookingSlot')->name('club.timeslots.booking.slot');
 
       //Get Region
       Route::get('/get-region', 'App\Http\Controllers\Backend\ClubController@getRegion')->name('regionlist');
       Route::get('/get-city', 'App\Http\Controllers\Backend\ClubController@getCity')->name('citylist');
+
+     //Bats
+     Route::get('/vendor/bats', 'App\Http\Controllers\Backend\BatController@vendorBats')->name('vendor.bats');
+
     });
 });
