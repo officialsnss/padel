@@ -24,9 +24,13 @@ class ClubsController extends Controller
         $this->clubDataService = $clubDataService;
     }
 
-    public function getClubs(Request $request)
+    public function getClubs()
     {
-        return $this->clubDataService->getClubs($request);
+        $data = $this->clubDataService->getClubs();
+        if($data) {
+            return ResponseUtil::successWithData($data, true, 200);
+        }
+        return ResponseUtil::successWithMessage('No Clubs found.', true, 200);
     }
 
     public function getSingleClub($id)

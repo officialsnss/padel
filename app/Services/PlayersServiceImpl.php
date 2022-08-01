@@ -28,17 +28,32 @@ class PlayersServiceImpl implements PlayersService
      */
     public function getPlayersList()
     {
+        $userId = auth()->user()->id;
         $data = $this->playersRepository->getPlayersList();
         $dataArray = [];
+
+
+        foreach($data as $key => $row) {
+            if($row['user_id'] == $userId) {
+                unset($data[$key]);
+            }
+        }
+
+        $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+        $following = explode(',',$userData['following']);
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];            
             $dataArray[$i]['name'] = $row['users'][0]['name'];  
             $dataArray[$i]['level'] = $row['levels'];  
-            $dataArray[$i]['image'] = $row['users'][0]['profile_pic'];  
-            $dataArray[$i]['isFollowed'] = 0;  
+            $dataArray[$i]['image'] = $row['users'][0]['profile_pic'];
+            if(in_array($row['id'], $following)) {
+                $dataArray[$i]['isFollowed'] = 1;  
+            } else {
+                $dataArray[$i]['isFollowed'] = 0;  
+            }
         }
-        return ['Players' => $dataArray];
+        return $dataArray;
     }
 
     public function getPlayerDetails()
@@ -74,17 +89,17 @@ class PlayersServiceImpl implements PlayersService
         
         $currentDate = Carbon\Carbon::now()->toDateTimeString();
         // dd($currentDate->toDateTimeString());
-        foreach($data['matches'] as $i => $row) {
-            dd($row);
-            $bookingDate[$row['id']] = $row['booking'][0]['booking_date'];
-        }
+        // foreach($data['matches'] as $i => $row) {
+        //     dd($row);
+        //     $bookingDate[$row['id']] = $row['booking'][0]['booking_date'];
+        // }
 
-        foreach($bookingDate as $booking) {
-            if($booking > $currentDate) {
-                dd($booking);
-            }
-        }
-        dd($bookingDate);
+        // foreach($bookingDate as $booking) {
+        //     if($booking > $currentDate) {
+        //         dd($booking);
+        //     }
+        // }
+        // dd($bookingDate);
 
         $dataArray['court_side'] = $data['court_side'] == 1 ? 'Left': 'Right';  
         $dataArray['best_shot'] = $data['best_shot'];  
@@ -98,7 +113,7 @@ class PlayersServiceImpl implements PlayersService
     {
         $userId = auth()->user()->id;
         $playerId = $request->player_id;
-            
+
         $playerData = $this->playersRepository->getPlayerDetails($playerId);
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
         $followers = explode(',',$playerData['followers']);
@@ -136,31 +151,15 @@ class PlayersServiceImpl implements PlayersService
     {
         $dataArray = [];
 
-        if($request->gender != null) {
-            $dataArray['gender'] = $request->gender;
-        }
-        if($request->instagram_url != null) {
-            $dataArray['instagram_url'] = $request->instagram_url;
-        }
-        if($request->whatsapp_no != null) {
-            $dataArray['whatsapp_no'] = $request->whatsapp_no;
-        }
-        if($request->dob != null) {
-            $dataArray['dob'] = $request->dob;
-        }
-        if($request->court_side != null) {
-            $dataArray['court_side'] = $request->court_side;
-        }
-        if($request->play_time != null) {
-            $dataArray['play_time'] = $request->play_time;
-        }
-        if($request->best_shot != null) {
-            $dataArray['best_shot'] = $request->best_shot;
-        }
-        if($request->levels != null) {
-            $dataArray['levels'] = $request->levels;
-        }
-        
+        $dataArray['gender'] = $request->gender;
+        $dataArray['instagram_url'] = $request->instagram_url;
+        $dataArray['whatsapp_no'] = $request->whatsapp_no;
+        $dataArray['dob'] = $request->dob;
+        $dataArray['court_side'] = $request->court_side;
+        // $dataArray['play_time'] = $request->play_time;
+        $dataArray['best_shot'] = $request->best_shot;
+        $dataArray['levels'] = $request->levels;
+
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
 

@@ -26,37 +26,42 @@ class ClubDataServiceImpl implements ClubDataService
      *
      * @return mixed
      */
-    public function getClubs($request)
+    public function getClubs()
     {
-        $data = $this->clubDataRepository->getClubs($request);
-        return $this->getClubData($data);
+        $data = $this->clubDataRepository->getClubs();
+
+        $dataPacket = [];
+        $i =0;
+        foreach($data as $i => $row) {
+            $dataPacket[$i]['name'] = $row['name'];
+            $clubPrice = $this->getClubPrice($row['court']);
+            $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
+            $dataPacket[$i]['featured_image'] = $this->getFeaturedImage($row['court']);
+            $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
+            $i++;
+        }
+        return $dataPacket;
     }
 
     public function getSingleClub($id)
     {
         $data = $this->clubDataRepository->getSingleClub($id);
-        return $this->getClubData($data);  
-    }
-
-    public function getClubData($data)
-    {
-        // dd($data);
         $dataPacket = [];
-        $i =0;
-        foreach($data as $i => $row) {
-            $dataPacket[$i]['name'] = $row['name'];
-            $dataPacket[$i]['description'] = $row['description'];
-            $address = $row['address'];
-            $city = $row['cities'] == '' ? $row['cities'][0]['name'] : null;
-            $dataPacket[$i]['address'] = $address . ',' . $city;
-            $clubPrice = $this->getClubPrice($row['court']);
-            $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
-            $dataPacket[$i]['featured_image'] = $this->getFeaturedImage($row['court']);
-            $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
-            $dataPacket[$i]['rating'] = $this->getClubRating($row['club_rating']);
-            $i++;
-        }
-        return $dataPacket;  
+        
+        $clubData = $data['data'];
+        $dataPacket['name'] = $clubData['name'];
+        $dataPacket['description'] = $clubData['description'];
+        $address = $clubData['address'];
+        $city = $clubData['cities'] == '' ? $clubData['cities'][0]['name'] : null;
+        $dataPacket['address'] = $address . ',' . $city;
+        $clubPrice = $this->getClubPrice($clubData['court']);
+        $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
+        $dataPacket['featured_image'] = $this->getFeaturedImage($clubData['court']);
+        $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
+        $dataPacket['rating'] = $this->getClubRating($clubData['club_rating']);
+        $dataPacket['bookingsCount'] = $data['bookingsCount'];
+        
+        return $dataPacket; 
     }
 
     public function getClubPrice($courts)

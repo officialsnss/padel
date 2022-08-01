@@ -1,27 +1,31 @@
 <?php
-
+   
 namespace App\Notifications;
-
+   
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Session;
 
-class PasswordReset extends Notification
+class SendContactMail extends Notification
 {
     use Queueable;
-    public $token;
+  
+    protected $data;
+   
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($token)
+    public function __construct($data)
     {
-        $this->token = $token;
+        $this->name = $data['name'];
+        $this->email = $data['email'];
+        $this->message = $data['message'];
     }
-
+   
     /**
      * Get the notification's delivery channels.
      *
@@ -32,7 +36,7 @@ class PasswordReset extends Notification
     {
         return ['mail'];
     }
-
+   
     /**
      * Get the mail representation of the notification.
      *
@@ -41,16 +45,11 @@ class PasswordReset extends Notification
      */
     public function toMail($notifiable)
     {
-        $urlFrontEnd = "http://127.0.0.1:8000";
-                // $url = $urlFrontEnd.'/password-update?token='.$this->token;
-        $url = $urlFrontEnd.'/password/reset/'.$this->token.'?email=padel78981@gmail.com';
         return (new MailMessage)
-            ->subject('Reset Password from Sports Arena')
-            ->line('You or someone else has requested a password recovery. Please click on the following link to continue the password recovery process.')
-            ->action('Click to Action', $url)
+            ->subject('Contact Mail from '.$this->name)
+            ->line($this->message.'from Email id '.$this->email)
             ->line('Thank you!');
     }
-
     /**
      * Get the array representation of the notification.
      *
@@ -64,3 +63,4 @@ class PasswordReset extends Notification
         ];
     }
 }
+   

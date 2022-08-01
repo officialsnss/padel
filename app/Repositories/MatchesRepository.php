@@ -25,7 +25,8 @@ class MatchesRepository extends BaseRepository
      */
     public function getMatchesList()
     {
-      return Matches::with('slots')
+      return Matches::where('match_type', 1)
+              ->with('slots')
               ->with('clubs.cities')
               ->get(); 
     }

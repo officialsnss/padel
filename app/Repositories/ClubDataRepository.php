@@ -7,6 +7,7 @@ use App\Models\Club;
 use App\Models\Court; 
 use App\Models\ClubRating; 
 use App\Models\Cities; 
+use App\Models\Booking; 
 
 /**
  * Class PropertyRepository
@@ -20,11 +21,10 @@ class ClubDataRepository extends BaseRepository
     /**
      * Method used to fetch the Club Data
      *
-     * @param $request
      *
      * @return mixed
      */
-    public function getClubs($request)
+    public function getClubs()
     {
         return Club::with('court')
                 ->with('club_rating')
@@ -35,12 +35,16 @@ class ClubDataRepository extends BaseRepository
 
     public function getSingleClub($id)
     {
-        return Club::where('id', $id)
+        $data = Club::where('id', $id)
                 ->with('court')
                 ->with('club_rating')
                 ->with('currencies')
                 ->with('cities')
-                ->get();
+                ->first();
+
+        $bookingsCount = Booking::where('club_id', $id)->where('status', '1')->count();
+
+        return ['data' => $data, 'bookingsCount' => $bookingsCount];
     }
 
     public function getCourtsCount($id)
