@@ -112,7 +112,29 @@ class RefundController extends Controller
         catch (ValidationException  $e) {
            return redirect('/admin/refunds')->with('error', 'Something went wrong.');
         }
-    }    
+    } 
+    
+    //Wallets Manage
+    public function wallets()
+    {
+        try{
+            $title = 'Wallets';
+          
+            $wallets = Wallets:: leftJoin('users','users.id', '=', 'wallets.user_id')
+            ->leftJoin('currencies', 'currencies.id' ,'=', 'wallets.currency_id')
+            ->groupBy('wallets.user_id')
+            ->select('users.name as username', 'users.email as email','wallets.user_id', DB::raw('count(*) as total'))
+            ->get();
+           dd($wallets);
+            return view('backend.pages.wallets', compact('title','wallets'));
+        }
+        catch (\Exception $e) {
+          dd($e->getMessage());
+            return redirect('/admin')->with('error', 'Something went wrong.');
+        }      
+    }
+
+
 }
 
 

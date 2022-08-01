@@ -151,14 +151,96 @@ class BatController extends Controller
             $bats =  VendorBats::leftJoin('bats','bats.id','=', 'vendor_bats.bat_id')
                      ->leftJoin('currencies', 'currencies.id' ,'=', 'vendor_bats.currency_id')
                      ->where('vendor_bats.club_id', $clubId)
+                     ->select('vendor_bats.id as batid', 'currencies.*','vendor_bats.*','bats.*')
                      ->get();
            return view('backend.pages.vendorBats', compact('title','bats'));
         }
         catch (\Exception $e) {
-          dd($e->getMessage());
+         // dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
         }      
     }
+
+    //Vendor Bat Create
+    public function vendorCreate()
+    { 
+        try{
+            //$title = '';
+            $bats =  Bat::where('status', 1)->get();
+            return view('backend.pages.vendorBatCreate', compact('bats'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/vendor/bats/')->with('error', 'Something went wrong.');
+        }
+    }
+
+    public function vendorAdd(Request $request)
+    {
+      try{
+            $userId = auth()->user()->id;
+            $club =  Club::where('user_id',$userId)
+                     ->first();
+            $clubId = $club->id;
+            $data['club_id'] =  $clubId;
+            $data['bat_id'] = $request->bat_id;
+            $data['price'] = $request->price;
+            $data['currency_id'] = '129';
+            $data['quantity'] = $request->quantity; 
+           
+            $result =  VendorBats::insert($data);  
+        
+            if($result){
+            return redirect('/admin/vendor/bats')->with('success', 'Added Successfully.');
+            }
+        }
+        catch (\Exception $e) {
+            //dd($e->getMessage());
+            return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
+        }
+
+    
+    }
+
+    public function vendorEdit($id)
+    {
+        try{
+            $batData= VendorBats::where('id', $id)->first();
+            $bats =  Bat::where('status', 1)->get();
+            return view('backend.pages.vendorBatEdit', compact('batData','bats'));
+        }
+        catch (\Exception $e) {
+            //dd($e->getMessage());
+            return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
+        }
+    }
+
+  
+    public function vendorUpdate(Request $request, $id)
+    {
+     
+        
+     try{ 
+       
+        $vendorbats = VendorBats::findOrFail($id);
+        $userId = auth()->user()->id;
+        $club =  Club::where('user_id',$userId)
+        ->first();
+        $clubId = $club->id;
+        $vendorbats->club_id =  $clubId;
+        $vendorbats->bat_id = $request->bat_id;
+        $vendorbats->price = $request->price;
+        $vendorbats->quantity = $request->quantity;
+        $userId = auth()->user()->id;
+       
+       // $page->slug = Str::slug($request->title);
+        $vendorbats->save(); 
+        return redirect('/admin/vendor/bats')->with('success', 'Updated successfully');
+     }
+     catch (\Exception $e) {
+         //dd($e->getMessage());
+         return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
+     }
+ }
 
    
      

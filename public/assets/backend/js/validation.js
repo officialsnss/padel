@@ -266,3 +266,31 @@ $("#batform").validate({
 
   
 })
+
+
+$("#vendorcreateform").validate({
+  //ignore: [],
+  rules: {
+    bat_id: {
+        required: true,
+        
+    },
+    price: {
+      required: true,
+      number: true,
+    },
+    quantity: {
+      required: true,
+      number: true,
+    },
+    
+  },
+  
+  messages: {
+    bat_id: {
+      required: "Please Select the bat."
+    }
+  }
+
+  
+})

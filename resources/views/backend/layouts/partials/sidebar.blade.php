@@ -110,7 +110,7 @@
          
 
           <li class="nav-item">
-            <a href="{{url('/admin/vendor/bats')}}" class="nav-link  {{ request()->segment(2) == 'bats' ? 'active' : '' }}">
+            <a href="{{url('/admin/vendor/bats')}}" class="nav-link  {{ request()->segment(2) == 'vendor' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-table-tennis"></i>
               <p>
                 Bats </p>
@@ -179,6 +179,14 @@
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
               <p>
                 Refunds </p>
+            </a>
+          </li> 
+          
+          <li class="nav-item">
+            <a href="{{url('/admin/wallets')}}" class="nav-link  {{ request()->segment(2) == 'wallets' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-money-bill-alt"></i>
+              <p>
+                Wallets</p>
             </a>
           </li>  
 

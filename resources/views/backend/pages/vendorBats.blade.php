@@ -7,7 +7,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="add">
-                 <a href="" class="btn btn-info">Add New</a>
+                 <a href="{{ route('vendor.create') }}" class="btn btn-info">Add New</a>
                 </div>
               </div>
               <div class="card-body">
@@ -29,10 +29,7 @@
                       <td>{{ $bat->name }}</td>
                       <td>{{ $bat->price }} {{ $bat->code }}</td>
                       <td>{{ $bat->quantity }}</td>
-                     
-                    
-                       
-                       <td> <a href="" class="btn btn-secondary">Edit</a>
+                      <td> <a href="{{ route('vendor.edit',  $bat->batid) }}" class="btn btn-secondary">Edit</a>
                       
                        
                        

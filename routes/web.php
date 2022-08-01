@@ -92,6 +92,9 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
       Route::post('/refunds/reject', 'App\Http\Controllers\Backend\RefundController@reject')->name('refund.reject');
     
+      Route::get('/wallets', 'App\Http\Controllers\Backend\RefundController@wallets')->name('wallets');
+
+
       //Bats
      Route::get('/bats', 'App\Http\Controllers\Backend\BatController@index');
      Route::get('/bat/create', 'App\Http\Controllers\Backend\BatController@create')->name('bat.create');
@@ -156,6 +159,10 @@ Route::group(['middleware' =>['role:5']], function(){
 
      //Bats
      Route::get('/vendor/bats', 'App\Http\Controllers\Backend\BatController@vendorBats')->name('vendor.bats');
+     Route::get('/vendor/create', 'App\Http\Controllers\Backend\BatController@vendorCreate')->name('vendor.create');
+     Route::post('/vendor/add', 'App\Http\Controllers\Backend\BatController@vendorAdd')->name('vendor.add');
+     Route::get('/vendor/edit/{id}', 'App\Http\Controllers\Backend\BatController@vendorEdit')->name('vendor.edit');
+     Route::post('/vendor/update/{id}', 'App\Http\Controllers\Backend\BatController@vendorUpdate')->name('vendor.update');
 
     });
 });
