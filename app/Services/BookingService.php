@@ -18,4 +18,5 @@ interface BookingService
      */
     public function getBookingsList();
 
+    public function getWallet();
 }

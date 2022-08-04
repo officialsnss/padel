@@ -40,4 +40,18 @@ class BookingServiceImpl implements BookingService
         }
         return ['Players' => $dataArray];
     }
+
+    public function getWallet()
+    {
+        $data = $this->bookingRepository->getWalletData();
+        $dataArray = [];
+
+        foreach($data as $i => $row) {
+            $dataArray[$i]['booking_id'] = $row['booking_id'];
+            $dataArray[$i]['status'] = $row['status'] == 1 ? 'Refund' : 'Booking';
+            $dataArray[$i]['amount'] = $row['amount'];
+            $dataArray[$i]['date'] = $row['created_at']->toDateString();
+        }
+        return $dataArray;
+    }
 }

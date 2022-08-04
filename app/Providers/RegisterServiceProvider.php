@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Services\DashboardService;
+use App\Services\DashboardServiceImpl;
 use App\Services\ClubDataService;
 use App\Services\ClubDataServiceImpl;
 use App\Services\BatDataService;
@@ -32,6 +34,7 @@ class RegisterServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(DashboardService::class, DashboardServiceImpl::class);
         $this->app->singleton(ClubDataService::class, ClubDataServiceImpl::class);
         $this->app->singleton(BatDataService::class, BatDataServiceImpl::class);
         $this->app->singleton(LevelsService::class, LevelsServiceImpl::class);

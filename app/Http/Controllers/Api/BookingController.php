@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Utils\ResponseUtil;
 use Illuminate\Http\Request;
 use App\Services\BookingService;
 
@@ -26,5 +27,14 @@ class BookingController extends Controller
     {
         $data =  $this->bookingService->getBookingsList();
         return ['status' => 'success', 'data' => $data];
+    }
+
+    public function getWallet()
+    {
+        $data = $this->bookingService->getWallet();
+        if($data == []) {
+            return ResponseUtil::successWithMessage('No entries in the wallet', true, 200);
+        }
+        return ResponseUtil::successWithData($data, true, 200);
     }
 }

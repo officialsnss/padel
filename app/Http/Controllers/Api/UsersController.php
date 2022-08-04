@@ -44,14 +44,13 @@ class UsersController extends Controller
         $user = Auth::user();
         if($user['status'] == 1) {
             $token = $this->createToken($user);
+            $access_token = 'Bearer ' . $token->accessToken;
+            $message = __('Login Successfully');
+            $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
             $data = [
-                'status' => 'success',
-                'message' => __('Login Successfully'),
-                'access_token' => 'Bearer ' . $token->accessToken,
-                'expires_at' => Carbon::parse($token->token->expires_at)->toDateTimeString(),
                 'details' => new UserResource($user),
             ];
-            return ResponseUtil::successWithData($data, true, 200);
+            return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
         }
         return ResponseUtil::errorWithMessage('Admin has deactiaved you.', false, 200);
     }
@@ -201,14 +200,14 @@ class UsersController extends Controller
                 auth()->login($user, true);
                 User::where('device_id',$request->device_id)->update(['otp' => null, 'isOtpVerified' => '1']);
                 $token = $this->createToken($user);
+                $token = $this->createToken($user);
+                $access_token = 'Bearer ' . $token->accessToken;
+                $message = __('Login Successfully');
+                $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
                 $data = [
-                    'status' => 'success',
-                    'message' => __('Otp verified successfully.'),
-                    'access_token' => 'Bearer ' . $token->accessToken,
-                    'expires_at' => Carbon::parse($token->token->expires_at)->toDateTimeString(),
                     'details' => new UserResource($user),
                 ];
-                return ResponseUtil::successWithData($data, true, 200);
+                return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
             }
             else {
                 return ResponseUtil::errorWithMessage('Invalid Otp', false, 401);

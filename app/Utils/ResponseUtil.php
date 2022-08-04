@@ -36,7 +36,7 @@ class ResponseUtil
      */
     public static function errorWithMessage($message, $success = false, $status = 400): JsonResponse
     {
-        return response()->json(['message' => $message, 'success' => $success], $status);
+        return response()->json(['code' => 400, 'message' => $message, 'success' => $success], $status);
     }
 
 
@@ -51,7 +51,7 @@ class ResponseUtil
      */
     public static function errorWithMessageBag($errors, $success = false, $status = 400): JsonResponse
     {
-        return response()->json(['errors' => $errors, 'success' => $success], $status);
+        return response()->json(['code' => 400, 'errors' => $errors, 'success' => $success], $status);
     }
 
 
@@ -80,7 +80,7 @@ class ResponseUtil
      */
     public static function successWithMessage($message, $success = true, $status = 200): JsonResponse
     {
-        return response()->json(['message' => $message, 'success' => $success], $status);
+        return response()->json(['code' => 200, 'message' => $message, 'success' => $success], $status);
     }
 
     /**
@@ -94,7 +94,12 @@ class ResponseUtil
      */
     public static function successWithData($data, $success = true, $status = 200)
     {
-        return response()->json(['success' => $success, 'data' => $data], $status);
+        return response()->json(['code' => 200, 'success' => $success, 'data' => $data], $status);
+    }
+
+    public static function successWithDataToken($data, $message, $access_token, $expires_at, $success = true, $status = 200)
+    {
+        return response()->json(['code' => 200, 'success' => $success, 'message' => $message, 'token' => $access_token, 'expires_at' => $expires_at, 'data' => $data], $status);
     }
 
     /**
@@ -110,7 +115,7 @@ class ResponseUtil
      */
     public static function successWithMessageData($data, $responseMessage, $success = true, $status = 200)
     {
-        return response()->json(['success' => $success, 'responseMessage' => $responseMessage, 'data' => $data], $status);
+        return response()->json(['code' => 200, 'success' => $success, 'responseMessage' => $responseMessage, 'data' => $data], $status);
     }
 
     /**

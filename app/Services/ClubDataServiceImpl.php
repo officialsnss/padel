@@ -38,6 +38,10 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
             $dataPacket[$i]['featured_image'] = $this->getFeaturedImage($row['court']);
             $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
+            $dataPacket[$i]['isPopular'] = $row['isPopular'];
+            $dataPacket[$i]['ordering'] = $row['ordering'];
+            $dataPacket[$i]['latitude'] = $row['latitude'];
+            $dataPacket[$i]['longitude'] = $row['longitude'];
             $i++;
         }
         return $dataPacket;

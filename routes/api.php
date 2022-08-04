@@ -28,6 +28,9 @@ Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); 
      
 Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
+    
+    //DASHBOARD
+    Route::get('dashboard', 'App\Http\Controllers\Api\DashboardController@getDashboard');
 
     //CLUBS
     Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubs');
@@ -64,4 +67,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Change Password
     Route::post('change_password', 'App\Http\Controllers\Api\UsersController@changePassword');
+
+    //Wallet
+    Route::get('wallet', 'App\Http\Controllers\Api\BookingController@getWallet');
 });

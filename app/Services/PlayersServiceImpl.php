@@ -52,6 +52,8 @@ class PlayersServiceImpl implements PlayersService
             } else {
                 $dataArray[$i]['isFollowed'] = 0;  
             }
+            $dataArray[$i]['isPopular'] = $row['isPopular'];
+            $dataArray[$i]['ordering'] = $row['ordering'];
         }
         return $dataArray;
     }
