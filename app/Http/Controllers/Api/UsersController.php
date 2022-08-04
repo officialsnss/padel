@@ -26,30 +26,34 @@ class UsersController extends Controller
 {
     public function login(Request $request)
     {
-        $rules = [
-            'email'    => 'required|email',
-            'password' => 'required',
-        ];
+        // $rules = [
+        //     'email'    => 'required|email',
+        //     'password' => 'required',
+        // ];
 
-        $input = $request->only('email','password');
-        $validator = Validator::make($input, $rules);
+        // $input = $request->only('email','password');
+        // $validator = Validator::make($input, $rules);
 
-        if ($validator->fails()) {
-            return ResponseUtil::errorWithMessage($validator->messages(), false, 422);
+        // if ($validator->fails()) {
+        //     return ResponseUtil::errorWithMessage($validator->messages(), false, 422);
+        // }
+
+        $loginUser = USER::where('email', $request->email)->first();
+        if(!$loginUser) {
+            return ResponseUtil::errorWithMessage('The entered email is not registered with us.', false, 422);
         }
 
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
-            return ResponseUtil::errorWithMessage('Login failed: The email_id or password is incorrect.', false, 422);
+            return ResponseUtil::errorWithMessage('The entered password is incorrect.', false, 422);
         }
+
         $user = Auth::user();
         if($user['status'] == 1) {
             $token = $this->createToken($user);
             $access_token = 'Bearer ' . $token->accessToken;
             $message = __('Login Successfully');
             $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-            $data = [
-                'details' => new UserResource($user),
-            ];
+            $data = new UserResource($user);
             return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
         }
         return ResponseUtil::errorWithMessage('Admin has deactiaved you.', false, 200);
@@ -86,18 +90,28 @@ class UsersController extends Controller
      */
     public function register(Request $request)
     {
-        $rules = [
-            'name' => 'required',
-            'email'    => 'unique:users|required',
-            'password' => 'required',
-            'phone' => 'required|',
-        ];
+        // $rules = [
+        //     'name' => 'required',
+        //     'email'    => 'unique:users|required',
+        //     'password' => 'required',
+        //     'phone' => 'required|',
+        // ];
 
-        $input = $request->only('name', 'email','password', 'phone');
-        $validator = Validator::make($input, $rules);
+        // $input = $request->only('name', 'email','password', 'phone');
+        // $validator = Validator::make($input, $rules);
 
-        if ($validator->fails()) {
-            return ResponseUtil::errorWithMessage($validator->messages(), false, 200);
+        // if ($validator->fails()) {
+        //     return ResponseUtil::errorWithMessage($validator->messages(), false, 200);
+        // }
+
+        $existingUsers = User::where('email',$request->email)->first();
+        if($existingUsers) {
+            return ResponseUtil::successWithMessage("This email_id already exists", true, 200);
+        }
+
+        $existingUsers = User::where('phone',$request->phone)->first();
+        if($existingUsers) {
+            return ResponseUtil::successWithMessage("This phone number already exists", true, 200);
         }
 
         $user = User::create(['name' => $request->name, 
@@ -114,25 +128,26 @@ class UsersController extends Controller
 
     public function sendOtp($id)
     {
-        $otp = rand(1000,9999);
+        // $otp = rand(1000,9999);
+        $otp = 1234;
         $user = User::where('id', $id)->first();
 
-        // Send Otp to Phone number
-        $receiverNumber = "+91".$user->phone;
-        $message = "This the otp for you registration. " . $otp;
-        try {
-            $account_sid = getenv("TWILIO_SID");
-            $auth_token = getenv("TWILIO_TOKEN");
-            $twilio_number = getenv("TWILIO_FROM");
+        // // Send Otp to Phone number
+        // $receiverNumber = "+91".$user->phone;
+        // $message = "This the otp for you registration. " . $otp;
+        // try {
+        //     $account_sid = getenv("TWILIO_SID");
+        //     $auth_token = getenv("TWILIO_TOKEN");
+        //     $twilio_number = getenv("TWILIO_FROM");
 
-            $client = new Client($account_sid, $auth_token);
-            $client->messages->create($receiverNumber, [
-                'from' => $twilio_number, 
-                'body' => $message]);
+        //     $client = new Client($account_sid, $auth_token);
+        //     $client->messages->create($receiverNumber, [
+        //         'from' => $twilio_number, 
+        //         'body' => $message]);
 
-        } catch (Exception $e) {
-            dd("Error: ". $e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     dd("Error: ". $e->getMessage());
+        // }
         
         // Send Otp to Email
         $user->notify(new NewRegister($otp));
@@ -141,25 +156,26 @@ class UsersController extends Controller
 
     public function resendOtp(Request $request)
     {
-        $otp = rand(1000,9999);
-        $user = User::where('device_id', $request->device_id)->first();
+        // $otp = rand(1000,9999);
+        $otp = 1234;
+        $user = User::where('device_id', $request->device_id)->where('phone', $request->phone)->first();
 
-        // Send Otp to Phone number
-        $receiverNumber = "+91".$user->phone;
-        $message = "This the otp for you registration. " . $otp;
-        try {
-            $account_sid = getenv("TWILIO_SID");
-            $auth_token = getenv("TWILIO_TOKEN");
-            $twilio_number = getenv("TWILIO_FROM");
+        // // Send Otp to Phone number
+        // $receiverNumber = "+91".$user->phone;
+        // $message = "This the otp for you registration. " . $otp;
+        // try {
+        //     $account_sid = getenv("TWILIO_SID");
+        //     $auth_token = getenv("TWILIO_TOKEN");
+        //     $twilio_number = getenv("TWILIO_FROM");
 
-            $client = new Client($account_sid, $auth_token);
-            $client->messages->create($receiverNumber, [
-                'from' => $twilio_number, 
-                'body' => $message]);
+        //     $client = new Client($account_sid, $auth_token);
+        //     $client->messages->create($receiverNumber, [
+        //         'from' => $twilio_number, 
+        //         'body' => $message]);
   
-        } catch (Exception $e) {
-            dd("Error: ". $e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     dd("Error: ". $e->getMessage());
+        // }
 
         // try {
   
@@ -181,32 +197,30 @@ class UsersController extends Controller
         
         // Send Otp to Email
         $user->notify(new NewRegister($otp));
-        User::where('device_id', $request->device_id)->update(['otp' => $otp]);
+        User::where('device_id', $request->device_id)->where('phone', $request->phone)->update(['otp' => $otp]);
         return ResponseUtil::successWithMessage("OTP resent successfully.", true, 200);
     }
 
     public function verifyOtp(Request $request)
     {
-        $user  = User::where('device_id',$request->device_id)->first();
+        $user  = User::where('device_id',$request->device_id)->where('phone', $request->phone)->first();
         $currentTime = Carbon::now()->toDateTimeString();
         $otpSendTime = strtotime($user['updated_at']->toDateTimeString());
 
-        if(strtotime($currentTime) - $otpSendTime > 60) {
-            User::where('device_id',$request->device_id)->update(['otp' => null]);
-            return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 401);
-        }
+        // if(strtotime($currentTime) - $otpSendTime > 60) {
+        //     User::where('device_id',$request->device_id)->update(['otp' => null]);
+        //     return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 401);
+        // }
         if($user){
             if($user['otp'] == $request->otp) {
                 auth()->login($user, true);
-                User::where('device_id',$request->device_id)->update(['otp' => null, 'isOtpVerified' => '1']);
+                User::where('device_id',$request->device_id)->where('phone', $request->phone)->update(['otp' => null, 'isOtpVerified' => '1']);
                 $token = $this->createToken($user);
                 $token = $this->createToken($user);
                 $access_token = 'Bearer ' . $token->accessToken;
                 $message = __('Login Successfully');
                 $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-                $data = [
-                    'details' => new UserResource($user),
-                ];
+                $data = new UserResource($user);
                 return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
             }
             else {
