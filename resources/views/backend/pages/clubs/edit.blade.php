@@ -96,6 +96,29 @@
                         </div>
                      </div> 
                   </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="inputName">Latitude</label>
+                          <input type="text" id="latitude" class="form-control" value="{{ $clubData->latitude }}" name="latitude">
+                              @error('latitude')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                      </div>
+                     </div> 
+                     <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputName">Longitude</label>
+                          <input type="text" id="longitude" class="form-control" value="{{ $clubData->longitude }}" name="longitude">
+                              @error('longitude')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                        </div>
+                     </div> 
+                  </div>
+
+
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">

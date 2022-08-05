@@ -31,10 +31,14 @@ class Club extends Model
         'amenities',
         'country',
         'status',
+        'latitude',
+        'longitude',
+        'ordering',
         'featured_image',
         'created_at',
         'updated_at',
     ];
+
 
     public function court()
     {

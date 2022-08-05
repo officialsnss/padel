@@ -25,11 +25,15 @@ class ClubController extends Controller
     {
        
         $userId = auth()->user()->id;
-        $club =  Club::leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
-                      ->where('clubs.user_id',$userId)
-                      ->select('currencies.code', 'clubs.*')
-                      ->first();
-        $title = $club->name;
+            $club =  Club::leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
+            ->where('clubs.user_id',$userId)
+            ->select('currencies.code', 'clubs.*')
+            ->first();
+            $title = $club->name;
+    
+        
+       
+      
         return view('backend.pages.clubs.club', compact('title','club'));
     }
 
@@ -493,6 +497,50 @@ class ClubController extends Controller
         
         }
     }
+
+    // Clubs Ordering Module
+    public function clubs()
+    {
+       
+       $clubs =  Club::leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
+            ->select('currencies.code', 'clubs.*')
+            ->orderBy('ordering','ASC')
+            ->get();
+            $title = 'Clubs Listing';
+    
+        return view('backend.pages.clubs.listing', compact('title','clubs'));
+    }
+
+    public function reorder(Request $request)
+    {
+        $clubs = Club::all();
+      
+        foreach ($clubs as $club) {
+            foreach ($request->order as $order) {
+                if ($order['id'] == $club->id) {
+                    $club->update(['ordering' => $order['position']]);
+                }
+            }
+        }
+        return response()->json(['message' => 'Order Update Successfully.', 'status' => 200]);
+       
+    }
+
+      // Customer Status Updation
+      public function popularStatus(Request $request)
+      {
+      
+          try{
+              $club = Club::findOrFail($request->club_id);
+              $club->isPopular = $request->status;
+              $club->save();
+  
+              return response()->json(['message' => 'Status updated successfully.']);
+          }
+          catch (\Exception $e) {
+              return redirect('/admin/clubs-listing/')->with('error', 'Something went wrong.');
+          }
+      }
 
    
 }

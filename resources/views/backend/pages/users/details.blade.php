@@ -30,6 +30,7 @@
                 {{ $userInfo->county }}
                 </td>
                </tr>
+              
                <tr>
                 <td><strong>User Notification</strong></td>
                 @if($userInfo->notification === '1')
@@ -39,6 +40,10 @@
                        @endif
                        
                </tr>
+               <tr>
+                <td><strong>Wallets</strong></td>
+                <td><a href="{{ route('wallets', $userInfo->id) }}" class="btn btn-success">View Wallets</a></td>
+                </tr>
             </table>
                 <div class="bk-btn">
                   <a href="#" onclick="history.go(-1)" class="btn btn-info">BACK</a>

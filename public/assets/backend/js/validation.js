@@ -111,6 +111,12 @@ $("#club-edit").validate({
     required: true,
     number: true,
     },
+    latitude:{
+      required: true,
+    },
+    longitude:{
+      required: true,
+    },
     zipcode: {
       number: true,
     },
@@ -292,5 +298,32 @@ $("#vendorcreateform").validate({
     }
   }
 
+  
+})
+
+$.validator.addMethod("balance", function( value, element, param ) {
+
+  var val_a = $("#balamount").val();
+   
+ return this.optional(element) || (parseFloat(value) <= parseFloat(val_a));
+},"Your amount is greater than wallet balance");
+ 
+ $("#withdrawalform").validate({
+
+  rules: {
+    withdrawal_amt: {
+    required: true,
+    number: true,
+    balance: true
+    }
+    
+  },
+  messages: {
+    withdrawal_amt: {
+      required: "Please enter amount",
+      number:"Please enter numeric value"
+      }
+  
+  },
   
 })

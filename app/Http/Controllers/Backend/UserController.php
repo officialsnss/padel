@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Controllers\Backend;
-
+use DB;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Club;
+use Redirect;
+use App\Models\Wallets;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -150,6 +152,64 @@ class UserController extends Controller
             return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
          }
     }
+
+    //Wallets Manage
+    public function wallets($id)
+    {
+        try{
+            $title = 'Wallets';
+          
+            $wallets = Wallets::leftJoin('currencies', 'currencies.id' ,'=', 'wallets.currency_id')
+            ->where('wallets.user_id', $id)
+            ->get();
+            $book = 0;
+            $refund = 0;
+            foreach($wallets as $wallet){
+               
+              if($wallet->status == '1'){
+              
+                $refund+= $wallet->amount;
+              }
+              else{
+                
+                $book+= $wallet->amount;
+              }
+
+                     
+            }
+            $balance =  $refund - $book;
+            $userId = $id;
+           return view('backend.pages.wallets', compact('title','wallets','balance', 'userId'));
+        }
+        catch (\Exception $e) {
+          // dd($e->getMessage());
+            return redirect('/admin/users/wallets')->with('error', 'Something went wrong.');
+        }      
+    }
+
+
+    //Wallets Withdraw 
+    public function walletsClear(Request $request, $id){
+     
+      try{ 
+          $result = Wallets::create([
+                  'amount' => $request->withdrawal_amt,
+                  'user_id' => $id,
+                  'currency_id' => '129',
+                  'status' => 3,
+              
+          ]);
+      
+          if($result){
+            
+             return Redirect::back()->with('success', 'Withdraw amount Successfully.');
+          }
+      }
+      catch (ValidationException  $e) {
+         //dd($e->getMessage());
+      return redirect('/admin/users/wallets')->with('error', 'Something went wrong.');
+      }
+  }    
     
 
 
