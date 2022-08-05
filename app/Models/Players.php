@@ -11,7 +11,8 @@ class Players extends Model
     protected $table = 'players_details';
 
     protected $fillable = [
-        'user_id'
+        'user_id',
+        'ordering'
     ];
     
     public function users()

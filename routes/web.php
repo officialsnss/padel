@@ -92,8 +92,17 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
       Route::post('/refunds/reject', 'App\Http\Controllers\Backend\RefundController@reject')->name('refund.reject');
     
-      Route::get('/wallets', 'App\Http\Controllers\Backend\RefundController@wallets')->name('wallets');
 
+   //Clubs Ordering
+   Route::get('/clubs-listing', 'App\Http\Controllers\Backend\ClubController@clubs')->name('clubs.listing');
+   Route::post('clubs/reorder', 'App\Http\Controllers\Backend\ClubController@reorder')->name('clubs.reorder');
+   Route::get('/clubs/popular/update', 'App\Http\Controllers\Backend\ClubController@popularStatus')->name('clubs.popular.status');
+  
+   //Players
+   Route::get('/players', 'App\Http\Controllers\Backend\PlayerController@index')->name('players');
+   Route::post('players/reorder', 'App\Http\Controllers\Backend\PlayerController@reorder')->name('players.reorder');
+   Route::get('/players/popular/update', 'App\Http\Controllers\Backend\PlayerController@popularStatus')->name('players.popular.status');
+ 
 
       //Bats
      Route::get('/bats', 'App\Http\Controllers\Backend\BatController@index');
@@ -103,6 +112,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
      Route::get('/bat/edit/{id}', 'App\Http\Controllers\Backend\BatController@edit')->name('bat.edit');
      Route::post('/bat/update/{id}', 'App\Http\Controllers\Backend\BatController@update')->name('bat.update');
     });
+
+    
 
    //Users Route
     Route::prefix('/admin/users')->group(function () {
@@ -114,6 +125,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('courtOwners');
         Route::get('/create', 'App\Http\Controllers\Backend\UserController@create')->name('create');
         Route::post('/add', 'App\Http\Controllers\Backend\UserController@add')->name('user.add');
+        Route::get('/wallets/{id}', 'App\Http\Controllers\Backend\UserController@wallets')->name('wallets');
+        Route::post('/wallets/withdraw/{id}', 'App\Http\Controllers\Backend\UserController@walletsClear')->name('wallets.withdraw');
     });
 
     
@@ -128,6 +141,9 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
        //Bookings
        Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+
+       
+      
     
       
     });

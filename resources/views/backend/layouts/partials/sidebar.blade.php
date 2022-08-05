@@ -122,6 +122,26 @@
       
           @if ( auth()->user()->role != '5')
           <li class="nav-item">
+            <a href="{{url('/admin/clubs-listing/')}}" class="nav-link  {{ (request()->segment(2) == 'clubs-listing') ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-building"></i>
+              <p>
+                Clubs
+               
+              </p>
+            </a>
+         </li>
+
+         <li class="nav-item">
+            <a href="{{url('/admin/players')}}" class="nav-link  {{ (request()->segment(2) == 'players') ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-users"></i>
+              <p>
+                Players
+               
+              </p>
+            </a>
+         </li>
+
+          <li class="nav-item">
             <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-plug"></i>
               <p>
@@ -182,13 +202,13 @@
             </a>
           </li> 
           
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{url('/admin/wallets')}}" class="nav-link  {{ request()->segment(2) == 'wallets' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
               <p>
                 Wallets</p>
             </a>
-          </li>  
+          </li>   -->
 
           <li class="nav-item">
             <a href="{{url('/admin/bats')}}" class="nav-link  {{ request()->segment(2) == 'bats' ? 'active' : '' }}">

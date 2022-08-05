@@ -91,7 +91,7 @@
 <script src="{{asset('assets/backend/js/jquery-timepicker.js') }}"></script>
 <script>
   $(function () {
-    $("#example1").DataTable({
+    $dataa = $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "fnRowCallback" : function(nRow, aData, iDisplayIndex){
                 $("td:first", nRow).html(iDisplayIndex +1);
@@ -173,6 +173,61 @@ if (typeof (FileReader) != "undefined") {
     alert("This browser does not support FileReader.");
 }
 });
+</script>
+<script>let elemss = Array.prototype.slice.call(document.querySelectorAll('.js-switchs'));
+
+elemss.forEach(function(html) {
+    let switchery = new Switchery(html,  { size: 'small' });
+});</script>
+      <script>
+        $(document).ready(function(){
+    $('.js-switchs').change(function () {
+        let status = $(this).prop('checked') === true ? 1 : 0;
+        let clubid = $(this).data('id');
+      
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '{{ route('clubs.popular.status') }}',
+            data: {'status': status, 'club_id': clubid},
+            success: function (data) {
+                toastr.options.closeButton = true;
+                toastr.options.closeMethod = 'fadeOut';
+                toastr.options.closeDuration = 100;
+                toastr.success(data.message);
+              }
+        });
+    });
+});
+
+</script>
+
+<script>let elemen = Array.prototype.slice.call(document.querySelectorAll('.js-switch-player'));
+
+elemen.forEach(function(html) {
+    let switchery = new Switchery(html,  { size: 'small' });
+});</script>
+      <script>
+        $(document).ready(function(){
+    $('.js-switch-player').change(function () {
+        let status = $(this).prop('checked') === true ? 1 : 0;
+        let playerid = $(this).data('id');
+      
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '{{ route('players.popular.status') }}',
+            data: {'status': status, 'player_id': playerid},
+            success: function (data) {
+                toastr.options.closeButton = true;
+                toastr.options.closeMethod = 'fadeOut';
+                toastr.options.closeDuration = 100;
+                toastr.success(data.message);
+              }
+        });
+    });
+});
+
 </script>
 
 </body>
