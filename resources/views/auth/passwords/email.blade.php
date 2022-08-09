@@ -14,7 +14,12 @@
                     {{ session('status') }}
                 </div>
              @endif
-        <form method="POST" action="{{ route('password.email') }}">
+             @if (session('message'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('message') }}
+                </div>
+             @endif
+        <form method="POST" action="{{ route('user.password.email') }}">
             @csrf
         <div class="input-group mb-3">
          <input id="email" type="email" placeholder="{{ __('Email Address') }}" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>

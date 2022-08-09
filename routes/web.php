@@ -22,7 +22,8 @@ Route::get('/', function(){
     return view('frontend.pages.index');
 });
 
-
+Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');
+Route::post('/users/reset/', 'App\Http\Controllers\Backend\UserController@reset')->name('user.password.update');
 //Route::get('admin/home', 'App\Http\Controllers\Backend\HomeController@adminHome')->name('admin.home')->middleware('paddle_admin');
 Route::get('/admin/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard')->middleware('paddle_admin');
 
@@ -48,8 +49,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
         // Calender
          Route::get('calendar', 'App\Http\Controllers\Backend\BookingController@calendar')->name('bookings.calendar');
 
-         //Reports
-        Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
+       
+      
        
     //System Settings
       //Pages
@@ -142,8 +143,10 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
        Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
 
-       
-      
+        //Reports
+        Route::get('/reports/booking', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
+        Route::get('/reports/cancel', 'App\Http\Controllers\Backend\ReportController@cancel')->name('reports.cancel');
+
     
       
     });
