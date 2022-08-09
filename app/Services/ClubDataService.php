@@ -16,8 +16,8 @@ interface ClubDataService
      *
      * @return mixed
      */
-    public function getClubs();
+    public function getClubsList();
 
-    public function getSingleClub($id);
+    public function getSingleClub($request, $id);
 
 }

@@ -33,7 +33,7 @@ class ClubDataRepository extends BaseRepository
                 ->get();
     }
 
-    public function getSingleClub($id)
+    public function getSingleClubData($id)
     {
         $data = Club::where('id', $id)
                 ->with('court')
