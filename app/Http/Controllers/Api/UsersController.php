@@ -40,11 +40,11 @@ class UsersController extends Controller
 
         $loginUser = USER::where('email', $request->email)->first();
         if(!$loginUser) {
-            return ResponseUtil::errorWithMessage('The entered email is not registered with us.', false, 422);
+            return ResponseUtil::errorWithMessage('422', 'The entered email is not registered with us.', false, 422);
         }
 
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
-            return ResponseUtil::errorWithMessage('The entered password is incorrect.', false, 422);
+            return ResponseUtil::errorWithMessage('401', 'The entered password is incorrect.', false, 401);
         }
 
         $user = Auth::user();
@@ -56,7 +56,7 @@ class UsersController extends Controller
             $data = new UserResource($user);
             return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
         }
-        return ResponseUtil::errorWithMessage('Admin has deactiaved you.', false, 200);
+        return ResponseUtil::errorWithMessage('403','Admin has deactiaved you.', false, 403 );
     }
 
     /**
@@ -79,7 +79,7 @@ class UsersController extends Controller
         $user = Auth::user();
         $user->token()->revoke();
         $user->token()->delete();
-        return ResponseUtil::successWithMessage("Logout Successfully!", true, 200);
+        return ResponseUtil::successWithMessage('200', "Logout Successfully!", true, 200);
     }
 
     /**
@@ -106,12 +106,12 @@ class UsersController extends Controller
 
         $existingUsers = User::where('email',$request->email)->first();
         if($existingUsers) {
-            return ResponseUtil::successWithMessage("This email_id already exists", true, 200);
+            return ResponseUtil::errorWithMessage('201', "This email_id already exists", true, 201);
         }
 
         $existingUsers = User::where('phone',$request->phone)->first();
         if($existingUsers) {
-            return ResponseUtil::successWithMessage("This phone number already exists", true, 200);
+            return ResponseUtil::errorWithMessage('201', "This phone number already exists", true, 201);
         }
 
         $user = User::create(['name' => $request->name, 
@@ -122,7 +122,7 @@ class UsersController extends Controller
         $player = Players::create(['user_id' => $user['id']]);
         $sendOtp = $this->sendOtp($user->id);
         
-        return ResponseUtil::successWithMessage("Registerd Successfully", true, 200);
+        return ResponseUtil::successWithMessage('200', "Registerd Successfully", true, 200);
     }
 
 
@@ -198,7 +198,7 @@ class UsersController extends Controller
         // Send Otp to Email
         $user->notify(new NewRegister($otp));
         User::where('device_id', $request->device_id)->where('phone', $request->phone)->update(['otp' => $otp]);
-        return ResponseUtil::successWithMessage("OTP resent successfully.", true, 200);
+        return ResponseUtil::successWithMessage('200',"OTP resent successfully.", true, 200);
     }
 
     public function verifyOtp(Request $request)
@@ -224,10 +224,10 @@ class UsersController extends Controller
                 return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
             }
             else {
-                return ResponseUtil::errorWithMessage('Invalid Otp', false, 401);
+                return ResponseUtil::errorWithMessage('401','Invalid Otp', false, 401);
             }
         } else {
-            return ResponseUtil::errorWithMessage('No user data found with this device id', false, 401);
+            return ResponseUtil::errorWithMessage('401', 'No user data found with this device id', false, 401);
         }
     }
 
@@ -240,7 +240,7 @@ class UsersController extends Controller
         } else {
             User::where('id', $userId)->update(['notification' => '1']);
         }
-        return ResponseUtil::successWithMessage("Notification settings updated!", true, 200);
+        return ResponseUtil::successWithMessage('200', "Notification settings updated!", true, 200);
     }
 
     public function changePassword(Request $request)
@@ -252,6 +252,6 @@ class UsersController extends Controller
         ]);
 
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
-        return ResponseUtil::successWithMessage("Password change successfully.", true, 200);
+        return ResponseUtil::successWithMessage('200', "Password change successfully.", true, 200);
     }
 }

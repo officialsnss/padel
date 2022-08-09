@@ -33,7 +33,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('dashboard', 'App\Http\Controllers\Api\DashboardController@getDashboard');
 
     //CLUBS
-    Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubs');
+    Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
     Route::get('get/club/{id}', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
 
     //BATS
