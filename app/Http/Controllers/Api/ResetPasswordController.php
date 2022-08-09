@@ -38,7 +38,7 @@ class ResetPasswordController extends Controller
        
         // Calling Noitication to send mail to the user
         if ($passwordReset) {
-            $user->notify(new ResetPasswordRequest($passwordReset->token));
+            $user->notify(new ResetPasswordRequest($passwordReset->token, $passwordReset->email));
         }
         return ResponseUtil::successWithMessage("We have sent a link to your email. Please check and follow the instructions!", true, 200);
     }

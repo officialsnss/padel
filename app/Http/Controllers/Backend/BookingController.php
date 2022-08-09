@@ -37,7 +37,7 @@ class BookingController extends Controller
         ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
         ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
         ->whereIn('payments.payment_status',[1,2])
-         ->where('payments.isRefunded', '0')
+        ->where('payments.isRefunded', '0')
         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname')
         ->get();
     }

@@ -46,6 +46,7 @@
                     <th>User Email</th>
                     <th>Booking Date</th>
                     <th>Total Amount(In KWD)</th> 
+                    <th>Refund Amount(In KWD)</th>
                  </tr>
                   </thead>
                 
@@ -89,7 +90,7 @@ $(document).ready(function(){
             }
         ],
    ajax: {
-    url:'{{ route("reports") }}',
+    url:'{{ route("reports.cancel") }}',
     data:{from_date:from_date, to_date:to_date,club_id:club_id}
    },
    columns: [
@@ -110,7 +111,10 @@ $(document).ready(function(){
      data:'total_amount',
      name:'total_amount'
     },
-   
+    {
+     data:'refund_amt',
+     name:'refund_amt'
+    },
    ]
   });
  }

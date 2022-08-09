@@ -8,6 +8,10 @@ use Redirect;
 use App\Models\Wallets;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Notifications\PasswordReset as ResetPasswordRequest;
+use App\Models\Api\PasswordReset;
+use App\Notifications\PasswordResetSuccess;
+use Str;
 
 class UserController extends Controller
 {
@@ -209,7 +213,69 @@ class UserController extends Controller
          //dd($e->getMessage());
       return redirect('/admin/users/wallets')->with('error', 'Something went wrong.');
       }
-  }    
+  }  
+  
+  public function sendMail(Request $request)
+  {
+    
+      // Getting data from the users table
+      $user = User::where('email', $request->email)->first();
+     
+      if (!$user) {
+       return back()->with('message', 'This email does not exist. Please try again.');
+         // return ResponseUtil::errorWithMessage('This email does not exist. Please try again.', false, 200);
+      }
+      if(($user->role == '5') || ($user->role == '4')){
+        return back()->with('message', 'Please contact your admin to change the password.');
+      
+      }
+     
+      //Updating or creating token value in password_reset table
+      $passwordReset = PasswordReset::updateOrCreate([
+          'email' => $user->email,
+      ], [
+          'token' => Str::random(60),
+      ]);
+     
+      // Calling Noitication to send mail to the user
+      if ($passwordReset) {
+          $user->notify(new ResetPasswordRequest($passwordReset->token, $passwordReset->email));
+      }
+     
+      return back()->with('status', 'We have e-mailed your password reset link!');
+     // return ResponseUtil::successWithMessage("We have sent a link to your email. Please check and follow the instructions!", true, 200);
+  }
+
+  public function reset(Request $request)
+  {
+      // Validate the input fields
+      $request->validate([
+          'email' => 'required|email',
+          'password' => 'required|min:8',
+          'password_confirmation' => 'required|same:password'
+      ]);
+      $passwordReset = PasswordReset::where('token', $request->token)->first();
+
+      // For wrong token case fails
+      if (!$passwordReset) {
+         return back()->with('message', 'This password reset token is invalid.');
+       
+      }
+
+      // For invalid user case fails
+      $user = User::where('email', $passwordReset->email)->first();
+      if (!$user) {
+        return back()->with('message', 'We cannot find a user with that e-mail address.');
+     }
+
+      $user->password = bcrypt($request->password);
+      $user->remember_token = str_random(60);
+      $user->save();  // updating the password and remember_token in the users table
+      $passwordReset->delete(); // delete the value from password_reset table
+      $user->notify(new PasswordResetSuccess($request->password));
+      return back()->with('status', 'New password has been sent to your email. Please check.');
+     
+  }
     
 
 
