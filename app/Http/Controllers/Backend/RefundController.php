@@ -129,7 +129,7 @@ class RefundController extends Controller
             return view('backend.pages.wallets', compact('title','wallets'));
         }
         catch (\Exception $e) {
-          dd($e->getMessage());
+          //dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
         }      
     }

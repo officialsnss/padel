@@ -10,21 +10,39 @@
                      <div class="col-md-12">
                         <form action="" method="post" id="date-filter">
                          <div class="item">
-                          <label>Select Start Date</label>
+                          <label>From:</label>
                           <input type="text"  id="from_date" value="" class="form-control input-daterange" name="from_date">
                           </div>
                           <div class="item">
-                          <label>Select End Date</label>
+                          <label>To:</label>
                           <input type="text"  id="to_date" value="" class="form-control input-daterange" name="to_date">
                           </div>
                           <div class="item">
-                          <label>Select Court</label>
+                          <label>Select Club</label>
                             <select id="clubs-filter" class="form-control">
-                              <option value="">Select Court</option>
+                              <option value="">Select Club</option>
                               @foreach($clubs as $club)
                                   <option value="{{ $club->id }}">{{ $club->name }}</option>
                               @endforeach
                             </select>
+                          </div>
+                          <div class="item">
+                          <label>Select Payment Method</label>
+                            <select id="payment_type" class="form-control">
+                              <option value="">Select Payment Method</option>
+                              <option value="1">Instant</option>
+                              <option value="2">Later</option>
+                             
+                             </select>
+                          </div>
+                          <div class="item">
+                          <label>Status</label>
+                            <select id="order_status" class="form-control">
+                              <option value="">Select Status</option>
+                              <option value="1">Booked</option>
+                              <option value="3">Cancellation</option>
+                             
+                             </select>
                           </div>
                           <div class="item filter-btn">
                             <button type="button" name="filter" id="filter" class="btn btn-primary">Filter</button>
@@ -38,18 +56,29 @@
                       
                      
                       </div>
-                   <table id="order_table" class="table table-bordered table-striped">
+                      <div class="summary-view" style="margin-bottom:20px">
+                          <strong>Total Amount: </strong><span class="total-b">2000 KWD</span><br>
+                          <strong>Total Cancellation: </strong><span class="cancel-b">3</span><br>
+                          <strong>Total Commision:</strong><span class="comm-b">4000</span><br>
+                          <strong>Total Amount to be given to Club:</strong><span class="given">4000</span><br>
+                      </div>
+                <table id="order_table" class="table table-bordered table-striped" style="width:100%">
                   <thead>
+     
                   <tr>
-                   
+                    <th>Order Number</th>
                     <th>Club Name</th>
                     <th>User Email</th>
                     <th>Booking Date</th>
-                    <th>Total Amount(In KWD)</th> 
+                    <th>Status</th>
+                    <th>Payment Type</th>
+                    <th>Payment Status</th>
+                    <th>Order Date-Time</th>
+                   
                  </tr>
                   </thead>
                 
-                
+                 
                 </table>
               </div>
               <!-- /.card-body -->
@@ -69,7 +98,7 @@ $(document).ready(function(){
  
  load_data();
  
- function load_data(from_date = '', to_date = '', club_id ='')
+ function load_data(from_date = '', to_date = '', club_id ='',order_status='', payment_type='')
  {
   $('#order_table').DataTable({
    processing: true,
@@ -79,25 +108,58 @@ $(document).ready(function(){
           {
                 extend: 'collection',
                 text: 'Export',
+                // buttons: [
+                //     'copy',
+                //     'excel',
+                //     'csv',
+                //     'pdf',
+                //     'print'
+                // ],
                 buttons: [
-                    'copy',
-                    'excel',
-                    'csv',
-                    'pdf',
-                    'print'
-                ]
+           
+            {
+                extend: 'copy',
+                messageTop: function () {
+                  $topData =  $('.summary-view').text();
+                  return $topData
+                },
+            },
+            {
+                extend: 'pdf',
+                messageTop: function () {
+                  $topData =  $('.summary-view').text();
+                  return $topData
+                },
+            },
+            {
+                extend: 'print',
+                messageTop: function () {
+                  $topData =  $('.summary-view').text();
+                  return $topData
+                },
+            },
+
+         
+        ]
             }
         ],
    ajax: {
     url:'{{ route("reports") }}',
-    data:{from_date:from_date, to_date:to_date,club_id:club_id}
+    data:{from_date:from_date, to_date:to_date,club_id:club_id,order_status:order_status,payment_type:payment_type}
    },
    columns: [
-   
+    {
+     data:'order_id',
+     name:'order_id'
+    },
     {
      data:'clubname',
      name:'clubname'
     },
+    // {
+    //  data:'usrname',
+    //  name:'usrname'
+    // },
     {
      data:'usremail',
      name:'usremail'
@@ -107,11 +169,66 @@ $(document).ready(function(){
      name:'booking_date'
     },
     {
-     data:'total_amount',
-     name:'total_amount'
+     data:'booked_status',
+     render : function(data)
+      {
+          if (data == '1') {
+            return "Booked" 
+          }else if(data == '3'){
+            return "Cancellation"
+          }
+          else{
+            return "Pending"
+          }
+      },
+     name:'booked_status'
+    },
+    {
+     data:'payment_method',
+     render : function(data)
+      {
+          if (data == '1') {
+            return "Instant" 
+          }
+          else{
+            return "Later"
+          }
+      },
+     name:'payment_method'
+    },
+    {
+     data:'pay_status',
+     render : function(data)
+      {
+          if (data == '1') {
+            return "Completed" 
+          }
+          else{
+            return "Pending"
+          }
+      },
+     name:'pay_status'
+    },
+    {
+     data:'booking_created_at',
+     name:'booking_created_at'
     },
    
-   ]
+   ],
+   "headerCallback": function( thead, data, start, end, display) {
+    var api = this.api();
+    var ttotal = api.ajax.json().ttotal
+    var commission = api.ajax.json().commission
+    var cancel = api.ajax.json().cancel
+    var given = api.ajax.json().given
+    $('.cancel-b').html(cancel);
+    $('.comm-b').html(commission);
+    $('.total-b').html(ttotal+' KWD');
+    $('.given').html(given+' KWD');
+   
+     
+  }
+  
   });
  }
  
@@ -120,11 +237,13 @@ $(document).ready(function(){
   var from_date = $('#from_date').val();
   var to_date = $('#to_date').val();
   var club_id = $('#clubs-filter').val();
- 
-  if((from_date != '' || to_date != '' ||  club_id != ''))
+  var order_status = $('#order_status').val();
+  var payment_type = $('#payment_type').val();
+  if(from_date != '' || to_date != '' ||  club_id != '' || order_status != '' || payment_type != '')
   {
    $('#order_table').DataTable().destroy();
-   load_data(from_date, to_date, club_id);
+   var resr = load_data(from_date, to_date, club_id,order_status,payment_type);
+ 
   }
 
  
@@ -134,9 +253,12 @@ $(document).ready(function(){
   $('#from_date').val('');
   $('#to_date').val('');
   $('#clubs-filter').val('');
+  $('#order_status').val('');
   $('#order_table').DataTable().destroy();
   load_data();
  });
+
+
  
 });
 </script>

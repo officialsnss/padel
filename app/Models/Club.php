@@ -35,6 +35,7 @@ class Club extends Model
         'longitude',
         'ordering',
         'featured_image',
+        'commission',
         'created_at',
         'updated_at',
     ];

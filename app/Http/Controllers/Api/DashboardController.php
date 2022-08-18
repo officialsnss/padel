@@ -25,6 +25,7 @@ class DashboardController extends Controller
 
     public function getDashboard(Request $request)
     {
+        //dd($request);
         $data =  $this->dashboardService->getDashboard($request);
         return ResponseUtil::successWithData($data, true, 200);
     }

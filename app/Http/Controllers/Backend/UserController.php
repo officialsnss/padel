@@ -5,6 +5,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Club;
 use Redirect;
+use App\Models\Regions;
+use App\Models\Cities;
+use App\Models\Amenities;
+use App\Models\Countries;
 use App\Models\Wallets;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -117,7 +121,13 @@ class UserController extends Controller
     { 
        try{
         $title = 'Add Court Owners';
-        return view('backend.pages.users.create', compact('title'));
+        $countries = Countries::all();
+        $amenities = Amenities::all();
+        $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
+                    ->select('regions.*','countries.name as cname')
+                    ->get();
+
+        return view('backend.pages.users.create', compact('title','countries','amenities','regions'));
        }
        catch (\Exception $e) {
         return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
@@ -134,7 +144,7 @@ class UserController extends Controller
                 'password_confirmation' => 'required|same:password'
             ]);
         try{
-         
+           
            $result = User::create([
             'name' => $request->fullname,
             'email' => $request->email,
@@ -144,10 +154,22 @@ class UserController extends Controller
         ]);
        
         if($result){
-          $result = Club::create([
-            'name' => $request->clubname,
-            'user_id' => $result->id,
-        ]);
+          $data = $request->except('_method','_token','submit');
+          $amList = implode(',', $request->amenities);
+        
+          $data['amenities'] = $amList;
+          $data['user_id'] =  $result->id;
+        
+
+          if($request->file('featured_image')){
+            $file= $request->file('featured_image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file->move(public_path('Images/club_images'), $filename);
+            $data['featured_image']= $filename;
+             }
+         
+         $result = Club::insert($data);
+         
           return redirect('/admin/users/court-owners')->with('success', 'Court Owner Created Successfully.');
         }
       }
@@ -276,7 +298,47 @@ class UserController extends Controller
       return back()->with('status', 'Ypur password has been updated and has been sent to your email. Please check.');
      
   }
-    
+
+
+  // Get Region
+  public function getUserRegion(Request $request){
+     $regions = Regions::where('country_id', $request->country_id)
+    ->get();
+
+    if($request->country_id == null){
+       // dd($request->country_id);
+        echo '<option value="">Select Country First</option>'; 
+    }
+    elseif(!$regions->isEmpty()){
+        foreach($regions as $region){
+           
+            echo '<option value="'.$region->id.'">'.$region->name.'</option>'; 
+        }
+    }
+    else{
+        echo '<option value="">Region not available</option>'; 
+    }
+  }
+
+  // Get City
+  public function getUserCity(Request $request){
+   
+    $cities = Cities::where('region_id', $request->region_id)
+    ->get();
+    if($request->region_id == null){
+        echo '<option value="">Select Region First</option>'; 
+    }
+    elseif(!$cities->isEmpty()){
+    foreach($cities as $city){
+      
+            echo '<option value="'.$city->id.'">'.$city->name.'</option>'; 
+        }
+    }
+    else{
+        echo '<option value="">City not available</option>'; 
+    }
+  // return $regions;
+}
 
 
 }
