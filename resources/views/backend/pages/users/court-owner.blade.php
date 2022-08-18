@@ -34,7 +34,7 @@
                         <td>Inactive</td>
                        @endif 
                        
-                       <td><a href="{{ route('customer.view',$courtUser->id)}}" class="btn btn-secondary">View</a>
+                       <td><a href="{{ route('court-owners.view',$courtUser->id)}}" class="btn btn-secondary">View</a>
                      
                   </tr>
                   @endforeach

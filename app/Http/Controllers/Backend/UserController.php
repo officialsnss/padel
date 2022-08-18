@@ -136,6 +136,10 @@ class UserController extends Controller
 
     public function add(Request $request)
     {
+     
+      
+     
+      
             $request->validate([
                 'fullname' => 'required|string',
                 'clubname' => 'required|string|unique:clubs,name',
@@ -154,12 +158,13 @@ class UserController extends Controller
         ]);
        
         if($result){
-          $data = $request->except('_method','_token','submit');
+           $clubName = $request->clubname;
+          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation');
           $amList = implode(',', $request->amenities);
         
           $data['amenities'] = $amList;
           $data['user_id'] =  $result->id;
-        
+          $data['name'] =  $clubName;
 
           if($request->file('featured_image')){
             $file= $request->file('featured_image');
@@ -167,17 +172,60 @@ class UserController extends Controller
             $file->move(public_path('Images/club_images'), $filename);
             $data['featured_image']= $filename;
              }
-         
-         $result = Club::insert($data);
+       
+         $finalresult = Club::insert($data);
          
           return redirect('/admin/users/court-owners')->with('success', 'Court Owner Created Successfully.');
         }
       }
         catch (\Exception $e) {
-        
+           //dd($e->getMessage());
             return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
          }
     }
+
+     // Vendor Details
+     public function courtOwnersview($id){
+     
+      try{
+          $title = 'Court Owners Detail';
+          $userInfo = User::leftJoin('clubs','users.id', '=', 'clubs.user_id')
+            ->leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
+            ->leftJoin('regions', 'regions.id' ,'=', 'clubs.region_id')
+            ->leftJoin('cities', 'cities.id' ,'=', 'clubs.city_id')
+            ->leftJoin('countries', 'countries.id' ,'=', 'clubs.country')
+            ->where('users.id', $id)
+            ->select('users.*', 'clubs.*', 'clubs.name as clubname','users.name as username','currencies.code', 'regions.name as region', 'cities.name as city','countries.name as country')
+            ->first();
+
+          $amenityList = [];
+         if($userInfo->amenities != 'NULL'){
+          $amenityList = [];
+          $lists = explode(',', $userInfo->amenities);
+          foreach( $lists as $amentityID){
+             $amenityList[] = $this->amentityName($amentityID);
+          }
+          $amenityList = implode(',', $amenityList);
+         }
+         // dd($userInfo);
+          return view('backend.pages.users.clubdetails', compact('title','userInfo','amenityList'));
+      } 
+      catch (\Exception $e) {
+       // dd($e->getMessage());
+          return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
+       }
+       }
+
+        //Get Amenity
+        public function amentityName($id){
+          $res = Amenities::where('id',$id)->first();
+          if($res){
+            return $res->name;
+          }
+        else{
+          return ; 
+        }
+        }
 
     //Wallets Manage
     public function wallets($id)

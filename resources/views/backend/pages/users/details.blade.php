@@ -22,13 +22,7 @@
                 <td>{{ $userInfo->phone }}</td>
                </tr>
                <tr>
-                <td><strong>Address</strong></td>
-                <td>{{ $userInfo->address }}<br>
-                {{ $userInfo->region_id }}<br>
-                {{ $userInfo->city_id }}<br>
-                {{ $userInfo->zipcode }}<br>
-                {{ $userInfo->county }}
-                </td>
+               
                </tr>
               
                <tr>

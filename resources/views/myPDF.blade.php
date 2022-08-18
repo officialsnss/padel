@@ -153,9 +153,9 @@ table.details {
                 </tr>
                 <tr>
                   <td><strong>Payments Method:</strong></td>
-                  <td>{{ ($bookingInfo->payment_method == 1)?'Instant':'Later' }}</td>
+                  <td>{{ ($bookingInfo->payment_method == 1)?'KNET':'COD' }}</td>
                 </tr>
-                @if($bookingInfo->payment_method == '2')
+                <!-- @if($bookingInfo->payment_method == '2')
                 <tr>
                   <td><strong>Advance Payment:</strong></td>
                   <td>{{ $bookingInfo->advance_price }}</td>
@@ -165,7 +165,7 @@ table.details {
                   <td>{{ $bookingInfo->pending_amount }} {{ $bookingInfo->unit }}</td>
                 </tr>
                 @endif
-                
+                 -->
                 <tr>
                   <td><strong>Service Charge:</strong></td>
                   <td>{{ $bookingInfo->service_charge }} {{ $bookingInfo->unit }}</td>

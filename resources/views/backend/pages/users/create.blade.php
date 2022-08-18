@@ -6,7 +6,7 @@
           <div class="card card-primary">
            
       <div class="card-body reset-form">
-         <form method="post" action="{{ route('user.add') }}" id="vendorform">
+         <form method="post" action="{{ route('user.add') }}" id="vendorform" enctype="multipart/form-data">
             {{ csrf_field() }}
           <div class="row">  
             
