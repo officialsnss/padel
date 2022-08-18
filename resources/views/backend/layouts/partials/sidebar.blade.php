@@ -183,31 +183,14 @@
           @endif
 
           <li class="nav-item">
-            <a href="#" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
+            <a href="{{url('/admin/reports')}}" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-file"></i>
               <p>
                 Reports
-                <i class="fas fa-angle-left right"></i>
+               
               </p>
             </a>
-            <ul class="nav nav-treeview">
-               <li class="nav-item">
-                <a href="{{url('/admin/reports/booking')}}" class="nav-link  {{ request()->segment(3) == 'booking' ? 'active' : '' }}">
-                <i class="nav-icon 	fas fa-user-edit"></i>
-                  <p>
-                    Bookings
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/admin/reports/cancel')}}" class="nav-link  {{ request()->segment(3) == 'cancel' ? 'active' : '' }}">
-                <i class="nav-icon fas fa-id-card-alt"></i>
-                  <p>
-                    Cancellation
-                  </p>
-                </a>
-              </li>
-            </ul>
+           
           </li>  
 
          

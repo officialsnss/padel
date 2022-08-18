@@ -128,6 +128,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::post('/add', 'App\Http\Controllers\Backend\UserController@add')->name('user.add');
         Route::get('/wallets/{id}', 'App\Http\Controllers\Backend\UserController@wallets')->name('wallets');
         Route::post('/wallets/withdraw/{id}', 'App\Http\Controllers\Backend\UserController@walletsClear')->name('wallets.withdraw');
+        Route::get('/get-user-region', 'App\Http\Controllers\Backend\UserController@getUserRegion')->name('userRegionlist');
+        Route::get('/get-user-city', 'App\Http\Controllers\Backend\UserController@getUserCity')->name('userCitylist');
     });
 
     
@@ -144,8 +146,8 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
        Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
 
         //Reports
-        Route::get('/reports/booking', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
-        Route::get('/reports/cancel', 'App\Http\Controllers\Backend\ReportController@cancel')->name('reports.cancel');
+        Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
+    
 
     
       

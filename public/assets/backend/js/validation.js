@@ -72,12 +72,52 @@ $("#vendorform").validate({
     required: true,
     equalTo: "#password"
     },
+    commission: {
+      required: true,
+      number: true,
+      max: 100
+    },
+    service_charge: {
+      required: true,
+      number: true,
+    },
+    single_price: {
+      required: true,
+      number: true,
+    },
+    double_price: {
+      required: true,
+      number: true,
+    },
+    indoor_courts: {
+     required: true,
+     number: true,
+   },
+    outdoor_courts: {
+    required: true,
+    number: true,
+    },
+    latitude:{
+      required: true,
+    },
+    longitude:{
+      required: true,
+    },
+    zipcode: {
+      number: true,
+    },
+    featured_image: {
+      extension: "jpg|jpeg|png"
+    }
     
   },
   messages: {
     password_confirmation: {
       required: "Please enter same password",
-      }
+      },
+      featured_image: {
+        extension: "Please upload file in these format only (jpg, jpeg, png)."
+    }
   
   },
   

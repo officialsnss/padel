@@ -19,7 +19,7 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         try{
-            $title = 'Bookings Report';
+            $title = 'Sales Report';
             $clubs =  Club::orderBy('ordering','ASC')
              ->get();
              $userId = auth()->user()->id;
@@ -32,36 +32,65 @@ class ReportController extends Controller
                 $data = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
                 ->leftJoin('users','users.id', '=', 'bookings.user_id')
                 ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-                ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-                ->whereIn('payments.payment_status',[1,2])
-                ->where('payments.isRefunded', '0');
+                ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id');
+               // ->whereIn('payments.payment_status',[1,2]);
+                
                 // if(!empty($request->from_date)){
                   
                 //  $data = $data->whereBetween('bookings.booking_date', array($request->from_date, $request->to_date));
                 //  }
                 if(!empty($request->from_date)){
-                   $data = $data->where('bookings.booking_date','>=', $request->from_date);
+                   $data = $data->where('bookings.created_at','>=', $request->from_date);
                 }
                 
                  if(!empty($request->to_date)){
                    
-                    $data = $data->where('bookings.booking_date','<=', $request->to_date);
+                    $data = $data->where('bookings.created_at','<=', $request->to_date);
                     }
                  if(!empty($request->club_id)){
                   
                     $data = $data->where('bookings.club_id','=', $request->club_id);
                  }
+                 if(!empty($request->order_status)){
+                  
+                    $data = $data->where('bookings.status','=', $request->order_status);
+                 }
+                 if(!empty($request->payment_type)){
+                  
+                    $data = $data->where('payments.payment_method','=', $request->payment_type);
+                 }
+               
                  if(auth()->user()->role == 5){ 
                   $data =  $data->where('clubs.user_id', '=', $userId);
                  } 
+               
+
+                $data = $data->select('payments.total_amount', 'payments.payment_status as pay_status', 'payments.payment_method as payment_method','users.name as usrname', 'users.email as usremail', 'bookings.booking_date', 'bookings.id as bookId','clubs.name as clubname','payments.total_amount','bookings.order_id', 'bookings.status as booked_status','bookings.created_at as booking_created_at');
+               // $test = $data;
+
+                $data =  $data->get();
+                $cancel = $data->where('booked_status',3)->count();
+                $commission = '100';
+                $summ = $data->where('booked_status',1)->sum('total_amount');
+                $given = $summ- $commission;
                 
-                $data = $data->select('payments.payment_status', 'users.email as usremail', 'bookings.booking_date', 'bookings.id as bookId','clubs.name as clubname','payments.total_amount')
-                ->get();
+                //$summ = $summ->where('bookings.status',3);
+               
+               //$summ = $summ->where('bookings.status',3);
+               // 
+
+                
            
-            
-             return datatables()->of($data)->make(true);
+              // dd($data->toSql());
+             return datatables()->of($data)
+                ->with('ttotal', $summ)
+                ->with('commission', $commission)
+                ->with('cancel', $cancel)
+                ->with('given', $given)
+                ->toJson();
+           
             }
-      
+    
               return view('backend.pages.reports', compact('title','clubs'));
         
             //return view('backend.pages.reports', compact('title','bookings'));
