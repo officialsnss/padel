@@ -10,7 +10,7 @@ use App\Models\User;
 /**
  * Class ContactUsRepository
  */
-class ContactUsRepository extends BaseRepository
+class DashboardRepository extends BaseRepository
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class ContactUsRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getContactDetails()
+    public function getPopularClubs()
     {
         $userId = auth()->user()->id;
         return User::where('id', $userId)->first(); 
@@ -32,6 +32,6 @@ class ContactUsRepository extends BaseRepository
     public function sendMessage($message)
     {
         $userId = auth()->user()->id;
-        return ContactUs::create(['sender_id' => $userId, 'receiver_id' => 1, 'message' => $message]);
+        return ContactUs::create(['sender_id' => $userId, 'message' => $message]);
     }
 }

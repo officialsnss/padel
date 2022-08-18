@@ -23,9 +23,9 @@ class DashboardController extends Controller
         $this->dashboardService = $dashboardService;
     }
 
-    public function getDashboard(Request $request)
+    public function getPopularClubs(Request $request)
     {
-        $data =  $this->dashboardService->getDashboard($request);
+        $data =  $this->dashboardService->getPopularClubs($request);
         return ResponseUtil::successWithData($data, true, 200);
     }
 }

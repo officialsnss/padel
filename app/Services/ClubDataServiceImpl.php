@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\ClubDataRepository;
-use App\Services\DashboardServiceImpl;
 
 /**
  * Class ClubDataServiceImpl
@@ -16,11 +15,9 @@ class ClubDataServiceImpl implements ClubDataService
      * ClubDataServiceImpl constructor.
      *
      */
-    public function __construct(ClubDataRepository $clubDataRepository,
-                                DashBoardServiceImpl  $dashboardServiceImpl)
+    public function __construct(ClubDataRepository $clubDataRepository)
     {
         $this->clubDataRepository = $clubDataRepository;
-        $this->dashboardServiceImpl = $dashboardServiceImpl;
     }
 
 
@@ -29,9 +26,9 @@ class ClubDataServiceImpl implements ClubDataService
      *
      * @return mixed
      */
-    public function getClubs()
+    public function getClubsList()
     {
-        $data = $this->clubDataRepository->getClubs();
+        $data = $this->clubDataRepository->getClubsList();
 
         $dataPacket = [];
         $i =0;
@@ -51,26 +48,63 @@ class ClubDataServiceImpl implements ClubDataService
         return $dataPacket;
     }
 
-    public function getClubsList()
+    public function getPopularClubs()
     {
-        $data = $this->getClubs();
+        $data = $this->getClubsList();
 
+        // Sorting of clubs based on ordering
         usort($data, function($a, $b) {
             return $a['ordering'] - $b['ordering'];
         });
 
         $clubData = [];
         foreach($data as $club) {
-            // Removing the indexes which is not required in the packet
-            unset($club['ordering']);
-            unset($club['latitude']);
-            unset($club['longitude']);
-            unset($club['isPopular']);
-            unset($club['courtsCount']);
+            if($club['isPopular'] == 1) {
 
-            array_push($clubData,$club);
+                // Removing the indexes which is not required in the packet
+                unset($club['ordering']);
+                unset($club['latitude']);
+                unset($club['longitude']);
+                unset($club['isPopular']);
+
+                array_push($clubData,$club);
+            }
         }
         return $clubData;
+    }
+
+    public function getNearClubs($request)
+    {
+        $data = $this->getClubsList();
+
+        $nearClubs = [];
+
+        foreach($data as $club) {
+            $clubLatitude = $club['latitude'];
+            $clubLongitude = $club['longitude'];
+
+            // Calculating the distance by lat and long
+            $club['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
+                
+            if($club['latitude'] || $club['longitude']) {
+
+                // Removing the indexes which is not required in the packet
+                unset($club['latitude']);
+                unset($club['longitude']);
+                unset($club['ordering']);
+                unset($club['isPopular']);
+
+                //Pushing the clubs in the popularClubs variable
+                array_push($nearClubs,$club);
+            }
+        }
+
+        // Sorting of clubs based on distance
+        usort($nearClubs, function($a, $b) {
+            return $a['distance'] - $b['distance'];
+        });
+
+        return $nearClubs;
     }
 
     public function getSingleClub($request, $id)

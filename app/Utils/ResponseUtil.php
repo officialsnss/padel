@@ -78,9 +78,9 @@ class ResponseUtil
      *
      * @return JsonResponse
      */
-    public static function successWithMessage($code, $message, $success = true, $status = 200): JsonResponse
+    public static function successWithMessage($message, $success = true, $status = 200): JsonResponse
     {
-        return response()->json(['code' => $code, 'message' => $message, 'success' => $success], $status);
+        return response()->json(['code' => 200, 'success' => $success, 'message' => $message, 'data' => []], $status);
     }
 
     /**
@@ -92,9 +92,9 @@ class ResponseUtil
      *
      * @return JsonResponse
      */
-    public static function successWithData($data, $success = true, $status = 200)
+    public static function successWithData($data, $message, $success = true, $status = 200)
     {
-        return response()->json(['code' => 200, 'success' => $success, 'data' => $data], $status);
+        return response()->json(['code' => 200, 'success' => $success, 'message' => $message, 'data' => $data], $status);
     }
 
     public static function successWithDataToken($data, $message, $access_token, $expires_at, $success = true, $status = 200)

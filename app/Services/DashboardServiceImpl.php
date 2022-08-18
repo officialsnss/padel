@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Repositories\DashboardRepository;
 use App\Services\ClubDataServiceImpl;
 use App\Services\MatchesServiceImpl;
 use App\Services\PlayersServiceImpl;
@@ -34,19 +33,19 @@ class DashboardServiceImpl implements DashboardService
      *
      * @return mixed
      */
-    public function getDashboard($request)
+    public function getPopularClubs($request)
     {
         $clubData = $this->clubDataServiceImpl->getClubs();
 
-        $popularClubs = $this->getPopularClubs($clubData);
-        $upcomingMatches = $this->getUpcomingMatches();
-        $popularPlayers = $this->getPopularPlayers();
-        $nearClubs = $this->getNearClubs($clubData, $request);
-
+        // $popularClubs = $this->getPopular($clubData);
+        // $upcomingMatches = $this->getUpcomingMatches();
+        // $popularPlayers = $this->getPopularPlayers();
+        // $nearClubs = $this->getNearClubs($clubData, $request);
+return $popularClubs;
         return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs];
     }
 
-    public function getPopularClubs($clubData) 
+    public function getPopular($clubData) 
     {
         // Getting List of Popular Clubs
         $popularClubs = [];
@@ -126,7 +125,7 @@ class DashboardServiceImpl implements DashboardService
             $clubLongitude = $club['longitude'];
 
             // Calculating the distance by lat and long
-            $club['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
+            // $club['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
                 
             // Removing the indexes which is not required in the packet
             unset($club['latitude']);

@@ -16,6 +16,6 @@ interface DashboardService
      *
      * @return mixed
      */
-    public function getDashboard($request);
+    public function getPopularClubs($request);
 
 }

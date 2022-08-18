@@ -204,6 +204,8 @@ class UsersController extends Controller
     public function verifyOtp(Request $request)
     {
         $user  = User::where('device_id',$request->device_id)->where('phone', $request->phone)->first();
+        
+        if($user){
         $currentTime = Carbon::now()->toDateTimeString();
         $otpSendTime = strtotime($user['updated_at']->toDateTimeString());
 
@@ -211,7 +213,7 @@ class UsersController extends Controller
         //     User::where('device_id',$request->device_id)->update(['otp' => null]);
         //     return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 401);
         // }
-        if($user){
+        
             if($user['otp'] == $request->otp) {
                 auth()->login($user, true);
                 User::where('device_id',$request->device_id)->where('phone', $request->phone)->update(['otp' => null, 'isOtpVerified' => '1']);

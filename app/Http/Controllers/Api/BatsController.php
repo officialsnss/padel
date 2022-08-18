@@ -29,6 +29,6 @@ class BatsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, true, 200);
         }
-        return ResponseUtil::errorWithMessage('No record found for bats', true, 200);
+        return ResponseUtil::errorWithMessage('201', 'No record found for bats', true, 201);
     }
 }
