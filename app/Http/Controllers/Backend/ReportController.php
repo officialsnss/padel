@@ -68,9 +68,9 @@ class ReportController extends Controller
 
                 $data =  $data->get();
                  
-                $cancel = $data->where('booked_status',3)->count();
+                $cancel = $data->where('booked_status','3')->count();
                 $commission = '100';
-                $refund_amount = $data->where('refundStatus', 1)->sum('refund_price');
+                $refund_amount = $data->where('refundStatus', '1')->sum('refund_price');
                 $summ = $data->sum('total_amount');
 
                

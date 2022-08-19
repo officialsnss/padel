@@ -244,3 +244,8 @@ form#bookform label {
         font-style: italic;
         font-size: 13px;
     }
+    li.user-footer{
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }

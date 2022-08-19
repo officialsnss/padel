@@ -27,13 +27,14 @@
                   </p>
               </li>
             <li class="user-footer">
-              <a href="#" class="btn btn-default btn-flat">Profile</a>
+              <div class="signout">
+              <!-- <a href="#" class="btn btn-default btn-flat">Profile</a> -->
               <a class="btn btn-default btn-flat float-right" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
                   {{ __('Sign out') }}
               </a>
-
+              </div>
               <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                   @csrf
               </form>

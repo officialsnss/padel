@@ -7,6 +7,7 @@
             <div class="card">
            
               <div class="card-body">
+            
                 <div class="row">
                 <div class="col-md-8">
                     </div>
@@ -160,7 +161,9 @@
                        @endforeach
                     </ul>
                   </div>
+                  <p class="note"><strong>Note: </strong>Please click on the time slot to book it manually.</p>
               </div>
+              
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
