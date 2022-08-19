@@ -26,6 +26,31 @@ class PlayersServiceImpl implements PlayersService
      *
      * @return mixed
      */
+    public function getPopularPlayers()
+    {
+        $userId = auth()->user()->id;
+        $playerData = $this->getPlayersList();
+        $popularPlayers = [];
+
+        // Sorting of popularPlayers based on the ordering
+        usort($playerData, function($a, $b) {
+            return $a['ordering'] - $b['ordering'];
+        });
+
+        foreach($playerData as $player) {
+            if($player['isPopular'] == 1) {
+
+                // Removing the indexes which is not required in the packet
+                unset($player['ordering']);
+                unset($player['isPopular']);
+
+                //Pushing players data in the popularPlayers array
+                array_push($popularPlayers,$player);
+            }
+        }
+        return $popularPlayers;
+    }
+
     public function getPlayersList()
     {
         $userId = auth()->user()->id;
@@ -40,7 +65,7 @@ class PlayersServiceImpl implements PlayersService
         }
 
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
-        $following = explode(',',$userData['following']);
+        $following = $userData['following'] ? explode(',',$userData['following']) : [];
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];            

@@ -32,6 +32,6 @@ class ContactUsRepository extends BaseRepository
     public function sendMessage($message)
     {
         $userId = auth()->user()->id;
-        return ContactUs::create(['sender_id' => $userId, 'message' => $message]);
+        return ContactUs::create(['sender_id' => $userId, 'receiver_id' => 1, 'message' => $message]);
     }
 }

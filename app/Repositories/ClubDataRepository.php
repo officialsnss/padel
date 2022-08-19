@@ -24,7 +24,7 @@ class ClubDataRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getClubs()
+    public function getClubsList()
     {
         return Club::with('court')
                 ->with('club_rating')

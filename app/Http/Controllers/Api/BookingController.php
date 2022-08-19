@@ -33,8 +33,8 @@ class BookingController extends Controller
     {
         $data = $this->bookingService->getWallet();
         if($data == []) {
-            return ResponseUtil::successWithMessage('No entries in the wallet', true, 200);
+            return ResponseUtil::errorWithMessage('201', 'No entries in the wallet', true, 201);
         }
-        return ResponseUtil::successWithData($data, true, 200);
+        return ResponseUtil::successWithData('200', $data, true, 200);
     }
 }

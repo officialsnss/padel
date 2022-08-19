@@ -29,6 +29,6 @@ class LevelsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, true, 200);
         }
-        return ResponseUtil::errorWithMessage('No Levels found', true, 200);
+        return ResponseUtil::errorWithMessage('201', 'No Levels found', true, 201);
     }
 }

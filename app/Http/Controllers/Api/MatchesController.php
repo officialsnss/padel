@@ -48,8 +48,7 @@ class MatchesController extends Controller
     {
         $data = $this->matchesService->acceptRequest($request);
         if(isset($data['message'])) {
-        return ResponseUtil::successWithData($data, true, 200);
-        return $data;
+            return ResponseUtil::errorWithMessage(201, 'No such request for this player', false, 201);
         }
         if($request->isAccept) {
             return ResponseUtil::successWithMessage('The request has been accepted!', true, 200);

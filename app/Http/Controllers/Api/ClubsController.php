@@ -28,15 +28,32 @@ class ClubsController extends Controller
     {
         $data = $this->clubDataService->getClubsList();
         if($data) {
-            return ResponseUtil::successWithData($data, true, 200);
+            return ResponseUtil::successWithData($data, 'Clubs data listing', true, 200);
         }
-        return ResponseUtil::successWithMessage('200','No Clubs found.', true, 200);
+        return ResponseUtil::errorWithMessage('201','No clubs found.', true, 201);
+    }
+
+    public function getNearClubs(Request $request)
+    {
+        $data = $this->clubDataService->getNearClubs($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Near Clubs data listing', true, 200);
+        }
+        return ResponseUtil::errorWithMessage('201','No near clubs found.', true, 201);
+    }
+
+    public function getPopularClubs()
+    {
+        $data = $this->clubDataService->getPopularClubs();
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Popular clubs data listing', true, 200);
+        }
+        return ResponseUtil::errorWithMessage('201','No popular clubs found.', true, 201);
     }
 
     public function getSingleClub(Request $request, $id)
     {
         $data = $this->clubDataService->getSingleClub($request, $id);
         return ResponseUtil::successWithData($data, true, 200);
-
     }
 }

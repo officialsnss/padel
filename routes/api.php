@@ -28,12 +28,11 @@ Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); 
      
 Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
-    
-    //DASHBOARD
-    Route::get('dashboard', 'App\Http\Controllers\Api\DashboardController@getDashboard');
 
     //CLUBS
     Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
+    Route::get('nearClubs', 'App\Http\Controllers\Api\ClubsController@getNearClubs');
+    Route::get('popularClubs', 'App\Http\Controllers\Api\ClubsController@getPopularClubs');
     Route::get('get/club/{id}', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
 
     //BATS
@@ -43,10 +42,12 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
 
     //PLAYERS
+    Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
     Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
     Route::get('get/playerDetails', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
 
     //MATCHES
+    Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatchesList');
     Route::get('get/match/{id}', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
 
