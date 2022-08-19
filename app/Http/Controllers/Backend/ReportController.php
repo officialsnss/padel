@@ -24,11 +24,9 @@ class ReportController extends Controller
              ->get();
              $userId = auth()->user()->id;
             
-            
             if(request()->ajax())
             {
                
-                
                 $data = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
                 ->leftJoin('users','users.id', '=', 'bookings.user_id')
                 ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
@@ -59,20 +57,23 @@ class ReportController extends Controller
                   
                     $data = $data->where('payments.payment_method','=', $request->payment_type);
                  }
-               
-                 if(auth()->user()->role == 5){ 
+                
+                 if(auth()->user()->role == '5'){ 
+                 
                   $data =  $data->where('clubs.user_id', '=', $userId);
+                
                  } 
-               
-
-                $data = $data->select('payments.total_amount', 'payments.payment_status as pay_status', 'payments.payment_method as payment_method','users.name as usrname', 'users.email as usremail', 'bookings.booking_date', 'bookings.id as bookId','clubs.name as clubname','payments.total_amount','bookings.order_id', 'bookings.status as booked_status','bookings.created_at as booking_created_at');
-               // $test = $data;
+                 $data = $data->select('payments.total_amount', 'payments.payment_status as pay_status', 'payments.payment_method as payment_method','users.name as usrname', 'users.email as usremail', 'bookings.booking_date', 'bookings.id as bookId','clubs.name as clubname','payments.total_amount','payments.refund_price', 'payments.isRefunded as refundStatus','bookings.order_id', 'bookings.status as booked_status','bookings.created_at as booking_created_at','clubs.commission as commission');
+              
 
                 $data =  $data->get();
+                 
                 $cancel = $data->where('booked_status',3)->count();
                 $commission = '100';
-                $summ = $data->where('booked_status',1)->sum('total_amount');
-                $given = $summ- $commission;
+                $refund_amount = $data->where('refundStatus', 1)->sum('refund_price');
+                $summ = $data->sum('total_amount');
+
+               
                 
                 //$summ = $summ->where('bookings.status',3);
                
@@ -86,7 +87,7 @@ class ReportController extends Controller
                 ->with('ttotal', $summ)
                 ->with('commission', $commission)
                 ->with('cancel', $cancel)
-                ->with('given', $given)
+                ->with('refund', $refund_amount)
                 ->toJson();
            
             }

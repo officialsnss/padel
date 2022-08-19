@@ -240,3 +240,7 @@ form#bookform label {
     .item {
         margin: 0 5px 0 5px;
     }
+    p.note {
+        font-style: italic;
+        font-size: 13px;
+    }

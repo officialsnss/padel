@@ -14,6 +14,7 @@ class Club extends Model
 {
     use HasFactory;
     public $timestamps = true;
+
     protected $fillable = [
         'name',
         'description',
@@ -36,8 +37,8 @@ class Club extends Model
         'ordering',
         'featured_image',
         'commission',
-        'created_at',
-        'updated_at',
+        //'created_at',
+       // 'updated_at',
     ];
 
 

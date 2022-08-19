@@ -7,7 +7,7 @@
             <div class="card">
               
               <div class="card-body">
-               
+               <p class="note"><strong>Note: </strong>Please drag and drop the row to change the order of the players.</p>
               
               <table id="tableplayers" class="table table-bordered table-striped">
                   <thead>

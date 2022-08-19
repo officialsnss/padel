@@ -17,6 +17,7 @@
                           <label>To:</label>
                           <input type="text"  id="to_date" value="" class="form-control input-daterange" name="to_date">
                           </div>
+                          @if(auth()->user()->role != '5')
                           <div class="item">
                           <label>Select Club</label>
                             <select id="clubs-filter" class="form-control">
@@ -26,12 +27,13 @@
                               @endforeach
                             </select>
                           </div>
+                          @endif
                           <div class="item">
                           <label>Select Payment Method</label>
                             <select id="payment_type" class="form-control">
                               <option value="">Select Payment Method</option>
-                              <option value="1">Instant</option>
-                              <option value="2">Later</option>
+                              <option value="1">KNET</option>
+                              <option value="2">COD</option>
                              
                              </select>
                           </div>
@@ -59,9 +61,9 @@
                       <div class="summary-view" style="margin-bottom:20px">
                           <strong>Total Amount: </strong><span class="total-b">2000 KWD</span><br>
                           <strong>Total Cancellation: </strong><span class="cancel-b">3</span><br>
-                          <strong>Total Commision:</strong><span class="comm-b">4000</span><br>
-                          <strong>Total Amount to be given to Club:</strong><span class="given">4000</span><br>
+                          <strong>Total Refunded Amount:</strong><span class="refund">4000</span><br>
                       </div>
+            <div class="table-responsive">
                 <table id="order_table" class="table table-bordered table-striped" style="width:100%">
                   <thead>
      
@@ -70,16 +72,18 @@
                     <th>Club Name</th>
                     <th>User Email</th>
                     <th>Booking Date</th>
+                    <th>Commission(in %)</th>
                     <th>Status</th>
                     <th>Payment Type</th>
                     <th>Payment Status</th>
                     <th>Order Date-Time</th>
-                   
+                    
                  </tr>
                   </thead>
                 
                  
                 </table>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -103,6 +107,7 @@ $(document).ready(function(){
   $('#order_table').DataTable({
    processing: true,
    dom: 'Bfrtip',
+   
    serverSide: true,
    buttons: [
           {
@@ -169,6 +174,10 @@ $(document).ready(function(){
      name:'booking_date'
     },
     {
+     data:'commission',
+     name:'commission'
+    },
+    {
      data:'booked_status',
      render : function(data)
       {
@@ -188,10 +197,10 @@ $(document).ready(function(){
      render : function(data)
       {
           if (data == '1') {
-            return "Instant" 
+            return "KNET" 
           }
           else{
-            return "Later"
+            return "COD"
           }
       },
      name:'payment_method'
@@ -214,17 +223,16 @@ $(document).ready(function(){
      name:'booking_created_at'
     },
    
+   
    ],
    "headerCallback": function( thead, data, start, end, display) {
     var api = this.api();
     var ttotal = api.ajax.json().ttotal
-    var commission = api.ajax.json().commission
     var cancel = api.ajax.json().cancel
-    var given = api.ajax.json().given
+    var refund = api.ajax.json().refund
     $('.cancel-b').html(cancel);
-    $('.comm-b').html(commission);
     $('.total-b').html(ttotal+' KWD');
-    $('.given').html(given+' KWD');
+    $('.refund').html(refund+' KWD');
    
      
   }
