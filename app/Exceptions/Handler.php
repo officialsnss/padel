@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\Response;
+use Illuminate\Auth\AuthenticationException;
 
 class Handler extends ExceptionHandler
 {
@@ -37,5 +39,22 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof AuthenticationException) {
+            return response()->json(
+                [
+                    'code' => 401,
+                    'success' => false,
+                    'message' => 'Your token has been expired! Please login again.',
+                    'data' => []
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
+        }
+
+        return parent::render($request, $e);
     }
 }
