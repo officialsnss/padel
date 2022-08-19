@@ -91,14 +91,14 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/admin/club/timeslots')}}" class="nav-link  {{ (request()->segment(3) == 'timeslots') ? 'active' : '' }}">
+                <a href="{{url('/admin/club/timeslots')}}" class="nav-link  {{ (request()->segment(3) == 'timeslots' && request()->segment(4) != 'book') ? 'active' : '' }}">
                   <i class="fas fa-clock nav-icon"></i>
                   <p>Timeslots</p>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a href="{{url('/admin/club/timeslots/book')}}" class="nav-link  {{ (request()->segment(3) == 'book') ? 'active' : '' }}">
+                <a href="{{url('/admin/club/timeslots/book')}}" class="nav-link  {{ (request()->segment(4) == 'book') ? 'active' : '' }}">
                   <i class="fas fa-book nav-icon"></i>
                   <p>Book Timeslots</p>
                 </a>

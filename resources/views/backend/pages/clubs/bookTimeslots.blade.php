@@ -7,11 +7,12 @@
             <div class="card">
            
               <div class="card-body">
+            
                 <div class="row">
                 <div class="col-md-8">
                     </div>
                   <div class="col-md-4">
-                     <form action="" method="post" id="date-filter">
+                     <form action="" method="post" id="date-filter" style="display:block">
                          <label>Select Date</label>
                          <input type="text"  id="datepicker" value="" class="form-control">
                     </form>
@@ -160,7 +161,9 @@
                        @endforeach
                     </ul>
                   </div>
+                  <p class="note"><strong>Note: </strong>Please click on the time slot to book it manually.</p>
               </div>
+              
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
