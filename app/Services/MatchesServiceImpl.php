@@ -108,17 +108,25 @@ class MatchesServiceImpl implements MatchesService
         $playerId =$request->player_id;
 
         $data = $this->matchesRepository->getMatchData($matchId);
-        $idsPacket = explode(',',$data['requestedPlayersIds']);
-        if($idsPacket[0] == 0) {
-            array_shift($idsPacket);
+        $requestedIdsArray = explode(',',$data['requestedPlayersIds']);
+        $idsPacket = explode(',',$data['playersIds']);
+
+        if($requestedIdsArray[0] == 0) {
+            array_shift($requestedIdsArray);
         }
-        $finalPacket = implode(',', $idsPacket);
-        if(!$finalPacket) {
-            return $this->matchesRepository->requestAddPlayer($matchId, $playerId);
-        }
+        $finalPacket = implode(',', $requestedIdsArray);
+
         if(!in_array($playerId, $idsPacket)) {
-            $ids = $finalPacket . ',' . $playerId;
-            return $this->matchesRepository->requestAddPlayer($matchId, $ids);
+            // If there are no requested players column in this match
+            if(!$finalPacket) {
+                return $this->matchesRepository->requestAddPlayer($matchId, $playerId);
+            }
+
+            // If there are some values in the requested players column
+            if(!in_array($playerId, $requestedIdsArray)) {
+                $ids = $finalPacket . ',' . $playerId;
+                return $this->matchesRepository->requestAddPlayer($matchId, $ids);
+            }
         }
     }
 
@@ -141,6 +149,9 @@ class MatchesServiceImpl implements MatchesService
                 if($playerId == $row) {
                     array_push($arrayIds, $row);
                 }
+            }
+            if($arrayIds[0] == ''){
+                unset($arrayIds[0]);
             }
             $finalPacket = implode(',', $arrayIds);
         }
