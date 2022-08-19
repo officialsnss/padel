@@ -27,8 +27,8 @@ class BatsController extends Controller
     {
         $data = $this->batDataService->getBatDetails($clubId);
         if($data) {
-            return ResponseUtil::successWithData($data, true, 200);
+            return ResponseUtil::successWithData($data, 'List of all bats', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201', 'No record found for bats', true, 201);
+        return ResponseUtil::errorWithMessage(201, 'No record found for bats', false, 201);
     }
 }

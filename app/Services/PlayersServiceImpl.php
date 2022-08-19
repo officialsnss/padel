@@ -57,18 +57,12 @@ class PlayersServiceImpl implements PlayersService
         $data = $this->playersRepository->getPlayersList();
         $dataArray = [];
 
-
-        foreach($data as $key => $row) {
-            if($row['user_id'] == $userId) {
-                unset($data[$key]);
-            }
-        }
-
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
         $following = $userData['following'] ? explode(',',$userData['following']) : [];
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];            
+            $dataArray[$i]['user_id'] = $row['user_id'];            
             $dataArray[$i]['name'] = $row['users'][0]['name'];  
             $dataArray[$i]['level'] = $row['levels'];  
             $dataArray[$i]['image'] = $row['users'][0]['profile_pic'];
@@ -83,57 +77,64 @@ class PlayersServiceImpl implements PlayersService
         return $dataArray;
     }
 
-    public function getPlayerDetails()
+    public function getPlayerDetails($id)
     {
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
 
-        $data = $this->playersRepository->getPlayerDetails($userData['id']);
+        $data = $this->playersRepository->getPlayerDetails($id);
         $dataArray = [];
+        $upcoming = [];
 
-        $dataArray['id'] = $data['id'];            
-        $dataArray['name'] = $data['users'][0]['name'];  
-        $dataArray['level'] = $data['levels'];  
-        $dataArray['image'] = $data['users'][0]['profile_pic'];  
-        $dataArray['instagram_url'] = $data['instagram_url'];  
-        $dataArray['snapchat'] = $data['snapchat'];  
-        $dataArray['match_played'] = $data['match_played'];  
-        $dataArray['match_won'] = $data['match_won'];  
-        $dataArray['match_loose'] = $data['match_loose'];  
-        $dataArray['match_draw'] = $data['match_played'] - ($data['match_loose'] + $data['match_won']);
-        
-        $followers = explode(',',$data['followers']);
-        if($followers[0] == "") {
-            array_shift($followers);
+        if($data) {
+            $dataArray['id'] = $data['id'];            
+            $dataArray['name'] = $data['users'][0]['name'];  
+            $dataArray['level'] = $data['levels'];  
+            $dataArray['image'] = $data['users'][0]['profile_pic'];  
+            $dataArray['instagram_url'] = $data['instagram_url'];  
+            $dataArray['snapchat'] = $data['snapchat'];  
+            $dataArray['match_played'] = $data['match_played'];  
+            $dataArray['match_won'] = $data['match_won'];  
+            $dataArray['match_loose'] = $data['match_loose'];  
+            $dataArray['match_draw'] = $data['match_played'] - ($data['match_loose'] + $data['match_won']);
+            
+            $followers = explode(',',$data['followers']);
+            if($followers[0] == "") {
+                array_shift($followers);
+            }
+            $dataArray['followers'] = count($followers);  
+            
+            $followings = explode(',',$data['following']);
+            if($followings[0] == "") {
+                array_shift($followings);
+            }
+            $dataArray['following'] = count($followings);  
+            
+            $currentDate = Carbon\Carbon::now()->toDateTimeString();
+            $matches = $data['matches']->all();
+            if(!$matches) {
+                $dataArray['upcoming_matches'] = 0;  
+            } else {
+                $key = 0;
+                foreach($matches as $i => $row) {
+                    $booking_date = $row['booking'][0]['booking_date'];
+                    $booking_time = $row['booking'][0]['slots']['start_time'];
+                    $date = date('Y-m-d H:i:s', strtotime("$booking_date $booking_time"));
+                    $match_date = strtotime($date);
+                    $currentDate = strtotime($currentDate);
+                    if($currentDate < $match_date) {
+                        $key++;
+                    }
+                }
+                $dataArray['upcoming_matches'] = $key;  
+            }
+            $dataArray['court_side'] = $data['court_side'] == 1 ? 'Left': 'Right';  
+            $dataArray['best_shot'] = $data['best_shot'];  
+            $dataArray['gender'] = $data['gender'] == 1 ? "Female" : "Male";  
+            $dataArray['status'] = $data['status'] == 1 ? "Active" : "Deactive";  
+            
+            return $dataArray;
         }
-        $dataArray['followers'] = count($followers);  
-        
-        $followings = explode(',',$data['following']);
-        if($followings[0] == "") {
-            array_shift($followings);
-        }
-        $dataArray['following'] = count($followings);  
-        
-        $currentDate = Carbon\Carbon::now()->toDateTimeString();
-        // dd($currentDate->toDateTimeString());
-        // foreach($data['matches'] as $i => $row) {
-        //     dd($row);
-        //     $bookingDate[$row['id']] = $row['booking'][0]['booking_date'];
-        // }
-
-        // foreach($bookingDate as $booking) {
-        //     if($booking > $currentDate) {
-        //         dd($booking);
-        //     }
-        // }
-        // dd($bookingDate);
-
-        $dataArray['court_side'] = $data['court_side'] == 1 ? 'Left': 'Right';  
-        $dataArray['best_shot'] = $data['best_shot'];  
-        $dataArray['gender'] = $data['gender'] == 1 ? "Female" : "Male";  
-        $dataArray['status'] = $data['status'] == 1 ? "Active" : "Deactive";  
-        
-        return $dataArray;
     }
 
     public function followPlayer($request)

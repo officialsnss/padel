@@ -29,19 +29,25 @@ class PlayersController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'List of Popular Players', true, 200);
         }
-        return ResponseUtil::errorWithMessage(400, 'No data for popular players', false, 400);
+        return ResponseUtil::errorWithMessage(201, 'No data for popular players', false, 201);
     }
 
     public function getPlayersList()
     {
         $data =  $this->playersService->getPlayersList();
-        return ResponseUtil::successWithData($data, 'List of all players', true, 200);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'List of all players', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No data for players', false, 201);
     }
 
-    public function getPlayerDetails()
+    public function getPlayerDetails($id)
     {
-        $data = $this->playersService->getPlayerDetails();
-        return ResponseUtil::successWithData($data, 'Players details', true, 200);
+        $data = $this->playersService->getPlayerDetails($id);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Players details', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No details for this player', false, 201);
     }
 
     public function followPlayer(Request $request)

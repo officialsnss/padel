@@ -23,7 +23,8 @@ class PlayersRepository extends BaseRepository
      */
     public function getPlayersList()
     {
-      return Players::with('users')->get(); 
+      $userId = auth()->user()->id;
+      return Players::where('user_id','!=',$userId)->with('users')->get(); 
     }
 
     public function getPlayerDetails($playerId)

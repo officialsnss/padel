@@ -27,8 +27,8 @@ class LevelsController extends Controller
     {
         $data = $this->levelsService->getLevelsList();
         if($data) {
-            return ResponseUtil::successWithData($data, true, 200);
+            return ResponseUtil::successWithData($data, 'List of all levels', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201', 'No Levels found', true, 201);
+        return ResponseUtil::errorWithMessage(201, 'No Levels found', false, 201);
     }
 }

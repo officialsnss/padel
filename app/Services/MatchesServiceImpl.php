@@ -141,7 +141,7 @@ class MatchesServiceImpl implements MatchesService
         $idsPacket = explode(',',$data['requestedPlayersIds']);
         $arrayIds = explode(',', $data['playersIds']);
 
-        if(!$data['requestedPlayersIds']) {
+        if(!in_array($playerId, $idsPacket)) {
             return ['message' => 'No such request for this player'];
         }
         if($request->isAccept) {
