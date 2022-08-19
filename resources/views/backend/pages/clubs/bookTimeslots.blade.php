@@ -12,7 +12,7 @@
                 <div class="col-md-8">
                     </div>
                   <div class="col-md-4">
-                     <form action="" method="post" id="date-filter">
+                     <form action="" method="post" id="date-filter" style="display:block">
                          <label>Select Date</label>
                          <input type="text"  id="datepicker" value="" class="form-control">
                     </form>
