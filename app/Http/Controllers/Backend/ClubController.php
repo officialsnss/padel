@@ -93,7 +93,7 @@ class ClubController extends Controller
             return view('backend.pages.clubs.gallery', compact('title','clubId','clubImages'));
         }
         catch (\Exception $e) {
-          return redirect('/admin/clubs')->with('error', 'Something went wrong.');
+          return Redirect::back()->with('error', 'Something went wrong.');
         }
     }
 
@@ -124,7 +124,7 @@ class ClubController extends Controller
        
     }
         catch (\Exception $e) {
-          return redirect('/admin/clubs')->with('error', 'Something went wrong.');
+          return Redirect::back()->with('error', 'Something went wrong.');
         }
     }
 

@@ -92,6 +92,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
       Route::post('/refunds/reject', 'App\Http\Controllers\Backend\RefundController@reject')->name('refund.reject');
+      Route::get('/refunds/approve/{id}', 'App\Http\Controllers\Backend\RefundController@approve')->name('refund.approve');
     
 
    //Clubs Ordering
@@ -140,17 +141,17 @@ Route::group(['middleware' =>['role:1,2']], function(){
 Route::group(['middleware' =>['role:1,2,5']], function(){
     Route::prefix('/admin')->group(function () {
       //Dashboard Route
-      Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+    Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
      
-       //Bookings
-       Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
-       Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
-
-        //Reports
-        Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
+    //Bookings
+    Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
+    Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+    //Reports
+    Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
     
-
-    
+    Route::get('/clubs/gallery/{id}', 'App\Http\Controllers\Backend\ClubController@gallery')->name('club.images');
+    Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
+    Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
       
     });
 });
@@ -162,9 +163,8 @@ Route::group(['middleware' =>['role:5']], function(){
       Route::get('/clubs', 'App\Http\Controllers\Backend\ClubController@index')->name('clubs');
       Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
       Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
-      Route::get('/clubs/gallery/{id}', 'App\Http\Controllers\Backend\ClubController@gallery')->name('club.images');
-      Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
-      Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
+
+     
       Route::get('/club/timeslots/add/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsAdd')->name('club.timeslots.add');
       Route::post('/club/timeslots/save/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsSave')->name('club.timeslots.save');
       Route::get('/club/timeslots', 'App\Http\Controllers\Backend\ClubController@timeSlots')->name('club.timeslots');

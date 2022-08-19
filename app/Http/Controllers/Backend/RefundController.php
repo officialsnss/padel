@@ -31,7 +31,7 @@ class RefundController extends Controller
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
             ->where('payments.isCancellationRequest', '1')
            // ->where('payments.isRefunded', '0')
-             ->select('payments.*', 'users.name', 'users.email','currencies.code')
+             ->select('payments.*', 'users.name', 'users.email','currencies.code','payments.id as pay_id','payments.user_id as userid')
             ->get();
           
             return view('backend.pages.cancel', compact('title','payments'));
@@ -78,6 +78,29 @@ class RefundController extends Controller
         return redirect('/admin/refunds')->with('error', 'Something went wrong.');
         }
     }    
+
+    // Add Refunds
+    
+    public function approve($id){
+        
+        try{ 
+           
+                $paymentInfo = Payment::findOrFail($id);
+                $paymentInfo->isRefunded = '2';
+                $paymentInfo->save();
+
+               $bookinginfo  = Booking::where('id',$paymentInfo->booking_id)->first();
+              
+               $bookinginfo->status = '3';
+               $bookinginfo->save();
+               return redirect('/admin/refunds')->with('success', 'Request Cancelled Successfully.');
+            
+        }
+        catch (ValidationException  $e) {
+
+        return redirect('/admin/refunds')->with('error', 'Something went wrong.');
+        }
+      }    
 
      // Add Refunds
     

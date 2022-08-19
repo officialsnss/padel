@@ -32,14 +32,14 @@ class HomeController extends Controller
           $regUsers = User::whereIn('role', [3, 4])->where('status', 1)->count();
           $regClubs = Club::where('status', 1)->count();
           $totalBooking =  DB::table('payments')
-          ->where('payments.isRefunded', '0')
+          //->where('payments.isRefunded', '0')
           ->count();
 
           $cancel= DB::table('payments')
           ->where('payments.isCancellationRequest', '1')
-          ->where('payments.isRefunded', '1')
+          ->whereIn('payments.isRefunded', ['1', '2'])
           ->count();
-
+         
           $refund= DB::table('payments')
           ->where('payments.isCancellationRequest', '1')
           ->where('payments.isRefunded', '0')

@@ -4,7 +4,12 @@
 <div class="card">
         <div class="card-header">
           <h3 class="card-title">{{ $userInfo->name }} Details</h3>
-         </div>
+        
+                <div class="add">
+                 <a href="{{ route('club.images', $userInfo->clubid)}}" class="btn btn-info">Gallery</a>
+                </div>
+              </div>
+        
         <div class="card-body">
           <div class="row">
             <div class="col-12 col-md-12 col-lg-12">

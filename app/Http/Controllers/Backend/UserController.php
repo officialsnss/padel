@@ -136,11 +136,7 @@ class UserController extends Controller
 
     public function add(Request $request)
     {
-     
-      
-     
-      
-            $request->validate([
+      $request->validate([
                 'fullname' => 'required|string',
                 'clubname' => 'required|string|unique:clubs,name',
                 'email'=> 'required|email|unique:users' , 
@@ -195,7 +191,7 @@ class UserController extends Controller
             ->leftJoin('cities', 'cities.id' ,'=', 'clubs.city_id')
             ->leftJoin('countries', 'countries.id' ,'=', 'clubs.country')
             ->where('users.id', $id)
-            ->select('users.*', 'clubs.*', 'clubs.name as clubname','users.name as username','currencies.code', 'regions.name as region', 'cities.name as city','countries.name as country')
+            ->select('users.*', 'clubs.*', 'clubs.id as clubid','clubs.name as clubname','users.name as username','currencies.code', 'regions.name as region', 'cities.name as city','countries.name as country')
             ->first();
 
           $amenityList = [];
