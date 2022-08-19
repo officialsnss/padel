@@ -44,7 +44,7 @@ Route::middleware('auth:api')->group( function () {
     //PLAYERS
     Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
     Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
-    Route::get('get/playerDetails', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
+    Route::get('get/playerDetails/{player_id}', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
 
     //MATCHES
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
