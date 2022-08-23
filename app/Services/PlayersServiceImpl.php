@@ -28,7 +28,6 @@ class PlayersServiceImpl implements PlayersService
      */
     public function getPopularPlayers()
     {
-        $userId = auth()->user()->id;
         $playerData = $this->getPlayersList();
         $popularPlayers = [];
 
@@ -65,7 +64,7 @@ class PlayersServiceImpl implements PlayersService
             $dataArray[$i]['user_id'] = $row['user_id'];            
             $dataArray[$i]['name'] = $row['users'][0]['name'];  
             $dataArray[$i]['level'] = $row['levels'];  
-            $dataArray[$i]['image'] = $row['users'][0]['profile_pic'];
+            $dataArray[$i]['image'] = $row['users'][0]['profile_pic'] ? getenv("IMAGES")."player_images/".$row['users'][0]['profile_pic'] : null;
             if(in_array($row['id'], $following)) {
                 $dataArray[$i]['isFollowed'] = 1;  
             } else {
@@ -90,7 +89,7 @@ class PlayersServiceImpl implements PlayersService
             $dataArray['id'] = $data['id'];            
             $dataArray['name'] = $data['users'][0]['name'];  
             $dataArray['level'] = $data['levels'];  
-            $dataArray['image'] = $data['users'][0]['profile_pic'];  
+            $dataArray['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."player_images/".$data['users'][0]['profile_pic'] : null;  
             $dataArray['instagram_url'] = $data['instagram_url'];  
             $dataArray['snapchat'] = $data['snapchat'];  
             $dataArray['match_played'] = $data['match_played'];  
@@ -184,7 +183,7 @@ class PlayersServiceImpl implements PlayersService
         $dataArray['whatsapp_no'] = $request->whatsapp_no;
         $dataArray['dob'] = $request->dob;
         $dataArray['court_side'] = $request->court_side;
-        // $dataArray['play_time'] = $request->play_time;
+        $dataArray['play_time'] = $request->play_time;
         $dataArray['best_shot'] = $request->best_shot;
         $dataArray['levels'] = $request->levels;
 

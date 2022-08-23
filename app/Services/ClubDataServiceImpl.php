@@ -33,10 +33,16 @@ class ClubDataServiceImpl implements ClubDataService
         $dataPacket = [];
         $i =0;
         foreach($data as $i => $row) {
+            $dataPacket[$i]['id'] = $row['id'];
             $dataPacket[$i]['name'] = $row['name'];
-            $clubPrice = $this->getClubPrice($row['court']);
-            $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
-            $dataPacket[$i]['featured_image'] = $this->getFeaturedImage($row['court']);
+
+            $address = $row['address'];
+            $city = $row['cities'] != null ? $row['cities'][0]['name'] : null;
+            $dataPacket[$i]['address'] = $address . ', ' . $city;
+            // $clubPrice = $this->getClubPrice($row['court']);
+            // $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
+            $dataPacket[$i]['price'] = $row['single_price'];
+            $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
             $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
             $dataPacket[$i]['isPopular'] = $row['isPopular'];
             $dataPacket[$i]['rating'] = $this->getClubRating($row['club_rating']);
@@ -62,10 +68,10 @@ class ClubDataServiceImpl implements ClubDataService
             if($club['isPopular'] == 1) {
 
                 // Removing the indexes which is not required in the packet
-                unset($club['ordering']);
-                unset($club['latitude']);
-                unset($club['longitude']);
-                unset($club['isPopular']);
+                // unset($club['ordering']);
+                // unset($club['latitude']);
+                // unset($club['longitude']);
+                // unset($club['isPopular']);
 
                 array_push($clubData,$club);
             }
@@ -84,15 +90,15 @@ class ClubDataServiceImpl implements ClubDataService
             $clubLongitude = $club['longitude'];
 
             // Calculating the distance by lat and long
-            $club['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
-                
+            $club['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
+
             if($club['latitude'] || $club['longitude']) {
 
                 // Removing the indexes which is not required in the packet
-                unset($club['latitude']);
-                unset($club['longitude']);
-                unset($club['ordering']);
-                unset($club['isPopular']);
+                // unset($club['latitude']);
+                // unset($club['longitude']);
+                // unset($club['ordering']);
+                // unset($club['isPopular']);
 
                 //Pushing the clubs in the popularClubs variable
                 array_push($nearClubs,$club);
@@ -118,12 +124,13 @@ class ClubDataServiceImpl implements ClubDataService
         $dataPacket['name'] = $clubData['name'];
         $dataPacket['description'] = $clubData['description'];
         $address = $clubData['address'];
-        $city = $clubData['cities'] == '' ? $clubData['cities'][0]['name'] : null;
+        $city = count($clubData['cities']->all()) > 0 ? $clubData['cities'][0]['name'] : null;
         $dataPacket['address'] = $address . ',' . $city;
-        $clubPrice = $this->getClubPrice($clubData['court']);
-        $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
-        $dataPacket['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
-        $dataPacket['featured_image'] = $this->getFeaturedImage($clubData['court']);
+        // $clubPrice = $this->getClubPrice($clubData['court']);
+        // $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
+        $dataPacket['price'] = $clubData['single_price'];
+        $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
+        $dataPacket['featured_image'] = getenv("IMAGES")."club_images/".$clubData['featured_image'];
         $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
         $dataPacket['rating'] = $this->getClubRating($clubData['club_rating']);
         $dataPacket['bookingsCount'] = $data['bookingsCount'];

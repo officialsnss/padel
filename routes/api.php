@@ -29,6 +29,9 @@ Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); 
 Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
 
+    //Dashboard
+    Route::get('dashboard', 'App\Http\Controllers\Api\DashboardController@getDashboard');
+
     //CLUBS
     Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
     Route::get('nearClubs', 'App\Http\Controllers\Api\ClubsController@getNearClubs');

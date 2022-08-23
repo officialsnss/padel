@@ -20,7 +20,7 @@ class User extends JsonResource
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
             'phone' => $this->phone,
-            'profile_pic' => $this->profile_pic,
+            'profile_pic' => getenv("IMAGES")."club_images/".$this->profile_pic,
             'address' => $this->address,
             'region_id' => $this->region_id,
             'city_id' => $this->region_id,

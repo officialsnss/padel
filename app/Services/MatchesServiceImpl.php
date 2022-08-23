@@ -34,8 +34,14 @@ class MatchesServiceImpl implements MatchesService
         $dataArray = [];
 
         foreach($data as $i => $row) {
+            $dataArray[$i]['id'] = $row['id'];  
             $dataArray[$i]['name'] = $row['clubs'] ? $row['clubs'][0]['name'] : null;  
-            $dataArray[$i]['date'] = $row['slots'] ? $row['slots'][0]['date'] : null; 
+
+            $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
+            $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
+            $dataArray[$i]['address'] = $address . ', ' . $city;
+
+            $dataArray[$i]['date'] = $row['booking'] ? $row['booking'][0]['booking_date'] : null; 
             $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['date']));
             $dataArray[$i]['startTime'] = $row['slots'] ? $row['slots'][0]['start_time'] : null;  
             $dataArray[$i]['endTime'] = $row['slots'] ? $row['slots'][0]['end_time']: null;  
@@ -43,6 +49,7 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
             $dataArray[$i]['minimum_level'] = $row['level'];  
+            $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds); 
@@ -92,12 +99,14 @@ class MatchesServiceImpl implements MatchesService
     public function getPlayersList($playersIds)
     {
         $dataArray = [];
-        foreach($playersIds as $key => $playerId) {
-            $data = $this->playersRepository->getPlayerDetails($playerId);
-            $dataArray[$key]['id'] = $data['id'];
-            $dataArray[$key]['name'] = $data['users'][0]['name'];
-            $dataArray[$key]['image'] = $data['users'][0]['profile_pic'];
-            $dataArray[$key]['level'] = $data['levels'];
+        if($playersIds[0]) {
+            foreach($playersIds as $key => $playerId) {
+                $data = $this->playersRepository->getPlayerDetails($playerId);
+                $dataArray[$key]['id'] = $data['id'];
+                $dataArray[$key]['name'] = $data['users'][0]['name'];
+                $dataArray[$key]['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."player_images/".$data['users'][0]['profile_pic'] : null;
+                $dataArray[$key]['level'] = $data['levels'];
+            }
         }
         return $dataArray;
     }
