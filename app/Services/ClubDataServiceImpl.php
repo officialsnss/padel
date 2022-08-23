@@ -45,7 +45,7 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
             $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
             $dataPacket[$i]['isPopular'] = $row['isPopular'];
-            $dataPacket[$i]['rating'] = $this->getClubRating($row['club_rating']);
+            $dataPacket[$i]['rating'] = number_format($this->getClubRating($row['club_rating']),1,'.','');
             $dataPacket[$i]['ordering'] = $row['ordering'];
             $dataPacket[$i]['latitude'] = $row['latitude'];
             $dataPacket[$i]['longitude'] = $row['longitude'];
@@ -120,7 +120,7 @@ class ClubDataServiceImpl implements ClubDataService
         $clubLatitude = $clubData['latitude'];
         $clubLongitude = $clubData['longitude'];
         $dataPacket = [];
-        
+
         $dataPacket['name'] = $clubData['name'];
         $dataPacket['description'] = $clubData['description'];
         $address = $clubData['address'];
@@ -132,7 +132,7 @@ class ClubDataServiceImpl implements ClubDataService
         $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
         $dataPacket['featured_image'] = getenv("IMAGES")."club_images/".$clubData['featured_image'];
         $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
-        $dataPacket['rating'] = $this->getClubRating($clubData['club_rating']);
+        $dataPacket['rating'] = number_format($this->getClubRating($clubData['club_rating']),1,'.','');
         $dataPacket['bookingsCount'] = $data['bookingsCount'];
         
         return $dataPacket; 
