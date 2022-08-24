@@ -23,16 +23,25 @@ class MatchesController extends Controller
         $this->matchesService = $matchesService;
     }
 
+    public function getUpcomingMatches()
+    {
+        $data = $this->matchesService->getUpcomingMatches();
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Upcoming matches list', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No upcoming matches', false, 201);
+    }
+
     public function getMatchesList()
     {
         $data = $this->matchesService->getMatchesList();
-        return ResponseUtil::successWithData($data, true, 200);
+        return ResponseUtil::successWithData($data, 'All Matches list', true, 200);
     }
 
     public function getMatchDetails($matchId)
     {
         $data = $this->matchesService->getMatchDetails($matchId);
-        return ResponseUtil::successWithData($data, true, 200);
+        return ResponseUtil::successWithData($data, 'Matche Details', true, 200);
     }
 
     public function sendRequest(Request $request)

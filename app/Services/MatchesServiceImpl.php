@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Repositories\MatchesRepository;
 use App\Repositories\PlayersRepository;
+use Carbon\Carbon;
+
 // use App\Services\PlayersServiceImpl;
 /**
  * Class MatchesServiceImpl
@@ -28,6 +30,40 @@ class MatchesServiceImpl implements MatchesService
      *
      * @return mixed
      */
+
+    public function getUpcomingMatches()
+    {
+        // Getting Listing of Upcoming Matches
+        $matchData = $this->getMatchesList();
+        $upcomingMatches = [];
+
+        foreach($matchData as $match) {
+            
+            $matchDate = $match['date'];
+            $matchTime = $match['startTime'];
+            $current = Carbon::now()->toDateTimeString();
+            $currentDate = strtotime($current);
+            $date = date('Y-m-d H:i:s', strtotime("$matchDate $matchTime"));
+            $match_date = strtotime($date);
+
+            // Converting dates and times to time string
+            $match['date'] = strtotime($match['date']);
+            $match['startTime'] = strtotime($match['startTime']);
+            $match['endTime'] = strtotime($match['endTime']);
+
+            $userId = auth()->user()->id;
+            if($match['booked_by'] == $userId) {
+                unset($match['booked_by']);
+                if($currentDate < $match_date) {
+                    array_push($upcomingMatches, $match);
+                }
+            }
+        }
+
+        $upcomingMatches = collect($upcomingMatches)->sortBy('date')->toArray();
+        return $upcomingMatches;
+    }
+
     public function getMatchesList()
     {
         $data = $this->matchesRepository->getMatchesList();
