@@ -23,6 +23,13 @@ class MatchesRepository extends BaseRepository
      *
      * @return mixed
      */
+    public function getUpcomingMatches()
+    {
+      return Matches::with('slots')
+              ->with('clubs.cities')
+              ->get(); 
+    }
+
     public function getMatchesList()
     {
       return Matches::where('match_type', 1)

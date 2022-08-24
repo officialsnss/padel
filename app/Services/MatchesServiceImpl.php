@@ -33,23 +33,19 @@ class MatchesServiceImpl implements MatchesService
 
     public function getUpcomingMatches()
     {
+        $key = 1;
         // Getting Listing of Upcoming Matches
-        $matchData = $this->getMatchesList();
+        $matchData = $this->getMatchesList($key);
         $upcomingMatches = [];
 
         foreach($matchData as $match) {
             
-            $matchDate = $match['date'];
-            $matchTime = $match['startTime'];
+            $matchDate = date('Y-m-d', $match['date']);
+            $matchTime = date('H:i:s', $match['startTime']);
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
             $date = date('Y-m-d H:i:s', strtotime("$matchDate $matchTime"));
             $match_date = strtotime($date);
-
-            // Converting dates and times to time string
-            $match['date'] = strtotime($match['date']);
-            $match['startTime'] = strtotime($match['startTime']);
-            $match['endTime'] = strtotime($match['endTime']);
 
             $userId = auth()->user()->id;
             if($match['booked_by'] == $userId) {
@@ -64,9 +60,13 @@ class MatchesServiceImpl implements MatchesService
         return $upcomingMatches;
     }
 
-    public function getMatchesList()
+    public function getMatchesList($key)
     {
-        $data = $this->matchesRepository->getMatchesList();
+        if($key) {
+            $data = $this->matchesRepository->getUpcomingMatches();
+        } else {
+            $data = $this->matchesRepository->getMatchesList();
+        }
         $dataArray = [];
 
         foreach($data as $i => $row) {

@@ -18,7 +18,7 @@ interface MatchesService
      */
     public function getUpcomingMatches();
 
-    public function getMatchesList();
+    public function getMatchesList($key);
 
     public function getMatchDetails($matchId);
 

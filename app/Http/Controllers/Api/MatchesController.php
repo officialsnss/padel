@@ -34,7 +34,8 @@ class MatchesController extends Controller
 
     public function getMatchesList()
     {
-        $data = $this->matchesService->getMatchesList();
+        $key = 0;
+        $data = $this->matchesService->getMatchesList($key);
         if($data) {
             return ResponseUtil::successWithData($data, 'All Matches list', true, 200);
         }
