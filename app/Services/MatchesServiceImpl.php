@@ -77,14 +77,16 @@ class MatchesServiceImpl implements MatchesService
             $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
             $dataArray[$i]['address'] = $address . ', ' . $city;
 
-            $dataArray[$i]['date'] = $row['booking'] ? $row['booking'][0]['booking_date'] : null; 
+            $dataArray[$i]['date'] = $row['booking'] ? strtotime($row['booking'][0]['booking_date']) : null; 
             $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['date']));
-            $dataArray[$i]['startTime'] = $row['slots'] ? $row['slots'][0]['start_time'] : null;  
-            $dataArray[$i]['endTime'] = $row['slots'] ? $row['slots'][0]['end_time']: null;  
+            $dataArray[$i]['startTime'] = $row['slots'] ? strtotime($row['slots'][0]['start_time']) : null;  
+            $dataArray[$i]['endTime'] = $row['slots'] ? strtotime($row['slots'][0]['end_time']): null;  
             $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
-            $dataArray[$i]['minimum_level'] = $row['level'];  
+            $minimum_level = explode(',',$row['level']);
+            $min = min($minimum_level);
+            $dataArray[$i]['minimum_level'] = $min;  
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             
             $arrayIds = explode(',', $row['playersIds']); 

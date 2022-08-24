@@ -35,7 +35,10 @@ class MatchesController extends Controller
     public function getMatchesList()
     {
         $data = $this->matchesService->getMatchesList();
-        return ResponseUtil::successWithData($data, 'All Matches list', true, 200);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'All Matches list', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No matches list', false, 201);
     }
 
     public function getMatchDetails($matchId)
