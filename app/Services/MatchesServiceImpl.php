@@ -61,7 +61,7 @@ class MatchesServiceImpl implements MatchesService
 
     public function getMatchesList($request)
     {
-        $data = $this->matchesRepository->getUpcomingMatches();
+        $data = $this->matchesRepository->getUpcomingMatches($request);
         $dataArray = [];
 
         foreach($data as $i => $row) {

@@ -70,11 +70,11 @@ class DashboardServiceImpl implements DashboardService
         return $popularClubs;
     }
 
-    public function getUpcomingMatches()
+    public function getUpcomingMatches($request)
     {
         $key = 1;
         // Getting Listing of Upcoming Matches
-        $matchData = $this->matchesServiceImpl->getMatchesList();
+        $matchData = $this->matchesServiceImpl->getMatchesList($request);
         $upcomingMatches = [];
 
         foreach($matchData as $match) {
@@ -100,10 +100,10 @@ class DashboardServiceImpl implements DashboardService
         return $upcomingMatches;
     }
 
-    public function getPopularPlayers()
+    public function getPopularPlayers($request)
     {
         // Getting List of Popular Players
-        $playerData = $this->playersServiceImpl->getPlayersList();
+        $playerData = $this->playersServiceImpl->getPlayersList($request);
         $popularPlayers = [];
 
         // Sorting of popularPlayers based on the ordering
