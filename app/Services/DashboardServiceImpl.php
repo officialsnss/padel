@@ -74,7 +74,7 @@ class DashboardServiceImpl implements DashboardService
     {
         $key = 1;
         // Getting Listing of Upcoming Matches
-        $matchData = $this->matchesServiceImpl->getMatchesList($key);
+        $matchData = $this->matchesServiceImpl->getMatchesList();
         $upcomingMatches = [];
 
         foreach($matchData as $match) {

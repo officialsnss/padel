@@ -32,10 +32,9 @@ class MatchesController extends Controller
         return ResponseUtil::errorWithMessage(201, 'No upcoming matches', false, 201);
     }
 
-    public function getMatchesList()
+    public function getMatches(Request $request)
     {
-        $key = 0;
-        $data = $this->matchesService->getMatchesList($key);
+        $data = $this->matchesService->getMatches($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'All Matches list', true, 200);
         }

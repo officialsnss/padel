@@ -30,8 +30,16 @@ class MatchesRepository extends BaseRepository
               ->get(); 
     }
 
-    public function getMatchesList()
+    public function getMatchesList($request)
     {
+      if($request->dateData) {
+        $date = date('Y-m-d', $request->dateData);
+        return Matches::where('match_type', 1)->with('booking')->whereHas('booking', function ($q) use ($date) {
+                    $q->where('booking_date', '=', $date);
+              })->with('slots')
+                ->with('clubs.cities')
+                ->get(); 
+    }
       return Matches::where('match_type', 1)
               ->with('slots')
               ->with('clubs.cities')

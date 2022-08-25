@@ -33,9 +33,8 @@ class MatchesServiceImpl implements MatchesService
 
     public function getUpcomingMatches()
     {
-        $key = 1;
         // Getting Listing of Upcoming Matches
-        $matchData = $this->getMatchesList($key);
+        $matchData = $this->getMatchesList();
         $upcomingMatches = [];
 
         foreach($matchData as $match) {
@@ -60,14 +59,42 @@ class MatchesServiceImpl implements MatchesService
         return $upcomingMatches;
     }
 
-    public function getMatchesList($key)
+    public function getMatchesList()
     {
-        if($key) {
-            $data = $this->matchesRepository->getUpcomingMatches();
-        } else {
-            $data = $this->matchesRepository->getMatchesList();
-        }
+        $data = $this->matchesRepository->getUpcomingMatches();
         $dataArray = [];
+
+        foreach($data as $i => $row) {
+            $dataArray[$i]['id'] = $row['id'];  
+            $dataArray[$i]['name'] = $row['clubs'] ? $row['clubs'][0]['name'] : null;  
+
+            $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
+            $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
+            $dataArray[$i]['address'] = $address . ', ' . $city;
+
+            $dataArray[$i]['date'] = $row['booking'] ? strtotime($row['booking'][0]['booking_date']) : null; 
+            $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['date']));
+            $dataArray[$i]['startTime'] = $row['slots'] ? strtotime($row['slots'][0]['start_time']) : null;  
+            $dataArray[$i]['endTime'] = $row['slots'] ? strtotime($row['slots'][0]['end_time']): null;  
+            $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private';  
+            $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
+            $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
+            $minimum_level = explode(',',$row['level']);
+            $min = min($minimum_level);
+            $dataArray[$i]['minimum_level'] = $min;  
+            $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
+            
+            $arrayIds = explode(',', $row['playersIds']); 
+            $dataArray[$i]['players'] = $this->getPlayersList($arrayIds); 
+        }
+        return $dataArray;
+    }
+
+    public function getMatches($request)
+    {
+        $data = $this->matchesRepository->getMatchesList($request);
+        $dataArray = [];
+        $dateData = [];
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];  
