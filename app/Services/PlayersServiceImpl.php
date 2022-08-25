@@ -26,9 +26,9 @@ class PlayersServiceImpl implements PlayersService
      *
      * @return mixed
      */
-    public function getPopularPlayers()
+    public function getPopularPlayers($request)
     {
-        $playerData = $this->getPlayersList();
+        $playerData = $this->getPlayersList($request);
         $popularPlayers = [];
 
         // Sorting of popularPlayers based on the ordering
@@ -50,10 +50,10 @@ class PlayersServiceImpl implements PlayersService
         return $popularPlayers;
     }
 
-    public function getPlayersList()
+    public function getPlayersList($request)
     {
         $userId = auth()->user()->id;
-        $data = $this->playersRepository->getPlayersList();
+        $data = $this->playersRepository->getPlayersList($request);
         $dataArray = [];
 
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);

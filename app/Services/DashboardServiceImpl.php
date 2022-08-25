@@ -35,11 +35,11 @@ class DashboardServiceImpl implements DashboardService
      */
     public function getDashboard($request)
     {
-        $clubData = $this->clubDataServiceImpl->getClubsList();
+        $clubData = $this->clubDataServiceImpl->getClubsList($request);
 
         $popularClubs = $this->getPopularClubs($clubData);
-        $upcomingMatches = $this->getUpcomingMatches();
-        $popularPlayers = $this->getPopularPlayers();
+        $upcomingMatches = $this->getUpcomingMatches($request);
+        $popularPlayers = $this->getPopularPlayers($request);
         $nearClubs = $this->getNearClubs($clubData, $request);
 
         return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs];

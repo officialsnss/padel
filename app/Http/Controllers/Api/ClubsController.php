@@ -24,9 +24,9 @@ class ClubsController extends Controller
         $this->clubDataService = $clubDataService;
     }
 
-    public function getClubsList()
+    public function getClubsList(Request $request)
     {
-        $data = $this->clubDataService->getClubsList();
+        $data = $this->clubDataService->getClubsList($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'Clubs data listing', true, 200);
         }
@@ -42,9 +42,9 @@ class ClubsController extends Controller
         return ResponseUtil::errorWithMessage('201','No near clubs found.', true, 201);
     }
 
-    public function getPopularClubs()
+    public function getPopularClubs(Request $request)
     {
-        $data = $this->clubDataService->getPopularClubs();
+        $data = $this->clubDataService->getPopularClubs($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'Popular clubs data listing', true, 200);
         }

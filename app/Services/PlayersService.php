@@ -16,9 +16,9 @@ interface PlayersService
      *
      * @return mixed
      */
-    public function getPopularPlayers();
+    public function getPopularPlayers($request);
 
-    public function getPlayersList();
+    public function getPlayersList($request);
     
     public function getPlayerDetails($id);
 

@@ -31,10 +31,10 @@ class MatchesServiceImpl implements MatchesService
      * @return mixed
      */
 
-    public function getUpcomingMatches()
+    public function getUpcomingMatches($request)
     {
         // Getting Listing of Upcoming Matches
-        $matchData = $this->getMatchesList();
+        $matchData = $this->getMatchesList($request);
         $upcomingMatches = [];
 
         foreach($matchData as $match) {
@@ -59,7 +59,7 @@ class MatchesServiceImpl implements MatchesService
         return $upcomingMatches;
     }
 
-    public function getMatchesList()
+    public function getMatchesList($request)
     {
         $data = $this->matchesRepository->getUpcomingMatches();
         $dataArray = [];

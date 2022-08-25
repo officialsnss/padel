@@ -26,9 +26,9 @@ class ClubDataServiceImpl implements ClubDataService
      *
      * @return mixed
      */
-    public function getClubsList()
+    public function getClubsList($request)
     {
-        $data = $this->clubDataRepository->getClubsList();
+        $data = $this->clubDataRepository->getClubsList($request);
 
         $dataPacket = [];
         $i =0;
@@ -54,9 +54,9 @@ class ClubDataServiceImpl implements ClubDataService
         return $dataPacket;
     }
 
-    public function getPopularClubs()
+    public function getPopularClubs($request)
     {
-        $data = $this->getClubsList();
+        $data = $this->getClubsList($request);
 
         // Sorting of clubs based on ordering
         usort($data, function($a, $b) {
@@ -81,7 +81,7 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getNearClubs($request)
     {
-        $data = $this->getClubsList();
+        $data = $this->getClubsList($request);
 
         $nearClubs = [];
 

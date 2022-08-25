@@ -23,9 +23,9 @@ class MatchesController extends Controller
         $this->matchesService = $matchesService;
     }
 
-    public function getUpcomingMatches()
+    public function getUpcomingMatches(Request $request)
     {
-        $data = $this->matchesService->getUpcomingMatches();
+        $data = $this->matchesService->getUpcomingMatches($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'Upcoming matches list', true, 200);
         }

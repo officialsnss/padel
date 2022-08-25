@@ -21,10 +21,14 @@ class PlayersRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getPlayersList()
+    public function getPlayersList($request)
     {
       $userId = auth()->user()->id;
-      return Players::where('user_id','!=',$userId)->with('users')->get(); 
+      return Players::where('user_id','!=',$userId)
+                      ->with('users')
+                      ->whereHas('users', function ($q) use ($request) {
+                          $q->where('name', 'like', '%' . $request->searchData . '%');
+                      })->get(); 
     }
 
     public function getPlayerDetails($playerId)

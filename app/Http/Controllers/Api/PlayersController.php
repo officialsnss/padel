@@ -23,18 +23,18 @@ class PlayersController extends Controller
         $this->playersService = $playersService;
     }
 
-    public function getPopularPlayers()
+    public function getPopularPlayers(Request $request)
     {
-        $data =  $this->playersService->getPopularPlayers();
+        $data =  $this->playersService->getPopularPlayers($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'List of Popular Players', true, 200);
         }
         return ResponseUtil::errorWithMessage(201, 'No data for popular players', false, 201);
     }
 
-    public function getPlayersList()
+    public function getPlayersList(Request $request)
     {
-        $data =  $this->playersService->getPlayersList();
+        $data =  $this->playersService->getPlayersList($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all players', true, 200);
         }

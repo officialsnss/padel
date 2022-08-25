@@ -35,6 +35,6 @@ class BookingController extends Controller
         if($data == []) {
             return ResponseUtil::errorWithMessage('201', 'No entries in the wallet', true, 201);
         }
-        return ResponseUtil::successWithData('200', $data, true, 200);
+        return ResponseUtil::successWithData($data, 'Wallet details', true, 200);
     }
 }

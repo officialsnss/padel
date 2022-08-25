@@ -24,8 +24,15 @@ class ClubDataRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getClubsList()
+    public function getClubsList($request)
     {
+        if($request->searchData) {
+            return Club::where('name', 'like', '%' . $request->searchData . '%')->with('court')
+            ->with('club_rating')
+            ->with('currencies')
+            ->with('cities')
+            ->get(); 
+        }
         return Club::with('court')
                 ->with('club_rating')
                 ->with('currencies')

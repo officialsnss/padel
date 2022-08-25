@@ -16,7 +16,7 @@ interface MatchesService
      *
      * @return mixed
      */
-    public function getUpcomingMatches();
+    public function getUpcomingMatches($request);
 
     public function getMatches($request);
 
