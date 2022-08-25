@@ -23,10 +23,14 @@ class BookingController extends Controller
         $this->bookingService = $bookingService;
     }
 
-    public function getBookingsList()
+    public function getBookingsList(Request $request)
     {
-        $data =  $this->bookingService->getBookingsList();
-        return ['status' => 'success', 'data' => $data];
+        $data =  $this->bookingService->getBookingsList($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'List of all bookings by user', true, 200);
+        }
+        return ResponseUtil::errorWithMessage('201', 'No bookings', true, 201);
+
     }
 
     public function getWallet()

@@ -51,6 +51,8 @@ class MatchesServiceImpl implements MatchesService
                 unset($match['booked_by']);
                 if($currentDate < $match_date) {
                     array_push($upcomingMatches, $match);
+                } else {
+                    $match['isMatchCompleted'] = 1;
                 }
             }
         }
@@ -82,7 +84,8 @@ class MatchesServiceImpl implements MatchesService
             $minimum_level = explode(',',$row['level']);
             $min = min($minimum_level);
             $dataArray[$i]['minimum_level'] = $min;  
-            $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
+            $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];
+            $dataArray[$i]['isMatchCompleted'] = 0;  
             
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds); 
@@ -115,6 +118,7 @@ class MatchesServiceImpl implements MatchesService
             $min = min($minimum_level);
             $dataArray[$i]['minimum_level'] = $min;  
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
+            $dataArray[$i]['isMatchCompleted'] = 0;  
             
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds); 

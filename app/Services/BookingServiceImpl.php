@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Repositories\BookingRepository;
-use Carbon;
+use App\Services\MatchesServiceImpl;
+use App\Services\PlayersServiceImpl;
+use Carbon\Carbon;
 /**
  * Class BookingServiceImpl
  *
@@ -15,9 +17,11 @@ class BookingServiceImpl implements BookingService
      * BookingServiceImpl constructor.
      *
      */
-    public function __construct(BookingRepository $bookingRepository)
+    public function __construct(MatchesServiceImpl $matchesServiceImpl, 
+                                PlayersServiceImpl $playersServiceImpl)
     {
-        $this->bookingRepository = $bookingRepository;
+        $this->matchesServiceImpl = $matchesServiceImpl;
+        $this->playersServiceImpl = $playersServiceImpl;
     }
 
 
@@ -26,19 +30,32 @@ class BookingServiceImpl implements BookingService
      *
      * @return mixed
      */
-    public function getBookingsList()
+    public function getBookingsList($request)
     {
-        $data = $this->bookingRepository->getBookingsList();
-        $dataArray = [];
+        $matchData = $this->matchesServiceImpl->getMatches($request);
+        $bookedMatches = [];
 
-        foreach($data as $i => $row) {
-            $dataArray[$i]['id'] = $row['id'];            
-            $dataArray[$i]['name'] = $row['users'][0]['name'];  
-            $dataArray[$i]['level'] = $row['levels'];  
-            $dataArray[$i]['image'] = $row['users'][0]['profile_pic'];  
-            $dataArray[$i]['isFollowed'] = 0;  
+        foreach($matchData as $match) {
+            
+            $matchDate = date('Y-m-d', $match['date']);
+            $matchTime = date('H:i:s', $match['startTime']);
+            $current = Carbon::now()->toDateTimeString();
+            $currentDate = strtotime($current);
+            $date = date('Y-m-d H:i:s', strtotime("$matchDate $matchTime"));
+            $match_date = strtotime($date);
+
+            $userId = auth()->user()->id;
+            if($match['booked_by'] == $userId) {
+                unset($match['booked_by']);
+                if($currentDate > $match_date) {
+                    $match['isMatchCompleted'] = 1;
+                }
+                array_push($bookedMatches, $match);
+            }
         }
-        return ['Players' => $dataArray];
+
+        $bookedMatches = collect($bookedMatches)->sortBy('date')->toArray();
+        return $bookedMatches;
     }
 
     public function getWallet()

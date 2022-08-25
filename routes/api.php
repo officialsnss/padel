@@ -41,6 +41,9 @@ Route::middleware('auth:api')->group( function () {
     //BATS
     Route::get('get/bat_list/{club_id}', 'App\Http\Controllers\Api\BatsController@getBatDetails');
 
+    //BOOKINGS
+    Route::get('bookings/list', 'App\Http\Controllers\Api\BookingController@getBookingsList');
+
     //LEVELS
     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
 

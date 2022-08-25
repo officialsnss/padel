@@ -16,7 +16,7 @@ interface BookingService
      *
      * @return mixed
      */
-    public function getBookingsList();
+    public function getBookingsList($request);
 
     public function getWallet();
 }
