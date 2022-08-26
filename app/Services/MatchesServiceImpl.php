@@ -121,7 +121,14 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['isMatchCompleted'] = 0;  
             
             $arrayIds = explode(',', $row['playersIds']); 
-            $dataArray[$i]['players'] = $this->getPlayersList($arrayIds); 
+            $dataArray[$i]['players'] = $this->getPlayersList($arrayIds);
+            
+            $requestIds = explode(',', $row['requestedPlayersIds']);
+            if($row['requestedPlayersIds'] != "") {
+                $dataArray[$i]['requestedPlayers'] = count($this->getPlayersList($requestIds)); 
+            } else {
+                $dataArray[$i]['requestedPlayers'] = 0; 
+            }
         }
         return $dataArray;
     }
