@@ -78,4 +78,10 @@ class MatchesRepository extends BaseRepository
       return Matches::where('id', $matchId)
                 ->update(['requestedPlayersIds' => $dataSet]);   
     }
+
+    public function addPlayer($matchId, $playersIds) 
+    {
+      return Matches::where('id', $matchId)
+                ->update(['playersIds' => $playersIds]);
+    }   
 }

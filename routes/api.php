@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group( function () {
 
     //BOOKINGS
     Route::get('bookings/list', 'App\Http\Controllers\Api\BookingController@getBookingsList');
+    // Route::post('addBooking', 'App\Http\Controllers\Api\BookingController@addBooking');
 
     //LEVELS
     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
@@ -51,17 +52,17 @@ Route::middleware('auth:api')->group( function () {
     Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
     Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
     Route::get('get/playerDetails/{player_id}', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
+    Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
+    Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
+    Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
+    Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
+    Route::post('addPlayer', 'App\Http\Controllers\Api\PlayersController@addPlayerInMatch');
 
     //MATCHES
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatches');
     Route::get('get/match/{id}', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
 
-    //PLAYERS
-    Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
-    Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
-    Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
-    Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
 
     //NOTIFICATION
     Route::get('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');

@@ -67,4 +67,13 @@ class PlayersController extends Controller
         }
         return ResponseUtil::successWithMessage('There is an error in updating', true, 200);
     }
+
+    public function addPlayerInMatch(Request $request)
+    {
+        $data = $this->playersService->addPlayerInMatch($request);
+        if($data) {
+            return ResponseUtil::successWithMessage('Player added to the match.', true, 200);
+        }
+        return ResponseUtil::successWithMessage('There is an error while adding the player.', false, 200);
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\PlayersRepository;
+use App\Repositories\MatchesRepository;
 use Carbon;
 /**
  * Class PlayersServiceImpl
@@ -15,9 +16,11 @@ class PlayersServiceImpl implements PlayersService
      * PlayersServiceImpl constructor.
      *
      */
-    public function __construct(PlayersRepository $playersRepository)
+    public function __construct(PlayersRepository $playersRepository,
+                                MatchesRepository $matchesRepository)
     {
         $this->playersRepository = $playersRepository;
+        $this->matchesRepository = $matchesRepository;
     }
 
 
@@ -191,5 +194,34 @@ class PlayersServiceImpl implements PlayersService
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
 
         return $this->playersRepository->addPlayerDetails($dataArray, $userData['id']);
+    }
+
+    public function addPlayerInMatch($request)
+    {
+        $dataArray = [];
+        $matchId = $request->match_id;
+        $matchData = $this->matchesRepository->getMatchData($matchId);
+        
+        // Converting string to array of players to add
+        $playerIds = explode(',', $request->ids);
+        if(!$playerIds[0]) {
+            return $dataArray;
+        }
+
+        // Converting string to array of players to already in match
+        $addedPlayers = explode(',', $matchData['playersIds']);
+
+        foreach($playerIds as $key => $row) {
+            // If players to add and already added players in the match are same then it will overwrite
+            if(in_array($row, $addedPlayers)) {
+                unset($playerIds[$key]);
+            }
+        }
+        // Add players to the packet
+        array_unshift($playerIds, $matchData['playersIds']);
+
+        $playersPacket = implode(',', $playerIds);
+        $data = $this->matchesRepository->addPlayer($matchId, $playersPacket);
+        return $data;
     }
 }

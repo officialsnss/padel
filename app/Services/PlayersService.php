@@ -26,4 +26,5 @@ interface PlayersService
 
     public function addPlayerDetails($request);
 
+    public function addPlayerInMatch($request);
 }
