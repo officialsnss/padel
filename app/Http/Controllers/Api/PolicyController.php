@@ -23,9 +23,9 @@ class PolicyController extends Controller
         $this->policyService = $policyService;
     }
 
-    public function getPolicies($id)
+    public function getPolicies(Request $request)
     {
-        $data =  $this->policyService->getPolicies($id);
+        $data =  $this->policyService->getPolicies($request->id);
         if($data){
             return ResponseUtil::successWithData($data, true, 200);
         }

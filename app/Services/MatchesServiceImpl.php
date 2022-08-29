@@ -155,7 +155,7 @@ class MatchesServiceImpl implements MatchesService
         
         $images = $data['clubs'][0]['images'];
         foreach($images as $i => $image) {
-            $dataArray['images'][$i] = $image['image'];
+            $dataArray['images'][$i] = getenv("IMAGES")."club_images/".$image['image'];
         }
 
         $arrayIds = explode(',', $data['playersIds']); 

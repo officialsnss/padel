@@ -113,8 +113,9 @@ class ClubDataServiceImpl implements ClubDataService
         return $nearClubs;
     }
 
-    public function getSingleClub($request, $id)
+    public function getSingleClub($request)
     {
+        $id = $request->club_id;
         $data = $this->clubDataRepository->getSingleClubData($id);
         $clubData = $data['data'];
         $clubLatitude = $clubData['latitude'];

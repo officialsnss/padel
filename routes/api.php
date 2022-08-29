@@ -36,10 +36,10 @@ Route::middleware('auth:api')->group( function () {
     Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
     Route::get('nearClubs', 'App\Http\Controllers\Api\ClubsController@getNearClubs');
     Route::get('popularClubs', 'App\Http\Controllers\Api\ClubsController@getPopularClubs');
-    Route::get('get/club/{id}', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
+    Route::get('get/clubDetails', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
 
     //BATS
-    Route::get('get/bat_list/{club_id}', 'App\Http\Controllers\Api\BatsController@getBatDetails');
+    Route::get('get/bat_list', 'App\Http\Controllers\Api\BatsController@getBatDetails');
 
     //BOOKINGS
     Route::get('bookings/list', 'App\Http\Controllers\Api\BookingController@getBookingsList');
@@ -61,14 +61,14 @@ Route::middleware('auth:api')->group( function () {
     //MATCHES
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatches');
-    Route::get('get/match/{id}', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
+    Route::get('get/matchDetails', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
 
 
     //NOTIFICATION
     Route::get('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');
 
     //POLICIES
-    Route::get('policy/{id}', 'App\Http\Controllers\Api\PolicyController@getPolicies');
+    Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
     //Contact_Us
     Route::post('contact_us', 'App\Http\Controllers\Api\ContactUsController@sendMessage');

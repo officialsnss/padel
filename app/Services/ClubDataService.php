@@ -22,6 +22,6 @@ interface ClubDataService
 
     public function getNearClubs($request);
 
-    public function getSingleClub($request, $id);
+    public function getSingleClub($request);
 
 }

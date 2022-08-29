@@ -51,9 +51,9 @@ class ClubsController extends Controller
         return ResponseUtil::errorWithMessage('201','No popular clubs found.', true, 201);
     }
 
-    public function getSingleClub(Request $request, $id)
+    public function getSingleClub(Request $request)
     {
-        $data = $this->clubDataService->getSingleClub($request, $id);
-        return ResponseUtil::successWithData($data, true, 200);
+        $data = $this->clubDataService->getSingleClub($request);
+        return ResponseUtil::successWithData($data, 'Club Details', true, 200);
     }
 }

@@ -41,10 +41,10 @@ class MatchesController extends Controller
         return ResponseUtil::errorWithMessage(201, 'No matches list', false, 201);
     }
 
-    public function getMatchDetails($matchId)
+    public function getMatchDetails(Request $request)
     {
-        $data = $this->matchesService->getMatchDetails($matchId);
-        return ResponseUtil::successWithData($data, 'Matche Details', true, 200);
+        $data = $this->matchesService->getMatchDetails($request->match_id);
+        return ResponseUtil::successWithData($data, 'Match Details', true, 200);
     }
 
     public function sendRequest(Request $request)
