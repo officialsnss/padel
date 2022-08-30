@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\ClubDataRepository;
+use App\Repositories\BatDataRepository;
 
 /**
  * Class ClubDataServiceImpl
@@ -15,9 +16,11 @@ class ClubDataServiceImpl implements ClubDataService
      * ClubDataServiceImpl constructor.
      *
      */
-    public function __construct(ClubDataRepository $clubDataRepository)
+    public function __construct(ClubDataRepository $clubDataRepository,
+                                BatDataRepository $batDataRepository)
     {
         $this->clubDataRepository = $clubDataRepository;
+        $this->batDataRepository = $batDataRepository;
     }
 
 
@@ -115,27 +118,43 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getSingleClub($request)
     {
+        $dataPacket = [];
         $id = $request->club_id;
         $data = $this->clubDataRepository->getSingleClubData($id);
         $clubData = $data['data'];
-        $clubLatitude = $clubData['latitude'];
-        $clubLongitude = $clubData['longitude'];
-        $dataPacket = [];
 
-        $dataPacket['name'] = $clubData['name'];
-        $dataPacket['description'] = $clubData['description'];
-        $address = $clubData['address'];
-        $city = count($clubData['cities']->all()) > 0 ? $clubData['cities'][0]['name'] : null;
-        $dataPacket['address'] = $address . ',' . $city;
-        // $clubPrice = $this->getClubPrice($clubData['court']);
-        // $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
-        $dataPacket['price'] = $clubData['single_price'];
-        $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
-        $dataPacket['featured_image'] = getenv("IMAGES")."club_images/".$clubData['featured_image'];
-        $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
-        $dataPacket['rating'] = number_format($this->getClubRating($clubData['club_rating']),1,'.','');
-        $dataPacket['bookingsCount'] = $data['bookingsCount'];
-        
+        if($clubData) {
+            $clubLatitude = $clubData['latitude'];
+            $clubLongitude = $clubData['longitude'];
+    
+            $dataPacket['name'] = $clubData['name'];
+            $dataPacket['description'] = $clubData['description'];
+            
+            $batCount = $this->batDataRepository->getBatCount($clubData['id']);
+            $dataPacket['isBat'] = $batCount > 0 ? true : false;
+    
+            $amenitiesPacket = [];
+            $amenities = explode(',',$clubData['amenities']);
+            $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
+    
+            foreach($amenitiesData as $key => $row) {
+                $amenitiesPacket[$key]['id'] = $row->id;
+                $amenitiesPacket[$key]['name'] = $row->name;
+                $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$row->image;
+            }
+            $dataPacket['amenities']  = $amenitiesPacket;
+            $address = $clubData['address'];
+            $city = count($clubData['cities']->all()) > 0 ? $clubData['cities'][0]['name'] : null;
+            $dataPacket['address'] = $address . ',' . $city;
+            // $clubPrice = $this->getClubPrice($clubData['court']);
+            // $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
+            $dataPacket['price'] = $clubData['single_price'];
+            $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
+            $dataPacket['featured_image'] = getenv("IMAGES")."club_images/".$clubData['featured_image'];
+            $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
+            $dataPacket['rating'] = number_format($this->getClubRating($clubData['club_rating']),1,'.','');
+            $dataPacket['bookingsCount'] = $data['bookingsCount'];
+        }
         return $dataPacket; 
     }
 

@@ -41,9 +41,9 @@ class PlayersController extends Controller
         return ResponseUtil::errorWithMessage(201, 'No data for players', false, 201);
     }
 
-    public function getPlayerDetails($id)
+    public function getPlayerDetails(Request $request)
     {
-        $data = $this->playersService->getPlayerDetails($id);
+        $data = $this->playersService->getPlayerDetails($request->player_id);
         if($data) {
             return ResponseUtil::successWithData($data, 'Players details', true, 200);
         }

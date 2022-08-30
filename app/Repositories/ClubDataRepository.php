@@ -8,6 +8,7 @@ use App\Models\Court;
 use App\Models\ClubRating; 
 use App\Models\Cities; 
 use App\Models\Booking; 
+use App\Models\Amenities; 
 
 /**
  * Class PropertyRepository
@@ -57,6 +58,11 @@ class ClubDataRepository extends BaseRepository
     public function getCourtsCount($id)
     {
         return Court::where('club_id', $id)->count();
+    }
+
+    public function getAmenities($data)
+    {
+        return Amenities::whereIn('id', $data)->get();
     }
 
 }

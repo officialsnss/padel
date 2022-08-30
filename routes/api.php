@@ -44,6 +44,7 @@ Route::middleware('auth:api')->group( function () {
     //BOOKINGS
     Route::get('bookings/list', 'App\Http\Controllers\Api\BookingController@getBookingsList');
     // Route::post('addBooking', 'App\Http\Controllers\Api\BookingController@addBooking');
+    Route::post('get/booking_slots', 'App\Http\Controllers\Api\BookingController@getBookingSlots');
 
     //LEVELS
     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
@@ -51,7 +52,7 @@ Route::middleware('auth:api')->group( function () {
     //PLAYERS
     Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
     Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
-    Route::get('get/playerDetails/{player_id}', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
+    Route::get('get/playerDetails', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
     Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
     Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
     Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
