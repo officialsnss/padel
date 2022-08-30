@@ -26,7 +26,9 @@ class MatchesRepository extends BaseRepository
     public function getUpcomingMatches($request)
     {
       return Matches::with('slots')
-              ->with('clubs.cities')->whereHas('clubs', function ($q) use ($request) {
+              ->with('clubs.cities')
+              ->with('booking')
+              ->whereHas('clubs', function ($q) use ($request) {
                         $q->where('name', 'like', '%' . $request->searchData . '%');
               })->get(); 
     }
