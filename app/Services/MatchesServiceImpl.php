@@ -69,15 +69,21 @@ class MatchesServiceImpl implements MatchesService
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];  
             $dataArray[$i]['name'] = $row['clubs'] ? $row['clubs'][0]['name'] : null;  
-
+           
             $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
             $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
             $dataArray[$i]['address'] = $address . ', ' . $city;
-
             $dataArray[$i]['date'] = $row['booking'] ? strtotime($row['booking'][0]['booking_date']) : null; 
             $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['date']));
-            $dataArray[$i]['startTime'] = $row['slots']->all() != null ? strtotime($row['slots'][0]['start_time']) : null;  
-            $dataArray[$i]['endTime'] = $row['slots']->all() != null ? strtotime($row['slots'][0]['end_time']): null;  
+            
+            $bookedSlots = [];
+            foreach($row['bookingSlots'] as $slots) {
+                $bookedSlots[] = $slots->slots;
+            }
+            $start = min($bookedSlots);
+            $dataArray[$i]['startTime'] = strtotime($start);
+            $endTime = date('H:i:s', strtotime(max($bookedSlots). ' + 1 hours'));
+            $dataArray[$i]['endTime'] = strtotime($endTime);
             $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';

@@ -32,4 +32,9 @@ class Matches extends Model
     {
         return $this->hasMany(Booking::class, 'id', 'booking_id');
     }
+
+    public function bookingSlots()
+    {
+        return $this->hasMany(BookingSlots::class, 'booking_id', 'booking_id');
+    }
 }

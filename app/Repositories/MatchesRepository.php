@@ -27,7 +27,7 @@ class MatchesRepository extends BaseRepository
     {
       return Matches::with('slots')
               ->with('clubs.cities')
-              ->with('booking')
+              ->with('bookingSlots')
               ->whereHas('clubs', function ($q) use ($request) {
                         $q->where('name', 'like', '%' . $request->searchData . '%');
               })->get(); 
@@ -43,7 +43,7 @@ class MatchesRepository extends BaseRepository
                 ->with('clubs.cities')->whereHas('clubs', function ($q) use ($request) {
                   $q->where('name', 'like', '%' . $request->searchData . '%');
               })->get(); 
-    }
+      }
       return Matches::where('match_type', 1)
               ->with('slots')
               ->with('clubs.cities')
