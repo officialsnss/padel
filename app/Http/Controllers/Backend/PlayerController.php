@@ -22,7 +22,7 @@ class PlayerController extends Controller
        
        $players =  Players::leftJoin('users','users.id','=','players_details.user_id')
                             ->orderBy('players_details.ordering','ASC')
-                            ->select('players_details.*', 'users.name','users.email')
+                            ->select('users.id as userid','players_details.id as playerid', 'players_details.*', 'users.name as usname','users.email','users.status as player_status')
                             ->get();
         $title = 'Players Listing';
     
@@ -49,13 +49,15 @@ class PlayerController extends Controller
        // Customer Status Updation
        public function popularStatus(Request $request)
        {
-       
+        // dd($request->status);
            try{
                $player = Players::findOrFail($request->player_id);
+               
                $player->isPopular = $request->status;
+               
                $player->save();
    
-               return response()->json(['message' => 'Status updated successfully.']);
+               return response()->json(['message' => 'Popular Status updated successfully.']);
            }
            catch (\Exception $e) {
             

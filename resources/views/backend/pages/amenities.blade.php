@@ -16,6 +16,7 @@
                   <tr>
                     <th>Sr.no</th>
                     <th>Name</th>
+                    <th>Image</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -26,7 +27,11 @@
                       <td></td>
                       <td>{{ $amenity->name }}</td>
                      
-                       
+                      <td><div id="image-holder"> 
+                         @if($amenity->image)
+                            <img src="{{ URL::to('/') }}/Images/amenities/{{ $amenity->image }}" class="thumb-image-list">
+                         @endif
+                         </div></td>
                        <td>
                         <a href="{{ route('amenity.edit',$amenity->id)}}" class="btn btn-secondary">Edit</a>
                         <a href="{{ route('amenity.delete',$amenity->id)}}" class="btn btn-danger">Delete</a>

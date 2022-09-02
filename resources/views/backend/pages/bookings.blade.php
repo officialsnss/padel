@@ -5,7 +5,7 @@
 <div class="row">
         <div class="col-12">
             <div class="card">
-       @if(auth()->user()->role != 5) 
+       @if(auth()->user()->role == 5) 
             <div class="card-header">
                 <div class="add">
                  <a href="{{ route('bookings.calendar') }}" class="btn btn-info">View calendar View</a>

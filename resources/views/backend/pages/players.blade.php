@@ -16,18 +16,23 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Order No</th>
+                    <th>Status</th>
                     <th>Popularity</th>
+                    <th>Actions</th>
                   </tr>
                   </thead>
                   <tbody id="tablecontentss">
                     
                     @foreach($players as $player)
-                    <tr class="row1" data-id="{{ $player->id }}">
+                    <tr class="row1" data-id="{{ $player->playerid }}">
                     <td class="pl-3"><i class="fa fa-sort"></i></td>
                       <td>{{ $player->name }}</td>
                       <td>{{ $player->email }}</td>
                       <td>{{ $player->ordering }}</td>
-                      <td><input type="checkbox" data-id="{{ $player->id }}" name="popular" class="js-switch-player" {{ $player->isPopular == 1 ? 'checked' : '' }}></td>
+                      <td><input type="checkbox" data-id="{{ $player->userid }}" name="status" class="js-switch" {{ $player->player_status == 1 ? 'checked' : '' }}></td>
+                      <td><input type="checkbox" data-id="{{ $player->playerid }}" name="popular" class="js-switch-player" {{ $player->isPopular == 1 ? 'checked' : '' }}></td>
+                      <td><a href="{{ route('customer.view',$player->userid)}}" class="btn btn-secondary">View</a>
+                      <a href="{{ route('customer.resetPassword',$player->userid)}}" class="btn btn-info">Reset Password</a>
                      </tr>
                    @endforeach
                   

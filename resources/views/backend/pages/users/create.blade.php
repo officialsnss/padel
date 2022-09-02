@@ -131,6 +131,28 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
+                          <label for="inputName">Club Opening Time</label>
+                           <input type="text" id="start_time" class="form-control timePicker" value="" name="start_time">
+                           @error('start_time')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                           <label for="inputName">Club Closing Time</label>
+                           <input type="text" id="end_time" class="form-control timePicker" value="" name="end_time">
+                           @error('end_time')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
                           <label for="inputName">Total Indoor Courts</label>
                           <input type="text" id="indoor_courts" class="form-control" value="" name="indoor_courts">
                               @error('indoor_courts')

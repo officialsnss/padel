@@ -29,9 +29,10 @@ class RefundController extends Controller
             $title = 'Refunds';
             $payments = Payment::leftJoin('users','users.id', '=', 'payments.user_id')
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
+            ->leftJoin('bookings', 'bookings.id' ,'=', 'payments.booking_id')
             ->where('payments.isCancellationRequest', '1')
            // ->where('payments.isRefunded', '0')
-             ->select('payments.*', 'users.name', 'users.email','currencies.code','payments.id as pay_id','payments.user_id as userid')
+             ->select('payments.*', 'bookings.*', 'users.name', 'users.email','currencies.code','payments.id as pay_id','payments.user_id as userid')
             ->get();
           
             return view('backend.pages.cancel', compact('title','payments'));
@@ -148,7 +149,7 @@ class RefundController extends Controller
             ->groupBy('wallets.user_id')
             ->select('users.name as username', 'users.email as email','wallets.user_id', DB::raw('count(*) as total'))
             ->get();
-           dd($wallets);
+           //dd($wallets);
             return view('backend.pages.wallets', compact('title','wallets'));
         }
         catch (\Exception $e) {

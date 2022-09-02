@@ -7,6 +7,7 @@ use App\Models\Amenities;
 use App\Models\Countries;
 use App\Models\Regions;
 use App\Models\Cities;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class PageController extends Controller
@@ -163,18 +164,26 @@ class PageController extends Controller
     {
         
             $request->validate([
-                'desc' => 'required|string',
+                'amenity' => 'required|string',
             ]);
         try{
-                $result = Amenities::create([
-                'name' => $request->desc,
-            ]);
-      
+            $data['name'] = $request->amenity;
+           
+               
+             if($request->file('icon_image')){
+                $file= $request->file('icon_image');
+                $filename= date('YmdHi').$file->getClientOriginalName();
+                $file->move(base_path('Images/amenities'), $filename);
+                $data['image']= $filename;
+                 }
+               $result =  Amenities::insert($data);  
+        
             if($result){
                 return redirect('/admin/amenities')->with('success', 'Amenities Created Successfully.');
             }
         }
         catch (\Exception $e) {
+           // dd($e->getMessage());
             return redirect('/admin/amenities')->with('error', 'Something went wrong.');
         }
     }
@@ -196,15 +205,30 @@ class PageController extends Controller
     public function amenitiesUpdate(Request $request, $id){
         
             $request->validate([
-                'desc' => 'required|string',
+                'amenity' => 'required|string',
             ]);
         try{ 
             $amenity = Amenities::findOrFail($id);
-            $amenity->name = $request->desc;
+            if($request->file('icon_image')){
+                if($amenity->image){
+                $imagePath = base_path('Images/amenities/'. $amenity->image);
+                if(File::exists($imagePath)){
+                    unlink($imagePath);
+                }
+               }
+                $file= $request->file('icon_image');
+                $filename= date('YmdHi').$file->getClientOriginalName();
+                $file->move(base_path('Images/amenities'), $filename);
+                $amenity->image= $filename;
+        }
+           
+              
+            $amenity->name = $request->amenity;
             $amenity->save(); 
             return redirect('/admin/amenities')->with('success', 'Amenity Updated successfully');
         }
         catch (\Exception $e) {
+           // dd($e->getMessage());
             return redirect('/admin/amenities')->with('error', 'Something went wrong.');
            
         }

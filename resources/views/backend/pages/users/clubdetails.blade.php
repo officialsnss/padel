@@ -52,6 +52,14 @@
                 <td>{{ $userInfo->outdoor_courts }} </td>
                </tr>
                <tr>
+                <td><strong>Club Opening Time</strong></td>
+                <td>{{ $userInfo->start_time }} </td>
+               </tr>
+               <tr>
+                <td><strong>Club Closing Time</strong></td>
+                <td>{{ $userInfo->end_time }} </td>
+               </tr>
+               <tr>
                 <td><strong>Price for Singles</strong></td>
                 <td>{{ $userInfo->single_price }} {{ $userInfo->code }}</td>
                </tr>

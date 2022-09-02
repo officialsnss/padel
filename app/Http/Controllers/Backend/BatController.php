@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Backend;
 use DB;
 use Auth;
+use File;
 use App\Models\Bat; 
 use App\Models\VendorBats; 
 use App\Models\Club; 
@@ -54,6 +55,7 @@ class BatController extends Controller
     {
        $request->validate([
              'bat_name' => 'required|string',
+           //  'description' => 'required|string',
      ]);
             
          try{
@@ -63,7 +65,7 @@ class BatController extends Controller
              if($request->file('featured_image')){
                 $file= $request->file('featured_image');
                 $filename= date('YmdHi').$file->getClientOriginalName();
-                $file->move(public_path('Images/bat_images'), $filename);
+                $file->move(base_path('Images/bat_images'), $filename);
                 $data['featured_image']= $filename;
                  }
                $result =  Bat::insert($data);  
@@ -73,7 +75,7 @@ class BatController extends Controller
             }
         }
         catch (\Exception $e) {
-            //dd($e->getMessage());
+           // dd($e->getMessage());
             return redirect('/admin/bats')->with('error', 'Something went wrong.');
         }
 
@@ -122,9 +124,15 @@ class BatController extends Controller
           // $data = $request->except('_method','_token','submit');
          
            if($request->file('featured_image')){
+             if($bat->featured_image){
+                $imagePath = base_path('Images/bat_images/'. $bat->featured_image);
+                if(File::exists($imagePath)){
+                    unlink($imagePath);
+                }
+            }
             $file= $request->file('featured_image');
             $filename= date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('Images/bat_images'), $filename);
+            $file->move(base_path('Images/bat_images'), $filename);
             $bat->featured_image= $filename;
              }
            $bat->name = $request->bat_name;
@@ -134,7 +142,7 @@ class BatController extends Controller
            return redirect('/admin/bats')->with('success', 'Bat Updated successfully');
         }
         catch (\Exception $e) {
-           // dd($e->getMessage());
+            dd($e->getMessage());
             return redirect('/admin/bats')->with('error', 'Something went wrong.');
         }
     }

@@ -45,6 +45,7 @@
           },
         
           eventRender: function (event, element) {
+            element.find('.fc-time').html("<span>" + event.startTimeShort + " - " + event.endTimeShort + "</span><br>");
             element.find('.fc-title').html(event.title);/*For Month,Day and Week Views*/
             element.find('.fc-list-item-title').html(event.title);/*For List view*/
           }, 

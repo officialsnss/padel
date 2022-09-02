@@ -58,8 +58,14 @@
                   <p>{{ date('d-m-Y', strtotime($bookingInfo->bookdate)) }}</p>
                   
                   <h5 class="text-primary">Booking Time</h5>
-                  <p>{{ $bookingInfo->start_time }} - {{ $bookingInfo->end_time }}</p>
-
+                  <?php
+                  $firstslot = \App\Models\BookingSlots::where(['booking_id' =>  $bookingInfo->bookid])->pluck('slots')->first();
+                  $lastslot = \App\Models\BookingSlots::where(['booking_id' =>  $bookingInfo->bookid])->pluck('slots')->last();
+                  $timestamp = strtotime($lastslot) + 60*60;
+                  $lasttime = date('H:i', $timestamp);
+                  ?>
+                 <p>{{ $firstslot }} - {{ $lasttime }}</p>
+                 
                   <h5 class="text-primary">Club Name</h5>
                   <p>{{ $bookingInfo->clubname }}</p>
                 </div>  
