@@ -25,6 +25,8 @@ class Payment extends Model
         'pending_amount',
         'discount_price',
         'total_amount',
+        'online_amount',
+        'wallet_amount',
         'refund_price',
         'currency_id',
         'created_at',

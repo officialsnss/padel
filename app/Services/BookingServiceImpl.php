@@ -79,14 +79,25 @@ class BookingServiceImpl implements BookingService
 
         $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
         if($request->game_type == 1) {
-            $bookingArray['price'] = number_format((float)$clubData['data']['single_price'] + $clubData['data']['service_charge'], 3, '.', '');
+            $bookingPrice = ($clubData['data']['single_price'] * $bookingArray['no_of_hours'] + $clubData['data']['service_charge']) ;
+            $bookingArray['price'] = number_format((float)$bookingPrice, 3, '.', '');
         } else {
-            $bookingArray['price'] = number_format((float)$clubData['data']['double_price'] + $clubData['data']['service_charge'], 3, '.', '');
+            $bookingPrice = ($clubData['data']['double_price'] * $bookingArray['no_of_hours'] + $clubData['data']['service_charge']);
+            $bookingArray['price'] = number_format((float)$bookingPrice, 3, '.', '');
         }
         $bookingArray['court_type'] = $request->match_type;
         $bookingArray['currency_id'] = 129;
         $bookingArray['status'] = 1;
-        
+
+        //Adding bat price in booking table
+        $batPrice = 0;
+        $bats = $request->bats;
+        foreach($bats as $bat) {
+            $batData = $this->bookingRepository->getBatDetails($bat['bat_id']);
+            $batPrice += number_format((float)$batData->price * $bat['qty'], 3, '.', '');
+        }
+        $bookingArray['batPrice'] = $batPrice;
+
         //store the booking data in the database and get the booking_id for further use
         $booked = $this->bookingRepository->storeBookingData($bookingArray);
 
@@ -179,6 +190,7 @@ class BookingServiceImpl implements BookingService
                     $paymentArray['wallet_amount'] = "0.000";
                 }
             }
+            $paymentArray['online_amount'] = number_format((float)$paymentArray['total_amount'] - $paymentArray['wallet_amount'], 3, '.', '');
         } else {
             $paymentArray['advance_price'] = number_format((float)$paymentArray['total_amount'] * 0.1, 3, '.', '');
             $paymentArray['pending_amount'] = number_format((float)$paymentArray['total_amount'] * 0.9, 3, '.', '');
@@ -209,6 +221,7 @@ class BookingServiceImpl implements BookingService
                     $paymentArray['wallet_amount'] = "0.000";
                 }
             }
+            $paymentArray['online_amount'] = "0.000";
         }
         $paymentArray['refund_price'] = "0.000";
         $paymentArray['currency_id'] = "129";
