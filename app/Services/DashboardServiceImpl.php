@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\ClubDataServiceImpl;
 use App\Services\MatchesServiceImpl;
 use App\Services\PlayersServiceImpl;
+use App\Services\BookingServiceImpl;
 use Carbon\Carbon;
 
 /**
@@ -20,11 +21,13 @@ class DashboardServiceImpl implements DashboardService
      */
     public function __construct(ClubDataServiceImpl $clubDataServiceImpl, 
                                 MatchesServiceImpl $matchesServiceImpl, 
-                                PlayersServiceImpl $playersServiceImpl)
+                                PlayersServiceImpl $playersServiceImpl,
+                                BookingServiceImpl $bookingServiceImpl)
     {
         $this->clubDataServiceImpl = $clubDataServiceImpl;
         $this->matchesServiceImpl = $matchesServiceImpl;
         $this->playersServiceImpl = $playersServiceImpl;
+        $this->bookingServiceImpl = $bookingServiceImpl;
     }
 
 
@@ -41,8 +44,9 @@ class DashboardServiceImpl implements DashboardService
         $upcomingMatches = $this->getUpcomingMatches($request);
         $popularPlayers = $this->getPopularPlayers($request);
         $nearClubs = $this->getNearClubs($clubData, $request);
+        $walletAmount = $this->bookingServiceImpl->getWalletAmount();
 
-        return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs];
+        return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs, 'wallet' => $walletAmount];
     }
 
     public function getPopularClubs($clubData) 
