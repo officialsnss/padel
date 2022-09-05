@@ -33,10 +33,11 @@ class BatDataServiceImpl implements BatDataService
 
         foreach($data as $i => $row) {
             $batData[$i]['bat_id'] = $row['bat_id'];            
-            $batData[$i]['image'] = $row['bats'][0]['featured_image'];  
+            $batData[$i]['name'] = $row['bats'][0]['name'];            
+            $batData[$i]['image'] = getenv("IMAGES")."bat_images/".$row['bats'][0]['featured_image'];  
             $batData[$i]['club_id'] = $row['club_id'];            
             $batData[$i]['quantity'] = $row['quantity']; 
-            $batData[$i]['price'] = $row['price'] ? $row['price']. " " . $row['currencies'][0]['code']. "/hr" :null;                      
+            $batData[$i]['price'] = $row['price'] ? number_format((float)$row['price'], 3, '.', '') :null;                      
         }
 
         return $batData;
