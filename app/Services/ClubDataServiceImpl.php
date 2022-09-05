@@ -127,6 +127,7 @@ class ClubDataServiceImpl implements ClubDataService
             $clubLatitude = $clubData['latitude'];
             $clubLongitude = $clubData['longitude'];
     
+            $dataPacket['id'] = $clubData['id'];
             $dataPacket['name'] = $clubData['name'];
             $dataPacket['description'] = $clubData['description'];
             
