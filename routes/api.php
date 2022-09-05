@@ -43,7 +43,7 @@ Route::middleware('auth:api')->group( function () {
 
     //BOOKINGS
     Route::get('bookings/list', 'App\Http\Controllers\Api\BookingController@getBookingsList');
-    // Route::post('addBooking', 'App\Http\Controllers\Api\BookingController@addBooking');
+    Route::post('addBooking', 'App\Http\Controllers\Api\BookingController@addBooking');
     Route::post('get/booking_slots', 'App\Http\Controllers\Api\BookingController@getBookingSlots');
 
     //LEVELS
@@ -79,4 +79,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Wallet
     Route::get('wallet', 'App\Http\Controllers\Api\BookingController@getWallet');
+
+    //Coupons
+    Route::get('coupons', 'App\Http\Controllers\Api\BookingController@getCoupons');
 });

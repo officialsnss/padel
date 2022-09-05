@@ -25,12 +25,29 @@ class BookingController extends Controller
 
     public function getBookingsList(Request $request)
     {
-        $data =  $this->bookingService->getBookingsList($request);
+        $data = $this->bookingService->getBookingsList($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all bookings by user', true, 200);
         }
         return ResponseUtil::errorWithMessage('201', 'No bookings', true, 201);
+    }
 
+    public function addBooking(Request $request)
+    {
+        $data = $this->bookingService->addBooking($request);
+        if($data) {
+            return ResponseUtil::successWithData($data = [], 'Booking successfull', true, 200);
+        }
+        return ResponseUtil::errorWithMessage('201', 'Booking Failed', true, 201);
+    }
+
+    public function getBookingSlots(Request $request)
+    {
+        $data = $this->bookingService->getBookingSlots($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Slots available for the date', true, 200);
+        }
+        return ResponseUtil::errorWithMessage('201', 'No slots available!', true, 201);
     }
 
     public function getWallet()
@@ -40,5 +57,14 @@ class BookingController extends Controller
             return ResponseUtil::errorWithMessage('201', 'No entries in the wallet', true, 201);
         }
         return ResponseUtil::successWithData($data, 'Wallet details', true, 200);
+    }
+
+    public function getCoupons()
+    {
+        $data = $this->bookingService->getCoupons();
+        if($data == []) {
+            return ResponseUtil::errorWithMessage('201', 'No coupons in the wallet', true, 201);
+        }
+        return ResponseUtil::successWithData($data, 'Coupons details', true, 200);
     }
 }

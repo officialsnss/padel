@@ -11,6 +11,16 @@ class Matches extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'player_id',
+        'playersIds',
+        'club_id',
+        'booking_id',
+        'slot_id',
+        'level',
+        'court_type',
+    ];
+
     protected $table = "matches";
 
     public function slots()

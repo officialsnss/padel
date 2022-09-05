@@ -9,16 +9,20 @@ class Booking extends Model
 {
     use HasFactory;
     public $timestamps = true;
-
-
-    protected $attributes = [
-        'bat_id' => '0',
-        'slot_id' => '0',
+    protected $fillable = [
+        'user_id',
+        'club_id',
+        'no_of_hours',
+        'price',
+        'currency_id',
+        'isBatBooked',
+        'booking_date',
+        'order_id'
     ];
 
-    public function court()
+    public function clubs()
     {
-        return $this->belongsTo(Court::class,'court_id', 'id');
+        return $this->belongsTo(Club::class,'club_id', 'id');
     }
 
     public function slots()
@@ -29,5 +33,10 @@ class Booking extends Model
     public function players()
     {
         return $this->hasMany(Players::class, 'player_id', 'id');
+    }
+
+    public function bookingSlots()
+    {
+        return $this->belongsTo(BookingSlots::class, 'id', 'booking_id');
     }
 }

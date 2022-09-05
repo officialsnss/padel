@@ -18,5 +18,11 @@ interface BookingService
      */
     public function getBookingsList($request);
 
+    public function addBooking($request);
+
+    public function getBookingSlots($request);
+
     public function getWallet();
+
+    public function getCoupons();
 }
