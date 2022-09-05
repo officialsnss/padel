@@ -237,13 +237,25 @@ class UsersController extends Controller
             if($user['otp'] == $request->otp) {
                 auth()->login($user, true);
                 User::where('device_id',$request->device_id)->where('phone', $request->phone)->update(['otp' => null, 'isOtpVerified' => '1']);
+                $player = $this->playersRepository->getPlayerDetailsByUser($user['id']);
+                $player_id = $player['id'];
                 $token = $this->createToken($user);
                 $token = $this->createToken($user);
                 $access_token = 'Bearer ' . $token->accessToken;
                 $message = __('Login Successfully');
                 $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-                $data = new UserResource($user);
-                return ResponseUtil::successWithDataToken($data, $message, $access_token, $expires_at, true, 200);
+                // $data = new UserResource($user);
+                $array = [];
+                $array['id'] = $user->id;
+                $array['player_id'] = $player_id;
+                $array['name'] = $user->name;
+                $array['email'] = $user->email;
+                $array['role'] = $user->role;
+                $array['phone'] = $user->phone;
+                $array['profile_pic'] = getenv("IMAGES")."player_images/".$user->profile_pic;
+                $array['address'] = $user->address;
+                $array['status'] = $user->status;
+                return ResponseUtil::successWithDataToken($array, $message, $access_token, $expires_at, true, 200);
             }
             else {
                 return ResponseUtil::errorWithMessage('401','Invalid Otp', false, 401);
