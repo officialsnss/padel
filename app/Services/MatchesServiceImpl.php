@@ -143,36 +143,44 @@ class MatchesServiceImpl implements MatchesService
     {
         $data = $this->matchesRepository->getMatchDetails($matchId);
         $dataArray = [];
-
-        $dataArray['id'] = $data['id'];            
-        $dataArray['player_id'] = $data['player_id'];            
-        $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
-        $dataArray['date'] = $data['slots'] ? $data['slots'][0]['date'] : null;  
-        $dataArray['startTime'] = $data['slots'] ? $data['slots'][0]['start_time'] : null;  
-        $dataArray['endTime'] = $data['slots'] ? $data['slots'][0]['end_time']: null;  
-        $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
-        $dataArray['game_type'] = $data['game_type'] == 1 ? 'Singles' : 'Doubles';  
-        $dataArray['isFriendly'] = $data['is_friendly'] == 0 ? 'Game': 'Friendly';
-
-        $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
-        $city = $data['clubs'][0]['cities'] != null ? $data['clubs'][0]['cities'][0]['name'] : null;
-        $dataArray['address'] = $address . ', ' . $city;
-        $dataArray['minimum_level'] = $data['level'];  
-        
-        $images = $data['clubs'][0]['images'];
-        foreach($images as $i => $image) {
-            $dataArray['images'][$i] = getenv("IMAGES")."club_images/".$image['image'];
-        }
-
-        $arrayIds = explode(',', $data['playersIds']); 
-        $dataArray['players'] = $this->getPlayersList($arrayIds); 
-
-        if($data['match_type'] == 1) {
-            $requestIds = explode(',', $data['requestedPlayersIds']);
-            if($data['requestedPlayersIds'] != "") {
-                $dataArray['requestedPlayers'] = $this->getPlayersList($requestIds); 
-            } else {
-                $dataArray['requestedPlayers'] = 0; 
+        if($data) {
+            $dataArray['id'] = $data['id'];            
+            $dataArray['player_id'] = $data['player_id'];            
+            $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
+            $slots = explode(",", $data['slot_id']);
+            $timeArray = [];
+            foreach($slots as $i => $slot) {
+                $slotData = $this->matchesRepository->getMatchesSlots($slot);
+                $timeArray[$i] = $slotData['slots']; 
+            }
+            $endTime = end($timeArray);
+            $dataArray['date'] = $data['booking'] ? $data['booking'][0]['booking_date'] : null;  
+            $dataArray['startTime'] = $timeArray[0];  
+            $dataArray['endTime'] = date("H:i:s", strtotime($endTime) + 60*60);  
+            $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
+            $dataArray['game_type'] = $data['game_type'] == 1 ? 'Singles' : 'Doubles';  
+            $dataArray['isFriendly'] = $data['is_friendly'] == 0 ? 'Game': 'Friendly';
+    
+            $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
+            $city = $data['clubs'][0]['cities'] != null ? $data['clubs'][0]['cities'][0]['name'] : null;
+            $dataArray['address'] = $address . ', ' . $city;
+            $dataArray['minimum_level'] = $data['level'];  
+            
+            $images = $data['clubs'][0]['images'];
+            foreach($images as $i => $image) {
+                $dataArray['images'][$i] = getenv("IMAGES")."club_images/".$image['image'];
+            }
+    
+            $arrayIds = explode(',', $data['playersIds']); 
+            $dataArray['players'] = $this->getPlayersList($arrayIds); 
+    
+            if($data['match_type'] == 1) {
+                $requestIds = explode(',', $data['requestedPlayersIds']);
+                if($data['requestedPlayersIds'] != "") {
+                    $dataArray['requestedPlayers'] = $this->getPlayersList($requestIds); 
+                } else {
+                    $dataArray['requestedPlayers'] = 0; 
+                }
             }
         }
         return $dataArray;

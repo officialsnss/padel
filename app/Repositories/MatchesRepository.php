@@ -6,6 +6,7 @@ use App\Utils\ResponseUtil;
 use App\Models\Matches; 
 use App\Models\TimeSolts; 
 use App\Models\Clubs; 
+use App\Models\BookingSlots; 
 
 /**
  * Class MatchesRepository
@@ -53,7 +54,7 @@ class MatchesRepository extends BaseRepository
     public function getMatchDetails($matchId)
     {
       return Matches::where('id', $matchId)
-              ->with('slots')
+              ->with('booking')
               ->with('clubs.cities')
               ->with('clubs.images')
               ->with('players')
@@ -85,5 +86,11 @@ class MatchesRepository extends BaseRepository
     {
       return Matches::where('id', $matchId)
                 ->update(['playersIds' => $playersIds]);
-    }   
+    } 
+    
+    public function getMatchesSlots($id)
+    {
+      return BookingSlots::where('id', $id)->first();
+    }
+
 }
