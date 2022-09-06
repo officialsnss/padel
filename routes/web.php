@@ -14,7 +14,16 @@ use App\Http\Controllers\backend\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('clear', function () {
+    Artisan::call('optimize:clear');
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('clear-compiled');
+  
+    return 'Cleared.';
+});
 
 
 // Website Homepage
@@ -44,14 +53,15 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
         Route::get('contact/view/{id}', 'App\Http\Controllers\Backend\HomeController@contactView')->name('contact.view');
        
-        // Pdf 
-         Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF')); 
-        // Calender
-         Route::get('calendar', 'App\Http\Controllers\Backend\BookingController@calendar')->name('bookings.calendar');
+       
+      //Coupons
+        Route::get('coupons', 'App\Http\Controllers\Backend\CouponController@index')->name('coupons');
+        Route::get('/coupon/delete/{id}', 'App\Http\Controllers\Backend\CouponController@delete')->name('coupon.delete');
+        Route::get('/coupon/create', 'App\Http\Controllers\Backend\CouponController@create')->name('coupon.create');
+        Route::post('/coupon/add', 'App\Http\Controllers\Backend\CouponController@add')->name('coupon.add');
+        Route::get('/coupon/edit/{id}', 'App\Http\Controllers\Backend\CouponController@edit')->name('coupon.edit');
+        Route::post('/coupon/update/{id}', 'App\Http\Controllers\Backend\CouponController@update')->name('coupon.update');
 
-       
-      
-       
     //System Settings
       //Pages
       Route::get('/page/create', 'App\Http\Controllers\Backend\PageController@create')->name('page.create');
@@ -146,6 +156,9 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
     //Bookings
     Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
     Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+    // Outside Bookings
+    Route::get('/outside-booking', 'App\Http\Controllers\Backend\BookingController@outside')->name('bookings.outside');
+    Route::get('/outside-booking/delete/{id}', 'App\Http\Controllers\Backend\BookingController@delete')->name('bookings.outside.delete');
     //Reports
     Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
     
@@ -153,6 +166,8 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
     Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
     Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
       
+    // Pdf 
+    Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));  
     });
 });
 
@@ -164,7 +179,9 @@ Route::group(['middleware' =>['role:5']], function(){
       Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
       Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
 
-     
+       // Calender
+       Route::get('calendar', 'App\Http\Controllers\Backend\BookingController@calendar')->name('bookings.calendar');
+       
       Route::get('/club/timeslots/add/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsAdd')->name('club.timeslots.add');
       Route::post('/club/timeslots/save/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsSave')->name('club.timeslots.save');
       Route::get('/club/timeslots', 'App\Http\Controllers\Backend\ClubController@timeSlots')->name('club.timeslots');

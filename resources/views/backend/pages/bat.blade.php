@@ -17,6 +17,7 @@
                     <th>Sr.no</th>
                     <th>Bat Name</th>
                     <th>Content</th>
+                    <th>Image</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -28,7 +29,11 @@
                       <td>{{ $bat->name }}</td>
                      
                       <td>{{ str_replace("&nbsp;", "", strip_tags($bat->description)) }}</td>
-     
+                      <td><div id="image-holder"> 
+                         @if($bat->featured_image)
+                            <img src="{{ URL::to('/') }}/Images/bat_images/{{ $bat->featured_image }}" class="thumb-image-list">
+                         @endif
+                         </div></td>
                         
                        <td>
                         <a href="{{ route('bat.edit',$bat->id) }}" class="btn btn-secondary">Edit</a>

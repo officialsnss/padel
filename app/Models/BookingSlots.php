@@ -9,10 +9,12 @@ class BookingSlots extends Model
 {
     use HasFactory;
 
+    protected $table = "booking_slots";
+    public $timestamps = true;
     protected $fillable = [
         'booking_id',
-        'slots'
+        'slots',
+        'created_at',
+        'updated_at',
     ];
-
-    protected $table = 'booking_slots';
 }

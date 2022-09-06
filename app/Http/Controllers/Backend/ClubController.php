@@ -41,14 +41,15 @@ class ClubController extends Controller
     {
         try{
             $clubData= Club::leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
-                            ->select('currencies.code', 'clubs.*') 
+                            ->leftJoin('time_slots', 'clubs.id' ,'=', 'time_slots.club_id')
+                            ->select('currencies.code', 'clubs.*','time_slots.*','clubs.id as clubid', 'time_slots.id as timeid') 
                             ->where('clubs.id', $id)->first();
             $countries = Countries::all();
             $amenities = Amenities::all();
             $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
                         ->select('regions.*','countries.name as cname')
                         ->get();
-
+   
             $title = 'Edit Club Details';
             return view('backend.pages.clubs.edit', compact('title','clubData','countries', 'amenities'));
         }
@@ -63,21 +64,28 @@ class ClubController extends Controller
     
         try { 
             $club = Club::findOrFail($id);
-            $data = $request->except('_method','_token','submit');
+            $data = $request->except('_method','_token','submit','start_time','end_time');
             $amList = implode(',', $request->amenities);
             
            $data['amenities'] = $amList;
            if($request->file('featured_image')){
             $file= $request->file('featured_image');
             $filename= date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('Images/club_images'), $filename);
+            $file->move(base_path('Images/club_images'), $filename);
             $data['featured_image']= $filename;
              }
          
-            $club->update($data); 
+            $res = $club->update($data); 
+            if($res){
+                $time = TimeSlots::where('club_id',$id)->first();
+                $info['start_time'] = $request->start_time;
+                $info['end_time'] = $request->end_time;
+                $final = $time->update($info); 
+            }
               return redirect('/admin/clubs')->with('success', 'City Updated successfully');
         }
          catch (\Exception $e) {
+            
             return redirect('/admin/clubs')->with('error', 'Something went wrong.');
         
         }
@@ -315,12 +323,21 @@ class ClubController extends Controller
         $title = "Book Timing Slots";
         $clubtimings =  TimeSlots::where('club_id',$clubId)
                      ->where('status',1)
-                     ->get();
-
+                     ->first();
+        $open_time = strtotime($clubtimings->start_time);
+        $close_time = strtotime($clubtimings->end_time);
+       
+        $output = [];
+        for( $i=$open_time; $i<=$close_time; $i+=3600) {
+         
+            $output[] .= date("H:i",$i);
+            
+        }
+        $timings  = implode(',',  $output);
         $indoorCourts = $club->indoor_courts;
         $outdoorCourts = $club->outdoor_courts;
 
-        return view('backend.pages.clubs.bookTimeslots', compact('title','clubtimings','clubId','indoorCourts','outdoorCourts'));
+        return view('backend.pages.clubs.bookTimeslots', compact('title','clubtimings','clubId','indoorCourts','outdoorCourts','timings'));
     }
 
     public function fetchList(Request $request)
@@ -331,33 +348,48 @@ class ClubController extends Controller
         $clubId = $club->id;
         $clubtimings =  TimeSlots::where('club_id',$clubId)
                      ->where('status',1)
-                     ->get();
+                     ->first();
+        $open_time = strtotime($clubtimings->start_time);
+        $close_time = strtotime($clubtimings->end_time);
+        
+        $output = [];
+        for( $i=$open_time; $i<=$close_time; $i+=3600) {
+        
+            $output[] .= date("H:i",$i);
+            
+        }
+        
         $indoorCourts = $club->indoor_courts;
         $outdoorCourts = $club->outdoor_courts;
         $bookingdate = date('Y-m-d', strtotime($request->inputData));
         $x= 25;
-        foreach($clubtimings as $clubtime){
+        $timings  = implode(',',  $output);
+         $finaltimings = explode(',', $timings); 
+        foreach($finaltimings as $time){
             
-        $indoorbooking =  Booking::where(['slot_id' => $clubtime->id, 'booking_date'=> $bookingdate,'court_type' => '1'])
-           ->count();
+            $indoorbooking =   \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
+            ->leftJoin('payments','payments.booking_id', '=','bookings.id')
+             ->where(['bookings.booking_date'=> $bookingdate,'bookings.court_type' => '1','bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
+            ->count();
+        
+            
+           $outsideindoorbooking =  DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=> $bookingdate,'court_type' => '1'])
+                                     ->count();
            
-        $outsideindoorbooking =  DB::table('outside_bookings')->where(['slot_id' => $clubtime->id, 'booking_date'=> $bookingdate,'court_type' => '1'])
+           $totalindoorbooking =  $indoorbooking+$outsideindoorbooking; 
+           $outdoorbooking =    \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
+           ->leftJoin('payments','payments.booking_id', '=','bookings.id')
+           ->where(['bookings.booking_date'=> $bookingdate,'bookings.court_type' => '2', 'bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
            ->count();
+     
+           $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=>$bookingdate,'court_type' => '2'])
+            ->count();
+ 
+           $totalOutdoorbooking = $outdoorbooking+$outsideoutdoorbooking; 
 
-        $totalindoorbooking =  $indoorbooking+$outsideindoorbooking;
+           $rem_indoor = $indoorCourts -  $totalindoorbooking;
+           $rem_outdoor = $outdoorCourts - $totalOutdoorbooking;
 
-        $outdoorbooking =   Booking::where(['slot_id' => $clubtime->id, 'booking_date'=>$bookingdate,'court_type' => '2'])
-           ->count();
-
-        $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['slot_id' => $clubtime->id, 'booking_date'=>$bookingdate,'court_type' => '2'])
-           ->count();
-
-        $totalOutdoorbooking = $outdoorbooking+$outsideoutdoorbooking;
-      
-           
-          $rem_indoor = $indoorCourts -  $totalindoorbooking;
-          $rem_outdoor = $outdoorCourts - $totalOutdoorbooking;
-          
            if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0){
             $bg = "background:#fff; cursor: pointer";
              $info = '<p class="inner-des">
@@ -382,7 +414,7 @@ class ClubController extends Controller
            }
 
            
-         $data=  '<li><div style="'.$bg.'" data-toggle="modal" data-target="#bookModal'. $x.'"class="b-time"><strong>'.date("H:i",strtotime($clubtime->start_time)) .' - '.date("H:i", strtotime($clubtime->end_time)) .'</strong>'. $info.'</div>';
+         $data=  '<li><div style="'.$bg.'" data-toggle="modal" data-target="#bookModal'. $x.'"class="b-time"><strong>'.$time.'</strong>'. $info.'</div>';
          
          if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0){
          $data.= '<div class="modal fade" id="bookModal'.$x.'" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
@@ -395,7 +427,7 @@ class ClubController extends Controller
                  </div>
                  <div class="modal-body">
                
-                     <form method="post" action="'.route('club.timeslots.booking.slot', $clubtime->id) .'" id="bookform" class="bookforms">'.csrf_field().'
+                     <form method="post" action="'.route('club.timeslots.booking.slot', $clubId) .'" id="bookform" class="bookforms">'.csrf_field().'
                          <div class="form-group row">
                              <div class="col-md-6">
                                <div class="form-group">
@@ -407,7 +439,7 @@ class ClubController extends Controller
                              <div class="col-md-6">
                                 <div class="form-group">
                                    <label for="inputName">Time Slot</label>
-                                   <input type="text" id="book_slot" class="form-control" value="'.date('H:i',strtotime($clubtime->start_time)).' - '.date('H:i', strtotime($clubtime->end_time)).'" name="book_slot" readonly>
+                                   <input type="text" id="book_slot" class="form-control" value="'.$time.'" name="book_slot" readonly>
                                       
                                  </div>
                                </div>
@@ -482,7 +514,7 @@ class ClubController extends Controller
             ->where('status',1)
             ->get();
         
-           $data['slot_id'] = $id;
+           $data['slot'] = $request->book_slot;
            $data['club_id'] = $clubId;
            $data['court_type'] = $request->court_type;
            $data['booking_date'] = date('Y-m-d', strtotime($request->book_date));

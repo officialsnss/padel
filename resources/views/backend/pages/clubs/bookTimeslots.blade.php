@@ -20,20 +20,27 @@
                 </div>
                 <div class="book-time">
                     <ul class="time-list">
-                    <?php $i = 1; ?>
-                       @foreach($clubtimings as $clubtime)
+                    <?php $i = 1;  
+                        $finaltimings = explode(',', $timings)  ?>
+                       @foreach($finaltimings as $time)
                     <?php
                           
-                      $indoorbooking =   \App\Models\Booking::where(['slot_id' => $clubtime->id, 'booking_date'=> date('Y-m-d'),'court_type' => '1'])
+                      $indoorbooking =   \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
+                       ->leftJoin('payments','payments.booking_id', '=','bookings.id')
+                        ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '1','bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
                        ->count();
-
-                      $outsideindoorbooking =  DB::table('outside_bookings')->where(['slot_id' => $clubtime->id, 'booking_date'=> date('Y-m-d'),'court_type' => '1'])
+                   
+                       
+                      $outsideindoorbooking =  DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=> date('Y-m-d'),'court_type' => '1'])
                                                 ->count();
-
+                      
                       $totalindoorbooking =  $indoorbooking+$outsideindoorbooking; 
-                      $outdoorbooking =   \App\Models\Booking::where(['slot_id' => $clubtime->id, 'booking_date'=> date('Y-m-d'),'court_type' => '2'])
-                       ->count();
-                      $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['slot_id' => $clubtime->id, 'booking_date'=>date('Y-m-d'),'court_type' => '2'])
+                      $outdoorbooking =    \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
+                      ->leftJoin('payments','payments.booking_id', '=','bookings.id')
+                      ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '2', 'bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
+                      ->count();
+                
+                      $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=>date('Y-m-d'),'court_type' => '2'])
                        ->count();
             
                       $totalOutdoorbooking = $outdoorbooking+$outsideoutdoorbooking; 
@@ -43,7 +50,7 @@
                      ?>
                          <li>
                        
-                          <div data-toggle="modal" data-target="#bookModal{{ $i }}" class="b-time" style="{{ (($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)?'background:#fff;cursor: pointer;':'background:#e74c3c;color:#fff'}}"><strong>{{ date('H:i',strtotime($clubtime->start_time)) }} - {{ date('H:i', strtotime($clubtime->end_time)) }}</strong>
+                          <div data-toggle="modal" data-target="#bookModal{{ $i }}" class="b-time" style="{{ (($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)?'background:#fff;cursor: pointer;':'background:#e74c3c;color:#fff'}}"><strong>{{ $time  }}</strong>
                          @if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)  
                             <p class="inner-des">
                               <small><b>Courts Available:</b><br>
@@ -84,7 +91,7 @@
                                       </div>
                                       <div class="modal-body">
                                       
-                                          <form method="post" action="{{ route('club.timeslots.booking.slot', $clubtime->id) }}" id="bookform" class="bookforms">
+                                          <form method="post" action="{{ route('club.timeslots.booking.slot', $clubId) }}" id="bookform" class="bookforms">
                                               @csrf
                                               <div class="form-group row">
                                                   <div class="col-md-6">
@@ -99,7 +106,7 @@
                                                   <div class="col-md-6">
                                                      <div class="form-group">
                                                         <label for="inputName">Time Slot</label>
-                                                        <input type="text" id="book_slot" class="form-control" value="{{ date('H:i',strtotime($clubtime->start_time)) }} - {{ date('H:i', strtotime($clubtime->end_time)) }}" name="book_slot" readonly>
+                                                        <input type="text" id="book_slot" class="form-control" value="{{ date('H:i',strtotime($time)) }}" name="book_slot" readonly>
                                                             @error('book_slot')
                                                             <div class="form-error">{{ $message }}</div>
                                                             @enderror

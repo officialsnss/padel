@@ -7,16 +7,32 @@
           <div class="card card-primary">
            
             <div class="card-body reset-form">
-         <form method="post" action="{{ route('amenity.update', $amenitityData->id) }}">
+         <form method="post" action="{{ route('amenity.update', $amenitityData->id) }}" enctype="multipart/form-data" id="amenity-form">
             {{ csrf_field() }}
            
             <div class="form-group">
                 <label for="inputName">Name</label>
-                <textarea id="desc" class="form-control" name="desc">{{ $amenitityData->name }}</textarea>
-               @error('desc')
+                <textarea id="amenity" class="form-control" name="amenity">{{ $amenitityData->name }}</textarea>
+               @error('amenity')
                 <div class="form-error">{{ $message }}</div>
                @enderror
               </div>
+
+              <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                    <label for="inputName">Icon Image</label><br>
+                    <input id="fileUpload" type="file" name="icon_image"><br />
+                    <div id="image-holder"> 
+                         @if($amenitityData->image)
+                            <img src="{{ URL::to('/') }}/Images/amenities/{{ $amenitityData->image }}" class="thumb-image">
+                         @endif
+                    </div>
+                </div>
+              </div>
+            </div>
+
+
               <div class="form-group">
                 <button type="submit" class="btn btn-success">Save</button>
               </div> 

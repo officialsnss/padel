@@ -10,6 +10,8 @@ use App\Models\Cities;
 use App\Models\Amenities;
 use App\Models\Countries;
 use App\Models\Wallets;
+use App\Models\Players;
+use App\Models\TimeSlots;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Notifications\PasswordReset as ResetPasswordRequest;
@@ -29,11 +31,15 @@ class UserController extends Controller
      // Customer Listing
     public function customers()
     {
-      try{ 
-        $title = 'Customers';
-        $appUsers = User::whereIn('role', [3, 4])->get();
-        
-        return view('backend.pages.users.customer', compact('title', 'appUsers'));
+    
+    try{ 
+        $players =  Players::leftJoin('users','users.id','=','players_details.user_id')
+        ->orderBy('players_details.ordering','ASC')
+        ->select('players_details.*','users.id as userid','players_details.id as playerid', 'users.name','users.email','users.status as player_status')
+        ->get();
+      $title = 'Players Listing';
+
+        return view('backend.pages.users.customer', compact('title', 'players'));
       }
       catch (\Exception $e) {
         return redirect('/admin')->with('error', 'Something went wrong.');
@@ -44,10 +50,15 @@ class UserController extends Controller
     public function view($id){
         try{
             $title = 'User Detail';
-            $userInfo = User::where('id', $id)->first();
+            $userInfo =  Players::leftJoin('users','users.id','=','players_details.user_id')
+                      ->where('players_details.id',$id)
+                      ->select('players_details.*','users.*','users.id as userid','players_details.id as playerid', 'players_details.*', 'users.name','users.email','users.status as player_status')
+                      ->first();
+           // $userInfo = User::where('id', $id)->first();
             return view('backend.pages.users.details', compact('title','userInfo'));
         } 
         catch (\Exception $e) {
+         // dd($e->getMessage());
             return redirect('/admin/users/customers')->with('error', 'Something went wrong.');
          }
   }
@@ -155,7 +166,7 @@ class UserController extends Controller
        
         if($result){
            $clubName = $request->clubname;
-          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation');
+          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation','start_time','end_time');
           $amList = implode(',', $request->amenities);
         
           $data['amenities'] = $amList;
@@ -165,17 +176,26 @@ class UserController extends Controller
           if($request->file('featured_image')){
             $file= $request->file('featured_image');
             $filename= date('YmdHi').$file->getClientOriginalName();
-            $file->move(public_path('Images/club_images'), $filename);
+            $file->move(base_path('Images/club_images'), $filename);
             $data['featured_image']= $filename;
              }
        
-         $finalresult = Club::insert($data);
+         $finalresult = Club::insertGetId($data);
+        if($finalresult){
+                $final = TimeSlots::create([
+                  'club_id' => $finalresult,
+                  'start_time' => $request->start_time,
+                  'end_time' => $request->end_time,
+                
+              ]);
+             
+         }
          
           return redirect('/admin/users/court-owners')->with('success', 'Court Owner Created Successfully.');
         }
       }
         catch (\Exception $e) {
-           //dd($e->getMessage());
+           // dd($e->getMessage());
             return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
          }
     }
@@ -190,8 +210,9 @@ class UserController extends Controller
             ->leftJoin('regions', 'regions.id' ,'=', 'clubs.region_id')
             ->leftJoin('cities', 'cities.id' ,'=', 'clubs.city_id')
             ->leftJoin('countries', 'countries.id' ,'=', 'clubs.country')
+            ->leftJoin('time_slots', 'clubs.id' ,'=', 'time_slots.club_id')
             ->where('users.id', $id)
-            ->select('users.*', 'clubs.*', 'clubs.id as clubid','clubs.name as clubname','users.name as username','currencies.code', 'regions.name as region', 'cities.name as city','countries.name as country')
+            ->select('time_slots.*','users.*', 'clubs.*', 'clubs.id as clubid','clubs.name as clubname','users.name as username','currencies.code', 'regions.name as region', 'cities.name as city','countries.name as country')
             ->first();
 
           $amenityList = [];

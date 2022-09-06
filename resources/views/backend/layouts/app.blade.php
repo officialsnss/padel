@@ -29,6 +29,7 @@
   <script src="{{asset('assets/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
   <script src="{{asset('assets/plugins/jquery-validation/jquery.validate.js')}}"></script>
   <script src="{{asset('assets/plugins/jquery-validation/additional-methods.js')}}"></script>
+  <script src="{{asset('assets/backend/js/fonts.js')}}"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -210,6 +211,7 @@ elemen.forEach(function(html) {
       <script>
         $(document).ready(function(){
     $('.js-switch-player').change(function () {
+      
         let status = $(this).prop('checked') === true ? 1 : 0;
         let playerid = $(this).data('id');
       
@@ -227,6 +229,8 @@ elemen.forEach(function(html) {
         });
     });
 });
+
+
 
 </script>
 

@@ -35,7 +35,7 @@
               </p>
             </a>
           </li>
-          @if ( auth()->user()->role != '5')
+          @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
             
           <li class="nav-item">
             <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users'))? 'active' : '' }}">
@@ -70,7 +70,16 @@
             </a>
           </li>
           
-          @if ( auth()->user()->role == '5')    
+          @if ( auth()->user()->role == '5')   
+          
+           <li class="nav-item">
+            <a href="{{url('/admin/outside-booking')}}" class="nav-link  {{ (request()->segment(2) == 'outside-booking') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-box-open"></i>
+              <p>
+                Outside Bookings
+              </p>
+            </a>
+          </li>
           
           <li class="nav-item">
             <a href="#" class="nav-link  {{ (request()->segment(2) == 'clubs' || request()->segment(3) == 'timeslots') ? 'active' : '' }}">
@@ -90,12 +99,12 @@
                 </p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{url('/admin/club/timeslots')}}" class="nav-link  {{ (request()->segment(3) == 'timeslots' && request()->segment(4) != 'book') ? 'active' : '' }}">
-                  <i class="fas fa-clock nav-icon"></i>
-                  <p>Timeslots</p>
-                </a>
-              </li>
+              <!--<li class="nav-item">-->
+              <!--  <a href="{{url('/admin/club/timeslots')}}" class="nav-link  {{ (request()->segment(3) == 'timeslots' && request()->segment(4) != 'book') ? 'active' : '' }}">-->
+              <!--    <i class="fas fa-clock nav-icon"></i>-->
+              <!--    <p>Timeslots</p>-->
+              <!--  </a>-->
+              <!--</li>-->
 
               <li class="nav-item">
                 <a href="{{url('/admin/club/timeslots/book')}}" class="nav-link  {{ (request()->segment(4) == 'book') ? 'active' : '' }}">
@@ -120,7 +129,7 @@
           @endif
           
       
-          @if ( auth()->user()->role != '5')
+          @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
           <li class="nav-item">
             <a href="{{url('/admin/clubs-listing/')}}" class="nav-link  {{ (request()->segment(2) == 'clubs-listing') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-building"></i>
@@ -131,15 +140,15 @@
             </a>
          </li>
 
-         <li class="nav-item">
-            <a href="{{url('/admin/players')}}" class="nav-link  {{ (request()->segment(2) == 'players') ? 'active' : '' }}">
-            <i class="nav-icon 	fas fa-users"></i>
-              <p>
-                Players
+         <!--<li class="nav-item">-->
+         <!--   <a href="{{url('/admin/players')}}" class="nav-link  {{ (request()->segment(2) == 'players') ? 'active' : '' }}">-->
+         <!--   <i class="nav-icon 	fas fa-users"></i>-->
+         <!--     <p>-->
+         <!--       Players-->
                
-              </p>
-            </a>
-         </li>
+         <!--     </p>-->
+         <!--   </a>-->
+         <!--</li>-->
 
           <li class="nav-item">
             <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
@@ -194,7 +203,7 @@
           </li>  
 
          
-         @if ( auth()->user()->role != '5')
+         @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
           
          <li class="nav-item">
             <a href="{{url('/admin/refunds')}}" class="nav-link  {{ request()->segment(2) == 'refunds' ? 'active' : '' }}">
@@ -219,6 +228,15 @@
                 Bats </p>
             </a>
           </li>  
+
+          <li class="nav-item">
+            <a href="{{url('/admin/coupons')}}" class="nav-link  {{ request()->segment(2) == 'coupons' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-gift"></i>
+              <p>
+                Coupons </p>
+            </a>
+          </li>  
+
 
 
           <li class="nav-item">

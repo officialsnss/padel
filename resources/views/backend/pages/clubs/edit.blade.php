@@ -4,7 +4,7 @@
       <div class="col-md-12">
           <div class="card card-primary">
             <div class="card-body reset-form">
-              <form method="post" action="{{ route('club.update', $clubData->id) }}" id="club-edit" enctype="multipart/form-data">
+              <form method="post" action="{{ route('club.update', $clubData->clubid) }}" id="club-edit" enctype="multipart/form-data">
                   {{ csrf_field() }}
                 <div class="row">
                     <div class="col-md-6">
@@ -70,6 +70,27 @@
                               </div>
                             </div>    
                               @error('double_price')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="inputName">Club Opening Time</label>
+                           <input type="text" id="start_time" class="form-control timePicker" value="{{ date('H:i', strtotime($clubData->start_time))  }}" name="start_time">
+                           @error('start_time')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                           <label for="inputName">Club Closing Time</label>
+                           <input type="text" id="end_time" class="form-control timePicker" value="{{ date('H:i', strtotime($clubData->end_time))  }}" name="end_time">
+                           @error('end_time')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
                        </div>
