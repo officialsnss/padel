@@ -235,30 +235,30 @@ class BookingServiceImpl implements BookingService
         $result = [];
         $selectedDate = date('Y-m-d', $request->date);
         $data = $this->bookingRepository->getBookingSlots($selectedDate, $request->club_id);
-        $slotsArray = [];
-
-        $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
-        if($request->court_type == 1) {
-            $maxCourts = $clubData['data']->indoor_courts;
-        } else {
-            $maxCourts = $clubData['data']->outdoor_courts;
-        }
-
         if(count($data) > 0) {
+            $slotsArray = [];
+
+            $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
+            if($request->court_type == 1) {
+                $maxCourts = $clubData['data']->indoor_courts;
+            } else {
+                $maxCourts = $clubData['data']->outdoor_courts;
+            }
+    
             // Getting booked slots on particular date 
             foreach ($data as $i => $row) {
                 $slot = $row['bookingSlots']->slots;
                 $count = $this->bookingRepository->getCourtsCounts($request, $slot);
-
+    
                 if($count == $maxCourts) {
                     $date = date("H:i", strtotime("00-00-00 $slot"));
                     $slotsArray[$i] = $date;
                 }
             }
-
+    
             // Getting all the time slots when the club is open
             $clubsArray = [];
-    
+        
             $clubSlots = $this->bookingRepository->getClubSlots($request->club_id);
             $startTime = (int)$clubSlots->start_time;
             $endTime = (int)$clubSlots->end_time;
@@ -267,7 +267,7 @@ class BookingServiceImpl implements BookingService
                 $date = date("H:i", strtotime("00-00-00 $i:00:00"));
                 $clubsArray[] = $date;
             }
-    
+        
             // Getting all the time slots of the day
             for ($n = 0; $n < 24; $n+=1)
             {
@@ -282,7 +282,16 @@ class BookingServiceImpl implements BookingService
                     $result[$n]['isAvailable'] = false;
                 }
             }
+        } else {
+                // Getting all the time slots of the day
+                for ($n = 0; $n < 24; $n+=1)
+                {
+                    $date = sprintf('%02d:%02d', $n , $n % 1);
+                    $result[$n]['slot'] = $date;
+                    $result[$n]['isAvailable'] = true;
+                }
         }
+        
         return $result;
     }
 
