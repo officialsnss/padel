@@ -235,6 +235,19 @@ class BookingServiceImpl implements BookingService
         $result = [];
         $selectedDate = date('Y-m-d', $request->date);
         $data = $this->bookingRepository->getBookingSlots($selectedDate, $request->club_id);
+
+        // Getting all the time slots when the club is open
+        $clubsArray = [];
+        
+        $clubSlots = $this->bookingRepository->getClubSlots($request->club_id);
+        $startTime = (int)$clubSlots->start_time;
+        $endTime = (int)$clubSlots->end_time;
+
+        for ($i = $startTime; $i < $endTime; $i += 1) {
+            $date = date("H:i", strtotime("00-00-00 $i:00:00"));
+            $clubsArray[] = $date;
+        }
+
         if(count($data) > 0) {
             $slotsArray = [];
 
@@ -249,23 +262,11 @@ class BookingServiceImpl implements BookingService
             foreach ($data as $i => $row) {
                 $slot = $row['bookingSlots']->slots;
                 $count = $this->bookingRepository->getCourtsCounts($request, $slot);
-    
+                
                 if($count == $maxCourts) {
                     $date = date("H:i", strtotime("00-00-00 $slot"));
                     $slotsArray[$i] = $date;
                 }
-            }
-    
-            // Getting all the time slots when the club is open
-            $clubsArray = [];
-        
-            $clubSlots = $this->bookingRepository->getClubSlots($request->club_id);
-            $startTime = (int)$clubSlots->start_time;
-            $endTime = (int)$clubSlots->end_time;
-    
-            for ($i = $startTime; $i < $endTime; $i += 1) {
-                $date = date("H:i", strtotime("00-00-00 $i:00:00"));
-                $clubsArray[] = $date;
             }
         
             // Getting all the time slots of the day
@@ -288,7 +289,11 @@ class BookingServiceImpl implements BookingService
                 {
                     $date = sprintf('%02d:%02d', $n , $n % 1);
                     $result[$n]['slot'] = $date;
-                    $result[$n]['isAvailable'] = true;
+                    if(in_array($date, $clubsArray)) {
+                        $result[$n]['isAvailable'] = true;
+                    } else {
+                        $result[$n]['isAvailable'] = false;
+                    }
                 }
         }
         
