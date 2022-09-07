@@ -44,7 +44,7 @@ class DashboardServiceImpl implements DashboardService
         $upcomingMatches = $this->getUpcomingMatches($request);
         $popularPlayers = $this->getPopularPlayers($request);
         $nearClubs = $this->getNearClubs($clubData, $request);
-        $walletAmount = $this->bookingServiceImpl->getWalletAmount();
+        $walletAmount = number_format((float)$this->bookingServiceImpl->getWalletAmount(), 3, '.', '');
 
         return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs, 'wallet' => $walletAmount];
     }
@@ -76,14 +76,13 @@ class DashboardServiceImpl implements DashboardService
 
     public function getUpcomingMatches($request)
     {
-        $key = 1;
         // Getting Listing of Upcoming Matches
         $matchData = $this->matchesServiceImpl->getMatchesList($request);
         $upcomingMatches = [];
 
         foreach($matchData as $match) {
             
-            $matchDate = date('Y-m-d', $match['date']);
+            $matchDate = date('Y-m-d', $match['match_date']);
             $matchTime = date('H:i:s', $match['startTime']);
 
             $current = Carbon::now()->toDateTimeString();

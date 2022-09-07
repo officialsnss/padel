@@ -73,8 +73,9 @@ class MatchesServiceImpl implements MatchesService
             $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
             $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
             $dataArray[$i]['address'] = $address . ', ' . $city;
-            $dataArray[$i]['date'] = $row['booking'] ? strtotime($row['booking'][0]['booking_date']) : null; 
-            $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['date']));
+            $dateStr = $row['booking'] ? strtotime($row['booking'][0]['booking_date']) : null;
+            $dataArray[$i]['match_date'] = $dateStr; 
+            $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['match_date']));
             
             $bookedSlots = [];
             foreach($row['bookingSlots'] as $slots) {
