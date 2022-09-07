@@ -273,6 +273,7 @@ class BookingServiceImpl implements BookingService
             for ($n = 0; $n < 24; $n+=1)
             {
                 $date = sprintf('%02d:%02d', $n , $n % 1);
+                $result[$n]['id'] = $n + 1;
                 $result[$n]['slot'] = $date;
                 if(in_array($date, $clubsArray)) {
                     $result[$n]['isAvailable'] = true;
@@ -288,6 +289,7 @@ class BookingServiceImpl implements BookingService
                 for ($n = 0; $n < 24; $n+=1)
                 {
                     $date = sprintf('%02d:%02d', $n , $n % 1);
+                    $result[$n]['id'] = $n + 1;
                     $result[$n]['slot'] = $date;
                     if(in_array($date, $clubsArray)) {
                         $result[$n]['isAvailable'] = true;
