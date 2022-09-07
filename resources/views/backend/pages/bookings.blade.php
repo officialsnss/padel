@@ -32,12 +32,11 @@
                       <td>{{ $booking->usrname }}</td>
                       <td>{{ $booking->usremail }}</td>
                       <td>{{ $booking->clubname }}</td>
-                     @if($booking->payment_status == '1')
-                        <td >Completed</td>
-                      @else
-                        <td>Pending</td>
-                      
-                       @endif 
+                      <td> <select class="p_status form-control">
+                       <option value="1" data-id="{{ $booking->payid }}" {{ ($booking->payment_status == '1')?'selected':'' }}>Completed</option>
+                       <option value="2" data-id="{{ $booking->payid }}" {{ ($booking->payment_status == '2')?'selected':'' }}>Pending</option>
+                       </select>
+                        </td>
                      <td><a href="{{ route('booking.view',$booking->bookId)}}" class="btn btn-success">View Details</a></td>
                   </tr>
                   @endforeach
@@ -53,6 +52,27 @@
           <!-- /.col -->
         </div>
         <!-- /.row -->
+<script>
 
+    $('.p_status').change(function () {
+    
+         var status = $(this).val(); 
+         var bookId = $(this).find(':selected').attr('data-id');
+        // alert(bookId);
+         $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: '{{ route('payments.update.status') }}',
+            data: {'status': status, 'bookId': bookId},
+            success: function (data) {
+                toastr.options.closeButton = true;
+                toastr.options.closeMethod = 'fadeOut';
+                toastr.options.closeDuration = 100;
+                toastr.success(data.message);
+              }
+        });
+    });
+
+  </script>
         @endsection
   
