@@ -71,9 +71,9 @@ class BookingController extends Controller
     public function applyCoupon(Request $request)
     {
         $data = $this->bookingService->applyCoupon($request);
-        if($data) {
+        if($request->coupon_id) {
             return ResponseUtil::successWithData($data, 'Coupon applied', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201', 'No slots available!', true, 201);
+        return ResponseUtil::successWithData($data, 'Coupon applied', true, 200);
     }
 }

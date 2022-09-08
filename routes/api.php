@@ -82,4 +82,5 @@ Route::middleware('auth:api')->group( function () {
 
     //Coupons
     Route::get('coupons', 'App\Http\Controllers\Api\BookingController@getCoupons');
+    Route::post('apply/coupon', 'App\Http\Controllers\Api\BookingController@applyCoupon');
 });

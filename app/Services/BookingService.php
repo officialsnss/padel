@@ -25,4 +25,6 @@ interface BookingService
     public function getWallet();
 
     public function getCoupons();
+
+    public function applyCoupon($request);
 }

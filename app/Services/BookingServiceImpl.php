@@ -368,4 +368,48 @@ class BookingServiceImpl implements BookingService
         }
         return $dataPacket;
     }
+
+    public function applyCoupon($request)
+    {
+        $finalPacket = [];
+
+        $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
+        if($request->game_type == 1) {
+            $bookingPrice = $clubData['data']['single_price'] * $request->no_of_hours;
+        } else {
+            $bookingPrice = $clubData['data']['double_price'] * $request->no_of_hours;
+        }
+        $finalPacket['club_price'] = number_format((float)$bookingPrice, 3, '.', '');
+        
+        // Service Charge
+        $finalPacket['service_charge'] = number_format((float)$clubData['data']['service_charge'], 3, '.', '');
+
+        //Adding bat price in booking table
+        $batPrice = 0;
+        $bats = $request->bats;
+        foreach($bats as $bat) {
+            $batData = $this->bookingRepository->getBatDetails($bat['bat_id']);
+            $batPrice += number_format((float)$batData->price * $bat['qty'], 3, '.', '');
+        }
+        $finalPacket['batPrice'] = number_format((float)$batPrice, 3, '.', '');
+        $finalPacket['sub_total'] = number_format((float)$batPrice + $bookingPrice, 3, '.', '');
+        
+        if($request->coupon_id) {
+            $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
+            $finalPacket['coupon_name'] = $couponData->code;
+    
+            $paymentArray['coupons_id'] = $request->coupon_id;
+            if($couponData->discount_type == 1) {
+                $finalPacket['discount_price'] = $couponData->amount;
+            } else {
+                $finalPacket['discount_price'] =  number_format((float)($couponData->amount) * ($finalPacket['sub_total']) * (0.01), 3, '.', '');
+            }
+            $finalPacket['total_amount'] = number_format((float)$finalPacket['sub_total'] + $finalPacket['service_charge'] - $finalPacket['discount_price'], 3, '.', '');
+        } else {
+            $finalPacket['coupon_name'] = "";
+            $finalPacket['discount_price'] = "";
+            $finalPacket['total_amount'] = number_format((float)$finalPacket['sub_total'] + $finalPacket['service_charge'], 3, '.', '');
+        }
+        return $finalPacket;
+    }
 }
