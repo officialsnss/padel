@@ -79,17 +79,18 @@ class BookingServiceImpl implements BookingService
 
         $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
         if($request->game_type == 1) {
-            $bookingPrice = ($clubData['data']['single_price'] * $bookingArray['no_of_hours'] + $clubData['data']['service_charge']) ;
-            $bookingArray['price'] = number_format((float)$bookingPrice, 3, '.', '');
+            $bookingPrice = ($clubData['data']['single_price'] * $bookingArray['no_of_hours']) + $clubData['data']['service_charge'] ;
         } else {
-            $bookingPrice = ($clubData['data']['double_price'] * $bookingArray['no_of_hours'] + $clubData['data']['service_charge']);
-            $bookingArray['price'] = number_format((float)$bookingPrice, 3, '.', '');
+            $bookingPrice = ($clubData['data']['double_price'] * $bookingArray['no_of_hours']) + $clubData['data']['service_charge'];
         }
+        $bookingArray['price'] = number_format((float)$bookingPrice, 3, '.', '');
+
         $bookingArray['court_type'] = $request->match_type;
         $bookingArray['currency_id'] = 129;
         $bookingArray['status'] = 1;
 
         //Adding bat price in booking table
+        $batArray = [];
         $batPrice = 0;
         $bats = $request->bats;
         foreach($bats as $bat) {
@@ -101,24 +102,19 @@ class BookingServiceImpl implements BookingService
         //store the booking data in the database and get the booking_id for further use
         $booked = $this->bookingRepository->storeBookingData($bookingArray);
 
+        // Adding bats in booking
+        foreach($bats as $bat) {
+            $batArray['booking_id'] = $booked;
+            $batArray['bat_id'] = $bat['bat_id'];
+            $batArray['quantity'] = $bat['qty'];
+            $this->bookingRepository->storeBatsData($batArray);
+        }
+
         $slotArray = [];
         foreach($dateTime as $i => $time) {
             $slotArray['booking_id'] = $booked;
             $slotArray['slots'] = date('H:i:s', $time);
             $slot[$i] = $this->bookingRepository->storeSlotsData($slotArray);
-        }
-
-        // Adding bats in the booking
-        $batArray = [];
-        $batPrice = 0;
-        $bats = $request->bats;
-        foreach($bats as $bat) {
-            $batData = $this->bookingRepository->getBatDetails($bat['bat_id']);
-            $batPrice += number_format((float)$batData->price * $bat['qty'], 3, '.', '');
-            $batArray['booking_id'] = $booked;
-            $batArray['bat_id'] = $bat['bat_id'];
-            $batArray['quantity'] = $bat['qty'];
-            $this->bookingRepository->storeBatsData($batArray);
         }
 
         // Match array data to be filled in matches table
@@ -150,79 +146,48 @@ class BookingServiceImpl implements BookingService
         $paymentArray['isCancellationRequest'] = "0";
 
         $paymentArray['transaction_id'] = str_replace(' ', '', time());
-        $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
-        $paymentArray['coupons_id'] = $request->coupon_id;
-        if($couponData->discount_type == 1) {
-            $paymentArray['discount_price'] = $couponData->amount;
+        if($request->coupon_id) {
+            $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
+            $paymentArray['coupons_id'] = $request->coupon_id;
+            if($couponData->discount_type == 1) {
+                $paymentArray['discount_price'] = $couponData->amount;
+            } else {
+                $paymentArray['discount_price'] = $couponData->amount * $paymentArray['price'] * 0.01;
+            }
+            $paymentArray['total_amount'] = number_format((float)$paymentArray['price'] - $paymentArray['discount_price'], 3, '.', '');
         } else {
-            $paymentArray['discount_price'] = $couponData->amount * $paymentArray['price'] * 0.01;
+            $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
         }
-        $paymentArray['total_amount'] = number_format((float)$paymentArray['price'] - $paymentArray['discount_price'], 3, '.', '');
 
-        //In this case 1 full payment is done initially but in else it was COD so advance little then left at club site
-        if($request->payment_method == 1) {
-            $paymentArray['advance_price'] = "0.000";
-            $paymentArray['pending_amount'] = "0.000";
-            $paymentArray['payment_status'] = "1";
-            if($request->isWallet == 0) {
-                $paymentArray['wallet_amount'] = "0.000";
-            } else { 
-                // Getting total amount left in the wallet
-                $walletAmount = $this->getWalletAmount();
-                if($walletAmount > "0.000") {
-                    if($walletAmount >= $paymentArray['total_amount']) {
-                        $walletEntry = number_format((float)$paymentArray['total_amount'], 3, '.', '');
-                        $moneyLeft = "0.000";
-                    } else {
-                        $walletEntry = number_format((float)$walletAmount, 3, '.', '');
-                        $moneyLeft = number_format((float)$paymentArray['total_amount'] - $walletAmount, 3, '.', '');
-                    }
-                    $walletArray = [];
-                    $walletArray['user_id'] = $userId;
-                    $walletArray['booking_id'] = $booked;
-                    $walletArray['currency_id'] = "129";
-                    $walletArray['amount'] = $walletEntry;
-                    $walletArray['status'] = "2";
-    
-                    $walletLeft = $this->bookingRepository->storeTransaction($walletArray);
-                    $paymentArray['wallet_amount'] = $walletEntry;
+        $paymentArray['payment_status'] = "1";
+        if($request->isWallet == 0) {
+            $paymentArray['wallet_amount'] = "0.000";
+        } else { 
+            // Getting total amount left in the wallet
+            $walletAmount = $this->getWalletAmount();
+            if($walletAmount > "0.000") {
+                if($walletAmount >= $paymentArray['total_amount']) {
+                    $walletEntry = number_format((float)$paymentArray['total_amount'], 3, '.', '');
+                    $moneyLeft = "0.000";
                 } else {
-                    $paymentArray['wallet_amount'] = "0.000";
+                    $walletEntry = number_format((float)$walletAmount, 3, '.', '');
+                    $moneyLeft = number_format((float)$paymentArray['total_amount'] - $walletAmount, 3, '.', '');
                 }
-            }
-            $paymentArray['online_amount'] = number_format((float)$paymentArray['total_amount'] - $paymentArray['wallet_amount'], 3, '.', '');
-        } else {
-            $paymentArray['advance_price'] = number_format((float)$paymentArray['total_amount'] * 0.1, 3, '.', '');
-            $paymentArray['pending_amount'] = number_format((float)$paymentArray['total_amount'] * 0.9, 3, '.', '');
-            $paymentArray['payment_status'] = "2";
-            if($request->isWallet == 0) {
-                $paymentArray['wallet_amount'] = "0.000";
-            } else { 
-                // Getting total amount left in the wallet
-                $walletAmount = $this->getWalletAmount();
-                if($walletAmount > "0.000") {
-                    if($walletAmount >= $paymentArray['advance_price']) {
-                        $walletEntry = number_format((float)$paymentArray['advance_price'], 3, '.', '');
-                        $moneyLeft = "0.000";
-                    } else {
-                        $walletEntry = number_format((float)$walletAmount, 3, '.', '');
-                        $moneyLeft = number_format((float)$paymentArray['advance_price'] - $walletAmount, 3, '.', '');
-                    }
-                    $walletArray = [];
-                    $walletArray['user_id'] = $userId;
-                    $walletArray['booking_id'] = $booked;
-                    $walletArray['currency_id'] = "129";
-                    $walletArray['amount'] = $walletEntry;
-                    $walletArray['status'] = "2";
+                $walletArray = [];
+                $walletArray['user_id'] = $userId;
+                $walletArray['booking_id'] = $booked;
+                $walletArray['currency_id'] = "129";
+                $walletArray['amount'] = $walletEntry;
+                $walletArray['status'] = "2";
     
-                    $walletLeft = $this->bookingRepository->storeTransaction($walletArray);
-                    $paymentArray['wallet_amount'] = $walletEntry;
-                } else {
-                    $paymentArray['wallet_amount'] = "0.000";
-                }
+                $walletLeft = $this->bookingRepository->storeTransaction($walletArray);
+                $paymentArray['wallet_amount'] = $walletEntry;
+            } else {
+                $paymentArray['wallet_amount'] = "0.000";
             }
-            $paymentArray['online_amount'] = "0.000";
         }
+        $paymentArray['online_amount'] = number_format((float)$paymentArray['total_amount'] - $paymentArray['wallet_amount'], 3, '.', '');
+        
         $paymentArray['refund_price'] = "0.000";
         $paymentArray['currency_id'] = "129";
         $payment = $this->bookingRepository->storePaymentData($paymentArray);
@@ -375,9 +340,9 @@ class BookingServiceImpl implements BookingService
 
         $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
         if($request->game_type == 1) {
-            $bookingPrice = $clubData['data']['single_price'] * $request->no_of_hours;
+            $bookingPrice = $clubData['data']['single_price'] * count($request->dateTime);
         } else {
-            $bookingPrice = $clubData['data']['double_price'] * $request->no_of_hours;
+            $bookingPrice = $clubData['data']['double_price'] * count($request->dateTime);
         }
         $finalPacket['club_price'] = number_format((float)$bookingPrice, 3, '.', '');
         

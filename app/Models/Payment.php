@@ -17,7 +17,6 @@ class Payment extends Model
         'booking_id',
         'price',
         'invoice',
-        'payment_method',
         'advance_price',
         'transaction_id',
         'payment_status',
