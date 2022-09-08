@@ -123,7 +123,7 @@ table.details {
                   $firstslot = \App\Models\BookingSlots::where(['booking_id' =>  $bookingInfo->bookid])->pluck('slots')->first();
                   $lastslot = \App\Models\BookingSlots::where(['booking_id' =>  $bookingInfo->bookid])->pluck('slots')->last();
                   $timestamp = strtotime($lastslot) + 60*60;
-                  $lasttime = date('H:i', $timestamp);
+                  $lasttime = date('H:i:s', $timestamp);
                   ?>
                   <p>{{ $firstslot }} - {{ $lasttime }}</p>
                   
@@ -154,40 +154,55 @@ table.details {
               <div class="col-4 col-md-4 col-lg-4">
              
               <table class="details bookingdetails">
-                <tr>
-                  <td><strong>Price:</strong></td>
-                  <td>{{ $bookingInfo->cprice }} {{ $bookingInfo->unit }}</td>
-                </tr>
-                <tr>
-                  <td><strong>Payments Method:</strong></td>
-                  <td>{{ ($bookingInfo->payment_method == 1)?'KNET':'COD' }}</td>
-                </tr>
-                <!-- @if($bookingInfo->payment_method == '2')
-                <tr>
-                  <td><strong>Advance Payment:</strong></td>
-                  <td>{{ $bookingInfo->advance_price }}</td>
-                </tr>
-                <tr>
-                  <td><strong>Pending Price:</strong></td>
-                  <td>{{ $bookingInfo->pending_amount }} {{ $bookingInfo->unit }}</td>
-                </tr>
-                @endif
-                 -->
-                <tr>
-                  <td><strong>Service Charge:</strong></td>
-                  <td>{{ $bookingInfo->service_charge }} {{ $bookingInfo->unit }}</td>
-                </tr>
-                @if($bookingInfo->discount_price)
-                <tr>
-                  <td><strong>Discount:</strong></td>
-                  <td>{{ $bookingInfo->discount_price }} {{ $bookingInfo->unit }}</td>
-                </tr>
-                @endif
+                 <tr>
+                    <td><strong>Payments Method:</strong></td>
+                    <td>{{ ($bookingInfo->payment_method == 1)?'KNET':'COD' }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Price(Per Hour) x {{ $bookingInfo->no_of_hours}}:</strong></td>
+                    <td>{{ $bookingInfo->cprice }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+               
+                @if($bookingInfo->isBatBooked == '1')
+                  <tr>
+                    <td><strong>Total Bat Price:</strong></td>
+                    <td>{{ $bookingInfo->batPrice }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+                  @endif
+                  
+                  @if($bookingInfo->payment_method == '2')
+                  <tr>
+                    <td><strong>Pending Price:</strong></td>
+                    <td>{{ $bookingInfo->pending_amount }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+                  @endif
+                  
+                  <tr>
+                    <td><strong>Service Charge:</strong></td>
+                    <td>{{ $bookingInfo->service_charge }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+                  @if($bookingInfo->discount_price)
+                  
+                  <tr>
+                    <td><strong>Wallet Price:</strong></td>
+                    <td>{{ $bookingInfo->wallet_amount }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+                  @endif
+                  <tr>
+                    <td><strong>Discount:</strong></td>
+                    <td>{{ $bookingInfo->discount_price }} {{ $bookingInfo->unit }}</td>
+                  </tr>
 
-                <tr>
-                  <td><strong>Total Amount:</strong></td>
-                  <td>{{ $bookingInfo->total_amount }} {{ $bookingInfo->unit }}</td>
-                </tr>
+                  <tr>
+                    <td><strong>Total Amount:</strong></td>
+                    <td>{{ $bookingInfo->total_amount }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+                    @if($bookingInfo->payment_method == '2')
+                  <tr>
+                    <td><strong>Pending Price:</strong></td>
+                    <td>{{ $bookingInfo->pending_amount }} {{ $bookingInfo->unit }}</td>
+                  </tr>
+                  @endif
               </table>
               </div>
           </div>

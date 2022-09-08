@@ -123,7 +123,14 @@ Route::group(['middleware' =>['role:1,2']], function(){
      Route::get('/bat/delete/{id}', 'App\Http\Controllers\Backend\BatController@delete')->name('bat.delete');
      Route::get('/bat/edit/{id}', 'App\Http\Controllers\Backend\BatController@edit')->name('bat.edit');
      Route::post('/bat/update/{id}', 'App\Http\Controllers\Backend\BatController@update')->name('bat.update');
+
+
+    //Coaches
+    Route::get('/coach/create', 'App\Http\Controllers\Backend\CoachController@create')->name('coach.create');
+    Route::post('/coach/add', 'App\Http\Controllers\Backend\CoachController@add')->name('coach.add'); 
     });
+
+
 
     
 
@@ -155,7 +162,8 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
      
     //Bookings
     Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
-    Route::get('booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+    Route::get('/booking/status/update', 'App\Http\Controllers\Backend\BookingController@updateStatus')->name('payments.update.status');
+    Route::get('/booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
     // Outside Bookings
     Route::get('/outside-booking', 'App\Http\Controllers\Backend\BookingController@outside')->name('bookings.outside');
     Route::get('/outside-booking/delete/{id}', 'App\Http\Controllers\Backend\BookingController@delete')->name('bookings.outside.delete');
