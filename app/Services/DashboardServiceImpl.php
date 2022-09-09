@@ -45,7 +45,9 @@ class DashboardServiceImpl implements DashboardService
         $popularPlayers = $this->getPopularPlayers($request);
         $nearClubs = $this->getNearClubs($clubData, $request);
         $walletAmount = number_format((float)$this->bookingServiceImpl->getWalletAmount(), 3, '.', '');
-
+        if($walletAmount == "0.000") {
+            $walletAmount = "";
+        }
         return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs, 'wallet' => $walletAmount];
     }
 

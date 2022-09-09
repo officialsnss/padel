@@ -317,7 +317,11 @@ class BookingServiceImpl implements BookingService
             $dataArray[$i]['id'] = $row['id'];
             $dataArray[$i]['name'] = $row['name'];
             $dataArray[$i]['code'] = $row['code'];
-            $dataArray[$i]['amount'] = $row['amount'];
+            if($row['discount_type'] == 1) {
+                $dataArray[$i]['amount'] = $row['amount'];
+            } else {
+                $dataArray[$i]['amount'] = number_format($row['amount'],0,'.','');
+            }
             $dataArray[$i]['minimum_amount'] = $row['minimum_amount'];
             $dataArray[$i]['discount_type'] = $row['discount_type'];
             $dataArray[$i]['no_of_times'] = $row['no_of_times'];
@@ -361,19 +365,38 @@ class BookingServiceImpl implements BookingService
         
         if($request->coupon_id) {
             $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
+            if(!$couponData) {
+                return ['message' => 'No coupon for this coupon_id'];
+            }
+            if($couponData['discount_type'] == 1) {
+                $finalPacket['isPercentage'] = false;
+            } else {
+                $finalPacket['isPercentage'] = true;
+            }
             $finalPacket['coupon_name'] = $couponData->code;
     
             $paymentArray['coupons_id'] = $request->coupon_id;
             if($couponData->discount_type == 1) {
+                $discountPrice = $couponData->amount;
                 $finalPacket['discount_price'] = $couponData->amount;
             } else {
-                $finalPacket['discount_price'] =  number_format((float)($couponData->amount) * ($finalPacket['sub_total']) * (0.01), 3, '.', '');
+                $discountPrice = number_format((float)($couponData->amount) * ($finalPacket['sub_total'] + + $finalPacket['service_charge']) * (0.01), 3, '.', '');
+                $finalPacket['discount_price'] = number_format($couponData->amount,0,'.','');
             }
-            $finalPacket['total_amount'] = number_format((float)$finalPacket['sub_total'] + $finalPacket['service_charge'] - $finalPacket['discount_price'], 3, '.', '');
+            $finalPacket['total_amount'] = number_format((float)$finalPacket['sub_total'] + $finalPacket['service_charge'] - $discountPrice, 3, '.', '');
+            $finalPacket['wallet_amount'] = number_format((float)$this->getWalletAmount(), 3, '.', '');
+            if($finalPacket['wallet_amount'] == "0.000") {
+                $finalPacket['wallet_amount'] = "";
+            }
         } else {
+            $finalPacket['isPercentage'] = false;
             $finalPacket['coupon_name'] = "";
             $finalPacket['discount_price'] = "";
             $finalPacket['total_amount'] = number_format((float)$finalPacket['sub_total'] + $finalPacket['service_charge'], 3, '.', '');
+            $finalPacket['wallet_amount'] = number_format((float)$this->getWalletAmount(), 3, '.', '');
+            if($finalPacket['wallet_amount'] == "0.000") {
+                $finalPacket['wallet_amount'] = "";
+            }
         }
         return $finalPacket;
     }
