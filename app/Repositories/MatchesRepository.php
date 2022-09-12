@@ -93,4 +93,17 @@ class MatchesRepository extends BaseRepository
       return BookingSlots::where('id', $id)->first();
     }
 
+    public function filterMatchData($request)
+    {
+      $query = Matches::where('match_type', 1)->with('booking')->with('slots')->with('clubs.cities'); 
+                  
+      if(!is_null($request->gender)) {
+        $query->where('gender_allowed', $request->gender);
+      }
+      if(!is_null($request->court_type)) {
+        $query->where('court_type', $request->court_type);
+      }
+      $query = $query->get();
+      return $query;
+    }
 }

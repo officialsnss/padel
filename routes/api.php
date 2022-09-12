@@ -63,6 +63,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatches');
     Route::get('get/matchDetails', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
+    Route::get('match_filter', 'App\Http\Controllers\Api\MatchesController@filterMatchData');
 
 
     //NOTIFICATION

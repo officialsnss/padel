@@ -26,4 +26,6 @@ interface MatchesService
 
     public function acceptRequest($request);
 
+    public function filterMatchData($request);
+
 }

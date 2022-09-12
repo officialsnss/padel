@@ -70,4 +70,13 @@ class MatchesController extends Controller
         }
         return ResponseUtil::successWithMessage('The request has been rejected!', true, 200);
     }
+
+    public function filterMatchData(Request $request)
+    {
+        $data = $this->matchesService->filterMatchData($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Match Details', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No match details', false, 201);
+    }
 }
