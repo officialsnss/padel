@@ -35,7 +35,7 @@ class PlayersRepository extends BaseRepository
     {
       return Players::where('id', $playerId)
                     ->with('users')
-                    ->with('matches.booking.slots')
+                    ->with('matches.booking.bookingSlots')
                     ->first(); 
     }
 

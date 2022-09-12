@@ -95,6 +95,7 @@ class PlayersServiceImpl implements PlayersService
             $dataArray['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."player_images/".$data['users'][0]['profile_pic'] : null;  
             $dataArray['instagram_url'] = $data['instagram_url'];  
             $dataArray['snapchat'] = $data['snapchat'];  
+            $dataArray['dob'] = $data['dob'];  
             $dataArray['match_played'] = $data['match_played'];  
             $dataArray['match_won'] = $data['match_won'];  
             $dataArray['match_loose'] = $data['match_loose'];  
@@ -112,6 +113,7 @@ class PlayersServiceImpl implements PlayersService
             }
             $dataArray['following'] = count($followings);  
             
+            // Getting the count of upcoming matches of this player
             $currentDate = Carbon\Carbon::now()->toDateTimeString();
             $matches = $data['matches']->all();
             if(!$matches) {
@@ -120,7 +122,7 @@ class PlayersServiceImpl implements PlayersService
                 $key = 0;
                 foreach($matches as $i => $row) {
                     $booking_date = $row['booking'][0]['booking_date'];
-                    $booking_time = $row['booking'][0]['slots']['start_time'];
+                    $booking_time = $row['booking'][0]['bookingSlots']['slots'];
                     $date = date('Y-m-d H:i:s', strtotime("$booking_date $booking_time"));
                     $match_date = strtotime($date);
                     $currentDate = strtotime($currentDate);
@@ -130,11 +132,54 @@ class PlayersServiceImpl implements PlayersService
                 }
                 $dataArray['upcoming_matches'] = $key;  
             }
-            $dataArray['court_side'] = $data['court_side'] == 1 ? 'Left': 'Right';  
-            $dataArray['best_shot'] = $data['best_shot'];  
-            $dataArray['gender'] = $data['gender'] == 1 ? "Female" : "Male";  
-            $dataArray['status'] = $data['status'] == 1 ? "Active" : "Deactive";  
+
+            // Making an object of court_side 
+            $court_side = [];
+            if($data['court_side'] == 1) {
+                $court_side['id'] = $data['court_side'];
+                $court_side['value'] = "Side A";
+            } elseif ($data['court_side'] == 2) {
+                $court_side['id'] = $data['court_side'];
+                $court_side['value'] = "Side B";
+            }
+            $dataArray['court_side'] = $court_side;
             
+            // Making an object of best_shot 
+            $best_shot = [];
+            if($data['best_shot'] == 1) {
+                $best_shot['id'] = $data['best_shot'];
+                $best_shot['value'] = "Shot A";
+            } elseif ($data['best_shot'] == 2) {
+                $best_shot['id'] = $data['best_shot'];
+                $best_shot['value'] = "Shot B";
+            } elseif ($data['best_shot'] == 3) {
+                $best_shot['id'] = $data['best_shot'];
+                $best_shot['value'] = "Shot C";
+            }
+            $dataArray['best_shot'] = $best_shot;  
+            $dataArray['gender'] = $data['gender'];  
+
+            // Getting the values in the array of players time to play in the club
+            $playTime = explode(',', $data['play_time']);
+            if($playTime[0] == '') {
+                $dataArray['play_time'] = [];
+            } else {
+                $play_time = [];
+                foreach($playTime as $i => $play) {
+                    if ($play == 1) {
+                        $play_time['id'] = $play;
+                        $play_time['value'] = "Morning";
+                    } elseif ($play == 2) {
+                        $play_time['id'] = $play;
+                        $play_time['value'] = "Evening";
+                    } elseif ($play == 3) {
+                        $play_time['id'] = $play;
+                        $play_time['value'] = "Night";
+                    }
+                    $dataArray['play_time'][$i] = $play_time;
+                }
+            }
+            $dataArray['status'] = $data['status'] == 1 ? "Active" : "Deactive";  
             return $dataArray;
         }
     }
@@ -181,19 +226,30 @@ class PlayersServiceImpl implements PlayersService
     {
         $dataArray = [];
 
-        $dataArray['gender'] = $request->gender;
-        $dataArray['instagram_url'] = $request->instagram_url;
-        $dataArray['whatsapp_no'] = $request->whatsapp_no;
-        $dataArray['dob'] = $request->dob;
-        $dataArray['court_side'] = $request->court_side;
-        $dataArray['play_time'] = $request->play_time;
-        $dataArray['best_shot'] = $request->best_shot;
-        $dataArray['levels'] = $request->levels;
+        $dataArray['gender'] = $request->gender ? $request->gender : null;
+        $dataArray['instagram_url'] = $request->instagram_url ? $request->instagram_url : null;
+        $dataArray['whatsapp_no'] = $request->whatsapp_no ? $request->whatsapp_no : null;
+        $dataArray['dob'] = $request->dob ? date('Y-m-d', $request->dob): null;
+        $dataArray['court_side'] = $request->court_side ? $request->court_side : null;
+
+        $playArray = [];
+        $play_time = $request->play_time;
+        if($play_time) {
+            foreach($play_time as $play) {
+                $playArray[] = $play;
+            }
+            $playTime = implode(',', $playArray);
+            $dataArray['play_time'] = $playTime;
+        } else {
+            $dataArray['play_time'] = null;
+        }
+        $dataArray['best_shot'] = $request->best_shot ? $request->best_shot : null;
+        $dataArray['levels'] = $request->level ? $request->level : null;
 
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
-
-        return $this->playersRepository->addPlayerDetails($dataArray, $userData['id']);
+        $addDetails = $this->playersRepository->addPlayerDetails($dataArray, $userData['id']);
+        return $this->getPlayerDetails($userData['id']);
     }
 
     public function addPlayerInMatch($request)
@@ -203,7 +259,7 @@ class PlayersServiceImpl implements PlayersService
         $matchData = $this->matchesRepository->getMatchData($matchId);
         
         // Converting string to array of players to add
-        $playerIds = explode(',', $request->ids);
+        $playerIds = $request->ids;
         if(!$playerIds[0]) {
             return $dataArray;
         }

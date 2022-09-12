@@ -63,7 +63,7 @@ class PlayersController extends Controller
     {
         $data = $this->playersService->addPlayerDetails($request);
         if($data) {
-            return ResponseUtil::successWithMessage('Players data updated successfully', true, 200);
+            return ResponseUtil::successWithData($data, 'Players data updated successfully', true, 200);
         }
         return ResponseUtil::successWithMessage('There is an error in updating', true, 200);
     }
