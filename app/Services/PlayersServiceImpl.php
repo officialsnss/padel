@@ -95,7 +95,7 @@ class PlayersServiceImpl implements PlayersService
             $dataArray['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."player_images/".$data['users'][0]['profile_pic'] : null;  
             $dataArray['instagram_url'] = $data['instagram_url'] ? $data['instagram_url'] : "";  
             $dataArray['whatsapp'] = $data['whatsapp_no'] ? $data['whatsapp_no'] : "";  
-            $dataArray['dob'] = strtotime($data['dob']);  
+            $dataArray['dob'] = $data['dob'] ? strtotime($data['dob']) : 0;
             $dataArray['match_played'] = $data['match_played'];  
             $dataArray['match_won'] = $data['match_won'];  
             $dataArray['match_loose'] = $data['match_loose'];  
