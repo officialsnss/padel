@@ -93,9 +93,9 @@ class PlayersServiceImpl implements PlayersService
             $dataArray['name'] = $data['users'][0]['name'];  
             $dataArray['level'] = $data['levels'];  
             $dataArray['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."player_images/".$data['users'][0]['profile_pic'] : null;  
-            $dataArray['instagram_url'] = $data['instagram_url'];  
-            $dataArray['snapchat'] = $data['snapchat'];  
-            $dataArray['dob'] = $data['dob'];  
+            $dataArray['instagram_url'] = $data['instagram_url'] ? $data['instagram_url'] : "";  
+            $dataArray['whatsapp'] = $data['whatsapp_no'] ? $data['whatsapp_no'] : "";  
+            $dataArray['dob'] = strtotime($data['dob']);  
             $dataArray['match_played'] = $data['match_played'];  
             $dataArray['match_won'] = $data['match_won'];  
             $dataArray['match_loose'] = $data['match_loose'];  
@@ -142,7 +142,10 @@ class PlayersServiceImpl implements PlayersService
                 $court_side['id'] = $data['court_side'];
                 $court_side['value'] = "Side B";
             }
-            $dataArray['court_side'] = $court_side;
+            if(count($court_side) > 0) {
+                $dataArray['court_side'] = $court_side;
+            }
+            $dataArray['court_side'] = null;
             
             // Making an object of best_shot 
             $best_shot = [];
@@ -156,7 +159,10 @@ class PlayersServiceImpl implements PlayersService
                 $best_shot['id'] = $data['best_shot'];
                 $best_shot['value'] = "Shot C";
             }
-            $dataArray['best_shot'] = $best_shot;  
+            if(count($best_shot) > 0) {
+                $dataArray['best_shot'] = $best_shot;
+            }
+            $dataArray['best_shot'] = null;  
             $dataArray['gender'] = $data['gender'];  
 
             // Getting the values in the array of players time to play in the club
@@ -227,8 +233,8 @@ class PlayersServiceImpl implements PlayersService
         $dataArray = [];
 
         $dataArray['gender'] = $request->gender ? $request->gender : null;
-        $dataArray['instagram_url'] = $request->instagram_url ? $request->instagram_url : null;
-        $dataArray['whatsapp_no'] = $request->whatsapp_no ? $request->whatsapp_no : null;
+        $dataArray['instagram_url'] = $request->instagram_url ? $request->instagram_url : "";
+        $dataArray['whatsapp_no'] = $request->whatsapp_no ? $request->whatsapp_no : "";
         $dataArray['dob'] = $request->dob ? date('Y-m-d', $request->dob): null;
         $dataArray['court_side'] = $request->court_side ? $request->court_side : null;
 
