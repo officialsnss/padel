@@ -144,8 +144,9 @@ class PlayersServiceImpl implements PlayersService
             }
             if(count($court_side) > 0) {
                 $dataArray['court_side'] = $court_side;
+            } else {
+                $dataArray['court_side'] = null;
             }
-            $dataArray['court_side'] = null;
             
             // Making an object of best_shot 
             $best_shot = [];
@@ -161,8 +162,9 @@ class PlayersServiceImpl implements PlayersService
             }
             if(count($best_shot) > 0) {
                 $dataArray['best_shot'] = $best_shot;
+            } else {
+                $dataArray['best_shot'] = null;  
             }
-            $dataArray['best_shot'] = null;  
             $dataArray['gender'] = $data['gender'];  
 
             // Getting the values in the array of players time to play in the club
