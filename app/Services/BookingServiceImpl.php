@@ -198,13 +198,38 @@ class BookingServiceImpl implements BookingService
     public function getBookingSlots($request) 
     {
         $result = [];
+
+        // Validations for the entered values in the api
+        if(!$request->date) {
+            return ['message' => "Please enter a date"];
+        }
+        if(!$request->club_id) {
+            return ['message' => "Please enter a club_id"];
+        }
+        if(!$request->court_type) {
+            return ['message' => "Please enter a court_type"];
+        }
+        if($request->court_type !=1 && $request->court_type !=2) {
+            return ['message' => "The court_type value either be 1 or 2."];
+        }
+
+        // Validation for the entered date
         $selectedDate = date('Y-m-d', $request->date);
+        $current = Carbon::now()->toDateString();
+        $d2 = date('Y-m-d', strtotime('+30 days'));
+        if($selectedDate < $current || $selectedDate > $d2) {
+            return ['message' => "Please enter a valid date."];
+        }
+
         $data = $this->bookingRepository->getBookingSlots($selectedDate, $request->club_id);
 
         // Getting all the time slots when the club is open
         $clubsArray = [];
         
         $clubSlots = $this->bookingRepository->getClubSlots($request->club_id);
+        if($clubSlots == null) {
+            return ['message' => "The club_id is not exist in the database."];
+        }
         $startTime = (int)$clubSlots->start_time;
         $endTime = (int)$clubSlots->end_time;
 
@@ -219,7 +244,7 @@ class BookingServiceImpl implements BookingService
             $clubData = $this->clubDataRepository->getSingleClubData($request->club_id);
             if($request->court_type == 1) {
                 $maxCourts = $clubData['data']->indoor_courts;
-            } else {
+            } elseif ($request->court_type == 2) {
                 $maxCourts = $clubData['data']->outdoor_courts;
             }
     

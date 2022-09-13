@@ -44,10 +44,13 @@ class BookingController extends Controller
     public function getBookingSlots(Request $request)
     {
         $data = $this->bookingService->getBookingSlots($request);
-        if($data) {
+
+        if(count($data) > 1) {
             return ResponseUtil::successWithData($data, 'Slots available for the date', true, 200);
+        } elseif ($data['message']) {
+            return ResponseUtil::errorWithMessage('201', $data['message'], false, 201);
         }
-        return ResponseUtil::errorWithMessage('201', 'No slots available!', true, 201);
+        return ResponseUtil::errorWithMessage('201', 'No slots available!', false, 201);
     }
 
     public function getWallet()

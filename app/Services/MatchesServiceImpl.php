@@ -39,7 +39,7 @@ class MatchesServiceImpl implements MatchesService
 
         foreach($matchData as $match) {
             
-            $matchDate = date('Y-m-d', $match['date']);
+            $matchDate = date('Y-m-d', $match['match_date']);
             $matchTime = date('H:i:s', $match['startTime']);
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
