@@ -179,7 +179,9 @@ class UsersController extends Controller
         // $otp = rand(1000,9999);
         $otp = 1234;
         $user = User::where('device_id', $request->device_id)->where('phone', $request->phone)->first();
-
+        if(!$user) {
+            return ResponseUtil::errorWithMessage(201, 'No user exists for this phone and device_id', false, 201);
+        }
         // // Send Otp to Phone number
         // $receiverNumber = "+91".$user->phone;
         // $message = "This the otp for you registration. " . $otp;
