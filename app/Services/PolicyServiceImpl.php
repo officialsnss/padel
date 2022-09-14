@@ -28,11 +28,12 @@ class PolicyServiceImpl implements PolicyService
     public function getPolicies($id)
     {
         $data = $this->policyRepository->getPolicies($id);
+        
         $dataPacket = [];
-
-        $dataPacket['title'] = $data['title'];
-        $dataPacket['description'] = $data['content'];
-
+        if($data) {
+            $dataPacket['title'] = $data['title'];
+            $dataPacket['description'] = $data['content'];
+        }
         return $dataPacket;
     }
 }

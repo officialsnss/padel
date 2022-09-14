@@ -27,8 +27,8 @@ class PolicyController extends Controller
     {
         $data =  $this->policyService->getPolicies($request->id);
         if($data){
-            return ResponseUtil::successWithData($data, true, 200);
+            return ResponseUtil::successWithData($data, $data['title']. " data", true, 200);
         }
-        return ResponseUtil::successWithData($data, true, 200);
+        return ResponseUtil::errorWithMessage('201', 'No data found. Please enter id = 1,2,3', false, 201);
     }
 }
