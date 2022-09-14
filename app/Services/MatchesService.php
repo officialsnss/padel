@@ -20,7 +20,7 @@ interface MatchesService
 
     public function getMatches($request);
 
-    public function getMatchDetails($matchId);
+    public function getMatchDetails($request);
 
     public function sendRequest($request);
 

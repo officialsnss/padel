@@ -37,4 +37,10 @@ class LevelsServiceImpl implements LevelsService
         }
         return $dataArray;
     }
+
+    public function getLevelById($id)
+    {
+        $data = $this->levelsRepository->getLevelById($id);
+        return $data;
+    }
 }

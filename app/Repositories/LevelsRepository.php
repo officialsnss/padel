@@ -25,4 +25,9 @@ class LevelsRepository extends BaseRepository
     {
       return Levels::get(); 
     }
+
+    public function getLevelById($id)
+    {
+      return Levels::where('id', $id)->first(); 
+    }
 }

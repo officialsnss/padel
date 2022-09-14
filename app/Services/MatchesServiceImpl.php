@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Repositories\MatchesRepository;
 use App\Repositories\PlayersRepository;
+use App\Services\ClubDataServiceImpl;
+use App\Services\LevelsServiceImpl;
 use Carbon\Carbon;
 
 // use App\Services\PlayersServiceImpl;
@@ -18,10 +20,15 @@ class MatchesServiceImpl implements MatchesService
      * MatchesServiceImpl constructor.
      *
      */
-    public function __construct(MatchesRepository $matchesRepository, PlayersRepository $playersRepository)
+    public function __construct(MatchesRepository $matchesRepository, 
+                                PlayersRepository $playersRepository,
+                                ClubDataServiceImpl $clubDataServiceImpl,
+                                LevelsServiceImpl $levelsServiceImpl)
     {
         $this->matchesRepository = $matchesRepository;
         $this->playersRepository = $playersRepository;
+        $this->clubDataServiceImpl = $clubDataServiceImpl;
+        $this->levelsServiceImpl = $levelsServiceImpl;
     }
 
 
@@ -118,32 +125,42 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
+            
             $minimum_level = explode(',',$row['level']);
             $min = min($minimum_level);
             $dataArray[$i]['minimum_level'] = $min;  
+            
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             $dataArray[$i]['isMatchCompleted'] = 0;  
             
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds);
             
+            if($row['match_type'] == 1) {
             $requestIds = explode(',', $row['requestedPlayersIds']);
             if($row['requestedPlayersIds'] != "") {
-                $dataArray[$i]['requestedPlayers'] = count($this->getPlayersList($requestIds)); 
+                    $dataArray[$i]['requestedPlayersCount'] = count($this->getPlayersList($requestIds)); 
             } else {
-                $dataArray[$i]['requestedPlayers'] = 0; 
+                    $dataArray[$i]['requestedPlayersCount'] = 0; 
+                }
             }
         }
         return $dataArray;
     }
-    public function getMatchDetails($matchId)
+    public function getMatchDetails($request)
     {
-        $data = $this->matchesRepository->getMatchDetails($matchId);
+        $data = $this->matchesRepository->getMatchDetails($request->match_id);
         $dataArray = [];
         if($data) {
-            $dataArray['id'] = $data['id'];            
+            $dataArray['id'] = $data['id'];
             $dataArray['player_id'] = $data['player_id'];            
+
             $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
+            
+            $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
+            $city = $data['clubs'][0]['cities'] != null ? $data['clubs'][0]['cities'][0]['name'] : null;
+            $dataArray['address'] = $address . ', ' . $city;
+
             $slots = explode(",", $data['slot_id']);
             $timeArray = [];
             foreach($slots as $i => $slot) {
@@ -151,18 +168,29 @@ class MatchesServiceImpl implements MatchesService
                 $timeArray[$i] = $slotData['slots']; 
             }
             $endTime = end($timeArray);
-            $dataArray['date'] = $data['booking'] ? $data['booking'][0]['booking_date'] : null;  
-            $dataArray['startTime'] = $timeArray[0];  
-            $dataArray['endTime'] = date("H:i:s", strtotime($endTime) + 60*60);  
+            $dataArray['match_date'] = $data['booking'] ? strtotime($data['booking'][0]['booking_date']) : null;  
+            $dataArray['day'] = date('D', strtotime($dataArray['match_date']));
+            $dataArray['startTime'] = strtotime($timeArray[0]);  
+            $dataArray['endTime'] = strtotime(date("H:i:s", strtotime($endTime) + 60*60)); 
+
             $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray['game_type'] = $data['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray['isFriendly'] = $data['is_friendly'] == 0 ? 'Game': 'Friendly';
-    
-            $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
-            $city = $data['clubs'][0]['cities'] != null ? $data['clubs'][0]['cities'][0]['name'] : null;
-            $dataArray['address'] = $address . ', ' . $city;
-            $dataArray['minimum_level'] = $data['level'];  
             
+            $levelArray = explode(',',$data['level']);
+            $min = min($levelArray);
+            $min_level = $this->levelsServiceImpl->getLevelById($min);
+            $dataArray['minimum_level']['id'] = $min_level['id'];
+            $dataArray['minimum_level']['name'] = $min_level['name'];
+            $dataArray['minimum_level'] = (object)$dataArray['minimum_level'];
+            
+            $dataArray['booked_by'] = $data['booking'][0]['user_id'];  
+            $dataArray['isMatchCompleted'] = 0;  
+            
+            $clubLatitude = $data['clubs'][0]['latitude'];
+            $clubLongitude = $data['clubs'][0]['longitude'];
+            $dataArray['distance'] = number_format($this->clubDataServiceImpl->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
+
             $images = $data['clubs'][0]['images'];
             foreach($images as $i => $image) {
                 $dataArray['images'][$i] = getenv("IMAGES")."club_images/".$image['image'];
@@ -176,7 +204,7 @@ class MatchesServiceImpl implements MatchesService
                 if($data['requestedPlayersIds'] != "") {
                     $dataArray['requestedPlayers'] = $this->getPlayersList($requestIds); 
                 } else {
-                    $dataArray['requestedPlayers'] = 0; 
+                    $dataArray['requestedPlayers'] = []; 
                 }
             }
         }

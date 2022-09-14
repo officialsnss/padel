@@ -43,7 +43,7 @@ class MatchesController extends Controller
 
     public function getMatchDetails(Request $request)
     {
-        $data = $this->matchesService->getMatchDetails($request->match_id);
+        $data = $this->matchesService->getMatchDetails($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'Match Details', true, 200);
         }
