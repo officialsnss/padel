@@ -39,6 +39,9 @@ class ContactUsServiceImpl implements ContactUsService
      */
     public function sendMessage($request)
     {
+        if(!$request->message) {
+            return ['error' => 'Please enter a message'];
+        }
         $data = $this->contactUsRepository->getContactDetails();
         $dataPacket = [];
 
@@ -52,6 +55,6 @@ class ContactUsServiceImpl implements ContactUsService
         $admin = User::where('id', '1')->first();
         $admin->notify(new SendContactMail($dataPacket));
 
-        return ['status' => 'success', 'data' => $dataPacket];
+        return $dataPacket;
     }
 }
