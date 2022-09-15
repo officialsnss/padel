@@ -306,10 +306,10 @@ class UsersController extends Controller
         $userId = auth()->user()->id;
         if($request->isNotification == true) {
             User::where('id', $userId)->update(['notification' => '1']);
-            return ResponseUtil::successWithMessage("Notification settings updated to ON!", true, 200);
+            return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => true], 200);
         } else {
-            User::where('id', $userId)->update(['notification' => '0']);
-            return ResponseUtil::successWithMessage("Notification settings updated to OFF!", true, 200);
+                User::where('id', $userId)->update(['notification' => '0']);
+            return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => false], 200);
         }
     }
 
