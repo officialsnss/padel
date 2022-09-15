@@ -261,10 +261,18 @@ class MatchesServiceImpl implements MatchesService
         $finalPacket = [];
 
         $data = $this->matchesRepository->getMatchData($matchId);
-            
+
         $idsPacket = explode(',',$data['requestedPlayersIds']);
         $arrayIds = explode(',', $data['playersIds']);
-
+        if($data['game_type'] == 1) {
+            if(count($arrayIds) == 2) {
+                return ['message' => 'You can not add more players.'];
+            }
+        } else {
+            if(count($arrayIds) == 4) {
+                return ['message' => 'You can not add more players.'];
+            }
+        }
         if(!in_array($playerId, $idsPacket)) {
             return ['message' => 'No such request for this player'];
         }
