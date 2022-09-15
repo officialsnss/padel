@@ -304,12 +304,14 @@ class UsersController extends Controller
     public function notificationSettings(Request $request)
     {
         $userId = auth()->user()->id;
-        if($request->isNotification == true) {
+        if($request->isNotification === true) {
             User::where('id', $userId)->update(['notification' => '1']);
             return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => true], 200);
-        } else {
-                User::where('id', $userId)->update(['notification' => '0']);
+        } else if ($request->isNotification === false) {
+            User::where('id', $userId)->update(['notification' => '0']);
             return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => false], 200);
+        } else {
+            return ResponseUtil::errorWithMessage('201', 'Please enter the value of isNotification.', false, 201);
         }
     }
 

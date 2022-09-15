@@ -28,4 +28,5 @@ interface MatchesService
 
     public function filterMatchData($request);
 
+    public function getPlayersListInMatch($request);
 }

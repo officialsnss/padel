@@ -207,6 +207,13 @@ class MatchesServiceImpl implements MatchesService
                     $dataArray['requestedPlayers'] = []; 
                 }
             }
+            $userId = auth()->user()->id;
+            $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+            if(in_array($userData['id'], $requestIds)) {
+                $dataArray['isRequested'] = 1; 
+            } else {
+                $dataArray['isRequested'] = 0; 
+            }
         }
         return $dataArray;
     }
@@ -251,6 +258,7 @@ class MatchesServiceImpl implements MatchesService
                 $ids = $finalPacket . ',' . $playerId;
                 return $this->matchesRepository->requestAddPlayer($matchId, $ids);
             }
+            return [];
         }
     }
 
@@ -297,5 +305,27 @@ class MatchesServiceImpl implements MatchesService
 
         $data = $this->matchesRepository->acceptRequest($request->isAccept, $matchId, $finalPacket, $dataSet);
         return $data;
+    }
+
+    public function getPlayersListInMatch($request)
+    {
+        if(!$request->match_id) {
+            return ['error' => "Please enter the value of the match_id"];
+        }
+        $data = $this->matchesRepository->getMatchDetails($request->match_id);
+        $dataArray = [];
+        if(!$data) {
+            return ['message' => "No match data for this match_id"];
+        }
+        $arrayIds = explode(',', $data['playersIds']); 
+        if (($key = array_search($data['player_id'], $arrayIds)) !== false) {
+            unset($arrayIds[$key]);
+        }
+        if(count($arrayIds) == 0) {
+            return $dataArray;
+        }
+        $arrayIds = array_values($arrayIds);
+        $dataArray = $this->getPlayersList($arrayIds);
+        return $dataArray;
     }
 }

@@ -325,7 +325,7 @@ class BookingServiceImpl implements BookingService
 
         foreach($data as $i => $row) {
             $dataArray[$i]['booking_id'] = $row['booking_id'];
-            $dataArray[$i]['status'] = $row['status'] == 1 ? 'Refund' : 'Booking';
+            $dataArray[$i]['status'] = $row['status'];
             $dataArray[$i]['amount'] = $row['amount'];
             $dataArray[$i]['date'] = $row['created_at']->toDateString();
         }

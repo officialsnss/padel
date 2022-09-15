@@ -79,4 +79,15 @@ class MatchesController extends Controller
         }
         return ResponseUtil::errorWithMessage(201, 'No match details', false, 201);
     }
+
+    public function getPlayersListInMatch(Request $request)
+    {
+        $data = $this->matchesService->getPlayersListInMatch($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if (isset($data['message'])) {
+            return ResponseUtil::successWithMessage($data['message'], true, 200);
+        }
+        return ResponseUtil::successWithData($data, 'List of players in this match', true, 200);
+    }
 }
