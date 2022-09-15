@@ -48,7 +48,9 @@ class DashboardServiceImpl implements DashboardService
         if($walletAmount == "0.000") {
             $walletAmount = "";
         }
-        return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs, 'wallet' => $walletAmount];
+        $user = auth()->user();
+        $notificationSettings = $user['notification'] ? true : false;
+        return ['popularClubs' => $popularClubs, 'upcomingMatches' => $upcomingMatches, 'popularPlayers' => $popularPlayers, 'nearClubs' => $nearClubs, 'wallet' => $walletAmount, 'isNotification' => $notificationSettings];
     }
 
     public function getPopularClubs($clubData) 

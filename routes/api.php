@@ -67,7 +67,7 @@ Route::middleware('auth:api')->group( function () {
 
 
     //NOTIFICATION
-    Route::get('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');
+    Route::post('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');
 
     //POLICIES
     Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');

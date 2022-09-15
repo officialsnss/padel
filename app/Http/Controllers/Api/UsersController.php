@@ -301,16 +301,16 @@ class UsersController extends Controller
         }
     }
 
-    public function notificationSettings()
+    public function notificationSettings(Request $request)
     {
         $userId = auth()->user()->id;
-        $user = User::where('id', $userId)->first();
-        if($user['notification']) {
-            User::where('id', $userId)->update(['notification' => '0']);
-        } else {
+        if($request->isNotification == true) {
             User::where('id', $userId)->update(['notification' => '1']);
+            return ResponseUtil::successWithMessage("Notification settings updated to ON!", true, 200);
+        } else {
+            User::where('id', $userId)->update(['notification' => '0']);
+            return ResponseUtil::successWithMessage("Notification settings updated to OFF!", true, 200);
         }
-        return ResponseUtil::successWithMessage("Notification settings updated!", true, 200);
     }
 
     public function changePassword(Request $request)
