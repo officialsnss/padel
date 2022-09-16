@@ -7,6 +7,7 @@ use App\Models\Matches;
 use App\Models\TimeSolts; 
 use App\Models\Clubs; 
 use App\Models\BookingSlots; 
+use App\Models\PlayersRating; 
 
 /**
  * Class MatchesRepository
@@ -105,5 +106,10 @@ class MatchesRepository extends BaseRepository
       }
       $query = $query->get();
       return $query;
+    }
+
+    public function ratePlayer($data)
+    {
+      return PlayersRating::create($data);
     }
 }

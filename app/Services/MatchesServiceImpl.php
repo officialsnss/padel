@@ -328,4 +328,19 @@ class MatchesServiceImpl implements MatchesService
         $dataArray = $this->getPlayersList($arrayIds);
         return $dataArray;
     }
+
+    public function ratePlayer($request)
+    {
+        $rateData = $request->all();
+        $dataPacket = [];
+        
+        if($rateData) {
+            foreach($rateData as $i => $rate) {
+                $dataPacket[$i]['player_id'] = $rate['player_id'];
+                $dataPacket[$i]['rate'] = $rate['rate'];
+                $data = $this->matchesRepository->ratePlayer($dataPacket[$i]);
+            }
+        }
+        return $dataPacket;
+    }
 }

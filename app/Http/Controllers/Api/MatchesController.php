@@ -90,4 +90,13 @@ class MatchesController extends Controller
         }
         return ResponseUtil::successWithData($data, 'List of players in this match', true, 200);
     }
+
+    public function ratePlayer(Request $request)
+    {
+        $data = $this->matchesService->ratePlayer($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Rating submitted successfully!', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'Please fill the details', false, 201);
+    }
 }
