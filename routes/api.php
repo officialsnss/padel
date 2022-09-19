@@ -59,6 +59,10 @@ Route::middleware('auth:api')->group( function () {
     Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
     Route::post('addPlayer', 'App\Http\Controllers\Api\PlayersController@addPlayerInMatch');
 
+    //COACHES
+    Route::get('get/coaches', 'App\Http\Controllers\Api\CoachesController@getCoachesList');
+    Route::get('get/coachDetails', 'App\Http\Controllers\Api\CoachesController@getCoachDetails');
+
     //MATCHES
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatches');

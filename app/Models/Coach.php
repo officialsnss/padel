@@ -21,4 +21,19 @@ class Coach extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'id', 'user_id');
+    }
+
+    public function matches()
+    {
+        return $this->hasMany(Matches::class, 'coach_id', 'id');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany(CoachesRating::class, 'coach_id', 'id');
+    }
 }
