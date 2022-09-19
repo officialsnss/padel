@@ -307,12 +307,12 @@ class UserController extends Controller
     
       // Getting data from the users table
       $user = User::where('email', $request->email)->first();
-     
+    
       if (!$user) {
        return back()->with('message', 'This email does not exist. Please try again.');
          // return ResponseUtil::errorWithMessage('This email does not exist. Please try again.', false, 200);
       }
-      if(($user->role == '5') || ($user->role == '4')){
+      if(($user->role == '5') || ($user->role == '4') || ($user->role == '3')){
         return back()->with('message', 'Please contact your admin to change the password.');
       
       }

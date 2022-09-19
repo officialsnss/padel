@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link">
+    <a href="{{ URL::to('/'); }}" class="brand-link">
       <img src="{{asset('assets/backend/img/AdminLTELogo.png')}}" alt="Sports Arena" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Sports Arena</span>
     </a>
@@ -191,6 +191,7 @@
 
           @endif
 
+          @if ( auth()->user()->role != '4' )
           <li class="nav-item">
             <a href="{{url('/admin/reports')}}" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-file"></i>
@@ -201,6 +202,19 @@
             </a>
            
           </li>  
+          @endif
+
+          @if ( auth()->user()->role != '5' && auth()->user()->role != '3')
+          <li class="nav-item">
+            <a href="{{ route('holidays') }}" class="nav-link  {{ request()->segment(3) == 'holidays' ? 'active' : '' }}">
+            <i class="nav-icon 	fas fa-file"></i>
+              <p>
+                Holidays
+              </p>
+            </a>
+           
+          </li>  
+          @endif
 
          
          @if ( auth()->user()->role == '1' || auth()->user()->role == '2')

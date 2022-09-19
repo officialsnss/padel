@@ -23,12 +23,13 @@
                   <tbody>
                     
                   @foreach ($out_bookings as $booking)
+               
                     <tr>
                       <td></td>
                       <td>{{ $booking->name }}</td>
                       <td>{{ $booking->user_email }}</td>
                       <td>{{ date('d-m-Y', strtotime($booking->booking_date)) }}</td>
-                      <td>{{ $booking->start_time }} - {{ $booking->end_time }}</td>
+                      <td>{{ $booking->slot }}</td>
                       <td>@if($booking->court_type == '1')
                         {{ 'Indoor' }}
                         @else 

@@ -445,6 +445,70 @@ $("#couponform").validate({
   },
   
  
-
-  
 })
+
+// Caoches
+  
+$("#coachform").validate({
+  ignore: [],
+  rules: {
+    coach_name: {
+    required: true,
+    },
+    coach_email: {
+      required: true,
+      email: true,
+    },
+    price: {
+      required: true,
+      number: true,
+    },
+    'assign_club[]': {
+      required: true,
+      },
+    experience: {
+        required: true,
+    },
+    password: {
+      required: true,
+      minlength: 8
+      },
+    password_confirmation: {
+      required: true,
+      equalTo: "#password"
+      },
+    profile_img: {
+      extension: "jpg|jpeg|png"
+    }
+    
+    
+  },
+  messages: {
+    profile_img: {
+        extension: "Please upload file in these format only (jpg, jpeg, png)."
+    }
+ },
+ 
+})
+
+// Holidays
+  
+$("#holidaysform").validate({
+  ignore: [],
+  rules: {
+    start_date: {
+    required: true,
+    },
+    end_date: {
+      required: true,
+    
+    },
+    
+  },
+ 
+ 
+})
+
+
+
+

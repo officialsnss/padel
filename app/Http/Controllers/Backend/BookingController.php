@@ -33,6 +33,16 @@ class BookingController extends Controller
         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
         ->get();
     }
+      if(auth()->user()->role == 4){  
+      $bookings = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
+      ->leftJoin('users','users.id', '=', 'bookings.user_id')
+      ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+      ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
+      ->where('payments.isRefunded', '0')
+      ->where('bookings.coach_id', '=', $userId)
+      ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
+      ->get();
+    }
     else{
       $bookings = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
         ->leftJoin('users','users.id', '=', 'bookings.user_id')
@@ -146,24 +156,28 @@ class BookingController extends Controller
   {
     $userId = auth()->user()->id;
       $getEvents = DB::table('bookings')
-                ->leftJoin('time_slots','time_slots.id', '=' , 'bookings.slot_id')
+                //->leftJoin('time_slots','time_slots.id', '=' , 'bookings.slot_id')
                 ->leftJoin('users','users.id', '=' , 'bookings.user_id')
                 ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
                 ->where('clubs.user_id','=', $userId)
-                ->select('bookings.id as bookid','bookings.booking_date', 'users.email as custemail','users.name as uname','clubs.name as clubname', 'time_slots.start_time', 'time_slots.end_time')
+                ->select('bookings.id as bookid','bookings.booking_date', 'users.email as custemail','users.name as uname','clubs.name as clubname')
                 ->get();
       $events = [];
+      
+     
     
       foreach ($getEvents as $values) {
         
          $firstslot = BookingSlots::where(['booking_id' =>  $values->bookid])->pluck('slots')->first();
-         ;
+        
          $lastslot = BookingSlots::where(['booking_id' =>  $values->bookid])->pluck('slots')->last();
-         ;
-       
+          
           $start_time_format = date("h:i", strtotime($firstslot));
-          $end_time_format = date("h:i", strtotime($lastslot));
-         // dd($start_time_format);
+          //$end_time_format = date("h:i", strtotime($lastslot));
+          
+          $timestamp = strtotime($lastslot) + 60*60;
+          $end_time_format = date('h:i', $timestamp);
+        
           $event = [];
           $eventtext = $values->clubname;
                        
@@ -193,9 +207,9 @@ class BookingController extends Controller
 
       $out_bookings = DB::table('outside_bookings')
       ->leftJoin('clubs','clubs.id', '=', 'outside_bookings.club_id')
-      ->leftJoin('time_slots as slots','slots.id', '=', 'outside_bookings.slot_id')
+      //->leftJoin('time_slots as slots','slots.id', '=', 'outside_bookings.slot_id')
       ->where('clubs.user_id', '=', $userId)
-      ->select('clubs.*','outside_bookings.*','outside_bookings.id as oid','slots.*')
+      ->select('clubs.*','outside_bookings.*','outside_bookings.id as oid')
       ->get();
       //dd($out_bookings);
   

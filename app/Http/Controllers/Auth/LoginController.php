@@ -48,8 +48,8 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
    
-        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
-            if (auth()->user()->role == 1 || auth()->user()->role == 2 ||auth()->user()->role == 5) {
+        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'], 'isDeleted'=> '0'))) {
+            if (auth()->user()->role != 3) {
                 return redirect()->route('dashboard');
             } else {
                 Auth::logout();

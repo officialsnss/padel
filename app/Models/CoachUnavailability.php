@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Coach extends Model
+class CoachUnavailability extends Model
 {
     use HasFactory;
     public $timestamps = true;
-    protected $table = "coaches_details";
+    protected $table = "coaches_unavailability";
     protected $fillable = [
-        'user_id',
-        'description',
-        'experience',
-        'price',
-        'currency_id',
-        'clubs_assigned',
+        'coach_id',
+        'start_date',
+        'end_date',
+        'reason',
         'status',
         'created_at',
         'updated_at',

@@ -30,6 +30,8 @@
   <script src="{{asset('assets/plugins/jquery-validation/jquery.validate.js')}}"></script>
   <script src="{{asset('assets/plugins/jquery-validation/additional-methods.js')}}"></script>
   <script src="{{asset('assets/backend/js/fonts.js')}}"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -90,6 +92,9 @@
 <!-- Timepicker -->
 
 <script src="{{asset('assets/backend/js/jquery-timepicker.js') }}"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script>
   $(function () {
     $dataa = $("#example1").DataTable({
