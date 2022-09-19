@@ -260,3 +260,12 @@ form#bookform label {
         position: relative;
         padding: 5px;
     }
+    #coachform .dropdown-toggle{
+        height: 40px;
+        width: 400px !important;
+    }
+    .row {
+     
+        margin-right: -7.5px !important;
+        margin-left: -7.5px !important;
+    }

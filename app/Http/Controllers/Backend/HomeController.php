@@ -23,7 +23,7 @@ class HomeController extends Controller
 
     public function index()
     {
-     
+   
       try{
       
           // Backend page
@@ -46,7 +46,7 @@ class HomeController extends Controller
            ->count();
   
 
-        if(auth()->user()->role == 5){
+        if(auth()->user()->role == '5'){
           $totalBooking =  DB::table('bookings')
            ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
            ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
@@ -79,10 +79,41 @@ class HomeController extends Controller
                  ->orderBy('bookings.id', 'desc')
                  ->select('clubs.*','bookings.*','users.name as clubname','payments.*','users.email as playeremail')
                  ->get()
-                 ->take(10);       
+                 ->take(10);  
+                   
         
         }
-        else{
+        if(auth()->user()->role == '4'){
+          $todayBooking = DB::table('bookings')
+          ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+          ->where('payments.isRefunded', '0')
+          ->where('payments.created_at', '>=', date('Y-m-d').' 00:00:00')
+          ->where('bookings.coach_id', $userId)
+          ->count();
+
+          $totalBooking =  DB::table('bookings')
+          ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+          ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+          ->where('payments.isRefunded', '0')
+          ->where('bookings.coach_id', $userId)
+          ->count();
+
+
+          $topBooking = DB::table('bookings')
+          ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
+          ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
+          ->where('payments.isRefunded', '0')
+          ->where('bookings.coach_id', $userId)
+          ->orderBy('bookings.id', 'desc')
+          
+          ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
+          ->get()
+          ->take(10);  
+
+          $sale = '0';
+
+        }
+        if(auth()->user()->role == '2' || auth()->user()->role == '1'){
           $todayBooking = DB::table('payments')
           ->where('isRefunded', '0')
           ->where('created_at', '>=', date('Y-m-d').' 00:00:00')
@@ -105,11 +136,11 @@ class HomeController extends Controller
 
          }
         
-        
+      
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
        }
        catch (\Exception $e) {
-       //dd($e->getMessage());
+       // dd($e->getMessage());
         return redirect('/')->with('error', 'Something went wrong.');
        }
     }

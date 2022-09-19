@@ -3,12 +3,14 @@ namespace App\Http\Controllers\Backend;
 use DB;
 use Auth;
 use File;
-use App\Models\Bat; 
-use App\Models\VendorBats; 
 use App\Models\Club; 
+use App\Models\User; 
+use App\Models\Coach; 
+use App\Models\CoachUnavailability;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class CoachController extends Controller
 {
@@ -28,9 +30,13 @@ class CoachController extends Controller
     {
         try{
             $title = 'Coaches Listing';
-            $bats =  Coach::leftJoin('users'.'users.id','=' ,'coaches_details.user_id')
-                    ->where('status', 1)->get();
-           return view('backend.pages.bat', compact('title','bats'));
+            $coaches =  Coach::leftJoin('users','users.id','=' ,'coaches_details.user_id')
+                     ->leftJoin('currencies', 'currencies.id' ,'=', 'coaches_details.currency_id')
+                     ->where('coaches_details.status', '1')
+                     ->where('coaches_details.isDeleted', '0')
+                     ->select('coaches_details.*','users.*','currencies.code as currencyCode','coaches_details.id as cid')
+                     ->get();
+           return view('backend.pages.coaches', compact('title','coaches'));
         }
         catch (\Exception $e) {
           //dd($e->getMessage());
@@ -43,41 +49,57 @@ class CoachController extends Controller
     public function create()
     { 
         try{
-            $title = 'Create Bat';
-            return view('backend.pages.batCreate', compact('title'));
+            $title = 'Add Coach';
+            $clubs = Club::where('status', 1)->pluck('name','id');
+            return view('backend.pages.coachAdd', compact('title','clubs'));
         }
         catch (\Exception $e) {
-            return redirect('/admin/bats/')->with('error', 'Something went wrong.');
+            return redirect('/admin/coaches/')->with('error', 'Something went wrong.');
         }
     }
 
 
     public function add(Request $request)
     {
-       $request->validate([
-             'bat_name' => 'required|string',
-           //  'description' => 'required|string',
-     ]);
-            
+      
          try{
-            $data['name'] = $request->bat_name;
-            $data['description'] = $request->desc;
-               
-             if($request->file('featured_image')){
-                $file= $request->file('featured_image');
+            $data['name'] = $request->coach_name;
+            $data['email'] = $request->coach_email;
+            $data['password'] = Hash::make($request->password);
+            $data['role'] = '4';
+             if($request->file('profile_img')){
+                $file= $request->file('profile_img');
                 $filename= date('YmdHi').$file->getClientOriginalName();
-                $file->move(base_path('Images/bat_images'), $filename);
-                $data['featured_image']= $filename;
+                $file->move(base_path('Images/user_Images'), $filename);
+                $data['profile_pic']= $filename;
                  }
-               $result =  Bat::insert($data);  
+               $result =  User::insertGetId($data);  
+               if($result){
+                $assign =  $request->assign_club;
+                $all_clubs = [];
+                foreach($assign as $c_id){
+                   $all_clubs[] = $c_id;
+                }
+                $ids = implode(',', $all_clubs);
+                $final = Coach::create([
+                  'user_id' => $result,
+                  'experience' => $request->experience,
+                  'description' => $request->desc,
+                  'price' => $request->price,
+                  'currency_id' => 129,
+                  'clubs_assigned' => $ids
+                
+              ]);
+             
+             }
         
-            if($result){
-            return redirect('/admin/bats')->with('success', 'Bat Created Successfully.');
+            if($final){
+                   return redirect('/admin/coaches')->with('success', 'Coach Addec Successfully.');
             }
         }
         catch (\Exception $e) {
-           // dd($e->getMessage());
-            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+            //dd($e->getMessage());
+            return redirect('/admin/coaches')->with('error', 'Something went wrong.');
         }
 
     
@@ -87,15 +109,15 @@ class CoachController extends Controller
     public function delete(Request $request, $id)
     {
         try{
-            $bats = Bat::findOrFail($id);
-            $bats->status = '2';
-            $bats->save(); 
+            $coach = Coach::findOrFail($id);
+            $coach->isDeleted = '1';
+            $coach->save(); 
          
-           return redirect('/admin/bats')->with('success', 'Deleted Successfully.');
+           return redirect('/admin/coaches')->with('success', 'Coach Deleted Successfully.');
            
         }
         catch (\Exception $e) {
-            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+            return redirect('/admin/coaches')->with('error', 'Something went wrong.');
         
          }
     }
@@ -103,155 +125,177 @@ class CoachController extends Controller
     public function edit($id)
     {
         try{
-            $batData= Bat::where('id', $id)->first();
-            $title = 'Edit Bat';
-            return view('backend.pages.batEdit', compact('title','batData'));
+            $coachData =  Coach::leftJoin('users','users.id','=' ,'coaches_details.user_id')
+            ->leftJoin('currencies', 'currencies.id' ,'=', 'coaches_details.currency_id')
+            ->where('coaches_details.id', $id)
+            ->select('coaches_details.*','users.*','currencies.code as currencyCode','coaches_details.id as cid')
+            ->first();
+            $title = 'Edit Coach';
+            $clubs = Club::where('status', 1)->pluck('name','id');
+            return view('backend.pages.coachEdit', compact('title','coachData','clubs'));
         }
         catch (\Exception $e) {
-            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+            return redirect('/admin/coaches')->with('error', 'Something went wrong.');
         }
     }
 
     public function update(Request $request, $id)
        {
         
-            $request->validate([
-                'bat_name' => 'required|string',
-              
-            ]);
-        try{ 
+         try{ 
           
-           $bat = Bat::findOrFail($id);
+           $coach = Coach::findOrFail($id);
+           $user = User::where('id', $coach->user_id)->first();
+           $user['name'] = $request->coach_name;
+           $user['email'] = $request->coach_email;
           // $data = $request->except('_method','_token','submit');
          
-           if($request->file('featured_image')){
-             if($bat->featured_image){
-                $imagePath = base_path('Images/bat_images/'. $bat->featured_image);
+           if($request->file('profile_img')){
+          
+             if($user->profile_pic){
+                $imagePath = base_path('Images/user_Images/'. $user->profile_pic);
                 if(File::exists($imagePath)){
                     unlink($imagePath);
                 }
             }
-            $file= $request->file('featured_image');
+            $file= $request->file('profile_img');
             $filename= date('YmdHi').$file->getClientOriginalName();
-            $file->move(base_path('Images/bat_images'), $filename);
-            $bat->featured_image= $filename;
+            $file->move(base_path('Images/user_Images'), $filename);
+            $user->profile_pic= $filename;
              }
-           $bat->name = $request->bat_name;
-           $bat->description = $request->desc;
-          // $page->slug = Str::slug($request->title);
-           $bat->save(); 
-           return redirect('/admin/bats')->with('success', 'Bat Updated successfully');
+            $savedUser = $user->save(); 
+           if( $savedUser) {
+                $assign =  $request->assign_club;
+                $all_clubs = [];
+                foreach($assign as $c_id){
+                    $all_clubs[] = $c_id;
+                }
+                $ids = implode(',', $all_clubs);
+                $coach['experience'] = $request->experience;
+                $coach['price'] = $request->price; 
+                $coach['description'] = $request->desc;  
+                $coach['clubs_assigned'] = $ids; 
+                $coach->save(); 
+            }
+           return redirect('/admin/coaches')->with('success', 'Bat Updated successfully');
         }
         catch (\Exception $e) {
-            dd($e->getMessage());
-            return redirect('/admin/bats')->with('error', 'Something went wrong.');
+           // dd($e->getMessage());
+            return redirect('/admin/coaches')->with('error', 'Something went wrong.');
         }
     }
 
-    //Vendor Bats
-    public function vendorBats()
+
+    public function holidays()
     {
         try{
-            $title = 'Bats';
-            $userId = auth()->user()->id;
-            $club =  Club::where('user_id',$userId)
-                     ->first();
-            $clubId = $club->id;
-            $bats =  VendorBats::leftJoin('bats','bats.id','=', 'vendor_bats.bat_id')
-                     ->leftJoin('currencies', 'currencies.id' ,'=', 'vendor_bats.currency_id')
-                     ->where('vendor_bats.club_id', $clubId)
-                     ->select('vendor_bats.id as batid', 'currencies.*','vendor_bats.*','bats.*')
-                     ->get();
-           return view('backend.pages.vendorBats', compact('title','bats'));
+            $title = 'Holidays';
+            $coachId = auth()->user()->id;
+            
+            $holidays =  CoachUnavailability::leftJoin('users','users.id','=' ,'coaches_unavailability.coach_id')
+                     ->where('coaches_unavailability.status', '1')
+                     ->where('coaches_unavailability.isDeleted', '0')
+                     ->select('coaches_unavailability.*','users.*','coaches_unavailability.id as cid');
+                     if(auth()->user()->role == '4'){
+                        $holidays = $holidays->where('coaches_unavailability.coach_id', $coachId);
+                     }
+                    
+                     $holidays = $holidays->get();
+           return view('backend.pages.holidays', compact('title','holidays'));
         }
         catch (\Exception $e) {
-         // dd($e->getMessage());
+         
             return redirect('/admin')->with('error', 'Something went wrong.');
         }      
     }
 
-    //Vendor Bat Create
-    public function vendorCreate()
-    { 
-        try{
-            //$title = '';
-            $bats =  Bat::where('status', 1)->get();
-            return view('backend.pages.vendorBatCreate', compact('bats'));
-        }
-        catch (\Exception $e) {
-            return redirect('/admin/vendor/bats/')->with('error', 'Something went wrong.');
-        }
-    }
+   // Bat Create
 
-    public function vendorAdd(Request $request)
-    {
-      try{
-            $userId = auth()->user()->id;
-            $club =  Club::where('user_id',$userId)
-                     ->first();
-            $clubId = $club->id;
-            $data['club_id'] =  $clubId;
-            $data['bat_id'] = $request->bat_id;
-            $data['price'] = $request->price;
-            $data['currency_id'] = '129';
-            $data['quantity'] = $request->quantity; 
-           
-            $result =  VendorBats::insert($data);  
-        
-            if($result){
-            return redirect('/admin/vendor/bats')->with('success', 'Added Successfully.');
-            }
-        }
-        catch (\Exception $e) {
-            //dd($e->getMessage());
-            return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
-        }
+   public function holidaysCreate()
+   { 
 
+       try{
+           $title = 'Apply Holiday';
+          
+           return view('backend.pages.holidaysAdd', compact('title'));
+       }
+       catch (\Exception $e) {
+           return redirect('/admin/holidays/')->with('error', 'Something went wrong.');
+       }
+   }
+   
+   public function holidaysAdd(Request $request)
+   {
     
-    }
-
-    public function vendorEdit($id)
-    {
         try{
-            $batData= VendorBats::where('id', $id)->first();
-            $bats =  Bat::where('status', 1)->get();
-            return view('backend.pages.vendorBatEdit', compact('batData','bats'));
-        }
-        catch (\Exception $e) {
-            //dd($e->getMessage());
-            return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
-        }
-    }
-
-  
-    public function vendorUpdate(Request $request, $id)
-    {
-     
-        
-     try{ 
-       
-        $vendorbats = VendorBats::findOrFail($id);
-        $userId = auth()->user()->id;
-        $club =  Club::where('user_id',$userId)
-        ->first();
-        $clubId = $club->id;
-        $vendorbats->club_id =  $clubId;
-        $vendorbats->bat_id = $request->bat_id;
-        $vendorbats->price = $request->price;
-        $vendorbats->quantity = $request->quantity;
-        $userId = auth()->user()->id;
-       
-       // $page->slug = Str::slug($request->title);
-        $vendorbats->save(); 
-        return redirect('/admin/vendor/bats')->with('success', 'Updated successfully');
-     }
-     catch (\Exception $e) {
-         //dd($e->getMessage());
-         return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
-     }
- }
+           $coachId = auth()->user()->id;
+           $data['coach_id'] =  $coachId;
+           $data['start_date'] = $request->start_date;
+           $data['end_date'] = $request->end_date;
+           $data['reason'] =  $request->reason;
+           $result =  CoachUnavailability::insert($data);  
+             
+           if($result){
+                  return redirect('/admin/coach/holidays')->with('success', 'Apply holiday Successfully.');
+           }
+       }
+       catch (\Exception $e) {
+           // dd($e->getMessage());
+           return redirect('/admin/coach/holidays')->with('error', 'Something went wrong.');
+       }
 
    
+   }
+
+   
+   public function holidaysEdit($id)
+   {
+       try{
+           $coachesAvailData= CoachUnavailability::where('id', $id)->first();
+           //$title = 'Edit';
+          
+           return view('backend.pages.holidaysEdit', compact('coachesAvailData'));
+       }
+       catch (\Exception $e) {
+           return redirect('/admin/coach/holidays')->with('error', 'Something went wrong.');
+       }
+   }
+
+   public function holidaysUpdate(Request $request, $id)
+   {
+     try{ 
+      
+       $coachesAvail = CoachUnavailability::findOrFail($id);
+     
+       $coachesAvail->start_date = $request->start_date;
+       $coachesAvail->end_date = $request->end_date;
+       $coachesAvail->reason = $request->reason;
+      // $page->slug = Str::slug($request->title);
+       $coachesAvail->save(); 
+       return redirect('/admin/coach/holidays')->with('success', 'Updated successfully');
+    }
+    catch (\Exception $e) {
+       // dd($e->getMessage());
+        return redirect('/admin/coach/holidays')->with('error', 'Something went wrong.');
+    }
+}
+
+ // Region Delete
+    public function holidaysdelete(Request $request, $id)
+        {
+            try{
+                $coach_av = CoachUnavailability::findOrFail($id);
+                $coach_av->isDeleted = '1';
+                $coach_av->save(); 
+            
+            return redirect('/admin/coach/holidays')->with('success', 'Deleted Successfully.');
+            
+            }
+            catch (\Exception $e) {
+                return redirect('/admin/coach/holidays')->with('error', 'Something went wrong.');
+
+            }
+        }
      
 }
 

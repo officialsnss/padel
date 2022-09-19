@@ -33,19 +33,27 @@ Route::get('/', function(){
 
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');
 Route::post('/users/reset/', 'App\Http\Controllers\Backend\UserController@reset')->name('user.password.update');
-//Route::get('admin/home', 'App\Http\Controllers\Backend\HomeController@adminHome')->name('admin.home')->middleware('paddle_admin');
-Route::get('/admin/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard')->middleware('paddle_admin');
+
 
 
 Auth::routes();
+Route::group(['middleware' =>['role:1,2,5,4']], function(){
+    Route::prefix('/admin')->group(function () {
+        //Dashboard Route
+      Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+      Route::get('/', 'App\Http\Controllers\Backend\HomeController@index');
+      Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
+      Route::get('/booking/status/update', 'App\Http\Controllers\Backend\BookingController@updateStatus')->name('payments.update.status');
+      Route::get('/booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+    });
+});
+
 
 Route::group(['middleware' =>['role:1,2']], function(){
       
   
     Route::prefix('/admin')->group(function () {
-        //Default Admin Route
-        Route::get('/', 'App\Http\Controllers\Backend\HomeController@index');
-
+       
         //Dashboard Route
         //Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
 
@@ -126,8 +134,12 @@ Route::group(['middleware' =>['role:1,2']], function(){
 
 
     //Coaches
+    Route::get('/coaches', 'App\Http\Controllers\Backend\CoachController@index');
     Route::get('/coach/create', 'App\Http\Controllers\Backend\CoachController@create')->name('coach.create');
     Route::post('/coach/add', 'App\Http\Controllers\Backend\CoachController@add')->name('coach.add'); 
+    Route::get('/coach/edit/{id}', 'App\Http\Controllers\Backend\CoachController@edit')->name('coach.edit');
+    Route::post('/coach/update/{id}', 'App\Http\Controllers\Backend\CoachController@update')->name('coach.update');
+    Route::get('/coach/delete/{id}', 'App\Http\Controllers\Backend\CoachController@delete')->name('coach.delete');
     });
 
 
@@ -155,15 +167,15 @@ Route::group(['middleware' =>['role:1,2']], function(){
 });
 
 
+
+
 Route::group(['middleware' =>['role:1,2,5']], function(){
     Route::prefix('/admin')->group(function () {
-      //Dashboard Route
-    Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
+    //   //Dashboard Route
+    // Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
      
     //Bookings
-    Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
-    Route::get('/booking/status/update', 'App\Http\Controllers\Backend\BookingController@updateStatus')->name('payments.update.status');
-    Route::get('/booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+   
     // Outside Bookings
     Route::get('/outside-booking', 'App\Http\Controllers\Backend\BookingController@outside')->name('bookings.outside');
     Route::get('/outside-booking/delete/{id}', 'App\Http\Controllers\Backend\BookingController@delete')->name('bookings.outside.delete');
@@ -213,3 +225,14 @@ Route::group(['middleware' =>['role:5']], function(){
 
     });
 });
+
+Route::group(['middleware' =>['role:1,2,4']], function(){
+    Route::prefix('/admin')->group(function () {
+        Route::get('/coach/holidays', 'App\Http\Controllers\Backend\CoachController@holidays')->name('holidays');
+        Route::get('/coach/holidays/create', 'App\Http\Controllers\Backend\CoachController@holidaysCreate')->name('holiday.create');
+        Route::post('/coach/holidays/add', 'App\Http\Controllers\Backend\CoachController@holidaysAdd')->name('holiday.add');
+        Route::get('/coach/holidays/edit/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysEdit')->name('holiday.edit');
+        Route::post('/coach/holidays/update/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysUpdate')->name('holiday.update');
+        Route::get('/coach/holidays/delete/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysdelete')->name('holiday.delete');
+    });
+}); 

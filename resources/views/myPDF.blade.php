@@ -153,14 +153,18 @@ table.details {
               </div>
               <div class="col-4 col-md-4 col-lg-4">
              
-              <table class="details bookingdetails">
-                 <tr>
+                <table class="details bookingdetails">
+                    <tr>
                     <td><strong>Payments Method:</strong></td>
                     <td>{{ ($bookingInfo->payment_method == 1)?'KNET':'COD' }}</td>
                   </tr>
                   <tr>
-                    <td><strong>Price(Per Hour) x {{ $bookingInfo->no_of_hours}}:</strong></td>
-                    <td>{{ $bookingInfo->cprice }} {{ $bookingInfo->unit }}</td>
+                    <td><strong>Price(Per Hour) x {{ $bookingInfo->no_of_hours}} </strong><br></td>
+                     <td>{{ $bookingInfo->cprice }} {{ $bookingInfo->unit }}</td>
+                    
+                  </tr>
+                  <tr>
+                    <td colspan="2"><small>(Including service charge {{ $bookingInfo->service_charge }} {{ $bookingInfo->unit }})</small></small>
                   </tr>
                
                 @if($bookingInfo->isBatBooked == '1')
@@ -177,22 +181,13 @@ table.details {
                   </tr>
                   @endif
                   
-                  <tr>
-                    <td><strong>Service Charge:</strong></td>
-                    <td>{{ $bookingInfo->service_charge }} {{ $bookingInfo->unit }}</td>
-                  </tr>
-                  @if($bookingInfo->discount_price)
-                  
-                  <tr>
-                    <td><strong>Wallet Price:</strong></td>
-                    <td>{{ $bookingInfo->wallet_amount }} {{ $bookingInfo->unit }}</td>
-                  </tr>
-                  @endif
+                 
+                   @if($bookingInfo->discount_price)
                   <tr>
                     <td><strong>Discount:</strong></td>
                     <td>{{ $bookingInfo->discount_price }} {{ $bookingInfo->unit }}</td>
                   </tr>
-
+                @endif
                   <tr>
                     <td><strong>Total Amount:</strong></td>
                     <td>{{ $bookingInfo->total_amount }} {{ $bookingInfo->unit }}</td>
@@ -203,7 +198,7 @@ table.details {
                     <td>{{ $bookingInfo->pending_amount }} {{ $bookingInfo->unit }}</td>
                   </tr>
                   @endif
-              </table>
+                </table>
               </div>
           </div>
 </body>

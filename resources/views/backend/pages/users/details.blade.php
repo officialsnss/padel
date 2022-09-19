@@ -120,7 +120,7 @@
                </tr>
                <tr>
                 <td><strong>Wallets</strong></td>
-                <td><a href="{{ route('wallets', $userInfo->id) }}" class="btn btn-success">View Wallets</a></td>
+                <td><a href="{{ route('wallets', $userInfo->user_id) }}" class="btn btn-success">View Wallets</a></td>
                 </tr>
             </table>
                 <div class="bk-btn">

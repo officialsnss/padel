@@ -59,9 +59,9 @@
                      
                       </div>
                       <div class="summary-view" style="margin-bottom:20px">
-                          <strong>Total Amount: </strong><span class="total-b">2000 KWD</span><br>
-                          <strong>Total Cancellation: </strong><span class="cancel-b">3</span><br>
-                          <strong>Total Refunded Amount:</strong><span class="refund">4000</span><br>
+                          <strong>Total Amount: </strong><span class="total-b"></span><br>
+                          <strong>Total Cancellation: </strong><span class="cancel-b">0</span><br>
+                          <strong>Total Refunded Amount:</strong><span class="refund"></span><br>
                       </div>
             <div class="table-responsive">
                 <table id="order_table" class="table table-bordered table-striped" style="width:100%">
