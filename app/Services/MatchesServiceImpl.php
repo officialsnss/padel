@@ -172,6 +172,9 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['day'] = date('D', strtotime($dataArray['match_date']));
             $dataArray['startTime'] = strtotime($timeArray[0]);  
             $dataArray['endTime'] = strtotime(date("H:i:s", strtotime($endTime) + 60*60)); 
+            $matchDate = $data['booking'][0]['booking_date'];
+            $matchTime = date("H:i:s", $dataArray['endTime']);
+            $dataArray['match_end_timestamp'] = strtotime("$matchDate $matchTime"); 
 
             $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray['game_type'] = $data['game_type'] == 1 ? 'Singles' : 'Doubles';  
