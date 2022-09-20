@@ -447,10 +447,11 @@ $("#couponform").validate({
  
 })
 
-// Caoches
-  
+//coaches
+
 $("#coachform").validate({
-  ignore: [],
+ 
+  onkeyup: false ,
   rules: {
     coach_name: {
     required: true,
@@ -458,6 +459,7 @@ $("#coachform").validate({
     coach_email: {
       required: true,
       email: true,
+      
     },
     price: {
       required: true,
@@ -468,6 +470,7 @@ $("#coachform").validate({
       },
     experience: {
         required: true,
+        number: true,
     },
     password: {
       required: true,

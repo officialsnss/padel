@@ -45,6 +45,7 @@ Route::group(['middleware' =>['role:1,2,5,4']], function(){
       Route::get('/bookings', 'App\Http\Controllers\Backend\BookingController@index')->name('bookings');
       Route::get('/booking/status/update', 'App\Http\Controllers\Backend\BookingController@updateStatus')->name('payments.update.status');
       Route::get('/booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
+      Route::get('/emails', 'App\Http\Controllers\Backend\HomeController@emails')->name('emails');
     });
 });
 
@@ -134,7 +135,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
 
 
     //Coaches
-    Route::get('/coaches', 'App\Http\Controllers\Backend\CoachController@index');
+    Route::get('/coaches', 'App\Http\Controllers\Backend\CoachController@index')->name('coaches');
     Route::get('/coach/create', 'App\Http\Controllers\Backend\CoachController@create')->name('coach.create');
     Route::post('/coach/add', 'App\Http\Controllers\Backend\CoachController@add')->name('coach.add'); 
     Route::get('/coach/edit/{id}', 'App\Http\Controllers\Backend\CoachController@edit')->name('coach.edit');
@@ -228,11 +229,13 @@ Route::group(['middleware' =>['role:5']], function(){
 
 Route::group(['middleware' =>['role:1,2,4']], function(){
     Route::prefix('/admin')->group(function () {
-        Route::get('/coach/holidays', 'App\Http\Controllers\Backend\CoachController@holidays')->name('holidays');
-        Route::get('/coach/holidays/create', 'App\Http\Controllers\Backend\CoachController@holidaysCreate')->name('holiday.create');
-        Route::post('/coach/holidays/add', 'App\Http\Controllers\Backend\CoachController@holidaysAdd')->name('holiday.add');
-        Route::get('/coach/holidays/edit/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysEdit')->name('holiday.edit');
-        Route::post('/coach/holidays/update/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysUpdate')->name('holiday.update');
-        Route::get('/coach/holidays/delete/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysdelete')->name('holiday.delete');
+        Route::get('/off-days', 'App\Http\Controllers\Backend\CoachController@holidays')->name('holidays');
+        Route::get('/off-days/create', 'App\Http\Controllers\Backend\CoachController@holidaysCreate')->name('holiday.create');
+        Route::post('/off-days/add', 'App\Http\Controllers\Backend\CoachController@holidaysAdd')->name('holiday.add');
+        Route::get('/off-days/edit/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysEdit')->name('holiday.edit');
+        Route::post('/off-days/update/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysUpdate')->name('holiday.update');
+        Route::get('/off-days/delete/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysdelete')->name('holiday.delete');
+        Route::get('/off-days/approve/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysApprove')->name('holiday.approve');
+        Route::get('/off-days/reject/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysReject')->name('holiday.reject');
     });
 }); 
