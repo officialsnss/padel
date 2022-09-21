@@ -41,7 +41,7 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {   
-       
+     
         $input = $request->all();
         $this->validate($request, [
             'email' => 'required|email',
@@ -53,7 +53,7 @@ class LoginController extends Controller
                 return redirect()->route('dashboard');
             } else {
                 Auth::logout();
-                return redirect('login')->withErrors(['msg' => 'Wrong email or password']);;
+                return redirect('admin/login')->withErrors(['msg' => 'Wrong email or password']);;
             }
         } else {
             return redirect()->back()->withErrors(['msg' => 'Wrong email or password']);
@@ -63,6 +63,6 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('login');
+        return redirect('/admin/login');
     }
 }

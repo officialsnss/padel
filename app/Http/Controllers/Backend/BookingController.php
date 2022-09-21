@@ -39,7 +39,7 @@ class BookingController extends Controller
             $bookings = $bookings->whereIn('payments.payment_status',[1,2]);
           }
           $bookings = $bookings->where('payments.isRefunded', '0')
-         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
+         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.*', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
           ->get();
    // dd($bookings);
         return view('backend.pages.bookings', compact('title','bookings'));
@@ -242,6 +242,39 @@ class BookingController extends Controller
             return redirect('/admin/bookings')->with('error', 'Something went wrong.');
         }
     }
+
+    //Club Status
+    
+    public function updateClubStatus(Request $request)
+    {
+        try{
+            $c_status = Booking::findOrFail($request->bookId);
+            $c_status->club_status = $request->status;
+            $c_status->save();
+
+            return response()->json(['message' => 'Club status updated successfully.']);
+        }
+        catch (\Exception $e) {
+         //dd($e->getMessage());
+            return redirect('/admin/bookings')->with('error', 'Something went wrong.');
+        }
+    }
+      //Coach Status
+    
+      public function updateCoachStatus(Request $request)
+      {
+          try{
+              $co_status = Booking::findOrFail($request->bookId);
+              $co_status->coach_status = $request->status;
+              $co_status->save();
+  
+              return response()->json(['message' => 'Coach status updated successfully.']);
+          }
+          catch (\Exception $e) {
+           //dd($e->getMessage());
+              return redirect('/admin/bookings')->with('error', 'Something went wrong.');
+          }
+      }
 
    
 }
