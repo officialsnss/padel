@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('frontend.layouts.app')
 
 @section('content')
     <section class="banner-main home-banner-main">
@@ -98,75 +98,76 @@
                 <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
                     <div class="product-container swiper-container">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="courts-div">
-                                    <div class="courts-name-desc">
-                                        <h4>Play Padel</h4>
-                                        <div class="star-rating">
-                                            <input type="radio" id="5-stars" name="rating" value="5" />
-                                            <label for="5-stars" class="star">&#9733;</label>
-                                            <input type="radio" id="4-stars" name="rating" value="4" />
-                                            <label for="4-stars" class="star" style="color: #fc0;">&#9733;</label>
-                                            <input type="radio" id="3-stars" name="rating" value="3" />
-                                            <label for="3-stars" class="star" style="color: #fc0;">&#9733;</label>
-                                            <input type="radio" id="2-stars" name="rating" value="2" />
-                                            <label for="2-stars" class="star" style="color: #fc0;">&#9733;</label>
-                                            <input type="radio" id="1-star" name="rating" value="1" />
-                                            <label for="1-star" class="star" style="color: #fc0;">&#9733;</label>
+                                <div class="swiper-slide">
+                                    <div class="courts-div">
+                                        <div class="courts-name-desc">
+                                            <h4>Play Padel</h4>
+                                            <div class="star-rating">
+                                                <input type="radio" id="5-stars" name="rating" value="5" />
+                                                <label for="5-stars" class="star">&#9733;</label>
+                                                <input type="radio" id="4-stars" name="rating" value="4" />
+                                                <label for="4-stars" class="star" style="color: #fc0;">&#9733;</label>
+                                                <input type="radio" id="3-stars" name="rating" value="3" />
+                                                <label for="3-stars" class="star" style="color: #fc0;">&#9733;</label>
+                                                <input type="radio" id="2-stars" name="rating" value="2" />
+                                                <label for="2-stars" class="star" style="color: #fc0;">&#9733;</label>
+                                                <input type="radio" id="1-star" name="rating" value="1" />
+                                                <label for="1-star" class="star" style="color: #fc0;">&#9733;</label>
+                                            </div>
+                                            <div class="clearfix-space"></div>
+                                            <div class="row">
+                                                <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                                                    <span><img src="http://retalkapp.com/tbaree/01/images/icons/wallet.png" class="img-fluid"
+                                                            alt=""> 30KD/hr</span>
+                                                </div>
+                                                <div class="col-6 col-lg-6 col-md-6 col-sm-6">
+                                                    <span><img src="http://retalkapp.com/tbaree/01/images/icons/location-pin.png" class="img-fluid"
+                                                            alt=""> Salmiya, Kuwait</span>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix-space"></div>
+                                            <div class="row">
+                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
+                                                    <div class="court-icons">
+                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-1.png" class="img-fluid"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
+                                                    <div class="court-icons">
+                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-2.png" class="img-fluid"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
+                                                    <div class="court-icons">
+                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-3.png" class="img-fluid"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
+                                                    <div class="court-icons">
+                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-4.png" class="img-fluid"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
+                                                    <div class="court-icons">
+                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-5.png" class="img-fluid"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="clearfix-space"></div>
-                                        <div class="row">
-                                            <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                                <span><img src="http://retalkapp.com/tbaree/01/images/icons/wallet.png" class="img-fluid"
-                                                        alt=""> 30KD/hr</span>
-                                            </div>
-                                            <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                                <span><img src="http://retalkapp.com/tbaree/01/images/icons/location-pin.png" class="img-fluid"
-                                                        alt=""> Salmiya, Kuwait</span>
-                                            </div>
-                                        </div>
-                                        <div class="clearfix-space"></div>
-                                        <div class="row">
-                                            <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                <div class="court-icons">
-                                                    <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-1.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                            <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                <div class="court-icons">
-                                                    <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-2.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                            <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                <div class="court-icons">
-                                                    <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-3.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                            <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                <div class="court-icons">
-                                                    <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-4.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                            <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                <div class="court-icons">
-                                                    <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-5.png" class="img-fluid"
-                                                        alt="">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <img src="http://retalkapp.com/tbaree/01/images/court-img-1.webp" class="img-fluid" alt="">
                                     </div>
-                                    <img src="http://retalkapp.com/tbaree/01/images/court-img-1.webp" class="img-fluid" alt="">
+                                    <div class="know-more-arrow">
+                                        <a href="javascript:void(0)"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid"
+                                                alt=""></a>
+                                    </div>
                                 </div>
-                                <div class="know-more-arrow">
-                                    <a href="javascript:void(0)"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid"
-                                            alt=""></a>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
+
+                            {{-- <div class="swiper-slide">
                                 <div class="courts-div">
                                     <div class="courts-name-desc">
                                         <h4>Hashimi Padel Court</h4>
@@ -301,7 +302,7 @@
                                     <a href="javascript:void(0)"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid"
                                             alt=""></a>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <!--<div class="swiper-pagination product-pagination wow fadeInUp" data-wow-delay="0.1s"></div>-->
