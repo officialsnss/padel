@@ -6,6 +6,7 @@ use File;
 use App\Models\Club; 
 use App\Models\User; 
 use App\Models\Coach; 
+use App\Models\Booking; 
 use App\Models\CoachUnavailability;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -226,7 +227,7 @@ class CoachController extends Controller
 
    public function holidaysCreate()
    { 
-
+  
        try{
            $title = 'Apply off';
           
@@ -239,19 +240,29 @@ class CoachController extends Controller
    
    public function holidaysAdd(Request $request)
    {
-    
+     
         try{
+           
            $coachId = auth()->user()->id;
-           $data['coach_id'] =  $coachId;
-           $data['start_date'] = $request->start_date;
-           $data['end_date'] = $request->end_date;
-           $data['reason'] =  $request->reason;
-           $data['status'] =  '2';
-           $result =  CoachUnavailability::insert($data);  
-             
-           if($result){
-                  return redirect('/admin/leaves')->with('success', 'Apply holiday Successfully.');
-           }
+          
+           $isBooking = Booking::where('coach_id', $coachId)
+                             ->whereBetween('booking_date', [$request->start_date, $request->end_date])
+                             ->whereIn('status', [1,2])
+                            ->count();
+          if($isBooking > 0){
+            return Redirect::back()->with('error', 'You cannot apply off of these days as you have already booking on this date.');
+          }
+          else{
+            $data['coach_id'] =  $coachId;
+            $data['start_date'] = $request->start_date;
+            $data['end_date'] = $request->end_date;
+            $data['reason'] =  $request->reason;
+            $data['status'] =  '2';
+            $result =  CoachUnavailability::insert($data);  
+            if($result){
+                    return redirect('/admin/leaves')->with('success', 'Apply holiday Successfully.');
+            }
+        }
        }
        catch (\Exception $e) {
            // dd($e->getMessage());

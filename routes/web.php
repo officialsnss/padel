@@ -30,13 +30,14 @@ Route::get('clear', function () {
 Route::get('/', function(){
     return view('frontend.pages.index');
 });
-
+Route::prefix('/admin')->group(function () {
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');
 Route::post('/users/reset/', 'App\Http\Controllers\Backend\UserController@reset')->name('user.password.update');
+});
 
-
-
-Auth::routes();
+Route::prefix('/admin')->group(function () {
+  Auth::routes();
+});
 Route::group(['middleware' =>['role:1,2,5,4']], function(){
     Route::prefix('/admin')->group(function () {
         //Dashboard Route
@@ -46,6 +47,9 @@ Route::group(['middleware' =>['role:1,2,5,4']], function(){
       Route::get('/booking/status/update', 'App\Http\Controllers\Backend\BookingController@updateStatus')->name('payments.update.status');
       Route::get('/booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
       Route::get('/emails', 'App\Http\Controllers\Backend\HomeController@emails')->name('emails');
+
+      Route::get('/booking/clubstatus/update', 'App\Http\Controllers\Backend\BookingController@updateClubStatus')->name('bookings.update.clubstatus');
+      Route::get('/booking/coachstatus/update', 'App\Http\Controllers\Backend\BookingController@updateCoachStatus')->name('bookings.update.coachstatus');
     });
 });
 
