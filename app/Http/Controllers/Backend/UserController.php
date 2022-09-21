@@ -148,11 +148,11 @@ class UserController extends Controller
     public function add(Request $request)
     {
       $request->validate([
-                'fullname' => 'required|string',
+                // 'fullname' => 'required|string',
                 'clubname' => 'required|string|unique:clubs,name',
                 'email'=> 'required|email|unique:users' , 
-                'password' => 'required|min:8',
-                'password_confirmation' => 'required|same:password'
+                // 'password' => 'required|min:8',
+                // 'password_confirmation' => 'required|same:password'
             ]);
         try{
            

@@ -23,36 +23,25 @@ class BookingController extends Controller
     try{
         $title = 'Bookings';
         $userId = auth()->user()->id;
-    if(auth()->user()->role == 5){  
         $bookings = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
-        ->leftJoin('users','users.id', '=', 'bookings.user_id')
-        ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-        ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-        ->where('payments.isRefunded', '0')
-        ->where('clubs.user_id', '=', $userId)
-        ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
-        ->get();
-    }
-      if(auth()->user()->role == 4){  
-      $bookings = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
-      ->leftJoin('users','users.id', '=', 'bookings.user_id')
-      ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-      ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-      ->where('payments.isRefunded', '0')
-      ->where('bookings.coach_id', '=', $userId)
-      ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
-      ->get();
-    }
-    else{
-      $bookings = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
-        ->leftJoin('users','users.id', '=', 'bookings.user_id')
-        ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-        ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-        ->whereIn('payments.payment_status',[1,2])
-        ->where('payments.isRefunded', '0')
-        ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
-        ->get();
-    }
+            ->leftJoin('users','users.id', '=', 'bookings.user_id')
+            ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+            ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id');
+      
+      
+          if(auth()->user()->role == 5){  
+            $bookings = $bookings->where('clubs.user_id', '=', $userId);
+          }
+            if(auth()->user()->role == 4){  
+              $bookings = $bookings->where('bookings.coach_id', '=', $userId);
+          }
+          else{
+            $bookings = $bookings->whereIn('payments.payment_status',[1,2]);
+          }
+          $bookings = $bookings->where('payments.isRefunded', '0')
+         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
+          ->get();
+   // dd($bookings);
         return view('backend.pages.bookings', compact('title','bookings'));
     }
     catch (\Exception $e) {

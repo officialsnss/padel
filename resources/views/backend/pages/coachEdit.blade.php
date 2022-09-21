@@ -11,7 +11,7 @@
             <div class="col-md-6"> 
               <div class="form-group">
                   <label for="inputName">Coach Name</label>
-                  <input type="text" id="coach_name" class="form-control" value="{{ $coachData->name }}" name="coach_name">
+                  <input type="text" id="coach_name" class="form-control" value="{{ old('coach_name') ?? $coachData->name }}" name="coach_name">
                   @error('coach_name')
                   <div class="form-error">{{ $message }}</div>
                   @enderror
@@ -20,7 +20,7 @@
               <div class="col-md-6"> 
               <div class="form-group">
                   <label for="inputName">Email</label>
-                  <input type="email" id="coach_email" class="form-control" value="{{ $coachData->email }}" name="coach_email">
+                  <input type="email" id="coach_email" class="form-control" value="{{ old('coach_email') ?? $coachData->email }}" name="coach_email">
                   @error('coach_email')
                   <div class="form-error">{{ $message }}</div>
                   @enderror
@@ -31,8 +31,8 @@
           <div class="row">
             <div class="col-md-6"> 
               <div class="form-group">
-                  <label for="inputName">Total Experience</label>
-                  <input type="text" id="experience" class="form-control" value="{{ $coachData->experience }}" name="experience">
+                  <label for="inputName">Total Experience (in Months)</label>
+                  <input type="text" id="experience" class="form-control" value="{{ old('experience') ?? $coachData->experience }}" name="experience">
                   @error('experience')
                   <div class="form-error">{{ $message }}</div>
                   @enderror
@@ -43,7 +43,7 @@
                   <label for="inputName">Price(Per/hour)</label>
                       <div class="row">
                               <div class="col-md-10">
-                              <input type="text" id="price" class="form-control" value="{{ $coachData->price }}" name="price">
+                              <input type="text" id="price" class="form-control" value="{{ old('price') ?? $coachData->price }}" name="price">
                               </div>
                               <div class="col-md-2">
                                 <input type="text" class="form-control" value="KWD" readonly>
@@ -96,7 +96,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                 <label for="inputName">About Coach</label>
-                <textarea id="desc" class="ckeditor form-control" name="desc">{{ $coachData->description }}</textarea>
+                <textarea id="desc" class="ckeditor form-control" name="desc">{{ old('description') ?? $coachData->description }}</textarea>
                @error('desc')
                 <div class="form-error">{{ $message }}</div>
                @enderror

@@ -17,7 +17,7 @@
                     <th>Sr.no</th>
                     <th>Name</th>
                     <th>Price</th>
-                    <th>Experience</th>
+                    <th>Experience(in Months)</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -29,7 +29,7 @@
                       <td>{{ $coach->name }}</td>
                      
                       <td>{{ $coach->price }} {{ $coach->currencyCode }}</td>
-                      <td>{{ $coach->experience }}</td>
+                      <td>{{ $coach->experience }} </td>
                         
                        <td>
                         <a href="{{ route('coach.edit', $coach->cid) }}" class="btn btn-secondary">Edit</a>

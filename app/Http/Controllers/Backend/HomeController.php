@@ -209,5 +209,21 @@ class HomeController extends Controller
       }
     }
 
+  public function emails(Request $request){
+     $userEmails =  User::where('isDeleted', '0')
+                    ->pluck('email');
+
+      return response()->json($userEmails);
+    //   $checkemail =  User::where('isDeleted', '0')
+    //   ->where('email', $request->useremail)->count();
+    
+    //   if ($checkemail == 0){
+    //     $valid = "true";
+    // } else {
+    //     $valid = "false";
+    // }
+    // echo $valid;
+
+  }
     
 }
