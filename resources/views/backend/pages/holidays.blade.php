@@ -8,7 +8,7 @@
               <div class="card-header">
                 @if(auth()->user()->role == '4')
                 <div class="add">
-                 <a href="{{ route('holiday.create') }}" class="btn btn-info">Apply Holiday</a>
+                 <a href="{{ route('holiday.create') }}" class="btn btn-info">Apply OFF</a>
                 </div>
                 @endif
               </div>
@@ -17,8 +17,6 @@
                   <thead>
                   <tr>
                     <th>Sr.no</th>
-                    <th>Name</th>
-                    <th>Email</th>
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Reason</th>
@@ -31,8 +29,7 @@
                   @foreach ($holidays as $holiday)
                     <tr>
                       <td></td>
-                      <td>{{ $holiday->name }}</td>
-                      <td>{{ $holiday->email }}</td>
+                  
                       <td>{{ date('d-m-Y', strtotime($holiday->start_date)) }}</td>
                       <td>{{ date('d-m-Y', strtotime($holiday->end_date)) }}</td>
                       <td>{{ $holiday->reason }}</td>

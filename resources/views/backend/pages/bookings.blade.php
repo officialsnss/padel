@@ -20,7 +20,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Club Name</th>
-                    <!-- <th>Status</th> -->
+                   <!-- <th>Status</th> -->
                     @if( auth()->user()->role == '1' ||  auth()->user()->role == '2')
                     <th>Club Status</th>
                     <th>Coach Status</th>
@@ -47,10 +47,15 @@
                        <option value="1" data-id="{{ $booking->bookId }}" {{ ($booking->club_status == '1')?'selected':'' }}>Confirmed</option>
                        </select>
                         </td>
-                        <td> <select class="co_status form-control">
+                        <td>
+                          @if($booking->coach_id)
+                           <select class="co_status form-control">
                        <option value="0" data-id="{{ $booking->bookId }}" {{ ($booking->coach_status == '0')?'selected':'' }}>Not confirmed</option>
                        <option value="1" data-id="{{ $booking->bookId }}" {{ ($booking->coach_status == '1')?'selected':'' }}>Confirmed</option>
                        </select>
+                          @else
+                          {{ 'Coach Not booked' }}
+                          @endif
                         </td>
                         @endif
                      <td><a href="{{ route('booking.view',$booking->bookId)}}" class="btn btn-success">View Details</a></td>

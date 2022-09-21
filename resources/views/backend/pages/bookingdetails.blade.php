@@ -70,6 +70,10 @@
                  
                   <h5 class="text-primary">Club Name</h5>
                   <p>{{ $bookingInfo->clubname }}</p>
+                  @if($bookingInfo->coachname)
+                  <h5 class="text-primary">Coach Name: </h5>
+                  <p>{{ $bookingInfo->coachname }}</p>
+                  @endif
                 </div>  
                 <div class="col-1 col-md-1 col-lg-1">
                  </div>
@@ -112,6 +116,7 @@
                     <td>{{ $bookingInfo->batPrice }} {{ $bookingInfo->unit }}</td>
                   </tr>
                   @endif
+                 
                   
                   @if($bookingInfo->payment_method == '2')
                   <tr>
