@@ -30,7 +30,7 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No clubs found.', true, 201);
     }
 
     public function getNearClubs(Request $request)
@@ -39,7 +39,7 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Near Clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No near clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No near clubs found.', true, 201);
     }
 
     public function getPopularClubs(Request $request)
@@ -48,7 +48,7 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Popular clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No popular clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No popular clubs found.', true, 201);
     }
 
     public function getSingleClub(Request $request)
@@ -57,6 +57,6 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Club Details', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No club found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No club found.', true, 201);
     }
 }

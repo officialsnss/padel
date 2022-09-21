@@ -29,7 +29,7 @@ class BookingController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all bookings by user', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201', 'No bookings', true, 201);
+        return ResponseUtil::errorWithMessage(201, 'No bookings', true, 201);
     }
 
     public function addBooking(Request $request)
@@ -38,7 +38,7 @@ class BookingController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data = [], 'Booking successfull', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201', 'Booking Failed', true, 201);
+        return ResponseUtil::errorWithMessage(201, 'Booking Failed', true, 201);
     }
 
     public function getBookingSlots(Request $request)
@@ -48,16 +48,16 @@ class BookingController extends Controller
         if(count($data) > 1) {
             return ResponseUtil::successWithData($data, 'Slots available for the date', true, 200);
         } elseif ($data['message']) {
-            return ResponseUtil::errorWithMessage('201', $data['message'], false, 201);
+            return ResponseUtil::errorWithMessage(201, $data['message'], false, 201);
         }
-        return ResponseUtil::errorWithMessage('201', 'No slots available!', false, 201);
+        return ResponseUtil::errorWithMessage(201, 'No slots available!', false, 201);
     }
 
     public function getWallet()
     {
         $data = $this->bookingService->getWallet();
         if($data == []) {
-            return ResponseUtil::errorWithMessage('201', 'No entries in the wallet', true, 201);
+            return ResponseUtil::errorWithMessage(201, 'No entries in the wallet', true, 201);
         }
         return ResponseUtil::successWithData($data, 'Wallet details', true, 200);
     }
@@ -66,7 +66,7 @@ class BookingController extends Controller
     {
         $data = $this->bookingService->getCoupons();
         if($data == []) {
-            return ResponseUtil::errorWithMessage('201', 'No coupons in the wallet', true, 201);
+            return ResponseUtil::errorWithMessage(201, 'No coupons in the wallet', true, 201);
         }
         return ResponseUtil::successWithData($data, 'Coupons details', true, 200);
     }
@@ -75,7 +75,7 @@ class BookingController extends Controller
     {
         $data = $this->bookingService->applyCoupon($request);
         if(isset($data['message'])) {
-            return ResponseUtil::errorWithMessage('201', $data['message'], true, 201);
+            return ResponseUtil::errorWithMessage(201, $data['message'], true, 201);
         }
         if($request->coupon_id) {
             return ResponseUtil::successWithData($data, 'Coupon applied', true, 200);
