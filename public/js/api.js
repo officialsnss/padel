@@ -16,7 +16,7 @@ $(document).ready(function () {
         url: 'api/popularClubs',
         // data: formData.serialize(),
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             var res = "";
             for(var i=0; i<data.data.length; i++){
                 res += '<div class="swiper-slide">';
@@ -80,7 +80,7 @@ $(document).ready(function () {
                 res +='</div>';
                 res +='</div>';
             }
-            alert(res);
+            // alert(res);
 
             $(".res-data").append(res);
 

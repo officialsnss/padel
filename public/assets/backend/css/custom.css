@@ -269,3 +269,10 @@ form#bookform label {
         margin-right: -7.5px !important;
         margin-left: -7.5px !important;
     }
+    .card-body.setting-form input {
+        width: 70%;
+    }
+    .card-body.setting-form label {
+        width: 25%;
+        float: left;
+    }
