@@ -276,42 +276,9 @@
                         aria-labelledby="pills-players-tab">
                         <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
                             <div class="playerscoach-container swiper-container">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-1.webp"
-                                                class="img-fluid players-coach-img" alt="">
-                                        </div>
-                                        <div class="playerscoach-details">
-                                            <h4>Francisco N.Compan</h4>
-                                            <h6>Experience: 12 Years</h6>
-                                            <div class="star-rating-players">
-                                                <div class="star-rating">
-                                                    <input type="radio" id="e5-stars" name="rating"
-                                                        value="5" />
-                                                    <label for="5-stars" class="star"
-                                                        style="color: #fc0;">&#9733;</label>
-                                                    <input type="radio" id="d4-stars" name="rating"
-                                                        value="4" />
-                                                    <label for="4-stars" class="star"
-                                                        style="color: #fc0;">&#9733;</label>
-                                                    <input type="radio" id="c3-stars" name="rating"
-                                                        value="3" />
-                                                    <label for="3-stars" class="star"
-                                                        style="color: #fc0;">&#9733;</label>
-                                                    <input type="radio" id="b2-stars" name="rating"
-                                                        value="2" />
-                                                    <label for="2-stars" class="star"
-                                                        style="color: #fc0;">&#9733;</label>
-                                                    <input type="radio" id="a1-star" name="rating"
-                                                        value="1" />
-                                                    <label for="1-star" class="star"
-                                                        style="color: #fc0;">&#9733;</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
+                                <div class="swiper-wrapper player-list-data">
+
+                                    {{-- <div class="swiper-slide">
                                         <div class="playerscoach-div">
                                             <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-2.webp"
                                                 class="img-fluid players-coach-img" alt="">
@@ -376,7 +343,7 @@
                                                 <label for="1-star" class="star" style="color: #fc0;">&#9733;</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>
@@ -388,8 +355,8 @@
                     <div class="tab-pane fade" id="pills-coach" role="tabpanel" aria-labelledby="pills-coach-tab">
                         <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
                             <div class="playerscoach-container swiper-container">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
+                                <div class="swiper-wrapper coach-list-data">
+                                    {{-- <div class="swiper-slide">
                                         <div class="playerscoach-div">
                                             <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-4.webp"
                                                 class="img-fluid players-coach-img" alt="">
@@ -488,7 +455,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>
@@ -502,4 +469,7 @@
             </div>
         </div>
     </section>
+
+
 @endsection
+
