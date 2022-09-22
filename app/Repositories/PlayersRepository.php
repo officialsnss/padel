@@ -4,6 +4,7 @@ namespace App\Repositories;
 use Auth;
 use App\Utils\ResponseUtil;
 use App\Models\Players; 
+use DB;
 
 /**
  * Class PlayersRepository
@@ -58,6 +59,27 @@ class PlayersRepository extends BaseRepository
 
     public function addPlayerDetails($data, $playerId)
     {
-      return Players::where('id', $playerId)->update($data);
+      return Players::where('id', $playerId)
+                ->update($data);
+    }
+
+    public function updatePlayerData($id, $val)
+    {
+      if($val) {
+        $query = Players::where('id', $id)
+                    ->update(['match_won' => DB::raw('match_won + 1'),
+                              'match_played' => DB::raw('match_played + 1')]);
+      } else {
+        $query = Players::where('id', $id)
+                    ->update(['match_loose' => DB::raw('match_loose + 1'), 
+                              'match_played' => DB::raw('match_played + 1')]);
+      }
+    }
+
+    public function playersListInMatch($data)
+    {
+      return Players::whereIn('id', $data)
+                  ->with('users')
+                  ->get(); 
     }
 }

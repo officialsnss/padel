@@ -58,15 +58,16 @@ Route::middleware('auth:api')->group( function () {
     Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
     Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
     Route::post('addPlayer', 'App\Http\Controllers\Api\PlayersController@addPlayerInMatch');
+    Route::post('playersList/match', 'App\Http\Controllers\Api\PlayersController@playersListInMatch');
 
     //MATCHES
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
     Route::get('get/matches', 'App\Http\Controllers\Api\MatchesController@getMatches');
     Route::get('get/matchDetails', 'App\Http\Controllers\Api\MatchesController@getMatchDetails');
     Route::get('match_filter', 'App\Http\Controllers\Api\MatchesController@filterMatchData');
-    Route::get('playersList/match', 'App\Http\Controllers\Api\MatchesController@getPlayersListInMatch');
+    Route::get('playersList/rating', 'App\Http\Controllers\Api\MatchesController@playersRatingList');
     Route::post('ratePlayer', 'App\Http\Controllers\Api\MatchesController@ratePlayer');
-
+    Route::post('addResult', 'App\Http\Controllers\Api\MatchesController@addMatchResult');
 
     //NOTIFICATION
     Route::post('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');

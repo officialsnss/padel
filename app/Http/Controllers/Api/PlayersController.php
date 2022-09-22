@@ -76,4 +76,15 @@ class PlayersController extends Controller
         }
         return ResponseUtil::successWithMessage('There is an error while adding the player.', false, 200);
     }
+
+    public function playersListInMatch(Request $request)
+    {
+        $data = $this->playersService->playersListInMatch($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if (isset($data['message'])) {
+            return ResponseUtil::successWithMessage($data['message'], true, 200);
+        }
+        return ResponseUtil::successWithData($data, 'List of players in this match', true, 200);
+    }
 }
