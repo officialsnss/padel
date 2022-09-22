@@ -186,24 +186,26 @@ class HomeController extends Controller
     //Refunds Settings
     public function settings()
     { 
-       $title = 'Refunds Settings';
-       $settings = DB::table('settings')->select('id', 'value')->where('label' ,'refund_amount')->get();
-    
+       $title = 'Homepage Settings';
+       $settings = DB::table('settings')->get();
        return view('backend.pages.settings', compact('title','settings'));
     }
-    public function settingsUpdate(Request $request, $id)
+
+    public function settingsUpdate(Request $request)
     { 
-        $request->validate([
-        'amount' => 'required|numeric',
-        ]);
-      try{
      
-        DB::table('settings')->where('id', $id)->update(['value' => $request->amount]);
-        
+      try{
+       
+        foreach($request->setting as $key => $value){
+           DB::table('settings')
+             ->where('label', $key)->update(['value' => $value]);
+          
+        }
+       
         return redirect('/admin/settings')->with('success', 'Settings Updated!');
       }
       catch (\Exception $e) {
-       // dd(getMessage());
+       //dd(getMessage());
         return redirect('/admin/settings')->with('error', 'Something went wrong.');
       
       }

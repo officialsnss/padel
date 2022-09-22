@@ -109,7 +109,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
     
       //Settings
       Route::get('/settings', 'App\Http\Controllers\Backend\HomeController@settings')->name('settings');
-      Route::post('/settings/update/{id}', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
+      Route::post('/settings/update', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
+      
      
      //Refunds Listing
       Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');
@@ -233,7 +234,7 @@ Route::group(['middleware' =>['role:5']], function(){
 
 Route::group(['middleware' =>['role:1,2,4']], function(){
     Route::prefix('/admin')->group(function () {
-      Route::get('/off-days/list/{id}', 'App\Http\Controllers\Backend\CoachController@offDays')->name('offdays');
+        Route::get('/off-days/list/{id}', 'App\Http\Controllers\Backend\CoachController@offDays')->name('offdays');
         Route::get('/off-days', 'App\Http\Controllers\Backend\CoachController@holidays')->name('holidays');
         Route::get('/off-days/create', 'App\Http\Controllers\Backend\CoachController@holidaysCreate')->name('holiday.create');
         Route::post('/off-days/add', 'App\Http\Controllers\Backend\CoachController@holidaysAdd')->name('holiday.add');
