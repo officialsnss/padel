@@ -8,6 +8,7 @@ use App\Models\TimeSolts;
 use App\Models\Clubs; 
 use App\Models\BookingSlots; 
 use App\Models\PlayersRating; 
+use App\Models\MatchResults; 
 
 /**
  * Class MatchesRepository
@@ -111,5 +112,20 @@ class MatchesRepository extends BaseRepository
     public function ratePlayer($data)
     {
       return PlayersRating::create($data);
+    }
+
+    public function addMatchResult($data)
+    {
+      return MatchResults::create($data);
+    }
+
+    public function updateMatch($matchId)
+    {
+      return Matches::where('id', $matchId)->update(['status' => '2']);
+    }
+
+    public function checkMatchResult($matchId)
+    {
+      return MatchResults::where('match_id', $matchId)->first();
     }
 }

@@ -151,7 +151,7 @@
          <!--</li>-->
 
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity') || (request()->segment(2) == 'settings') || (request()->segment(2) == 'home-slider'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-plug"></i>
               <p>
                 System Settings
@@ -186,6 +186,28 @@
                   </p>
                 </a>
              </li> 
+
+             <li class="nav-item">
+                <a href="{{url('/admin/settings')}}" class="nav-link  {{ ( request()->segment(2) == 'settings')? 'active' : '' }}">
+                <i class="nav-icon fas fa-cogs"></i>
+                  <p>
+                    Settings
+                  </p>
+                </a>
+             </li> 
+
+             <li class="nav-item">
+                <a href="{{url('/admin/home-slider')}}" class="nav-link  {{ ( request()->segment(2) == 'home-slider')? 'active' : '' }}">
+                <i class="nav-icon fas fa-image"></i>
+                  <p>
+                    Homepage Slider
+                  </p>
+                </a>
+             </li> 
+
+
+           
+
             </ul>
           </li>
 
@@ -206,7 +228,7 @@
 
           @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
           <li class="nav-item">
-            <a href="{{ route('coaches') }}" class="nav-link  {{ (request()->segment(2) == 'coaches' || request()->segment(2) == 'coach') ? 'active' : '' }}">
+            <a href="{{ route('coaches') }}" class="nav-link  {{ (request()->segment(2) == 'coaches' || request()->segment(2) == 'coach' || request()->segment(2) == 'off-da') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-user"></i>
               <p>
                 Coaches
@@ -216,7 +238,7 @@
           </li>  
           @endif
 
-          @if ( auth()->user()->role != '5' && auth()->user()->role != '3')
+          @if ( auth()->user()->role == '4')
           <li class="nav-item">
             <a href="{{ route('holidays') }}" class="nav-link  {{ request()->segment(2) == 'off-days' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-file"></i>

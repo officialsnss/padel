@@ -512,6 +512,44 @@ $("#holidaysform").validate({
  
 })
 
+// homeslider
+$("#slideform").validate({
+ 
+ 
+  rules: {
+    slide_heading: {
+    required: true,
+    },
+   
+    button_label: {
+      required: true,
+    
+    },
+    
+    button_label: {
+        required: true,
+        
+    },
+    button_val: {
+      required: true,
+     
+      },
+   
+    image: {
+      required: true,
+      extension: "jpg|jpeg|png"
+    }
+    
+    
+  },
+  messages: {
+    image: {
+        extension: "Please upload file in these format only (jpg, jpeg, png)."
+    }
+ },
+ 
+})
+
 
 
 

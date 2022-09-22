@@ -155,6 +155,7 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['id'] = $data['id'];
             $dataArray['player_id'] = $data['player_id'];            
 
+            $dataArray['club_id'] = $data['clubs'] ? $data['clubs'][0]['id'] : null;
             $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
             
             $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
@@ -173,14 +174,30 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['startTime'] = strtotime($timeArray[0]);  
             $dataArray['endTime'] = strtotime(date("H:i:s", strtotime($endTime) + 60*60)); 
             $matchDate = $data['booking'][0]['booking_date'];
-            $matchTime = date("H:i:s", $dataArray['endTime']);
-            $dataArray['match_end_timestamp'] = strtotime("$matchDate $matchTime"); 
+            $matchEndTime = date("H:i:s", $dataArray['endTime']);
+            $matchStartTime = date("H:i:s", $dataArray['startTime']);
+            $dataArray['startTime'] = strtotime("$matchDate $matchStartTime"); 
+            $dataArray['endTime'] = strtotime("$matchDate $matchEndTime"); 
+
+            $dataArray['no_of_hours'] = $data['booking'][0]['no_of_hours'];  
 
             $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
+            $dataArray['court_type'] = $data['court_type'] == 1 ? 'Indoor' : 'Outdoor';  
             $dataArray['game_type'] = $data['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray['isFriendly'] = $data['is_friendly'] == 0 ? 'Game': 'Friendly';
-            
+            if($data['gender_allowed'] == 1) {
+                $dataArray['gender'] = 'Female';
+            } elseif ($data['gender_allowed'] == 2) {
+                $dataArray['gender'] = 'Male';
+            } else {
+                $dataArray['gender'] = 'Mix';
+            }
             $levelArray = explode(',',$data['level']);
+            foreach($levelArray as $i => $row) {
+                $level = $this->levelsServiceImpl->getLevelById($row);
+                $dataArray['level'][$i]['id'] = $level['id'];
+                $dataArray['level'][$i]['name'] = $level['name'];
+            }
             $min = min($levelArray);
             $min_level = $this->levelsServiceImpl->getLevelById($min);
             $dataArray['minimum_level']['id'] = $min_level['id'];
@@ -310,7 +327,7 @@ class MatchesServiceImpl implements MatchesService
         return $data;
     }
 
-    public function getPlayersListInMatch($request)
+    public function playersRatingList($request)
     {
         if(!$request->match_id) {
             return ['error' => "Please enter the value of the match_id"];
@@ -345,5 +362,83 @@ class MatchesServiceImpl implements MatchesService
             }
         }
         return $dataPacket;
+    }
+
+    public function addMatchResult($request)
+    {
+        // Check if the match has already been completed and result is added
+        $check = $this->matchesRepository->checkMatchResult($request->match_id);
+        if($check) {
+            return ['error' => 'This match result is already been added.'];
+        }
+
+        $check2 = $this->matchesRepository->getMatchData($request->match_id);
+        $playersInMatch = explode(',', $check2['playersIds']);
+        $score = [];
+        $result = $request->result;
+
+        //Making an array of scores based on the rounds
+        foreach ($result as $key => $data) {
+            if($request->rounds != count($data['score'])) {
+                return ['error' => 'There is an issue with number of rounds. Please check.'];
+            }
+            $playersIds[$key] = implode(',', $data['player_ids']);
+            foreach($data['score'] as $i => $row) {
+                $score['round'. ++$i][$key] = $row;
+            }
+        }
+
+        // Calculating the winner of the match with comparing scores based on rounds
+        $team1 = 0;
+        $team2 = 0;
+        foreach($score as $round) {
+            if($round[0] > $round[1]) {
+                $team1 += 1;
+            } else {
+                $team2 += 1;
+            }
+        }
+
+        // Creating a packet which stores the value of match_result
+        $resultPacket = [];
+        $resultPacket['match_id'] = $request->match_id;
+        $resultPacket['team1'] = $playersIds[0];
+        $resultPacket['team2'] = $playersIds[1];
+        $resultPacket['team1_score'] = implode(',', $result[0]['score']);
+        $resultPacket['team2_score'] = implode(',', $result[1]['score']);
+        $resultPacket['no_of_rounds'] = $request->rounds;
+        if($team1 > $team2) {
+            $resultPacket['winner'] = $playersIds[0];
+        } else {
+            $resultPacket['winner'] = $playersIds[1];
+        }
+
+        // Making an array for all players to be used further
+        $winner = explode(',', $resultPacket['winner']);
+        $team1_players = explode(',',  $playersIds[0]);
+        $team2_players = explode(',',  $playersIds[1]);
+        $players = array_merge($team1_players, $team2_players);
+        
+        $diff1 = array_diff($players, $playersInMatch);
+        $diff2 = array_diff($playersInMatch, $players);
+        if(count($diff1) > 0 || count($diff2) > 0) {
+            return ['error' => 'The player you are entering for this match is not associated with the match'];
+        }
+        // Adding result data and update match status in the database
+        $query1 = $this->matchesRepository->addMatchResult($resultPacket);
+        $query2 = $this->matchesRepository->updateMatch($request->match_id);
+
+        // Updating players data in the table
+        foreach ($players as $key => $value) {
+            if(in_array($value, $winner)) {
+                $val = 1;
+                $query3 = $this->playersRepository->updatePlayerData($value, $val);
+            } else {
+                $val = 0;
+                $query3 = $this->playersRepository->updatePlayerData($value, $val);
+            }
+        }
+        return ['message' => "Winner player_ids are ". $resultPacket['winner'] ];
+
     }
 }

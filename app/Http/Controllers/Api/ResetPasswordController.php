@@ -26,7 +26,7 @@ class ResetPasswordController extends Controller
         // Getting data from the users table
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return ResponseUtil::errorWithMessage('201', 'This email does not exist. Please try again.', false, 201);
+            return ResponseUtil::errorWithMessage(201, 'This email does not exist. Please try again.', false, 201);
         }
 
         //Updating or creating token value in password_reset table
@@ -55,13 +55,13 @@ class ResetPasswordController extends Controller
 
         // For wrong token case fails
         if (!$passwordReset) {
-            return ResponseUtil::errorWithMessage('201', 'This password reset token is invalid.', false, 201);
+            return ResponseUtil::errorWithMessage(201, 'This password reset token is invalid.', false, 201);
         }
 
         // For invalid user case fails
         $user = User::where('email', $passwordReset->email)->first();
         if (!$user) {
-            return ResponseUtil::errorWithMessage('201', "We can't find a user with that e-mail address.", false, 201);
+            return ResponseUtil::errorWithMessage(201, "We can't find a user with that e-mail address.", false, 201);
         }
 
         $user->password = bcrypt($request->password);

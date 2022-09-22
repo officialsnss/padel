@@ -39,7 +39,7 @@ class BookingController extends Controller
             $bookings = $bookings->whereIn('payments.payment_status',[1,2]);
           }
           $bookings = $bookings->where('payments.isRefunded', '0')
-         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
+         ->select('payments.payment_status', 'users.email as usremail', 'users.name as usrname', 'bookings.*', 'bookings.id as bookId','clubs.name as clubname','payments.id as payid')
           ->get();
    // dd($bookings);
         return view('backend.pages.bookings', compact('title','bookings'));
@@ -56,16 +56,18 @@ class BookingController extends Controller
           $title = 'Bookings Details';
           $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
           ->leftJoin('users','users.id', '=', 'bookings.user_id')
+          ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
           ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+          ->leftJoin('coaches_details','coachusers.id', '=', 'coaches_details.user_id')
          // ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
           ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
           ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
           //->whereIn('payments.payment_status',[1,2])
           ->where('bookings.id', $id)
           ->where('payments.isRefunded', '0')
-          ->select('bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
+          ->select('coaches_details.price as coachprice', 'coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
           ->first();
-     
+    // dd($bookingInfo);
           $amenityList = [];
          if($bookingInfo->clubamenities != 'NULL'){
           $amenityList = [];
@@ -103,18 +105,19 @@ class BookingController extends Controller
   {
    
    
-    $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
-          ->leftJoin('users','users.id', '=', 'bookings.user_id')
-          ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-          //->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
-          ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-          ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
-          //->whereIn('payments.payment_status',[1,2])
-          ->where('bookings.id', $id)
-          ->where('payments.isRefunded', '0')
-           ->select('bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
-          ->first();
-     
+        $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
+        ->leftJoin('users','users.id', '=', 'bookings.user_id')
+        ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
+        ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+        ->leftJoin('coaches_details','coachusers.id', '=', 'coaches_details.user_id')
+      // ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
+        ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
+        ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
+        //->whereIn('payments.payment_status',[1,2])
+        ->where('bookings.id', $id)
+        ->where('payments.isRefunded', '0')
+        ->select('coaches_details.price as coachprice', 'coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
+        ->first();
           $amenityList = [];
          if($bookingInfo->clubamenities != 'NULL'){
           $amenityList = [];
@@ -242,6 +245,39 @@ class BookingController extends Controller
             return redirect('/admin/bookings')->with('error', 'Something went wrong.');
         }
     }
+
+    //Club Status
+    
+    public function updateClubStatus(Request $request)
+    {
+        try{
+            $c_status = Booking::findOrFail($request->bookId);
+            $c_status->club_status = $request->status;
+            $c_status->save();
+
+            return response()->json(['message' => 'Club status updated successfully.']);
+        }
+        catch (\Exception $e) {
+         //dd($e->getMessage());
+            return redirect('/admin/bookings')->with('error', 'Something went wrong.');
+        }
+    }
+      //Coach Status
+    
+      public function updateCoachStatus(Request $request)
+      {
+          try{
+              $co_status = Booking::findOrFail($request->bookId);
+              $co_status->coach_status = $request->status;
+              $co_status->save();
+  
+              return response()->json(['message' => 'Coach status updated successfully.']);
+          }
+          catch (\Exception $e) {
+           //dd($e->getMessage());
+              return redirect('/admin/bookings')->with('error', 'Something went wrong.');
+          }
+      }
 
    
 }

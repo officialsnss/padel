@@ -142,7 +142,7 @@ class BatController extends Controller
            return redirect('/admin/bats')->with('success', 'Bat Updated successfully');
         }
         catch (\Exception $e) {
-            dd($e->getMessage());
+            //dd($e->getMessage());
             return redirect('/admin/bats')->with('error', 'Something went wrong.');
         }
     }

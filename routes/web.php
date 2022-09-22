@@ -30,13 +30,14 @@ Route::get('clear', function () {
 Route::get('/', function(){
     return view('frontend.pages.index');
 });
-
+Route::prefix('/admin')->group(function () {
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');
 Route::post('/users/reset/', 'App\Http\Controllers\Backend\UserController@reset')->name('user.password.update');
+});
 
-
-
-Auth::routes();
+Route::prefix('/admin')->group(function () {
+  Auth::routes();
+});
 Route::group(['middleware' =>['role:1,2,5,4']], function(){
     Route::prefix('/admin')->group(function () {
         //Dashboard Route
@@ -46,6 +47,9 @@ Route::group(['middleware' =>['role:1,2,5,4']], function(){
       Route::get('/booking/status/update', 'App\Http\Controllers\Backend\BookingController@updateStatus')->name('payments.update.status');
       Route::get('/booking/view/{id}', 'App\Http\Controllers\Backend\BookingController@view')->name('booking.view');
       Route::get('/emails', 'App\Http\Controllers\Backend\HomeController@emails')->name('emails');
+
+      Route::get('/booking/clubstatus/update', 'App\Http\Controllers\Backend\BookingController@updateClubStatus')->name('bookings.update.clubstatus');
+      Route::get('/booking/coachstatus/update', 'App\Http\Controllers\Backend\BookingController@updateCoachStatus')->name('bookings.update.coachstatus');
     });
 });
 
@@ -105,8 +109,14 @@ Route::group(['middleware' =>['role:1,2']], function(){
     
       //Settings
       Route::get('/settings', 'App\Http\Controllers\Backend\HomeController@settings')->name('settings');
-      Route::post('/settings/update/{id}', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
-     
+      Route::post('/settings/update', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
+      
+      Route::get('/home-slider', 'App\Http\Controllers\Backend\HomeController@homeslider')->name('homeslider');
+      Route::get('/slide/create', 'App\Http\Controllers\Backend\HomeController@slideCreate')->name('slide.create');
+      Route::post('/slide/add', 'App\Http\Controllers\Backend\HomeController@slideAdd')->name('slide.add');
+      Route::get('/slide/edit/{id}', 'App\Http\Controllers\Backend\HomeController@slideEdit')->name('slide.edit');
+      Route::post('/slide/update/{id}', 'App\Http\Controllers\Backend\HomeController@slideUpdate')->name('slide.update');
+
      //Refunds Listing
       Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
@@ -229,6 +239,7 @@ Route::group(['middleware' =>['role:5']], function(){
 
 Route::group(['middleware' =>['role:1,2,4']], function(){
     Route::prefix('/admin')->group(function () {
+        Route::get('/off-days/list/{id}', 'App\Http\Controllers\Backend\CoachController@offDays')->name('offdays');
         Route::get('/off-days', 'App\Http\Controllers\Backend\CoachController@holidays')->name('holidays');
         Route::get('/off-days/create', 'App\Http\Controllers\Backend\CoachController@holidaysCreate')->name('holiday.create');
         Route::post('/off-days/add', 'App\Http\Controllers\Backend\CoachController@holidaysAdd')->name('holiday.add');

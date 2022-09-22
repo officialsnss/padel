@@ -120,7 +120,9 @@ class BookingServiceImpl implements BookingService
         // Match array data to be filled in matches table
         $matchArray = [];
         $matchArray['player_id'] = $request->player_id;
-        $matchArray['playersIds'] = implode(',',$request->players);
+        $playersIds = $request->players;
+        array_unshift($playersIds, $request->player_id);
+        $matchArray['playersIds'] = implode(',',$playersIds);
         $matchArray['club_id'] = $request->club_id;
         $matchArray['booking_id'] = $booked;
         $matchArray['slot_id'] = implode(',',$slot);

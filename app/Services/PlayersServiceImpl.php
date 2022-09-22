@@ -55,8 +55,13 @@ class PlayersServiceImpl implements PlayersService
 
     public function getPlayersList($request)
     {
-        $userId = auth()->user()->id;
         $data = $this->playersRepository->getPlayersList($request);
+        return $this->getPlayers($data);
+    }
+
+    public function getPlayers($data)
+    {
+        $userId = auth()->user()->id;
         $dataArray = [];
 
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
@@ -287,5 +292,19 @@ class PlayersServiceImpl implements PlayersService
         $playersPacket = implode(',', $playerIds);
         $data = $this->matchesRepository->addPlayer($matchId, $playersPacket);
         return $data;
+    }
+    
+    public function playersListInMatch($request)
+    {
+        if(!$request->match_id) {
+            return ['error' => "Please enter the value of the match_id"];
+        }
+        $data = $this->matchesRepository->getMatchData($request->match_id);
+        if(!$data) {
+            return ['message' => "No match data for this match_id"];
+        }
+        $playerIds = explode(',', $data['playersIds']);
+        $playersData = $this->playersRepository->playersListInMatch($playerIds);
+        return $this->getPlayers($playersData);
     }
 }
