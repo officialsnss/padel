@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
-
+use Redirect;
 class CoachController extends Controller
 {
 
@@ -207,14 +207,9 @@ class CoachController extends Controller
             $holidays =  CoachUnavailability::leftJoin('users','users.id','=' ,'coaches_unavailability.coach_id')
                      ->where('coaches_unavailability.isDeleted', '0')
                      ->select('coaches_unavailability.*','users.*','coaches_unavailability.id as cid','coaches_unavailability.status as cstatus');
-                     if(auth()->user()->role == '4'){
-                        $holidays = $holidays->where('coaches_unavailability.coach_id', $coachId);
-                     }
-                     if(auth()->user()->role == '1' || auth()->user()->role == '2'){
-                        $holidays = $holidays->where('coaches_unavailability.status', '2');
-                     }
-                    
-                     $holidays = $holidays->get();
+                   
+           $holidays = $holidays->where('coaches_unavailability.coach_id', $coachId);
+           $holidays = $holidays->get();
            return view('backend.pages.holidays', compact('title','holidays'));
         }
         catch (\Exception $e) {
@@ -223,18 +218,36 @@ class CoachController extends Controller
         }      
     }
 
+    public function offDays($id)
+    {
+        try{
+            $title = 'Off Days';
+           
+            $holidays =  CoachUnavailability::leftJoin('users','users.id','=' ,'coaches_unavailability.coach_id')
+                     ->where('coaches_unavailability.isDeleted', '0')
+                     ->select('coaches_unavailability.*','users.*','coaches_unavailability.id as cid','coaches_unavailability.status as cstatus')
+                     ->where('coaches_unavailability.coach_id', $id)
+                   //  ->where('coaches_unavailability.status', '2');
+                      ->get();
+           return view('backend.pages.holidays', compact('title','holidays'));
+        }
+        catch (\Exception $e) {
+         
+            return redirect('/admin')->with('error', 'Something went wrong.');
+        }      
+    }
    // Bat Create
 
    public function holidaysCreate()
    { 
-  
+
        try{
            $title = 'Apply off';
           
            return view('backend.pages.holidaysAdd', compact('title'));
        }
        catch (\Exception $e) {
-           return redirect('/admin/leaves/')->with('error', 'Something went wrong.');
+           return redirect('/admin/off-days/')->with('error', 'Something went wrong.');
        }
    }
    
@@ -250,7 +263,7 @@ class CoachController extends Controller
                              ->whereIn('status', [1,2])
                             ->count();
           if($isBooking > 0){
-            return Redirect::back()->with('error', 'You cannot apply off of these days as you have already booking on this date.');
+            return Redirect::back()->with('error', 'Sorry, You cannot apply off as you have already booked.');
           }
           else{
             $data['coach_id'] =  $coachId;
@@ -260,13 +273,13 @@ class CoachController extends Controller
             $data['status'] =  '2';
             $result =  CoachUnavailability::insert($data);  
             if($result){
-                    return redirect('/admin/leaves')->with('success', 'Apply holiday Successfully.');
+                    return redirect('/admin/off-days')->with('success', 'Apply holiday Successfully.');
             }
         }
        }
        catch (\Exception $e) {
            // dd($e->getMessage());
-           return redirect('/admin/leaves')->with('error', 'Something went wrong.');
+           return redirect('/admin/off-days')->with('error', 'Something went wrong.');
        }
 
    
@@ -282,7 +295,7 @@ class CoachController extends Controller
            return view('backend.pages.holidaysEdit', compact('coachesAvailData'));
        }
        catch (\Exception $e) {
-           return redirect('/admin/leaves')->with('error', 'Something went wrong.');
+           return redirect('/admin/off-days')->with('error', 'Something went wrong.');
        }
    }
 
@@ -297,11 +310,11 @@ class CoachController extends Controller
        $coachesAvail->reason = $request->reason;
       // $page->slug = Str::slug($request->title);
        $coachesAvail->save(); 
-       return redirect('/admin/leaves')->with('success', 'Updated successfully');
+       return redirect('/admin/off-days')->with('success', 'Updated successfully');
     }
     catch (\Exception $e) {
        // dd($e->getMessage());
-        return redirect('/admin/leaves')->with('error', 'Something went wrong.');
+        return redirect('/admin/off-days')->with('error', 'Something went wrong.');
     }
 }
 
@@ -313,11 +326,11 @@ class CoachController extends Controller
                 $coach_av->isDeleted = '1';
                 $coach_av->save(); 
             
-            return redirect('/admin/leaves')->with('success', 'Deleted Successfully.');
+            return redirect('/admin/off-days')->with('success', 'Deleted Successfully.');
             
             }
             catch (\Exception $e) {
-                return redirect('/admin/leaves')->with('error', 'Something went wrong.');
+                return redirect('/admin/off-days')->with('error', 'Something went wrong.');
 
             }
         }
@@ -330,11 +343,11 @@ class CoachController extends Controller
             $coach_av->status = '1';
             $coach_av->save(); 
         
-        return redirect('/admin/leaves')->with('success', 'Leave Approved Successfully.');
+        return redirect('/admin/off-days')->with('success', 'Leave Approved Successfully.');
         
         }
         catch (\Exception $e) {
-            return redirect('/admin/leaves')->with('error', 'Something went wrong.');
+            return redirect('/admin/off-days')->with('error', 'Something went wrong.');
 
         }
     }
@@ -346,11 +359,11 @@ class CoachController extends Controller
               $coach_av->status = '0';
               $coach_av->save(); 
           
-          return redirect('/admin/leaves')->with('success', 'Leave Rejected.');
+          return redirect('/admin/off-days')->with('success', 'Leave Rejected.');
           
           }
           catch (\Exception $e) {
-              return redirect('/admin/leaves')->with('error', 'Something went wrong.');
+              return redirect('/admin/off-days')->with('error', 'Something went wrong.');
   
           }
       }
