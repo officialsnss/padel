@@ -5,7 +5,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Club;
 use App\Models\Booking;
+use App\Models\HomeSlider;
 use Illuminate\Http\Request;
+use File;
 
 class HomeController extends Controller
 {
@@ -186,28 +188,140 @@ class HomeController extends Controller
     //Refunds Settings
     public function settings()
     { 
-       $title = 'Refunds Settings';
-       $settings = DB::table('settings')->select('id', 'value')->where('label' ,'refund_amount')->get();
-    
+       $title = 'Homepage Settings';
+       $settings = DB::table('settings')->get();
        return view('backend.pages.settings', compact('title','settings'));
     }
-    public function settingsUpdate(Request $request, $id)
+
+    public function settingsUpdate(Request $request)
     { 
-        $request->validate([
-        'amount' => 'required|numeric',
-        ]);
-      try{
      
-        DB::table('settings')->where('id', $id)->update(['value' => $request->amount]);
-        
+      try{
+       
+        foreach($request->setting as $key => $value){
+           DB::table('settings')
+             ->where('label', $key)->update(['value' => $value]);
+          
+        }
+       
         return redirect('/admin/settings')->with('success', 'Settings Updated!');
       }
       catch (\Exception $e) {
-       // dd(getMessage());
+       //dd(getMessage());
         return redirect('/admin/settings')->with('error', 'Something went wrong.');
       
       }
     }
+
+  public function emails(Request $request){
+     $userEmails =  User::where('isDeleted', '0')
+                    ->pluck('email');
+
+      return response()->json($userEmails);
+   
+  }
+
+     //homepage slider Listing
+     public function homeslider()
+     {
+         try{
+             $title = 'Home Slider';
+             $slides = HomeSlider::all();
+             return view('backend.pages.homeslider', compact('title','slides'));
+         }
+         catch (\Exception $e) {
+             return redirect('/admin')->with('error', 'Something went wrong.');
+         }    
+     }
+
+    // Slide Create
+     public function slideCreate()
+     { 
+         try{
+             $title = 'Add Slide';
+             return view('backend.pages.slideCreate', compact('title'));
+         }
+         catch (\Exception $e) {
+             return redirect('/admin/home-slider/')->with('error', 'Something went wrong.');
+         }
+     }
+
+     
+    public function slideAdd(Request $request)
+    {
+      
+            
+         try{
+            $data['heading'] = $request->slide_heading;
+            $data['button_label'] = $request->button_label;
+            $data['button_url'] = $request->button_val;
+
+             if($request->file('image')){
+                $file= $request->file('image');
+                $filename= date('YmdHi').$file->getClientOriginalName();
+                $file->move(base_path('Images/homeslider_images'), $filename);
+                $data['image']= $filename;
+                 }
+               $result =  HomeSlider::insert($data);  
+        
+            if($result){
+            return redirect('/admin/home-slider')->with('success', 'Slide Created Successfully.');
+            }
+        }
+        catch (\Exception $e) {
+           // dd($e->getMessage());
+            return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
+        }
+
+    
+    }
+
+    public function slideEdit($id)
+    {
+        try{
+            $slideData= HomeSlider::where('id', $id)->first();
+            $title = 'Edit Slide';
+            return view('backend.pages.slideEdit', compact('title','slideData'));
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
+        }
+    }
+
+    public function slideUpdate(Request $request, $id)
+       {
+        
+        try{ 
+          
+           $slide = HomeSlider::findOrFail($id);
+          // $data = $request->except('_method','_token','submit');
+         
+           if($request->file('image')){
+             if($slide->image){
+                $imagePath = base_path('Images/homeslider_images/'. $slide->image);
+                
+                if(File::exists($imagePath)){
+                    unlink($imagePath);
+                }
+            }
+            $file= $request->file('image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file->move(base_path('Images/homeslider_images'), $filename);
+            $slide->image= $filename;
+             }
+           $slide->heading = $request->slide_heading;
+           $slide->button_label = $request->button_label;
+           $slide->button_url = $request->button_val;
+          // $page->slug = Str::slug($request->title);
+           $slide->save(); 
+           return redirect('/admin/home-slider')->with('success', 'Slide Updated successfully');
+        }
+        catch (\Exception $e) {
+            //dd($e->getMessage());
+            return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
+        }
+    }
+
 
     
 }

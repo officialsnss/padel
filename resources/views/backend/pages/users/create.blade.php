@@ -12,7 +12,7 @@
             
               <div class="form-group col-md-6">
                 <label for="inputName">Full Name</label>
-                <input type="text" id="fullname" class="form-control" value="" name="fullname">
+                <input type="text" id="fullname" class="form-control" value="{{old('fullname')}}" name="fullname">
                 @error('fullname')
                 <div class="form-error">{{ $message }}</div>
                 @enderror
@@ -20,7 +20,7 @@
 
               <div class="form-group col-md-6">
                 <label for="inputName">Phone Number</label>
-                <input type="text" id="phone" class="form-control" value="" name="phone">
+                <input type="text" id="phone" class="form-control" value="{{old('phone')}}" name="phone">
                @error('phone')
                 <div class="form-error">{{ $message }}</div>
                @enderror
@@ -29,14 +29,14 @@
              <div class="row"> 
                <div class="form-group col-md-6">
                 <label for="inputName">Email</label>
-                <input type="text" id="Email" class="form-control" value="" name="email">
+                <input type="text" id="Email" class="form-control" value="{{old('email')}}" name="email">
                 @error('email')
                 <div class="form-error">{{ $message }}</div>
                 @enderror
               </div>
               <div class="form-group col-md-6">
                 <label for="inputName">Club Name</label>
-                <input type="text" id="clubname" class="form-control" value="" name="clubname">
+                <input type="text" id="clubname" class="form-control" value="{{old('clubname')}}" name="clubname">
                 @error('clubname')
                 <div class="form-error">{{ $message }}</div>
                 @enderror
@@ -62,7 +62,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                           <label for="inputName">Commission(In Percent on each product)</label>
-                          <input type="text" id="commission" class="form-control" value="" name="commission">
+                          <input type="text" id="commission" class="form-control" value="{{old('commission')}}" name="commission">
                               @error('commission')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -73,7 +73,7 @@
                           <label for="inputName">Service Charge</label>
                             <div class="row">
                               <div class="col-md-10">
-                              <input type="text" id="service_charge" class="form-control" value="" name="service_charge">
+                              <input type="text" id="service_charge" class="form-control" value="{{ old('service_charge')}}" name="service_charge">
                               </div>
                               <div class="col-md-2">
                                 <input type="text" class="form-control" value="KWD" readonly>
@@ -99,7 +99,7 @@
                           <label for="inputName">Price for Singles</label>
                             <div class="row">
                               <div class="col-md-10">
-                              <input type="text" id="single_price" class="form-control" value="" name="single_price">
+                              <input type="text" id="single_price" class="form-control" value="{{old('single_price')}}" name="single_price">
                               </div>
                               <div class="col-md-2">
                                 <input type="text" class="form-control" value="KWD" readonly>
@@ -115,7 +115,7 @@
                           <label for="inputName">Price for Doubles</label>
                             <div class="row">
                               <div class="col-md-10">
-                              <input type="text" id="double_price" class="form-control" value="" name="double_price">
+                              <input type="text" id="double_price" class="form-control" value="{{old('double_price')}}" name="double_price">
                               </div>
                               <div class="col-md-2">
                                 <input type="text" class="form-control" value="KWD" readonly>
@@ -132,7 +132,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                           <label for="inputName">Club Opening Time</label>
-                           <input type="text" id="start_time" class="form-control timePicker" value="" name="start_time">
+                           <input type="text" id="start_time" class="form-control timePicker" value="{{old('start_time')}}" name="start_time">
                            @error('start_time')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -141,7 +141,7 @@
                     <div class="col-md-6">
                     <div class="form-group">
                            <label for="inputName">Club Closing Time</label>
-                           <input type="text" id="end_time" class="form-control timePicker" value="" name="end_time">
+                           <input type="text" id="end_time" class="form-control timePicker" value="{{old('end_time')}}" name="end_time">
                            @error('end_time')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -154,7 +154,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                           <label for="inputName">Total Indoor Courts</label>
-                          <input type="text" id="indoor_courts" class="form-control" value="" name="indoor_courts">
+                          <input type="text" id="indoor_courts" class="form-control" value="{{old('indoor_courts')}}" name="indoor_courts">
                               @error('indoor_courts')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -163,7 +163,7 @@
                      <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputName">Total Outdoor Courts</label>
-                          <input type="text" id="outdoor_courts" class="form-control" value="" name="outdoor_courts">
+                          <input type="text" id="outdoor_courts" class="form-control" value="{{old('outdoor_courts')}}" name="outdoor_courts">
                               @error('outdoor_courts')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -175,7 +175,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                           <label for="inputName">Latitude</label>
-                          <input type="text" id="latitude" class="form-control" value="" name="latitude">
+                          <input type="text" id="latitude" class="form-control" value="{{old('latitude')}}" name="latitude">
                               @error('latitude')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -184,7 +184,7 @@
                      <div class="col-md-6">
                         <div class="form-group">
                           <label for="inputName">Longitude</label>
-                          <input type="text" id="longitude" class="form-control" value="" name="longitude">
+                          <input type="text" id="longitude" class="form-control" value="{{old('longitude')}}" name="longitude">
                               @error('longitude')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -211,7 +211,7 @@
                      <div class="col-md-6">
                        <div class="form-group">
                           <label for="inputName">Address</label>
-                          <input type="text" id="address" class="form-control" value="" name="address">
+                          <input type="text" id="address" class="form-control" value="{{old('address')}}" name="address">
                               @error('address')
                                 <div class="form-error">{{ $address }}</div>
                               @enderror
@@ -251,7 +251,7 @@
                     <div class="col-md-6">
                        <div class="form-group">
                           <label for="inputName">Zip Code</label>
-                          <input type="text" id="zipcode" class="form-control" value="" name="zipcode">
+                          <input type="text" id="zipcode" class="form-control" value="{{old('zipcode')}}" name="zipcode">
                               @error('zipcode')
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
@@ -293,7 +293,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                             <label for="inputName">Description</label>
-                            <textarea id="description" class="ckeditor form-control" name="description"></textarea>
+                            <textarea id="description" class="ckeditor form-control" name="description">{{old('description')}}</textarea>
                                 @error('description')
                                 <div class="form-error">{{ $message }}</div>
                                 @enderror

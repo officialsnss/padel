@@ -7,7 +7,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="add">
-                 <a href="{{ route('coach.create') }}" class="btn btn-info">Add New</a>
+                 <a href="{{ route('slide.create') }}" class="btn btn-info">Add New</a>
                 </div>
               </div>
               <div class="card-body">
@@ -15,27 +15,30 @@
                   <thead>
                   <tr>
                     <th>Sr.no</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Experience(in Months)</th>
+                    <th>Image</th>
+                    <th>Heading</th>
+                    <th>Button Label</th>
+                    <th>Button URL</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
                   <tbody>
                     
-                  @foreach ($coaches as $coach)
-                  
+                  @foreach ($slides as $slide)
                     <tr>
                       <td></td>
-                      <td>{{ $coach->name }}</td>
-                     
-                      <td>{{ $coach->price }} {{ $coach->currencyCode }}</td>
-                      <td>{{ $coach->experience }} </td>
-                        
+                      <td>{{ $slide->heading }}</td>
+                      <td><div id="image-holder"> 
+                         @if($slide->image)
+                            <img src="{{ URL::to('/') }}/Images/homeslider_images/{{ $slide->image }}" class="thumb-image-list">
+                         @endif
+                         </div></td>
+                      <td>{{ $slide->button_label }}</td>
+                      <td>{{ $slide->button_url }}</td>
                        <td>
-                        <a href="{{ route('coach.edit', $coach->cid) }}" class="btn btn-secondary">Edit</a>
-                        <a href="{{ route('coach.delete', $coach->cid) }}" class="btn btn-danger">Delete</a>
-                        <a href="{{ route('offdays', $coach->id) }}" class="btn btn-success">Off-days</a>
+                        <a href="{{ route('slide.edit', $slide->id) }}" class="btn btn-secondary">Edit</a>
+                        <a href="" class="btn btn-danger">Delete</a>
+                      
                        
                        
                       </tr>

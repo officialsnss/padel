@@ -33,7 +33,7 @@ class CheckRole
         }
         else{
            
-            return redirect('/login')->with('error', 'No Access!');
+            return redirect('admin/login')->with('error', 'No Access!');
         }
       
         //throw new AuthenticationException();
