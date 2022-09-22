@@ -7,18 +7,21 @@
                 <div class="swiper-slide">
                     <div class="slideshow-box position-relative">
                         <!--<picture>
-                            <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
-                            <source media="(max-width: 991px) and (min-width: 770px)" srcset="">
-                            <source media="(max-width: 769px) and (min-width: 401px)" srcset="">
-                            <source media="(max-width: 400px)" srcset="">
-                            <img class="imageFill" src="">
-                        </picture>-->
+                                <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
+                                <source media="(max-width: 991px) and (min-width: 770px)" srcset="">
+                                <source media="(max-width: 769px) and (min-width: 401px)" srcset="">
+                                <source media="(max-width: 400px)" srcset="">
+                                <img class="imageFill" src="">
+                            </picture>-->
 
                         <div class="slideshow-img">
                             <picture>
-                                <source media="(max-width: 1200px) and (min-width:641px)" srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
-                                <source media="(max-width: 640px)" srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
-                                <img class="imageFill" src="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" class="img-fluid" alt="" />
+                                <source media="(max-width: 1200px) and (min-width:641px)"
+                                    srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
+                                <source media="(max-width: 640px)"
+                                    srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
+                                <img class="imageFill" src="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg"
+                                    class="img-fluid" alt="" />
                             </picture>
                         </div>
                         <div class="slideshow-contents position-absolute d-flex align-items-center">
@@ -32,18 +35,21 @@
                 <div class="swiper-slide">
                     <div class="slideshow-box position-relative">
                         <!--<picture>
-                            <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
-                            <source media="(max-width: 991px) and (min-width: 770px)" srcset="">
-                            <source media="(max-width: 769px) and (min-width: 401px)" srcset="">
-                            <source media="(max-width: 400px)" srcset="">
-                            <img class="imageFill" src="">
-                        </picture>-->
+                                <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
+                                <source media="(max-width: 991px) and (min-width: 770px)" srcset="">
+                                <source media="(max-width: 769px) and (min-width: 401px)" srcset="">
+                                <source media="(max-width: 400px)" srcset="">
+                                <img class="imageFill" src="">
+                            </picture>-->
 
                         <div class="slideshow-img">
                             <picture>
-                                <source media="(max-width: 1200px) and (min-width:641px)" srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
-                                <source media="(max-width: 640px)" srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
-                                <img class="imageFill" src="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" class="img-fluid" alt="" />
+                                <source media="(max-width: 1200px) and (min-width:641px)"
+                                    srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
+                                <source media="(max-width: 640px)"
+                                    srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
+                                <img class="imageFill" src="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg"
+                                    class="img-fluid" alt="" />
                             </picture>
                         </div>
                         <div class="slideshow-contents position-absolute d-flex align-items-center">
@@ -56,8 +62,8 @@
                 </div>
             </div>
             <!--<div class="swiper-pagination slideshow-pagination"></div>
-            <div class="swiper-button-next slideshow-button-next"></div>
-            <div class="swiper-button-prev slideshow-button-prev"></div>-->
+                <div class="swiper-button-next slideshow-button-next"></div>
+                <div class="swiper-button-prev slideshow-button-prev"></div>-->
         </div>
     </section>
 
@@ -68,7 +74,8 @@
                 <div class="row no-gutters">
                     <div class="col-lg-5 col-md-12">
                         <div class="upcoming-img">
-                            <img src="http://retalkapp.com/tbaree/01/images/upcoming-img.webp" class="img-fluid" alt="">
+                            <img src="http://retalkapp.com/tbaree/01/images/upcoming-img.webp" class="img-fluid"
+                                alt="">
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-12">
@@ -97,75 +104,8 @@
                 <h2>Popular Courts</h2>
                 <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
                     <div class="product-container swiper-container">
-                        <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="courts-div">
-                                        <div class="courts-name-desc">
-                                            <h4>Play Padel</h4>
-                                            <div class="star-rating">
-                                                <input type="radio" id="5-stars" name="rating" value="5" />
-                                                <label for="5-stars" class="star">&#9733;</label>
-                                                <input type="radio" id="4-stars" name="rating" value="4" />
-                                                <label for="4-stars" class="star" style="color: #fc0;">&#9733;</label>
-                                                <input type="radio" id="3-stars" name="rating" value="3" />
-                                                <label for="3-stars" class="star" style="color: #fc0;">&#9733;</label>
-                                                <input type="radio" id="2-stars" name="rating" value="2" />
-                                                <label for="2-stars" class="star" style="color: #fc0;">&#9733;</label>
-                                                <input type="radio" id="1-star" name="rating" value="1" />
-                                                <label for="1-star" class="star" style="color: #fc0;">&#9733;</label>
-                                            </div>
-                                            <div class="clearfix-space"></div>
-                                            <div class="row">
-                                                <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                                    <span><img src="http://retalkapp.com/tbaree/01/images/icons/wallet.png" class="img-fluid"
-                                                            alt=""> 30KD/hr</span>
-                                                </div>
-                                                <div class="col-6 col-lg-6 col-md-6 col-sm-6">
-                                                    <span><img src="http://retalkapp.com/tbaree/01/images/icons/location-pin.png" class="img-fluid"
-                                                            alt=""> Salmiya, Kuwait</span>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix-space"></div>
-                                            <div class="row">
-                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                    <div class="court-icons">
-                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-1.png" class="img-fluid"
-                                                            alt="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                    <div class="court-icons">
-                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-2.png" class="img-fluid"
-                                                            alt="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                    <div class="court-icons">
-                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-3.png" class="img-fluid"
-                                                            alt="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                    <div class="court-icons">
-                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-4.png" class="img-fluid"
-                                                            alt="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-2 col-lg-2 col-md-2 col-sm-2">
-                                                    <div class="court-icons">
-                                                        <img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-5.png" class="img-fluid"
-                                                            alt="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <img src="http://retalkapp.com/tbaree/01/images/court-img-1.webp" class="img-fluid" alt="">
-                                    </div>
-                                    <div class="know-more-arrow">
-                                        <a href="javascript:void(0)"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid"
-                                                alt=""></a>
-                                    </div>
-                                </div>
+                        <div class="swiper-wrapper res-data">
+
 
                             {{-- <div class="swiper-slide">
                                 <div class="courts-div">
@@ -339,8 +279,8 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-1.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-1.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Francisco N.Compan</h4>
@@ -373,8 +313,8 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-2.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-2.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Juan Lebron Chincoa</h4>
@@ -395,8 +335,8 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-3.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-3.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Alejandro Galan Romo</h4>
@@ -417,8 +357,8 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-4.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-4.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Carlos Daniel Gutierrez</h4>
@@ -451,8 +391,8 @@
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-4.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-4.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Carlos Daniel Gutierrez</h4>
@@ -473,8 +413,8 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-3.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-3.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Alejandro Galan Romo</h4>
@@ -495,8 +435,8 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-2.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-2.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Juan Lebron Chincoa</h4>
@@ -517,8 +457,8 @@
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="playerscoach-div">
-                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-1.webp" class="img-fluid players-coach-img"
-                                                alt="">
+                                            <img src="http://retalkapp.com/tbaree/01/images/players-coach/pc-1.webp"
+                                                class="img-fluid players-coach-img" alt="">
                                         </div>
                                         <div class="playerscoach-details">
                                             <h4>Francisco N.Compan</h4>
