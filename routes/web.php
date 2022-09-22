@@ -111,7 +111,12 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::get('/settings', 'App\Http\Controllers\Backend\HomeController@settings')->name('settings');
       Route::post('/settings/update', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
       
-     
+      Route::get('/home-slider', 'App\Http\Controllers\Backend\HomeController@homeslider')->name('homeslider');
+      Route::get('/slide/create', 'App\Http\Controllers\Backend\HomeController@slideCreate')->name('slide.create');
+      Route::post('/slide/add', 'App\Http\Controllers\Backend\HomeController@slideAdd')->name('slide.add');
+      Route::get('/slide/edit/{id}', 'App\Http\Controllers\Backend\HomeController@slideEdit')->name('slide.edit');
+      Route::post('/slide/update/{id}', 'App\Http\Controllers\Backend\HomeController@slideUpdate')->name('slide.update');
+
      //Refunds Listing
       Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
