@@ -218,27 +218,11 @@ class HomeController extends Controller
                     ->pluck('email');
 
       return response()->json($userEmails);
-<<<<<<< HEAD
-    //   $checkemail =  User::where('isDeleted', '0')
-    //   ->where('email', $request->useremail)->count();
 
-    //   if ($checkemail == 0){
-    //     $valid = "true";
-    // } else {
-    //     $valid = "false";
-    // }
-    // echo $valid;
 
   }
 
-}
 
-
-
-
-=======
-   
-  }
 
      //homepage slider Listing
      public function homeslider()
@@ -250,12 +234,12 @@ class HomeController extends Controller
          }
          catch (\Exception $e) {
              return redirect('/admin')->with('error', 'Something went wrong.');
-         }    
+         }
      }
 
     // Slide Create
      public function slideCreate()
-     { 
+     {
          try{
              $title = 'Add Slide';
              return view('backend.pages.slideCreate', compact('title'));
@@ -265,11 +249,11 @@ class HomeController extends Controller
          }
      }
 
-     
+
     public function slideAdd(Request $request)
     {
-      
-            
+
+
          try{
             $data['heading'] = $request->slide_heading;
             $data['button_label'] = $request->button_label;
@@ -281,8 +265,8 @@ class HomeController extends Controller
                 $file->move(base_path('Images/homeslider_images'), $filename);
                 $data['image']= $filename;
                  }
-               $result =  HomeSlider::insert($data);  
-        
+               $result =  HomeSlider::insert($data);
+
             if($result){
             return redirect('/admin/home-slider')->with('success', 'Slide Created Successfully.');
             }
@@ -292,7 +276,7 @@ class HomeController extends Controller
             return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
         }
 
-    
+
     }
 
     public function slideEdit($id)
@@ -309,16 +293,16 @@ class HomeController extends Controller
 
     public function slideUpdate(Request $request, $id)
        {
-        
-        try{ 
-          
+
+        try{
+
            $slide = HomeSlider::findOrFail($id);
           // $data = $request->except('_method','_token','submit');
-         
+
            if($request->file('image')){
              if($slide->image){
                 $imagePath = base_path('Images/homeslider_images/'. $slide->image);
-                
+
                 if(File::exists($imagePath)){
                     unlink($imagePath);
                 }
@@ -332,7 +316,7 @@ class HomeController extends Controller
            $slide->button_label = $request->button_label;
            $slide->button_url = $request->button_val;
           // $page->slug = Str::slug($request->title);
-           $slide->save(); 
+           $slide->save();
            return redirect('/admin/home-slider')->with('success', 'Slide Updated successfully');
         }
         catch (\Exception $e) {
@@ -352,11 +336,11 @@ class HomeController extends Controller
         }
         catch (\Exception $e) {
             return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
-        
+
          }
        }
 
 
-    
+
 }
->>>>>>> ebbfd570423ee96946c9e8239aa5b77db3023274
+
