@@ -24,12 +24,19 @@ class PlayersRepository extends BaseRepository
      */
     public function getPlayersList($request)
     {
-      $userId = auth()->user()->id;
-      return Players::where('user_id','!=',$userId)
-                      ->with('users')
-                      ->whereHas('users', function ($q) use ($request) {
-                          $q->where('name', 'like', '%' . $request->searchData . '%');
-                      })->get(); 
+      if(auth()->user()) {
+        $userId = auth()->user()->id;
+        return Players::where('user_id','!=',$userId)
+                        ->with('users')
+                        ->whereHas('users', function ($q) use ($request) {
+                            $q->where('name', 'like', '%' . $request->searchData . '%');
+                        })->get(); 
+      } else {
+        return Players::with('users')
+                        ->whereHas('users', function ($q) use ($request) {
+                            $q->where('name', 'like', '%' . $request->searchData . '%');
+                        })->get();      
+      }
     }
 
     public function getPlayerDetails($playerId)
