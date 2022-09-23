@@ -116,6 +116,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/slide/add', 'App\Http\Controllers\Backend\HomeController@slideAdd')->name('slide.add');
       Route::get('/slide/edit/{id}', 'App\Http\Controllers\Backend\HomeController@slideEdit')->name('slide.edit');
       Route::post('/slide/update/{id}', 'App\Http\Controllers\Backend\HomeController@slideUpdate')->name('slide.update');
+      Route::get('/slide/delete/{id}', 'App\Http\Controllers\Backend\HomeController@slideDelete')->name('slide.delete');
 
 
      //Refunds Listing

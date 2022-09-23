@@ -341,6 +341,21 @@ class HomeController extends Controller
         }
     }
 
+    // Slide Delete
+    public function slideDelete(Request $request, $id)
+    {
+        try{
+            $res= HomeSlider::where('id',$id)->delete();
+           if($res){
+              return redirect('/admin/home-slider')->with('success', 'Slide Deleted Successfully.');
+           }
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
+        
+         }
+       }
+
 
     
 }
