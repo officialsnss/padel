@@ -24,6 +24,7 @@ Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); 
 
 Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
 Route::get('popularClubs', 'App\Http\Controllers\Api\ClubsController@getPopularClubs');
+Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
 
 //COACHES
 Route::get('get/coaches', 'App\Http\Controllers\Api\CoachesController@getCoachesList');
@@ -54,7 +55,6 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
 
     //PLAYERS
-    Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
     Route::get('get/playerDetails', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
     Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
     Route::post('acceptRequest', 'App\Http\Controllers\Api\MatchesController@acceptRequest');
