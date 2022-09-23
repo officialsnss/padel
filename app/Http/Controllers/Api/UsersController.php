@@ -132,12 +132,12 @@ class UsersController extends Controller
 
         $existingUsers = User::where('email',$request->email)->first();
         if($existingUsers) {
-            return ResponseUtil::errorWithMessage('201', "This email_id already exists", true, 201);
+            return ResponseUtil::errorWithMessage(201, "This email_id already exists", true, 201);
         }
 
         $existingUsers = User::where('phone',$request->phone)->first();
         if($existingUsers) {
-            return ResponseUtil::errorWithMessage('201', "This phone number already exists", true, 201);
+            return ResponseUtil::errorWithMessage(201, "This phone number already exists", true, 201);
         }
 
         $user = User::create(['name' => $request->name, 
@@ -311,7 +311,7 @@ class UsersController extends Controller
             User::where('id', $userId)->update(['notification' => '0']);
             return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => false], 200);
         } else {
-            return ResponseUtil::errorWithMessage('201', 'Please enter the value of isNotification.', false, 201);
+            return ResponseUtil::errorWithMessage(201, 'Please enter the value of isNotification.', false, 201);
         }
     }
 

@@ -80,9 +80,9 @@ class MatchesController extends Controller
         return ResponseUtil::errorWithMessage(201, 'No match details', false, 201);
     }
 
-    public function getPlayersListInMatch(Request $request)
+    public function playersRatingList(Request $request)
     {
-        $data = $this->matchesService->getPlayersListInMatch($request);
+        $data = $this->matchesService->playersRatingList($request);
         if(isset($data['error'])) {
             return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
         } else if (isset($data['message'])) {
@@ -98,5 +98,14 @@ class MatchesController extends Controller
             return ResponseUtil::successWithData($data, 'Rating submitted successfully!', true, 200);
         }
         return ResponseUtil::errorWithMessage(201, 'Please fill the details', false, 201);
+    }
+
+    public function addMatchResult(Request $request)
+    {
+        $data = $this->matchesService->addMatchResult($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::successWithMessage($data['error'], true, 200);
+        }
+        return ResponseUtil::successWithData($data = [], 'Result added successfully!', true, 200);
     }
 }

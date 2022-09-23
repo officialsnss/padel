@@ -28,7 +28,9 @@ interface MatchesService
 
     public function filterMatchData($request);
 
-    public function getPlayersListInMatch($request);
+    public function playersRatingList($request);
 
     public function ratePlayer($request);
+
+    public function addMatchResult($request);
 }
