@@ -37,7 +37,7 @@
                       <td>{{ $slide->button_url }}</td>
                        <td>
                         <a href="{{ route('slide.edit', $slide->id) }}" class="btn btn-secondary">Edit</a>
-                        <a href="" class="btn btn-danger">Delete</a>
+                        <a href="{{ route('slide.delete', $slide->id) }}" class="btn btn-danger">Delete</a>
                       
                        
                        

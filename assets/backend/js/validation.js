@@ -532,12 +532,20 @@ $("#slideform").validate({
     },
     button_val: {
       required: true,
+      url: true
      
       },
    
     image: {
-      required: true,
-      extension: "jpg|jpeg|png"
+      required: function(element) {
+        if ($(".thumb-image").attr('src') !== '') {
+            return false;
+        } else {
+            return true;
+        }
+    },
+    extension: "jpg|jpeg|png"
+      
     }
     
     

@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label for="inputName">Banner Image</label><br>
                     <input id="fileUpload" type="file" name="image"><br />
-                    <div id="image-holder"> </div>
+                    <div id="image-holder"> <img src="" class="thumb-image"> </div>
                     @error('image')
                       <div class="form-error">{{ $message }}</div>
                       @enderror
