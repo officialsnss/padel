@@ -61,11 +61,13 @@ class PlayersServiceImpl implements PlayersService
 
     public function getPlayers($data)
     {
-        $userId = auth()->user()->id;
         $dataArray = [];
-
-        $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
-        $following = $userData['following'] ? explode(',',$userData['following']) : [];
+        $following = [];
+        if(auth()->user()) {
+            $userId = auth()->user()->id;
+            $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+            $following = $userData['following'] ? explode(',',$userData['following']) : [];
+        }
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];            
