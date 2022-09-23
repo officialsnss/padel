@@ -22,7 +22,12 @@ Route::post('register', 'App\Http\Controllers\Api\UsersController@register'); //
 Route::post('resendOtp', 'App\Http\Controllers\Api\UsersController@resendOtp'); // ResendOTP
 Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); // verifyOtp
 
+Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
+Route::get('popularClubs', 'App\Http\Controllers\Api\ClubsController@getPopularClubs');
 
+//COACHES
+Route::get('get/coaches', 'App\Http\Controllers\Api\CoachesController@getCoachesList');
+Route::get('get/coachDetails', 'App\Http\Controllers\Api\CoachesController@getCoachDetails');
 
 // Route::post('register', [RegisterController::class, 'register']);
      
@@ -35,7 +40,6 @@ Route::middleware('auth:api')->group( function () {
     //CLUBS
     Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
     Route::get('nearClubs', 'App\Http\Controllers\Api\ClubsController@getNearClubs');
-    Route::get('popularClubs', 'App\Http\Controllers\Api\ClubsController@getPopularClubs');
     Route::get('get/clubDetails', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
 
     //BATS
@@ -50,7 +54,6 @@ Route::middleware('auth:api')->group( function () {
     Route::get('get/levels', 'App\Http\Controllers\Api\LevelsController@getLevelsList');
 
     //PLAYERS
-    Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
     Route::get('get/players', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
     Route::get('get/playerDetails', 'App\Http\Controllers\Api\PlayersController@getPlayerDetails');
     Route::post('request_add', 'App\Http\Controllers\Api\MatchesController@sendRequest');
@@ -59,10 +62,6 @@ Route::middleware('auth:api')->group( function () {
     Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
     Route::post('addPlayer', 'App\Http\Controllers\Api\PlayersController@addPlayerInMatch');
     Route::post('playersList/match', 'App\Http\Controllers\Api\PlayersController@playersListInMatch');
-
-    //COACHES
-    Route::get('get/coaches', 'App\Http\Controllers\Api\CoachesController@getCoachesList');
-    Route::get('get/coachDetails', 'App\Http\Controllers\Api\CoachesController@getCoachDetails');
 
     //MATCHES
     Route::get('get/upcoming/matches', 'App\Http\Controllers\Api\MatchesController@getUpcomingMatches');
