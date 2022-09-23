@@ -27,12 +27,12 @@
                   @foreach ($slides as $slide)
                     <tr>
                       <td></td>
-                      <td>{{ $slide->heading }}</td>
                       <td><div id="image-holder"> 
                          @if($slide->image)
                             <img src="{{ URL::to('/') }}/Images/homeslider_images/{{ $slide->image }}" class="thumb-image-list">
                          @endif
                          </div></td>
+                      <td>{{ $slide->heading }}</td>
                       <td>{{ $slide->button_label }}</td>
                       <td>{{ $slide->button_url }}</td>
                        <td>
