@@ -151,7 +151,7 @@
          <!--</li>-->
 
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity'))? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity') || (request()->segment(2) == 'settings') || (request()->segment(2) == 'home-slider'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-plug"></i>
               <p>
                 System Settings
@@ -186,6 +186,28 @@
                   </p>
                 </a>
              </li> 
+
+             <li class="nav-item">
+                <a href="{{url('/admin/settings')}}" class="nav-link  {{ ( request()->segment(2) == 'settings')? 'active' : '' }}">
+                <i class="nav-icon fas fa-cogs"></i>
+                  <p>
+                    Settings
+                  </p>
+                </a>
+             </li> 
+
+             <li class="nav-item">
+                <a href="{{url('/admin/home-slider')}}" class="nav-link  {{ ( request()->segment(2) == 'home-slider')? 'active' : '' }}">
+                <i class="nav-icon fas fa-image"></i>
+                  <p>
+                    Homepage Slider
+                  </p>
+                </a>
+             </li> 
+
+
+           
+
             </ul>
           </li>
 
