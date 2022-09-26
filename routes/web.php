@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\backend\HomeController;
 use App\Http\Controllers\backend\UserController;
+use App\Http\Middleware\Language;
 
 
 /*
@@ -29,6 +30,9 @@ Route::get('clear', function () {
 
 // Website Homepage
 Route::get('/', 'App\Http\Controllers\Frontend\HomeController@index');
+Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us');
+
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
 
 Route::prefix('/admin')->group(function () {
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');

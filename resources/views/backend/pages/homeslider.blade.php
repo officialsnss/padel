@@ -23,11 +23,12 @@
                   </tr>
                   </thead>
                   <tbody>
-                    
+
                   @foreach ($slides as $slide)
                     <tr>
                       <td></td>
-                      <td><div id="image-holder"> 
+                      <td><div id="image-holder">
+
                          @if($slide->image)
                             <img src="{{ URL::to('/') }}/Images/homeslider_images/{{ $slide->image }}" class="thumb-image-list">
                          @endif
@@ -38,14 +39,14 @@
                        <td>
                         <a href="{{ route('slide.edit', $slide->id) }}" class="btn btn-secondary">Edit</a>
                         <a href="{{ route('slide.delete', $slide->id) }}" class="btn btn-danger">Delete</a>
-                      
-                       
-                       
+
+
+
                       </tr>
                   @endforeach
-                  
+
                   </tbody>
-                
+
                 </table>
               </div>
               <!-- /.card-body -->
@@ -57,4 +58,3 @@
         <!-- /.row -->
 
         @endsection
-  

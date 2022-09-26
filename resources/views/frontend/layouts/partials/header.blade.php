@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 topnnavi">
-                    <h5 class="top-follow-head">Follow With Us : </h5>
+                    <h5 class="top-follow-head">{{ (__('home.header.follow_with_us')) }} : </h5>
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-4 col-md-6 col-sm-12 d-flex justify-content-between">
@@ -44,12 +44,11 @@
                                     <ul>
                                         <li class="account-main">
                                             <a href="javascript:void(0);" class="account-link"><img
-                                                    src="http://retalkapp.com/tbaree/01/images/my-account.svg" alt="My Account"><span>My
-                                                    Account</span></a>
+                                                    src="http://retalkapp.com/tbaree/01/images/my-account.svg" alt="My Account"><span>{{ (__('home.header.my_account')) }}</span></a>
                                             <div class="account-div">
                                                 <ul class="account-ul">
-                                                    <li><a href="javscript:void(0)">Login</a></li>
-                                                    <li><a href="javscript:void(0)">Register</a></li>
+                                                    <li><a href="javscript:void(0)">{{ (__('home.header.login')) }}</a></li>
+                                                    <li><a href="javscript:void(0)">{{ (__('home.header.register')) }}</a></li>
                                                 </ul>
                                             </div>
                                         </li>
@@ -58,7 +57,7 @@
                                                 <a href="javascript:void(0);" class="search-link"><img
                                                         class="icon-close" src="http://retalkapp.com/tbaree/01/images/icon-close.png"
                                                         alt="close"><img class="icon-search"
-                                                        src="http://retalkapp.com/tbaree/01/images/icon-search.svg" alt="search"> Search</a>
+                                                        src="http://retalkapp.com/tbaree/01/images/icon-search.svg" alt="search"> {{ (__('home.header.search')) }}</a>
                                                 <form name="Searchform" action="searchresults.php"
                                                     method="post">
                                                     <div class="search-sub" style="display: none;">
@@ -77,7 +76,11 @@
                                             </div>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="ar/index.php" class="arabic-lang">العربية </a>
+                                            @if(App::getLocale() == 'kw')
+                                            <a href="{{url('lang/en')}}" class="arabic-lang">EN</a>
+                                            @else
+                                            <a href="{{url('lang/kw')}}" class="arabic-lang">عربي</a>
+                                            @endif
                                         </li>
                                     </ul>
                                 </div>
@@ -99,13 +102,13 @@
                 <div class="wsmain">
                     <nav class="wsmenu clearfix">
                         <ul class="mobile-sub wsmenu-list">
-                            <li><a href="javascript:void(0);" class="active">Home</a></li>
-                            <li><a href="javascript:void(0);">Players</a></li>
-                            <li><a href="javascript:void(0);">Booking</a></li>
-                            <li><a href="javascript:void(0);">Games</a></li>
-                            <li><a href="javascript:void(0);">Coaches</a></li>
-                            <li><a href="javascript:void(0);">About Us</a></li>
-                            <li><a href="javascript:void(0);">Contact Us</a></li>
+                            <li><a href="{{ url('/') }}" class="active">{{ (__('home.menu.Home')) }}</a></li>
+                            <li><a href="javascript:void(0);">{{ __('home.menu.Players') }}</a></li>
+                            <li><a href="javascript:void(0);">{{ __('home.menu.Booking') }}</a></li>
+                            <li><a href="javascript:void(0);">{{ __('home.menu.Games') }}</a></li>
+                            <li><a href="javascript:void(0);">{{ __('home.menu.Coaches') }}</a></li>
+                            <li><a href="javascript:void(0);">{{ __('home.menu.About') }}</a></li>
+                            <li><a href="javascript:void(0);">{{ __('home.menu.Contact_us') }}</a></li>
 
                         </ul>
                     </nav>

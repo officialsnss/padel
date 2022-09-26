@@ -123,7 +123,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: 'get',
-        url: 'api/get/players',
+        url: 'api/get/playersList',
         // data: formData.serialize(),
         success: function (playerslistdata) {
             var ply = "";

@@ -1,10 +1,60 @@
 @extends('frontend.layouts.app')
 
 @section('content')
+    {{-- Banner Layout --}}
     <section class="banner-main home-banner-main">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
+                @php
+                    $banners = \App\Models\HomeSlider::all();
+
+                @endphp
+                @foreach ($banners as $banner)
+                    @if ($banner->image != '')
+                        <div class="swiper-slide">
+                            <div class="slideshow-box position-relative">
+                                <!--<picture>
+                                            <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
+                                            <source media="(max-width: 991px) and (min-width: 770px)" srcset="">
+                                            <source media="(max-width: 769px) and (min-width: 401px)" srcset="">
+                                            <source media="(max-width: 400px)" srcset="">
+                                            <img class="imageFill" src="">
+                                        </picture>-->
+
+                                <div class="slideshow-img">
+                                    <picture>
+                                        <source media="(max-width: 1200px) and (min-width:641px)"
+                                            srcset="{{ URL::to('/') }}/Images/homeslider_images/{{ $banner->image }}" />
+                                        <source media="(max-width: 640px)"
+                                            srcset="{{ URL::to('/') }}/Images/homeslider_images/{{ $banner->image }}" />
+                                        <img class="imageFill" src="{{ URL::to('/') }}/Images/homeslider_images/{{ $banner->image }}"
+                                            class="img-fluid" alt="" />
+                                    </picture>
+                                </div>
+                                <div class="slideshow-contents position-absolute d-flex align-items-center">
+                                    <div class="w-100">
+                                        <h1 class="text-uppercase">
+                                            @if(App::getLocale() == 'kw')
+                                                {!! $banner->arabic_heading !!}
+                                            @else
+                                                {!! $banner->heading !!}
+                                            @endif
+                                        </h1>
+                                        <p class="slideshow-links"><a href="{{ $banner->button_url }}">
+                                            @if(App::getLocale() == 'kw')
+                                                {{ $banner->arabic_button_label }}
+                                            @else
+                                                {{ $banner->button_label }}
+                                            @endif
+                                        </a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+
+                {{-- <div class="swiper-slide">
                     <div class="slideshow-box position-relative">
                         <!--<picture>
                                 <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
@@ -31,46 +81,19 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="slideshow-box position-relative">
-                        <!--<picture>
-                                <source media="(max-width: 1200px) and (min-width: 992px)" srcset="">
-                                <source media="(max-width: 991px) and (min-width: 770px)" srcset="">
-                                <source media="(max-width: 769px) and (min-width: 401px)" srcset="">
-                                <source media="(max-width: 400px)" srcset="">
-                                <img class="imageFill" src="">
-                            </picture>-->
-
-                        <div class="slideshow-img">
-                            <picture>
-                                <source media="(max-width: 1200px) and (min-width:641px)"
-                                    srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
-                                <source media="(max-width: 640px)"
-                                    srcset="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg" />
-                                <img class="imageFill" src="http://retalkapp.com/tbaree/01/slideshow/slide-1.jpg"
-                                    class="img-fluid" alt="" />
-                            </picture>
-                        </div>
-                        <div class="slideshow-contents position-absolute d-flex align-items-center">
-                            <div class="w-100">
-                                <h1 class="text-uppercase">Ready To<br> Plan Your<br> Next Game ?</h1>
-                                <p class="slideshow-links"><a href="javascript:void(0);">Book Now</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> --}}
             </div>
             <!--<div class="swiper-pagination slideshow-pagination"></div>
-                <div class="swiper-button-next slideshow-button-next"></div>
-                <div class="swiper-button-prev slideshow-button-prev"></div>-->
+                        <div class="swiper-button-next slideshow-button-next"></div>
+                        <div class="swiper-button-prev slideshow-button-prev"></div>-->
         </div>
     </section>
 
+    {{-- Upcomming Tournament Layout --}}
     <section class="upcoming-tournament home-page-section">
         <div class="padding-left-right">
             <div class="container">
-                <h2>Upcoming Tournament</h2>
+                <h2>{{ __('home.home_page.upcoming_tournament') }}</h2>
                 <div class="row no-gutters">
                     <div class="col-lg-5 col-md-12">
                         <div class="upcoming-img">
@@ -98,10 +121,11 @@
         </div>
     </section>
 
+    {{-- Popular Courts Layout --}}
     <section class="popular-courts home-page-section">
         <div class="padding-left-right">
             <div class="container">
-                <h2>Popular Courts</h2>
+                <h2>{{ __('home.home_page.popular_courts') }}</h2>
                 <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
                     <div class="product-container swiper-container">
                         <div class="swiper-wrapper res-data">
@@ -253,20 +277,21 @@
         </div>
     </section>
 
+    {{-- All players and coaches Layout --}}
     <section class="players-coach home-page-section">
         <div class="padding-left-right">
             <div class="container">
                 <div class="players-coach-tab">
                     <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link players-coach-btn active" id="pills-players-tab"
-                                data-bs-toggle="pill" data-bs-target="#pills-players" type="button" role="tab"
-                                aria-controls="pills-players" aria-selected="true">Players</button>
+                            <button class="nav-link players-coach-btn active" id="pills-players-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-players" type="button" role="tab" aria-controls="pills-players"
+                                aria-selected="true">{{ __('home.home_page.players') }}</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link players-coach-btn" id="pills-coach-tab" data-bs-toggle="pill"
                                 data-bs-target="#pills-coach" type="button" role="tab" aria-controls="pills-coach"
-                                aria-selected="false">Coach</button>
+                                aria-selected="false">{{ __('home.home_page.coach') }}</button>
                         </li>
                     </ul>
                 </div>
@@ -469,7 +494,4 @@
             </div>
         </div>
     </section>
-
-
 @endsection
-
