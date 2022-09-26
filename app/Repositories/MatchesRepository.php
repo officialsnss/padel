@@ -43,6 +43,7 @@ class MatchesRepository extends BaseRepository
         return Matches::where('match_type', 1)->with('booking')->whereHas('booking', function ($q) use ($date) {
                     $q->where('booking_date', '=', $date);
               })->with('slots')
+                ->with('bookedBats')
                 ->with('clubs.cities')->whereHas('clubs', function ($q) use ($request) {
                   $q->where('name', 'like', '%' . $request->searchData . '%');
               })->get(); 
@@ -50,6 +51,7 @@ class MatchesRepository extends BaseRepository
       return Matches::where('match_type', 1)
               ->with('slots')
               ->with('clubs.cities')
+              ->with('bookedBats')
               ->get(); 
     }
 

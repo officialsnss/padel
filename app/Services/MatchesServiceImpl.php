@@ -104,7 +104,11 @@ class MatchesServiceImpl implements MatchesService
         $dataArray = [];
 
         foreach($data as $i => $row) {
-            $dataArray[$i]['id'] = $row['id'];  
+            $dataArray[$i]['id'] = $row['id'];
+            $dataArray[$i]['booking_id'] = $row['booking_id'];
+            $dataArray[$i]['player_id'] = $row['player_id'];            
+
+            $dataArray[$i]['club_id'] = $row['clubs'] ? $row['clubs'][0]['id'] : null; 
             $dataArray[$i]['name'] = $row['clubs'] ? $row['clubs'][0]['name'] : null;  
 
             $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
@@ -122,17 +126,40 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['startTime'] = strtotime($start);
             $endTime = date('H:i:s', strtotime(max($bookedSlots). ' + 1 hours'));
             $dataArray[$i]['endTime'] = strtotime($endTime); 
-            $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private';  
+
+            $dataArray[$i]['no_of_hours'] = $row['booking'][0]['no_of_hours'];  
+
+            $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private'; 
+            $dataArray[$i]['court_type'] = $row['court_type'] == 1 ? 'Indoor' : 'Outdoor';  
             $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
             $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
             
-            $minimum_level = explode(',',$row['level']);
-            $min = min($minimum_level);
-            $dataArray[$i]['minimum_level'] = $min;  
+            if($row['gender_allowed'] == 1) {
+                $dataArray[$i]['gender'] = 'Female';
+            } elseif ($row['gender_allowed'] == 2) {
+                $dataArray[$i]['gender'] = 'Male';
+            } else {
+                $dataArray[$i]['gender'] = 'Mix';
+            }
+            $levelArray = explode(',',$row['level']);
+            foreach($levelArray as $key => $level) {
+                $level = $this->levelsServiceImpl->getLevelById($level);
+                $dataArray[$i]['level'][$key]['id'] = $level['id'];
+                $dataArray[$i]['level'][$key]['name'] = $level['name'];
+            }
+            $min = min($levelArray);
+            $min_level = $this->levelsServiceImpl->getLevelById($min);
+            $dataArray[$i]['minimum_level'] = $min_level['id'];
             
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             $dataArray[$i]['isMatchCompleted'] = 0;  
+            $dataArray[$i]['bats'] = $this->getBookedBats($row['bookedBats']);  
             
+            $images = $row['clubs'][0]['images'];
+            foreach($images as $key => $image) {
+                $dataArray[$i]['images'][$key] = getenv("IMAGES")."club_images/".$image['image'];
+            }
+
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds);
             
