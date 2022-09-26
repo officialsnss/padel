@@ -30,7 +30,7 @@ class ContactUsController extends Controller
         if(isset($data['error'])) {
             return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
         } else {
-            return ResponseUtil::successWithData($data, 'Message sent successfully!', true, 200);
+            return ResponseUtil::successWithMessage('Message sent successfully!', true, 200);
         }
 
     }
