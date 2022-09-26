@@ -33,6 +33,9 @@ Route::get('get/coachDetails', 'App\Http\Controllers\Api\CoachesController@getCo
 //Contact_Us BY WEBSITE
 Route::post('contact', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
 
+//POLICIES
+Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');
+
 // Route::post('register', [RegisterController::class, 'register']);
      
 Route::middleware('auth:api')->group( function () {
@@ -78,9 +81,6 @@ Route::middleware('auth:api')->group( function () {
 
     //NOTIFICATION
     Route::post('notify', 'App\Http\Controllers\Api\UsersController@notificationSettings');
-
-    //POLICIES
-    Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
     //Contact_Us
     Route::post('contact_us', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
