@@ -122,4 +122,28 @@ class BookingRepository extends BaseRepository
       return VendorBats::where('bat_id', $bat_id)
               ->first(); 
     }
+
+    public function getBookingDetails($booking_id)
+    {
+      return Booking::where('id', $booking_id)
+              ->first();
+    }
+    
+    public function updateBookingData($data, $booking_id)
+    {
+      return Booking::where('id', $booking_id)
+              ->update($data);
+    }
+    
+    public function updateSlotsData($data, $booking_id)
+    {
+      return BookingSlots::where('booking_id', $booking_id)
+              ->update($data);
+    }
+
+    public function updateMatchData($data, $booking_id)
+    {
+      return Matches::where('booking_id', $booking_id)
+              ->update($data);
+    }
 }

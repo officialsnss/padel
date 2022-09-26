@@ -60,6 +60,7 @@ class MatchesRepository extends BaseRepository
               ->with('clubs.cities')
               ->with('clubs.images')
               ->with('players')
+              ->with('bookedBats')
               ->first(); 
     }
 

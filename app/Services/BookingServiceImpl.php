@@ -65,6 +65,38 @@ class BookingServiceImpl implements BookingService
 
     public function addBooking($request)
     {
+        if($request->isEdit == true) {
+
+            // Validation for null booking id value
+            if(!$request->booking_id) {
+                return ['error' => 'Please enter the value of booking id!'];
+            }
+
+            // Validation for random booking id
+            if(!$this->bookingRepository->getBookingDetails($request->booking_id)) {
+                return ['error' => 'There is no match exist for this booking id!'];
+            }
+
+            // Booking array data to be filled in bookings table for updating booking date
+            $bookingArray = [];
+            $dateTime = $request->dateTime;
+            $bookingArray['booking_date'] = date('Y-m-d', $dateTime[0]);
+            $booked = $this->bookingRepository->updateBookingData($bookingArray, $request->booking_id);
+
+            // Slots array data to be filled in slots table for updating slots
+            $slotArray = [];
+            foreach($dateTime as $i => $time) {
+                $slotArray['slots'] = date('H:i:s', $time);
+                $slot[$i] = $this->bookingRepository->updateSlotsData($slotArray, $request->booking_id);
+            }
+
+            // Match array data to be filled in matches table
+            $matchArray = [];
+            $matchArray['level'] = implode(',',$request->level);
+            $match = $this->bookingRepository->updateMatchData($matchArray, $request->booking_id);
+
+            return ['message' => 'Booking data updated successfully!'];
+        }
         $userId = auth()->user()->id;
 
         // Booking array data to be filled in bookings table
@@ -193,7 +225,7 @@ class BookingServiceImpl implements BookingService
         $paymentArray['refund_price'] = "0.000";
         $paymentArray['currency_id'] = "129";
         $payment = $this->bookingRepository->storePaymentData($paymentArray);
-        return 1;
+        return ['message'=> 'Booking successfull'];
     }
 
 

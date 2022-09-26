@@ -35,10 +35,13 @@ class BookingController extends Controller
     public function addBooking(Request $request)
     {
         $data = $this->bookingService->addBooking($request);
-        if($data) {
-            return ResponseUtil::successWithData($data = [], 'Booking successfull', true, 200);
+        if(isset($data['message'])) {
+            return ResponseUtil::successWithMessage($data['message'], true, 200);
+        } else if (isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else {
+            return ResponseUtil::errorWithMessage(201, 'Booking Failed', false, 201);
         }
-        return ResponseUtil::errorWithMessage(201, 'Booking Failed', true, 201);
     }
 
     public function getBookingSlots(Request $request)

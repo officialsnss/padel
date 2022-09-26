@@ -153,6 +153,7 @@ class MatchesServiceImpl implements MatchesService
         $dataArray = [];
         if($data) {
             $dataArray['id'] = $data['id'];
+            $dataArray['booking_id'] = $data['booking_id'];
             $dataArray['player_id'] = $data['player_id'];            
 
             $dataArray['club_id'] = $data['clubs'] ? $data['clubs'][0]['id'] : null;
@@ -206,6 +207,7 @@ class MatchesServiceImpl implements MatchesService
             
             $dataArray['booked_by'] = $data['booking'][0]['user_id'];  
             $dataArray['isMatchCompleted'] = 0;  
+            $dataArray['bats'] = $this->getBookedBats($data['bookedBats']);  
             
             $clubLatitude = $data['clubs'][0]['latitude'];
             $clubLongitude = $data['clubs'][0]['longitude'];
@@ -440,5 +442,15 @@ class MatchesServiceImpl implements MatchesService
         }
         return ['message' => "Winner player_ids are ". $resultPacket['winner'] ];
 
+    }
+
+    public function getBookedBats($data)
+    {
+        $batArray = [];
+        foreach($data as $i => $row) {
+            $batArray[$i]['bat_id'] = $row['bat_id'];
+            $batArray[$i]['quantity'] = $row['quantity'];
+        }
+        return $batArray;
     }
 }
