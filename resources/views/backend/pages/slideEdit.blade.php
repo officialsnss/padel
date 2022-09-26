@@ -43,8 +43,10 @@
               <div class="col-md-12">
                 <div class="form-group">
                     <label for="inputName">Banner Image</label><br>
+                    
                     <input id="fileUpload" type="file" name="image"><br />
                     <div id="image-holder"> 
+                      
                          @if($slideData->image)
                             <img src="{{ URL::to('/') }}/Images/homeslider_images/{{ $slideData->image }}" class="thumb-image">
                          @endif
