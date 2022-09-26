@@ -83,6 +83,11 @@ class CoachesServiceImpl implements CoachesService
         $coach_id = $request->coach_id;
         $data = $this->coachesRepository->getCoachDetails($coach_id);
 
+        // Validation for coach id
+        if(!$data) {
+            return ['error' => 'No coach exists for the coach_id'];
+        }
+
         $dataPacket = [];
         $dataPacket['id'] = $data['id'];
         $dataPacket['user_id'] = $data['user_id'];
@@ -108,7 +113,7 @@ class CoachesServiceImpl implements CoachesService
         $dataPacket['experience'] = end($experience);
         $dataPacket['rating'] = $this->getCoachRating($data['rating']);
         $dataPacket['clubs_assigned'] = $this->getAssociatedClubsData($data['clubs_assigned']);
-        return (object)$dataPacket;
+        return $dataPacket;
     }
 
     public function getAssociatedClubsData($clubIds)

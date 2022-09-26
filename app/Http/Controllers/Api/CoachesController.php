@@ -35,9 +35,9 @@ class CoachesController extends Controller
     public function getCoachDetails(Request $request)
     {
         $data = $this->coachesService->getCoachDetails($request);
-        if($data) {
-            return ResponseUtil::successWithData($data, 'Data of coach', true, 200);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201); 
         }
-        return ResponseUtil::errorWithMessage(201, 'No data for this coach', false, 201); 
+        return ResponseUtil::successWithData($data, 'Data of coach', true, 200);
     }
 }
