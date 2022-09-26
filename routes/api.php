@@ -30,6 +30,9 @@ Route::get('get/playersList', 'App\Http\Controllers\Api\PlayersController@getPla
 Route::get('get/coaches', 'App\Http\Controllers\Api\CoachesController@getCoachesList');
 Route::get('get/coachDetails', 'App\Http\Controllers\Api\CoachesController@getCoachDetails');
 
+//Contact_Us BY WEBSITE
+Route::post('contact', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
+
 // Route::post('register', [RegisterController::class, 'register']);
      
 Route::middleware('auth:api')->group( function () {
