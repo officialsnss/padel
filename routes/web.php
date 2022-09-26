@@ -198,6 +198,8 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
     Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
     Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
       
+   //Matches
+   Route::get('/bookings/matches/{id}', 'App\Http\Controllers\Backend\BookingController@matches')->name('matches');
     // Pdf 
     Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));  
     });

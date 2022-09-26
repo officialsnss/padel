@@ -24,8 +24,8 @@
                    </td>
                   </tr>
                   <tr>
-                    <td><strong>Date-Time</strong></td>
-                    <td>{{ $contactInfo->send_time }}<br>
+                    <td><strong>Sent Time</strong></td>
+                    <td>{{ $contactInfo->created_at }}<br>
                    </td>
                   </tr>
                 </table>

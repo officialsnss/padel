@@ -155,11 +155,13 @@ class HomeController extends Controller
     public function contact()
     { 
       try{
-        $title = 'Contact';
-        $information = DB::table('contact_us')->leftJoin('users', 'users.id', '=', 'contact_us.sender_id')
-                         ->leftJoin('users as receiver', 'receiver.id', '=', 'contact_us.receiver_id')
-                         ->select('users.*','contact_us.*', 'contact_us.id as contactid', 'contact_us.created_at as send_time')
-                         ->get();
+        $title = 'Contact Form Queries';
+        // $information = DB::table('contact_us')->leftJoin('users', 'users.id', '=', 'contact_us.sender_id')
+        //                  ->leftJoin('users as receiver', 'receiver.id', '=', 'contact_us.receiver_id')
+        //                  ->select('users.*','contact_us.*', 'contact_us.id as contactid', 'contact_us.created_at as send_time')
+        //                  ->get();
+        $information = DB::table('contact_us')
+                          ->get();
 
         return view('backend.pages.contact', compact('title','information'));
      }
