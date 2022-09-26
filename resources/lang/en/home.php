@@ -22,6 +22,11 @@
         'upcoming_tournament' => 'Upcoming Tournament',
         'players' => 'Players',
         'coach' => 'Coach'
+    ],
+    'extra_page' => [
+        'tnc' =>'Terms and Condition',
+        'privacy_policy' => 'Privacy Policy',
+        'refund_policy' => 'Refund Policy'
     ]
 ];
 

@@ -32,7 +32,19 @@ Route::get('clear', function () {
 Route::get('/', 'App\Http\Controllers\Frontend\HomeController@index');
 Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us');
 
+// Language Switcher Route
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
+
+// // Terms and condition route
+// Route::get('/terms_and_condition', 'App\Http\Controllers\Frontend\HomeController@terms_and_condition')->name('terms_and_condition');
+
+// // Privacy Policy route
+// Route::get('/privacy_policy', 'App\Http\Controllers\Frontend\HomeController@privacy_policy')->name('privacy_policy');
+
+// // Refund Policy route
+// Route::get('/refund_policy', 'App\Http\Controllers\Frontend\HomeController@refund_policy')->name('refund_policy');
+
+Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
 
 Route::prefix('/admin')->group(function () {
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');

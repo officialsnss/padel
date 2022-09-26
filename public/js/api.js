@@ -104,7 +104,7 @@ $(document).ready(function () {
                 res += '<img src="http://127.0.0.1:8000/Images/'+data.data[i].featured_image+'" class="img-fluid" alt="">';
                 res += '</div>';
                 res += '<div class="know-more-arrow">';
-                res += '<a href="javascript:void(0)"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid" alt=""></a>';
+                res += '<a href="' + data.data[i].id + '"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid" alt=""></a>';
                 res += '</div>';
                 res += '</div>';
                 res += '</div>';
@@ -259,4 +259,75 @@ $(document).ready(function () {
 
         // event.preventDefault();
     });
+
+    //------Contact Us Ajax Code ------//
+
+    $("#sendcontactus").submit(function (event) {
+        var contactformData = {
+            name: "Navjot Singh",
+            email: "enridise@gmail.com",
+            phone: "7777799999",
+            message: "This is a test message of contact us",
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "api/contact",
+            data: contactformData,
+            dataType: "json",
+            encode: true,
+            success: function (data) {
+
+                if (data.success === true) {
+                    console.log("Message sent successfully!");
+                } else {
+                    console.log("Something Went Wrong!");
+                }
+            },
+            error: function (data) {
+                // console.log(data);
+                console.log(data.responseJSON.message);
+            }
+        });
+
+        // event.preventDefault();
+    });
+
+    //------CMS Pages Ajax Code ------//
+
+    $.ajax({
+
+        type: 'get',
+        url: 'api/policy?id=',
+        // data: formData.serialize(),
+        success: function (coachslistdata) {
+            var coa = "";
+            console.log(coachslistdata);
+            for (var i = 0; i < coachslistdata.data.length; i++) {
+
+                coa += '<div class="swiper-slide">';
+                coa += '<div class="playerscoach-div">';
+                coa += '<img src="http://127.0.0.1:8000/Images/'+coachslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
+                coa += '</div>';
+                coa += '<div class="playerscoach-details">';
+                coa += '<h4>'+coachslistdata.data[i].name+'</h4>';
+                coa += '<h6>Experience: '+coachslistdata.data[i].experience+'</h6>';
+                // coa += '<div class="star-rating-players">';
+                // coa += '<div class="star-rating">';
+                // coa += '<label for="5-stars" class="star" style="color: #fc0;">&#9733;</label>';
+                // coa += '<label for="5-stars" class="star" style="color: #fc0;">&#9733;</label>';
+                // coa += '</div>';
+                // coa += '</div>';
+                coa += '</div>';
+                coa += '</div>';
+            }
+            $(".coach-list-data").append(coa);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+
+
 });

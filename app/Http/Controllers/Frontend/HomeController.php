@@ -13,7 +13,7 @@ use App\Models\Countries;
 use App\Models\Currencies;
 use App\Models\Setting;
 use App\Models\ContactUs;
-
+use App\Models\CmsPages;
 class HomeController extends Controller
 {
     public function index()
@@ -46,6 +46,45 @@ class HomeController extends Controller
            // dd($e->getMessage());
             return redirect('/contact_us')->with('error', 'Something went wrong.');
         }
+    }
+
+    // public function terms_and_condition()
+    // {
+    //     $tncs = CmsPages::all()->where('slug','terms-and-condition');
+    //     return view('frontend.pages.terms_and_condition',compact('tncs'));
+    // }
+
+    // public function privacy_policy()
+    // {
+    //     $pps = CmsPages::all()->where('slug','privacy-policy');
+    //     return view('frontend.pages.privacy_policy',compact('pps'));
+    // }
+
+    // public function refund_policy()
+    // {
+    //     $rps = CmsPages::all()->where('slug','refund-policy');
+    //     return view('frontend.pages.refund_policy',compact('rps'));
+    // }
+
+    public function extra_pages($slug)
+    {
+        if($slug == "terms-and-condition"){
+            $tncs = CmsPages::all()->where('slug',$slug);
+            return view('frontend.pages.terms_and_condition',compact('tncs'));
+        }
+        if($slug == "privacy-policy"){
+            $pps = CmsPages::all()->where('slug',$slug);
+            return view('frontend.pages.privacy_policy',compact('pps'));
+        }
+        if($slug == "refund-policy"){
+            $rps = CmsPages::all()->where('slug',$slug);
+            return view('frontend.pages.refund_policy',compact('rps'));
+        }
+        if($slug == "about-us"){
+            $rps = CmsPages::all()->where('slug',$slug);
+            return view('frontend.pages.refund_policy',compact('rps'));
+        }
+
     }
 
 }

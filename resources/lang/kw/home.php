@@ -21,6 +21,11 @@
         'upcoming_tournament' => 'البطولة القادمة',
         'players' => 'اللاعبين',
         'coach' => 'مدرب لياقة'
+    ],
+    'extra_page' => [
+        'tnc' => 'أحكام وشروط',
+        'privacy_policy' => 'سياسة الخصوصية',
+        'refund_policy' => 'سياسة الاسترجاع'
     ]
 
 
