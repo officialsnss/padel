@@ -49,11 +49,10 @@ class BookingServiceImpl implements BookingService
             $userId = auth()->user()->id;
             if($match['booked_by'] == $userId) {
                 unset($match['booked_by']);
-                if($currentDate < $matchTime) {
-                    array_push($bookedMatches, $match);
-                } else {
+                if($currentDate > $matchTime) {
                     $match['isMatchCompleted'] = 1;
                 }
+                array_push($bookedMatches, $match);
             }
         }
 
