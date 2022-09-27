@@ -16,7 +16,7 @@
                   <tr>
                     <th>Sr.no</th>
                     <th>Page Title</th>
-                    <th>Content</th>
+                    <th>Arabic Title</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -27,7 +27,7 @@
                       <td></td>
                       <td>{{ $page->title }}</td>
                      
-                      <td>{{ str_replace("&nbsp;", "", substr(strip_tags($page->content),0, 100)) }} ...</td>
+                      <td>{{ $page->title_arabic}}</td>
                      
                      <!-- @if($page->status === '1')
                         <td >Active</td>
@@ -35,8 +35,11 @@
                         <td>Inactive</td>
                        @endif  -->
                        
-                       <td><a href="{{ route('page.view',$page->id)}}" class="btn btn-success">View</a>
-                        <a href="{{ route('page.edit',$page->id)}}" class="btn btn-secondary">Edit</a>
+                       <td>
+                       <a href="{{ route('page.edit',$page->id)}}" class="btn btn-secondary">Edit</a>
+                        </td>
+                       <!-- <td><a href="{{ route('page.view',$page->id)}}" class="btn btn-success">View</a> -->
+                        
                       
                         <!-- <a href="{{ route('page.delete',$page->id)}}" class="btn btn-danger">Delete</a> -->
                        

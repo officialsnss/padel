@@ -276,3 +276,6 @@ form#bookform label {
         width: 25%;
         float: left;
     }
+    #cms-pages .error {
+        display: inherit;
+    }
