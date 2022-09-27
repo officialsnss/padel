@@ -30,4 +30,9 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="selectedLang" value="{{App::getLocale()}}">
+
 </footer>
+
+

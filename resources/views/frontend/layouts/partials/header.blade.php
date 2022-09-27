@@ -68,7 +68,7 @@
                                                                     placeholder="Search here..." value=""
                                                                     minlength="3">
                                                                 <button type="submit"
-                                                                    name="submitsearch">GO</button>
+                                                                    name="submitsearch">{{ (__('home.header.go')) }}</button>
                                                             </div>
                                                         </div>
                                                     </div>

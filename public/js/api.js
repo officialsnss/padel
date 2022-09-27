@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     //------Fetch Header Token Ajax Code ------//
-
+    var lang = $('#selectedLang').val();
 
     $.ajaxSetup({
         headers: {
@@ -16,13 +16,18 @@ $(document).ready(function () {
         url: 'api/popularClubs',
         // data: formData.serialize(),
         success: function (data) {
+            // alert(lang);
             console.log(data);
             var res = "";
             for (var i = 0; i < data.data.length; i++) {
                 res += '<div class="swiper-slide">';
                 res += '<div class="courts-div">';
                 res += ' <div class="courts-name-desc">';
-                res += '<h4 class="text-white">' + data.data[i].name + '</h4>';
+                if(lang == 'en'){
+                    res += '<h4 class="text-white">' + data.data[i].name + '</h4>';
+                } else {
+                    res += '<h4 class="text-white">' + data.data[i].name_arabic + '</h4>';
+                }
                 res += '<div class="star-rating">';
 
                 if (data.data[i].rating > 4.9) {
@@ -74,31 +79,13 @@ $(document).ready(function () {
                 res += ' </div>';
                 res += ' <div class="clearfix-space"></div>';
                 res += '<div class="row">';
+                for (var j = 0; j < data.data[i].amenities.length; j++) {
                 res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
                 res += '<div class="court-icons">';
-                res += '<img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-1.png" class="img-fluid" alt="">';
+                res += '<img src="http://127.0.0.1:8000/Images/'+data.data[i].amenities[j].image+'" class="img-fluid" alt="">';
                 res += '</div>';
                 res += '</div>';
-                res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
-                res += '<div class="court-icons">';
-                res += '<img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-2.png" class="img-fluid" alt="">';
-                res += '</div>';
-                res += '</div>';
-                res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
-                res += '<div class="court-icons">';
-                res += '<img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-3.png" class="img-fluid" alt="">';
-                res += '</div>';
-                res += '</div>';
-                res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
-                res += '<div class="court-icons">';
-                res += '<img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-4.png" class="img-fluid" alt="">';
-                res += '</div>';
-                res += '</div>';
-                res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
-                res += '<div class="court-icons">';
-                res += '<img src="http://retalkapp.com/tbaree/01/images/icons/court-icon-5.png" class="img-fluid" alt="">';
-                res += '</div>';
-                res += '</div>';
+                }
                 res += '</div>';
                 res += '</div>';
                 res += '<img src="http://127.0.0.1:8000/Images/'+data.data[i].featured_image+'" class="img-fluid" alt="">';
