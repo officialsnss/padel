@@ -34,6 +34,9 @@ class BatDataServiceImpl implements BatDataService
         foreach($data as $i => $row) {
             $batData[$i]['bat_id'] = $row['bat_id'];            
             $batData[$i]['name'] = $row['bats'][0]['name'];            
+            $batData[$i]['name_arabic'] = $row['bats'][0]['name_arabic'];            
+            $batData[$i]['description'] = $row['bats'][0]['description'];            
+            $batData[$i]['description_arabic'] = $row['bats'][0]['description_arabic'];            
             $batData[$i]['image'] = getenv("IMAGES")."bat_images/".$row['bats'][0]['featured_image'];  
             $batData[$i]['club_id'] = $row['club_id'];            
             $batData[$i]['quantity'] = $row['quantity']; 

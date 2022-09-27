@@ -95,6 +95,8 @@ class DashboardServiceImpl implements DashboardService
                 unset($match['booked_by']);
                 if($currentDate < $matchTime) {
                     array_push($upcomingMatches, $match);
+                } else {
+                    $match['isMatchCompleted'] = 1;
                 }
             }
         }
