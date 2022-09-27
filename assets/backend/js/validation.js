@@ -558,6 +558,34 @@ $("#slideform").validate({
  
 })
 
+// cms pages
+$("#cms-pages").validate({
+ 
+  ignore: [], 
+  rules: {
+    title: {
+    required: true,
+    },
+   
+    title_arabic: {
+      required: true,
+    
+    },
+    content:{
+      required: true,
+    },
+    content_arabic:{
+      required: true,
+    }
+   
+    
+  },
+  
+ 
+})
+
+
+
 
 
 

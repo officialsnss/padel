@@ -48,17 +48,28 @@ class PageController extends Controller
     public function add(Request $request)
     {
         
-            $request->validate([
-             'title' => 'required|string',
-             'content' => 'required'
-            ]);
+            // $request->validate([
+            //  'title' => 'required|string',
+            //  'content' => 'required'
+            // ]);
             
             try{
-
+                $isPage = Page::where('title', $request->title)
+                ->where('status','1')
+                ->count();
+                if($isPage > 0){
+                    $pslug = (Str::slug($request->title)).'_'.$isPage;
+                }
+                else{
+                    $pslug = Str::slug($request->title);
+                }
+              
             $result = Page::create([
                 'title' => $request->title,
+                'title_arabic' => $request->title_arabic,
                 'content' => $request->content,
-                'slug' => Str::slug($request->title),
+                'content_arabic' => $request->content_arabic,
+                'slug' => $pslug
             ]);
         
             if($result){
@@ -98,15 +109,17 @@ class PageController extends Controller
     public function update(Request $request, $id)
        {
         
-            $request->validate([
-                'title' => 'required|string',
-                'content' => 'required'
-            ]);
+            // $request->validate([
+            //     'title' => 'required|string',
+            //     'content' => 'required'
+            // ]);
         try{ 
           
            $page = Page::findOrFail($id);
            $page->title = $request->title;
            $page->content = $request->content;
+           $page->title_arabic = $request->title_arabic;
+           $page->content_arabic = $request->content_arabic;
           // $page->slug = Str::slug($request->title);
            $page->save(); 
            return redirect('/admin/pages')->with('success', 'Page Updated successfully');
