@@ -12,8 +12,10 @@
                   <tr>
                     <th>Sr.no</th>
                     <th>Name</th>
-                    <th>Message</th>
-                    <th>Date-Time</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <!-- <th>Message</th> -->
+                    <!-- <th>Date-Time</th> -->
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -23,9 +25,11 @@
                     <tr>
                       <td></td>
                       <td>{{ $info->name }}</td>
-                      <td>{{ str_replace("&nbsp;", "", substr(strip_tags($info->message),0, 100)) }} ...</td>
-                      <td>{{ $info->send_time }}</td>
-                      <td><a href="{{  route('contact.view',$info->contactid) }}" class="btn btn-success">View</a>
+                      <td>{{ $info->email }}</td>
+                      <td>{{ $info->phone }}</td>
+                      <!-- <td>{{ str_replace("&nbsp;", "", substr(strip_tags($info->message),0, 100)) }} ...</td> -->
+                      <!-- <td>{{ $info->created_at }}</td> -->
+                      <td><a href="{{  route('contact.view',$info->id) }}" class="btn btn-success">View</a>
                        
                   </tr>
                   @endforeach

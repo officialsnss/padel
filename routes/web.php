@@ -217,6 +217,11 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
 
     // Pdf
     Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));
+
+   //Matches
+   Route::get('/bookings/matches/{id}', 'App\Http\Controllers\Backend\BookingController@matches')->name('matches');
+    // Pdf
+    Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));
     });
 });
 
