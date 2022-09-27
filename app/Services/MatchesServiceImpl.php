@@ -114,17 +114,19 @@ class MatchesServiceImpl implements MatchesService
             $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
             $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
             $dataArray[$i]['address'] = $address . ', ' . $city;
-            $dateStr = $row['booking'] ? strtotime($row['booking'][0]['booking_date']) : null;
-            $dataArray[$i]['match_date'] = $dateStr; 
-            $dataArray[$i]['day'] = date('D', strtotime($dataArray[$i]['match_date']));
-            
+            $dateStr = $row['booking'] ? $row['booking'][0]['booking_date'] : null;
+
             $bookedSlots = [];
             foreach($row['bookingSlots'] as $slots) {
                 $bookedSlots[] = $slots->slots;
             }
             $start = min($bookedSlots);
-            $dataArray[$i]['startTime'] = strtotime($start);
-            $endTime = date('H:i:s', strtotime(max($bookedSlots). ' + 1 hours'));
+            $startTime = date('Y-m-d H:i:s', strtotime("$dateStr $start"));
+            
+            $dataArray[$i]['startTime'] = strtotime($startTime);
+            $end = date('H:i:s', strtotime(max($bookedSlots). ' + 1 hours'));
+            $endTime = date('Y-m-d H:i:s', strtotime("$dateStr $end"));
+
             $dataArray[$i]['endTime'] = strtotime($endTime); 
 
             $dataArray[$i]['no_of_hours'] = $row['booking'][0]['no_of_hours'];  
@@ -149,7 +151,7 @@ class MatchesServiceImpl implements MatchesService
             }
             $min = min($levelArray);
             $min_level = $this->levelsServiceImpl->getLevelById($min);
-            $dataArray[$i]['minimum_level'] = $min_level['id'];
+            $dataArray[$i]['minimum_level'] = (string)$min_level['id'];
             
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             $dataArray[$i]['isMatchCompleted'] = 0;  
@@ -197,8 +199,6 @@ class MatchesServiceImpl implements MatchesService
                 $timeArray[$i] = $slotData['slots']; 
             }
             $endTime = end($timeArray);
-            $dataArray['match_date'] = $data['booking'] ? strtotime($data['booking'][0]['booking_date']) : null;  
-            $dataArray['day'] = date('D', strtotime($dataArray['match_date']));
             $dataArray['startTime'] = strtotime($timeArray[0]);  
             $dataArray['endTime'] = strtotime(date("H:i:s", strtotime($endTime) + 60*60)); 
             $matchDate = $data['booking'][0]['booking_date'];
