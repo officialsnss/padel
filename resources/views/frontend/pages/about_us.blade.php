@@ -5,12 +5,12 @@
     <section class="popular-courts home-page-section">
         <div class="padding-left-right">
             <div class="container"><br><br><br><br><br>
-                @foreach ($tncs as $tnc)
+                @foreach ($abs as $ab)
                     <h2>
                         @if (App::getLocale() == 'kw')
-                            {{ $tnc->title_arabic }}
+                            {{ $ab->title_arabic }}
                         @else
-                            {{ $tnc->title }}
+                            {{ $ab->title }}
                         @endif
                     </h2>
                     <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
@@ -19,10 +19,11 @@
 
 
                                 @if (App::getLocale() == 'kw')
-                                    {!! $tnc->content_arabic !!}
+                                    {!! $ab->content_arabic !!}
                                 @else
-                                {!! $tnc->content !!}
+                                {!! $ab->content !!}
                                 @endif
+
 
                             </div>
                         </div>

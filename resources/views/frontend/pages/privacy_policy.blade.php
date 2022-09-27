@@ -15,7 +15,7 @@
                     </h2>
                     <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
                         <div class="product-container swiper-container">
-                            <div class="swiper-wrapper">
+                            <div class="swiper-wrapper text-white">
 
 
                                 @if (App::getLocale() == 'kw')

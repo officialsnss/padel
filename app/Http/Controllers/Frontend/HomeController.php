@@ -81,8 +81,8 @@ class HomeController extends Controller
             return view('frontend.pages.refund_policy',compact('rps'));
         }
         if($slug == "about-us"){
-            $rps = CmsPages::all()->where('slug',$slug);
-            return view('frontend.pages.refund_policy',compact('rps'));
+            $abs = CmsPages::all()->where('slug',$slug);
+            return view('frontend.pages.about_us',compact('abs'));
         }
 
     }
