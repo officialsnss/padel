@@ -42,20 +42,18 @@ class BookingServiceImpl implements BookingService
 
         foreach($matchData as $match) {
             
-            $matchDate = date('Y-m-d', $match['match_date']);
-            $matchTime = date('H:i:s', $match['startTime']);
+            $matchTime = $match['startTime'];
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
-            $date = date('Y-m-d H:i:s', strtotime("$matchDate $matchTime"));
-            $match_date = strtotime($date);
 
             $userId = auth()->user()->id;
             if($match['booked_by'] == $userId) {
                 unset($match['booked_by']);
-                if($currentDate > $match_date) {
+                if($currentDate < $matchTime) {
+                    array_push($bookedMatches, $match);
+                } else {
                     $match['isMatchCompleted'] = 1;
                 }
-                array_push($bookedMatches, $match);
             }
         }
 

@@ -38,6 +38,7 @@ class ClubDataServiceImpl implements ClubDataService
         foreach($data as $i => $row) {
             $dataPacket[$i]['id'] = $row['id'];
             $dataPacket[$i]['name'] = $row['name'];
+            $dataPacket[$i]['name_arabic'] = $row['name_arabic'];
 
             $address = $row['address'];
             $city = $row['cities'] != null ? $row['cities'][0]['name'] : null;
@@ -52,6 +53,18 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket[$i]['ordering'] = $row['ordering'];
             $dataPacket[$i]['latitude'] = $row['latitude'];
             $dataPacket[$i]['longitude'] = $row['longitude'];
+
+            $amenitiesPacket = [];
+            $amenities = explode(',',$row['amenities']);
+            $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
+    
+            foreach($amenitiesData as $key => $data) {
+                $amenitiesPacket[$key]['id'] = $data->id;
+                $amenitiesPacket[$key]['name'] = $data->name;
+                $amenitiesPacket[$key]['name_arabic'] = $data->name_arabic;
+                $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
+            }
+            $dataPacket[$i]['amenities']  = $amenitiesPacket;
             $i++;
         }
         return $dataPacket;
@@ -129,7 +142,9 @@ class ClubDataServiceImpl implements ClubDataService
     
             $dataPacket['id'] = $clubData['id'];
             $dataPacket['name'] = $clubData['name'];
+            $dataPacket['name_arabic'] = $clubData['name_arabic'];
             $dataPacket['description'] = $clubData['description'];
+            $dataPacket['description_arabic'] = $clubData['description_arabic'];
             
             $batCount = $this->batDataRepository->getBatCount($clubData['id']);
             $dataPacket['isBat'] = $batCount > 0 ? true : false;
@@ -141,6 +156,7 @@ class ClubDataServiceImpl implements ClubDataService
             foreach($amenitiesData as $key => $row) {
                 $amenitiesPacket[$key]['id'] = $row->id;
                 $amenitiesPacket[$key]['name'] = $row->name;
+                $amenitiesPacket[$key]['name_arabic'] = $row->name_arabic;
                 $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$row->image;
             }
             $dataPacket['amenities']  = $amenitiesPacket;
