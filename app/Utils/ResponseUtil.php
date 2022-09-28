@@ -54,6 +54,20 @@ class ResponseUtil
         return response()->json(['code' => 400, 'errors' => $errors, 'success' => $success], $status);
     }
 
+    /**
+     * This method can be used to send success response with data
+     *
+     * @param $data
+     * @param string $code
+     * @param int $status
+     *
+     * @return JsonResponse
+     */
+    public static function errorWithData($data, $message, $success = false, $status = 202)
+    {
+        return response()->json(['code' => 202, 'success' => $success, 'message' => $message, 'data' => $data], $status);
+    }
+
 
     /**
      * This method can be used to send success response

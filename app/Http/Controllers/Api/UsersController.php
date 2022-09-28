@@ -79,7 +79,17 @@ class UsersController extends Controller
             $array['address'] = $user->address;
             $array['status'] = $user->status;
             $array['isDeleted'] = $user->isDeleted;
-            return ResponseUtil::successWithDataToken($array, $message, $access_token, $expires_at, true, 200);
+            $array['isOtpVerified'] = $user->IsOtpVerified;
+            if($user->IsOtpVerified) {
+                return ResponseUtil::successWithDataToken($array, $message, $access_token, $expires_at, true, 200);
+            } else {
+                $otp = 1234;
+                $user = User::where('email', $request->email)->first();
+                $user->notify(new NewRegister($otp));
+                User::where('email', $request->email)->update(['otp' => $otp]);
+                $data['phone'] = $user->phone;
+                return ResponseUtil::errorWithData($data, 'Otp is not verified yet. Please verify it.', false, 202);
+            }
         }
         return ResponseUtil::errorWithMessage('403','Admin has deactiaved you.', false, 403 );
     }
