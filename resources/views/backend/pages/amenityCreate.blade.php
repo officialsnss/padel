@@ -17,13 +17,20 @@
                 <div class="form-error">{{ $message }}</div>
                @enderror
               </div>
+              <div class="form-group">
+                <label for="inputName">Arabic Name</label>
+                <textarea id="name_arabic" class="form-control" value="" name="name_arabic"></textarea>
+               @error('name_arabic')
+                <div class="form-error">{{ $message }}</div>
+               @enderror
+              </div>
 
               <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
                     <label for="inputName">Icon Image</label><br>
                     <input id="fileUpload" type="file" name="icon_image"><br />
-                    <div id="image-holder"> </div>
+                    <div id="image-holder"> <img src="" class="thumb-image"></div>
                     @error('icon_image')
                       <div class="form-error">{{ $message }}</div>
                       @enderror

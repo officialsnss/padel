@@ -176,12 +176,12 @@ class PageController extends Controller
     public function amenitiesAdd(Request $request)
     {
         
-            $request->validate([
-                'amenity' => 'required|string',
-            ]);
+            // $request->validate([
+            //     'amenity' => 'required|string',
+            // ]);
         try{
             $data['name'] = $request->amenity;
-           
+            $data['name_arabic'] = $request->name_arabic;
                
              if($request->file('icon_image')){
                 $file= $request->file('icon_image');
@@ -217,9 +217,9 @@ class PageController extends Controller
 
     public function amenitiesUpdate(Request $request, $id){
         
-            $request->validate([
-                'amenity' => 'required|string',
-            ]);
+            // $request->validate([
+            //     'amenity' => 'required|string',
+            // ]);
         try{ 
             $amenity = Amenities::findOrFail($id);
             if($request->file('icon_image')){
@@ -237,6 +237,7 @@ class PageController extends Controller
            
               
             $amenity->name = $request->amenity;
+            $amenity->name_arabic = $request->name_arabic;
             $amenity->save(); 
             return redirect('/admin/amenities')->with('success', 'Amenity Updated successfully');
         }

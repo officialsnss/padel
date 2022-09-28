@@ -16,6 +16,7 @@
                   <tr>
                     <th>Sr.no</th>
                     <th>Name</th>
+                    <th>Arabic Name</th>
                     <th>Image</th>
                     <th>Actions</th>
                   </tr>
@@ -26,7 +27,7 @@
                     <tr>
                       <td></td>
                       <td>{{ $amenity->name }}</td>
-                     
+                      <td>{{ $amenity->name_arabic }}</td>
                       <td><div id="image-holder"> 
                          @if($amenity->image)
                             <img src="{{ URL::to('/') }}/Images/amenities/{{ $amenity->image }}" class="thumb-image-list">

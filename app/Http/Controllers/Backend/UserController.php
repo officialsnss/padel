@@ -172,7 +172,7 @@ class UserController extends Controller
           $data['amenities'] = $amList;
           $data['user_id'] =  $result->id;
           $data['name'] =  $clubName;
-
+         
           if($request->file('featured_image')){
             $file= $request->file('featured_image');
             $filename= date('YmdHi').$file->getClientOriginalName();

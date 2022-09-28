@@ -32,8 +32,16 @@
                 <td>{{ $userInfo->clubname }}</td>
                </tr>
                <tr>
+                <td><strong>Arabic Club Name</strong></td>
+                <td>{{ $userInfo->name_arabic }}</td>
+               </tr>
+               <tr>
                 <td><strong>Description</strong></td>
                 <td>{{ strip_tags($userInfo->description) }}</td>
+               </tr>
+               <tr>
+                <td><strong>Arabic Description</strong></td>
+                <td>{{ strip_tags($userInfo->description_arabic) }}</td>
                </tr>
                <tr>
                 <td><strong>Service Charge</strong></td>

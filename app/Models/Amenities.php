@@ -11,6 +11,7 @@ class Amenities extends Model
     public $timestamps = true;
     protected $fillable = [
         'name',
+        'name_arabic',
         'image',
         'created_at',
         'updated_at',

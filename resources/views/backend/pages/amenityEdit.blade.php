@@ -18,6 +18,15 @@
                @enderror
               </div>
 
+              <div class="form-group">
+                <label for="inputName">Arabic Name</label>
+                <textarea id="name_arabic" class="form-control" name="name_arabic">{{ $amenitityData->name_arabic }}</textarea>
+               @error('name_arabic')
+                <div class="form-error">{{ $message }}</div>
+               @enderror
+              </div>
+
+
               <div class="row">
               <div class="col-md-12">
                 <div class="form-group">

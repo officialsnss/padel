@@ -68,6 +68,9 @@ $("#vendorform").validate({
     clubname: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+      },
     password: {
     required: true,
     minlength: 8
@@ -312,7 +315,18 @@ $("#batform").validate({
         required: true,
         
     },
+    name_arabic: {
+      required: true,
+      
+  },
     featured_image: {
+      required: function(element) {
+        if ($(".thumb-image").attr('src') !== '') {
+            return false;
+        } else {
+            return true;
+        }
+      },
       extension: "jpg|jpeg|png"
      
     },
@@ -392,8 +406,19 @@ $("#amenity-form").validate({
     amenity: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+      },
    
     icon_image: {
+
+        required: function(element) {
+          if ($(".thumb-image").attr('src') !== '') {
+              return false;
+          } else {
+              return true;
+          }
+      },
     // required: true,
       extension: "jpg|jpeg|png"
     }

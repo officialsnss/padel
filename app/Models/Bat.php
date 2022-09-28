@@ -12,8 +12,10 @@ class Bat extends Model
     protected $table = "bats";
     protected $fillable = [
         'name',
+        'name_arabic',
         'featured_image',
         'description',
+        'description_arabic',
         'status',
         'created_at',
         'updated_at',
