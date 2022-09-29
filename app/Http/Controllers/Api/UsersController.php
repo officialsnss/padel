@@ -22,6 +22,7 @@ use App\Utils\ResponseUtil;
 use Cache;
 use App\Rules\MatchOldPassword;
 use App\Repositories\PlayersRepository;
+use File;
 
 class UsersController extends Controller
 {
@@ -343,5 +344,28 @@ class UsersController extends Controller
         
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return ResponseUtil::successWithMessage("Password change successfully.", true, 200);
+    }
+
+    public function uploadUserImage(Request $request)
+    {
+        $user = auth()->user();
+        $image = $request->image;
+        if(!$image) {
+            return ResponseUtil::errorWithMessage(201, 'Please upload the image', false, 201);
+        }
+
+        $dataPacket = [];
+        $dataPacket['profile_pic'] = time() . '.' . $image->getClientOriginalExtension();
+        
+        // Delete the old image from the folder if exists
+        $imagePath = base_path('Images/user_Images/'. $user['profile_pic']);
+        if(File::exists($imagePath)){
+            unlink($imagePath);
+        }
+
+        // Move the image to folder and save it to the database
+        $image->move(base_path('Images/user_Images/'), $dataPacket['profile_pic']);
+        User::where('id', $user['id'])->update($dataPacket);
+        return ResponseUtil::successWithMessage('Images uploaded successfully!', true, 200);
     }
 }
