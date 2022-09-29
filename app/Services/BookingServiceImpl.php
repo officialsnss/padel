@@ -244,11 +244,19 @@ class BookingServiceImpl implements BookingService
         }
 
         // Validation for the entered date
-        $selectedDate = date('Y-m-d', $request->date);
+
+        $selectedDate = date('Y-m-d', ($request->date));
         $current = Carbon::now()->toDateString();
         $d2 = date('Y-m-d', strtotime('+30 days'));
+
         if($selectedDate < $current || $selectedDate > $d2) {
             return ['message' => "Please enter a valid date."];
+        }
+        if($selectedDate == $current) {
+            $time = Carbon::parse($request->date);
+            $newTime = $time->addHours(5);
+            $newTime = $time->addMinutes(30);
+            $dateNow = Carbon::parse($newTime)->format('H:i');
         }
 
         $data = $this->bookingRepository->getBookingSlots($selectedDate, $request->club_id);
@@ -280,34 +288,35 @@ class BookingServiceImpl implements BookingService
     
             // Getting booked slots on particular date 
             foreach ($data as $i => $row) {
-                $slot = $row['bookingSlots']->slots;
-                $count = $this->bookingRepository->getCourtsCounts($request, $slot);
-                
-                if($count == $maxCourts) {
-                    $date = date("H:i", strtotime("00-00-00 $slot"));
-                    $slotsArray[$i] = $date;
+                foreach ($row['bookingSlots'] as $key => $value) {
+                    $slot = $value['slots'];
+                    $count = $this->bookingRepository->getCourtsCounts($request, $slot);
+                    if($count == $maxCourts) {
+                        $date = date("H:i", strtotime("00-00-00 $slot"));
+                        $slotsArray[$key] = $date;
+                    }
                 }
             }
-        
+
             // Getting all the time slots of the day
             for ($n = 0; $n < 24; $n+=1)
             {
                 $date = sprintf('%02d:%02d', $n , $n % 1);
-                $currentTime = $request->date;
-                $slotTime = strtotime("$selectedDate $date");
                 
                 $result[$n]['id'] = $n + 1;
                 $result[$n]['slot'] = $date;
                 if(in_array($date, $clubsArray)) {
                     $result[$n]['isAvailable'] = true;
-                } else {
+                } else { 
                     $result[$n]['isAvailable'] = false;
                 }
                 if (in_array($date, $slotsArray) ) {
                     $result[$n]['isAvailable'] = false;
                 }
-                if($slotTime < $currentTime) {
-                    $result[$n]['isAvailable'] = false;
+                if($selectedDate == $current) {
+                    if($date < $dateNow) {
+                        $result[$n]['isAvailable'] = false;
+                    }
                 }
             }
         } else {
@@ -315,8 +324,6 @@ class BookingServiceImpl implements BookingService
             for ($n = 0; $n < 24; $n+=1)
             {
                 $date = sprintf('%02d:%02d', $n , $n % 1);
-                $currentTime = $request->date;
-                $slotTime = strtotime("$selectedDate $date");
                 
                 $result[$n]['id'] = $n + 1;
                 $result[$n]['slot'] = $date;
@@ -325,8 +332,10 @@ class BookingServiceImpl implements BookingService
                 } else {
                     $result[$n]['isAvailable'] = false;
                 }
-                if($slotTime < $currentTime) {
-                    $result[$n]['isAvailable'] = false;
+                if($selectedDate == $current) {
+                    if($date < $dateNow) {
+                        $result[$n]['isAvailable'] = false;
+                    }
                 }
             }
         }

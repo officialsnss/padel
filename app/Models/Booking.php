@@ -38,6 +38,6 @@ class Booking extends Model
 
     public function bookingSlots()
     {
-        return $this->belongsTo(BookingSlots::class, 'id', 'booking_id');
+        return $this->hasMany(BookingSlots::class, 'booking_id', 'id');
     }
 }
