@@ -13,6 +13,7 @@ class PlayersRating extends Model
 
     protected $fillable = [
         'player_id',
-        'rate'
+        'rate',
+        'match_id'
     ];
 }

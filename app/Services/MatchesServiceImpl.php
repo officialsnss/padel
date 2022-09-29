@@ -260,6 +260,14 @@ class MatchesServiceImpl implements MatchesService
             } else {
                 $dataArray['isRequested'] = 0; 
             }
+            $dataArray['isResultAdded'] = false; 
+            $dataArray['isPlayerRated'] = false;
+            if($this->matchesRepository->checkMatchResult($data['id'])) {
+                $dataArray['isResultAdded'] = true; 
+            }
+            if($this->matchesRepository->checkPlayerRated($data['id'])) {
+                $dataArray['isPlayerRated'] = true; 
+            }
         }
         return $dataArray;
     }
@@ -380,8 +388,15 @@ class MatchesServiceImpl implements MatchesService
         $rateData = $request->all();
         $dataPacket = [];
         
+        // Check if the player has already been rated
+        $check = $this->matchesRepository->checkPlayerRated($request->match_id);
+        if($check) {
+            return ['error' => 'You have already been rated this match players.'];
+        }
+
         if($rateData) {
-            foreach($rateData as $i => $rate) {
+            foreach($rateData['packet'] as $i => $rate) {
+                $dataPacket[$i]['match_id'] = $rateData['match_id'];
                 $dataPacket[$i]['player_id'] = $rate['player_id'];
                 $dataPacket[$i]['rate'] = $rate['rate'];
                 $data = $this->matchesRepository->ratePlayer($dataPacket[$i]);

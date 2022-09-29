@@ -94,7 +94,9 @@ class MatchesController extends Controller
     public function ratePlayer(Request $request)
     {
         $data = $this->matchesService->ratePlayer($request);
-        if($data) {
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if($data) {
             return ResponseUtil::successWithData($data, 'Rating submitted successfully!', true, 200);
         }
         return ResponseUtil::errorWithMessage(201, 'Please fill the details', false, 201);
@@ -104,7 +106,7 @@ class MatchesController extends Controller
     {
         $data = $this->matchesService->addMatchResult($request);
         if(isset($data['error'])) {
-            return ResponseUtil::successWithMessage($data['error'], true, 200);
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
         }
         return ResponseUtil::successWithData($data = [], 'Result added successfully!', true, 200);
     }
