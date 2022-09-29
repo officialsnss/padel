@@ -150,7 +150,6 @@ class BookingServiceImpl implements BookingService
         $matchArray = [];
         $matchArray['player_id'] = $request->player_id;
         $playersIds = $request->players;
-        array_unshift($playersIds, $request->player_id);
         $matchArray['playersIds'] = implode(',',$playersIds);
         $matchArray['club_id'] = $request->club_id;
         $matchArray['booking_id'] = $booked;
@@ -294,6 +293,9 @@ class BookingServiceImpl implements BookingService
             for ($n = 0; $n < 24; $n+=1)
             {
                 $date = sprintf('%02d:%02d', $n , $n % 1);
+                $currentTime = $request->date;
+                $slotTime = strtotime("$selectedDate $date");
+                
                 $result[$n]['id'] = $n + 1;
                 $result[$n]['slot'] = $date;
                 if(in_array($date, $clubsArray)) {
@@ -304,20 +306,29 @@ class BookingServiceImpl implements BookingService
                 if (in_array($date, $slotsArray) ) {
                     $result[$n]['isAvailable'] = false;
                 }
+                if($slotTime < $currentTime) {
+                    $result[$n]['isAvailable'] = false;
+                }
             }
         } else {
-                // Getting all the time slots of the day
-                for ($n = 0; $n < 24; $n+=1)
-                {
-                    $date = sprintf('%02d:%02d', $n , $n % 1);
-                    $result[$n]['id'] = $n + 1;
-                    $result[$n]['slot'] = $date;
-                    if(in_array($date, $clubsArray)) {
-                        $result[$n]['isAvailable'] = true;
-                    } else {
-                        $result[$n]['isAvailable'] = false;
-                    }
+            // Getting all the time slots of the day
+            for ($n = 0; $n < 24; $n+=1)
+            {
+                $date = sprintf('%02d:%02d', $n , $n % 1);
+                $currentTime = $request->date;
+                $slotTime = strtotime("$selectedDate $date");
+                
+                $result[$n]['id'] = $n + 1;
+                $result[$n]['slot'] = $date;
+                if(in_array($date, $clubsArray)) {
+                    $result[$n]['isAvailable'] = true;
+                } else {
+                    $result[$n]['isAvailable'] = false;
                 }
+                if($slotTime < $currentTime) {
+                    $result[$n]['isAvailable'] = false;
+                }
+            }
         }
         
         return $result;
