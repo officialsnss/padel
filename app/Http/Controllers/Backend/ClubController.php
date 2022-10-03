@@ -7,6 +7,7 @@ use App\Models\Regions;
 use App\Models\Cities;
 use App\Models\Amenities;
 use App\Models\Booking;
+use App\Models\User;
 use App\Models\Countries;
 use App\Models\TimeSlots;
 use App\Models\ClubImages;
@@ -40,9 +41,10 @@ class ClubController extends Controller
     public function edit($id)
     {
         try{
-            $clubData= Club::leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
+            $clubData= Club::leftJoin('users', 'users.id' ,'=', 'clubs.user_id')
+                            ->leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
                             ->leftJoin('time_slots', 'clubs.id' ,'=', 'time_slots.club_id')
-                            ->select('currencies.code', 'clubs.*','time_slots.*','clubs.id as clubid', 'time_slots.id as timeid') 
+                            ->select('currencies.code', 'clubs.*','time_slots.*','clubs.id as clubid', 'time_slots.id as timeid','users.name as fullname', 'users.email as useremail', 'users.phone as userphone') 
                             ->where('clubs.id', $id)->first();
             $countries = Countries::all();
             $amenities = Amenities::all();
@@ -51,6 +53,7 @@ class ClubController extends Controller
                         ->get();
    
             $title = 'Edit Club Details';
+        
             return view('backend.pages.clubs.edit', compact('title','clubData','countries', 'amenities'));
         }
         catch (\Exception $e) {
@@ -61,9 +64,10 @@ class ClubController extends Controller
 
     public function update(Request $request, $id){
         
-    
+   
         try { 
             $club = Club::findOrFail($id);
+            $clubUser = $club->user_id;
             $data = $request->except('_method','_token','submit','start_time','end_time');
             $amList = implode(',', $request->amenities);
             
@@ -74,18 +78,28 @@ class ClubController extends Controller
             $file->move(base_path('Images/club_images'), $filename);
             $data['featured_image']= $filename;
              }
-         
+            $data['name'] = $request->clubname;
+
+            $vendorInfo = User::where('id', $clubUser)->first();
+            $userInfo['name'] = $request->fullname;
+            $userInfo['email'] = $request->email;
+            $userInfo['phone'] = $request->phone;
+            $final = $vendorInfo->update($userInfo); 
+            
             $res = $club->update($data); 
+            
             if($res){
                 $time = TimeSlots::where('club_id',$id)->first();
                 $info['start_time'] = $request->start_time;
                 $info['end_time'] = $request->end_time;
                 $final = $time->update($info); 
+              
+               
             }
-              return redirect('/admin/clubs')->with('success', 'City Updated successfully');
+              return Redirect::back()->with('success', 'Club Updated successfully');
         }
          catch (\Exception $e) {
-            
+            dd($e->getMessage());
             return redirect('/admin/clubs')->with('error', 'Something went wrong.');
         
         }
@@ -546,11 +560,13 @@ class ClubController extends Controller
     public function reorder(Request $request)
     {
         $clubs = Club::all();
-      
+    
         foreach ($clubs as $club) {
             foreach ($request->order as $order) {
                 if ($order['id'] == $club->id) {
+                    
                     $club->update(['ordering' => $order['position']]);
+                   // print_r($order['position']);
                 }
             }
         }

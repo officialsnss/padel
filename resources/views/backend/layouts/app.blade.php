@@ -117,7 +117,7 @@ elems.forEach(function(html) {
       <script>
         $(document).ready(function(){
     $('.js-switch').change(function () {
-        let status = $(this).prop('checked') === true ? 1 : 0;
+        let status = $(this).prop('checked') === true ? 1 : 2;
         let userId = $(this).data('id');
         $.ajax({
             type: "GET",

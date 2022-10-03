@@ -38,7 +38,7 @@
           @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
             
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users') || request()->segment(3) == 'gallery')? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users') || request()->segment(3) == 'gallery' || request()->segment(2) == 'clubs')? 'active' : '' }}">
               <i class="nav-icon 	fas fa-users"></i>
               <p>
                 Users
@@ -53,7 +53,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners' || (request()->segment(3) == 'create' && request()->segment(2) == 'users') || request()->segment(3) == 'gallery') ? 'active' : '' }}">
+                <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners' || (request()->segment(3) == 'create' && request()->segment(2) == 'users') || request()->segment(3) == 'gallery' || request()->segment(2) == 'clubs') ? 'active' : '' }}">
                   <i class="fas fa-user-graduate nav-icon"></i>
                   <p>Court Owners</p>
                 </a>
@@ -129,7 +129,7 @@
           @endif
           
       
-          @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
+          <!-- @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
           <li class="nav-item">
             <a href="{{url('/admin/clubs-listing/')}}" class="nav-link  {{ (request()->segment(2) == 'clubs-listing') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-building"></i>
@@ -138,7 +138,7 @@
                
               </p>
             </a>
-         </li>
+         </li> -->
 
          <!--<li class="nav-item">-->
          <!--   <a href="{{url('/admin/players')}}" class="nav-link  {{ (request()->segment(2) == 'players') ? 'active' : '' }}">-->
