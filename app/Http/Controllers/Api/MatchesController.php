@@ -44,7 +44,9 @@ class MatchesController extends Controller
     public function getMatchDetails(Request $request)
     {
         $data = $this->matchesService->getMatchDetails($request);
-        if($data) {
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if($data) {
             return ResponseUtil::successWithData($data, 'Match Details', true, 200);
         }
         return ResponseUtil::errorWithMessage(201, 'No match details', false, 201);

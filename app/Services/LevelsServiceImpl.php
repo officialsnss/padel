@@ -28,6 +28,7 @@ class LevelsServiceImpl implements LevelsService
      */
     public function getLevelsList()
     {
+        // Getting data of all the levels from the db
         $data = $this->levelsRepository->getLevelsList();
         $dataArray = [];
 
@@ -40,6 +41,7 @@ class LevelsServiceImpl implements LevelsService
 
     public function getLevelById($id)
     {
+        // Getting level data by id
         $data = $this->levelsRepository->getLevelById($id);
         return $data;
     }

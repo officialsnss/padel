@@ -31,44 +31,49 @@ class UsersController extends Controller
         $this->playersRepository = $playersRepository;
     }
 
-
-
     public function login(Request $request)
     {
+        // Validations for the credientails
         $rules = [
             'email'    => 'required|email',
             'password' => 'required',
         ];
-
         $input = $request->only('email','password');
         $validator = Validator::make($input, $rules);
-
         if ($validator->fails()) {
             $error = head($validator->messages()->messages());
             return ResponseUtil::errorWithMessage(201, $error[0], false, 201);
         }
 
-        $loginUser = USER::where('email', $request->email)->first();
-        if(!$loginUser) {
+        // Getting data of the user from email
+        $user = USER::where('email', $request->email)->first();
+        
+        // Check for the not registered email
+        if(!$user) {
             return ResponseUtil::errorWithMessage('422', 'The entered email is not registered with us.', false, 422);
         }
 
+        // Check for wrong password
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
             return ResponseUtil::errorWithMessage('401', 'The entered password is incorrect.', false, 401);
         }
 
-        $user = Auth::user();
+        // Getting players details by user id
         $player = $this->playersRepository->getPlayerDetailsByUser($user['id']);
         $player_id = $player['id'];
+
+        // In case admin has deleted a player
         if($user['isDeleted'] != 0) {
             return ResponseUtil::errorWithMessage('403',"You have been deleted by the admin. You can't login now.", false, 403 );
         }
+
+        // Status of a player is 1 means it is active
         if($user['status'] == 1) {
             $token = $this->createToken($user);
             $access_token = 'Bearer ' . $token->accessToken;
             $message = __('Login Successfully');
             $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-            // $data = new UserResource($user);
+            
             $array = [];
             $array['id'] = $user->id;
             $array['player_id'] = $player_id;
@@ -81,9 +86,12 @@ class UsersController extends Controller
             $array['status'] = $user->status;
             $array['isDeleted'] = $user->isDeleted;
             $array['isOtpVerified'] = $user->IsOtpVerified;
+
+            // In case otp is verified, player will do the login
             if($user->IsOtpVerified) {
                 return ResponseUtil::successWithDataToken($array, $message, $access_token, $expires_at, true, 200);
             } else {
+                // Else we are sending otp and redirecting to verify otp screen
                 $otp = 1234;
                 $user = User::where('email', $request->email)->first();
                 $user->notify(new NewRegister($otp));
@@ -92,6 +100,7 @@ class UsersController extends Controller
                 return ResponseUtil::errorWithData($data, 'Otp is not verified yet. Please verify it.', false, 202);
             }
         }
+        // The status of the player is 0, it means admin has deactivated it.
         return ResponseUtil::errorWithMessage('403','Admin has deactiaved you.', false, 403 );
     }
 
@@ -126,39 +135,30 @@ class UsersController extends Controller
      */
     public function register(Request $request)
     {
+        // Validation for the credientails
         $rules = [
             'name' => 'required',
             'email'    => 'unique:users|required',
             'password' => 'required',
-            'phone' => 'required|',
+            'phone' => 'required|unique:users',
         ];
-
         $input = $request->only('name', 'email','password', 'phone');
         $validator = Validator::make($input, $rules);
-
         if ($validator->fails()) {
             $error = head($validator->messages()->messages());
             return ResponseUtil::errorWithMessage(201, $error[0], false, 201);
         }
 
-        $existingUsers = User::where('email',$request->email)->first();
-        if($existingUsers) {
-            return ResponseUtil::errorWithMessage(201, "This email_id already exists", true, 201);
-        }
-
-        $existingUsers = User::where('phone',$request->phone)->first();
-        if($existingUsers) {
-            return ResponseUtil::errorWithMessage(201, "This phone number already exists", true, 201);
-        }
-
+        // Creating new user
         $user = User::create(['name' => $request->name, 
                               'email' => $request->email, 
                               'password' => Hash::make($request->password), 
                               'phone' => $request->phone,
                               'device_id' => $request->device_id]);
         $player = Players::create(['user_id' => $user['id']]);
+
+        //Sending OTP to the user
         $sendOtp = $this->sendOtp($user->id);
-        
         return ResponseUtil::successWithMessage("Registerd Successfully", true, 200);
     }
 
@@ -186,25 +186,25 @@ class UsersController extends Controller
         //     dd("Error: ". $e->getMessage());
         // }
         
-        // Send Otp to Email
+        // Sending Otp to Email
         $user->notify(new NewRegister($otp));
         return User::where('id', $id)->update(['otp' => $otp]);
     }
 
     public function resendOtp(Request $request)
     {
+        // Validation for the credientials
         $rules = [
             'device_id' => 'required',
             'phone' => 'required|',
         ];
-
         $input = $request->only('device_id', 'phone');
         $validator = Validator::make($input, $rules);
-
         if ($validator->fails()) {
             $error = head($validator->messages()->messages());
             return ResponseUtil::errorWithMessage(201, $error[0], false, 201);
         }
+
         // $otp = rand(1000,9999);
         $otp = 1234;
         $user = User::where('device_id', $request->device_id)->where('phone', $request->phone)->first();
@@ -254,21 +254,22 @@ class UsersController extends Controller
 
     public function verifyOtp(Request $request)
     {
+        // Validations for the credientials
         $rules = [
             'device_id' => 'required',
             'phone' => 'required|',
         ];
-
         $input = $request->only('device_id', 'phone');
         $validator = Validator::make($input, $rules);
-
         if ($validator->fails()) {
             $error = head($validator->messages()->messages());
             return ResponseUtil::errorWithMessage(201, $error[0], false, 201);
         }
 
+        // Getting users data from the phone and device_id
         $user  = User::where('device_id',$request->device_id)->where('phone', $request->phone)->first();
         
+        // If users exists
         if($user) {
             if(!$user['otp']) {
                 return ResponseUtil::errorWithMessage(201, 'You are already verified. You can login!', false, 201);
@@ -276,22 +277,28 @@ class UsersController extends Controller
             $currentTime = Carbon::now()->toDateTimeString();
             $otpSendTime = strtotime($user['updated_at']->toDateTimeString());
 
+            // Expiration time set for the
             // if(strtotime($currentTime) - $otpSendTime > 60) {
             //     User::where('device_id',$request->device_id)->update(['otp' => null]);
             //     return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 401);
             // }
         
+            // If users Otp matches with the otp stored in db
             if($user['otp'] == $request->otp) {
+
+                // Updating fields for the player and users table
                 auth()->login($user, true);
                 User::where('device_id',$request->device_id)->where('phone', $request->phone)->update(['otp' => null, 'isOtpVerified' => '1']);
                 $player = $this->playersRepository->getPlayerDetailsByUser($user['id']);
                 $player_id = $player['id'];
-                $token = $this->createToken($user);
+
+                // Creating bearer token
                 $token = $this->createToken($user);
                 $access_token = 'Bearer ' . $token->accessToken;
                 $message = __('Login Successfully');
                 $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-                // $data = new UserResource($user);
+                
+                // Making an array for the response
                 $array = [];
                 $array['id'] = $user->id;
                 $array['player_id'] = $player_id;
@@ -305,9 +312,11 @@ class UsersController extends Controller
                 $array['isDeleted'] = $user->isDeleted;
                 return ResponseUtil::successWithDataToken($array, $message, $access_token, $expires_at, true, 200);
             } else {
+                //If the Otp is invalid
                 return ResponseUtil::errorWithMessage('401','Invalid Otp', false, 401);
             }
         } else {
+            // If no users exists on entered phone and device id
             return ResponseUtil::errorWithMessage('401', 'No user exists for this phone and device_id', false, 401);
         }
     }
@@ -316,32 +325,35 @@ class UsersController extends Controller
     {
         $userId = auth()->user()->id;
         if($request->isNotification === true) {
+            // If user wants to enable the notification
             User::where('id', $userId)->update(['notification' => '1']);
             return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => true], 200);
         } else if ($request->isNotification === false) {
+            // If user wants to disable the notification
             User::where('id', $userId)->update(['notification' => '0']);
             return response()->json(['code' => 200, 'success' => true, 'message' => "Notification settings updated!", 'isNotification' => false], 200);
         } else {
+            // Validation for the empty field
             return ResponseUtil::errorWithMessage(201, 'Please enter the value of isNotification.', false, 201);
         }
     }
 
     public function changePassword(Request $request)
     {
+        // Validation for the credentials
         $rules = [
             'old_password' => ['required', new MatchOldPassword],
             'new_password' => ['required'],
             'confirm_password' => ['same:new_password'],
         ];
-
         $input = $request->only('old_password', 'new_password', 'confirm_password');
         $validator = Validator::make($input, $rules);
-
         if ($validator->fails()) {
             $error = head($validator->messages()->messages());
             return ResponseUtil::errorWithMessage(201, $error[0], false, 201);
         }
         
+        // Saving new password to the db
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return ResponseUtil::successWithMessage("Password change successfully.", true, 200);
     }
@@ -350,6 +362,8 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         $image = $request->image;
+        
+        // Validation for the image
         if(!$image) {
             return ResponseUtil::errorWithMessage(201, 'Please upload the image', false, 201);
         }

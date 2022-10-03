@@ -19,6 +19,12 @@ class Matches extends Model
         'slot_id',
         'level',
         'court_type',
+        'game_type',
+        'match_type',
+        'is_friendly',
+        'gender_allowed',
+        'status',
+        'requestedPlayersIds',
     ];
 
     protected $table = "matches";

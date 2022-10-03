@@ -40,19 +40,21 @@ class MatchesServiceImpl implements MatchesService
 
     public function getUpcomingMatches($request)
     {
-        // Getting Listing of Upcoming Matches
+        // Getting Listing of all Matches
         $matchData = $this->getMatchesList($request);
         $upcomingMatches = [];
 
         foreach($matchData as $match) {
-            
             $matchTime = $match['startTime'];
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
 
+            // We are getting all matches above, so check on only players bookings
             $userId = auth()->user()->id;
             if($match['booked_by'] == $userId) {
                 unset($match['booked_by']);
+
+                // If matchTime is greater than currentTime, then the match is upcoming
                 if($currentDate < $matchTime) {
                     array_push($upcomingMatches, $match);
                 } else {
@@ -79,17 +81,23 @@ class MatchesServiceImpl implements MatchesService
 
     public function filterMatchData($request)
     {
+        // Validations for the filters key
         if($request->level == null && $request->gender == null && $request->court_type == null) {
             $data = $this->matchesRepository->getUpcomingMatches($request);
         } else {
             $data = $this->matchesRepository->filterMatchData($request);
         }
+
+        // Getting matches packet array
         $matchArray = $this->getMatchArray($data);
         $finalPacket = [];
         foreach($matchArray as $key => $match) {
+            
             if(count($request->level) == 0) {
+                // Pushing match data if there is no filter for level
                 array_push($finalPacket, $match);
             } elseif (in_array($match['minimum_level'], $request->level)) {
+                // Pushing match data in finalPacket
                 array_push($finalPacket, $match);
             }
         }
@@ -104,35 +112,37 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['id'] = $row['id'];
             $dataArray[$i]['booking_id'] = $row['booking_id'];
             $dataArray[$i]['player_id'] = $row['player_id'];            
-
             $dataArray[$i]['club_id'] = $row['clubs'] ? $row['clubs'][0]['id'] : null; 
             $dataArray[$i]['name'] = $row['clubs'] ? $row['clubs'][0]['name'] : null;  
 
+            // Getting the address of the club
             $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
             $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
             $dataArray[$i]['address'] = $address . ', ' . $city;
+
             $dateStr = $row['booking'] ? $row['booking'][0]['booking_date'] : null;
 
+            // Getting all the booked slots
             $bookedSlots = [];
             foreach($row['bookingSlots'] as $slots) {
                 $bookedSlots[] = $slots->slots;
             }
+
+            // Calculating start and end time of the booking
             $start = min($bookedSlots);
             $startTime = date('Y-m-d H:i:s', strtotime("$dateStr $start"));
-            
             $dataArray[$i]['startTime'] = strtotime($startTime);
             $end = date('H:i:s', strtotime(max($bookedSlots). ' + 1 hours'));
             $endTime = date('Y-m-d H:i:s', strtotime("$dateStr $end"));
-
             $dataArray[$i]['endTime'] = strtotime($endTime); 
 
             $dataArray[$i]['no_of_hours'] = $row['booking'][0]['no_of_hours'];  
-
             $dataArray[$i]['match_type'] = $row['match_type'] == 1 ? 'Public' : 'Private'; 
             $dataArray[$i]['court_type'] = $row['court_type'] == 1 ? 'Indoor' : 'Outdoor';  
             $dataArray[$i]['game_type'] = $row['game_type'] == 1 ? 'Singles' : 'Doubles';  
-            $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 0 ? 'Game': 'Friendly';
+            $dataArray[$i]['isFriendly'] = $row['is_friendly'] == 1 ? 'Game': 'Friendly';
             
+            // Check for the gender who will play the match
             if($row['gender_allowed'] == 1) {
                 $dataArray[$i]['gender'] = 'Female';
             } elseif ($row['gender_allowed'] == 2) {
@@ -140,6 +150,8 @@ class MatchesServiceImpl implements MatchesService
             } else {
                 $dataArray[$i]['gender'] = 'Mix';
             }
+
+            // Getting levels of the match
             $levelArray = explode(',',$row['level']);
             foreach($levelArray as $key => $level) {
                 $level = $this->levelsServiceImpl->getLevelById($level);
@@ -152,16 +164,21 @@ class MatchesServiceImpl implements MatchesService
             
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             $dataArray[$i]['isMatchCompleted'] = 0;  
+
+            // Getting bats list for this match booking
             $dataArray[$i]['bats'] = $this->getBookedBats($row['bookedBats']);  
             
+            // Getting packet for the imgaes of the clubs
             $images = $row['clubs'][0]['images'];
             foreach($images as $key => $image) {
                 $dataArray[$i]['images'][$key] = getenv("IMAGES")."club_images/".$image['image'];
             }
 
+            // Getting list of all the players playing this match
             $arrayIds = explode(',', $row['playersIds']); 
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds);
             
+            // If match is public i.e. match type is 1. Then getting listing of all requetsed players for this match
             if($row['match_type'] == 1) {
             $requestIds = explode(',', $row['requestedPlayersIds']);
             if($row['requestedPlayersIds'] != "") {
@@ -175,26 +192,40 @@ class MatchesServiceImpl implements MatchesService
     }
     public function getMatchDetails($request)
     {
+        // Getting player details from user id
+        $userId = auth()->user()->id;
+        $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+
+        // Getting list of match by match_id
         $data = $this->matchesRepository->getMatchDetails($request->match_id);
         $dataArray = [];
         if($data) {
+            if($data['match_type'] == 2) {
+                if($userData['id'] != $data['player_id']) {
+                    return ['error' => 'You cannot see someone else private match'];
+                }
+            }
+
             $dataArray['id'] = $data['id'];
             $dataArray['booking_id'] = $data['booking_id'];
             $dataArray['player_id'] = $data['player_id'];            
-
             $dataArray['club_id'] = $data['clubs'] ? $data['clubs'][0]['id'] : null;
             $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
             
+            // Getting the address of the club
             $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
             $city = $data['clubs'][0]['cities'] != null ? $data['clubs'][0]['cities'][0]['name'] : null;
             $dataArray['address'] = $address . ', ' . $city;
 
+            // Getting all the booked slots
             $slots = explode(",", $data['slot_id']);
             $timeArray = [];
             foreach($slots as $i => $slot) {
                 $slotData = $this->matchesRepository->getMatchesSlots($slot);
                 $timeArray[$i] = $slotData['slots']; 
             }
+
+            // Calculating start and end time of the booking
             $endTime = end($timeArray);
             $dataArray['startTime'] = strtotime($timeArray[0]);  
             $dataArray['endTime'] = strtotime(date("H:i:s", strtotime($endTime) + 60*60)); 
@@ -205,11 +236,12 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['endTime'] = strtotime("$matchDate $matchEndTime"); 
 
             $dataArray['no_of_hours'] = $data['booking'][0]['no_of_hours'];  
-
             $dataArray['match_type'] = $data['match_type'] == 1 ? 'Public' : 'Private';  
             $dataArray['court_type'] = $data['court_type'] == 1 ? 'Indoor' : 'Outdoor';  
             $dataArray['game_type'] = $data['game_type'] == 1 ? 'Singles' : 'Doubles';  
-            $dataArray['isFriendly'] = $data['is_friendly'] == 0 ? 'Game': 'Friendly';
+            $dataArray['isFriendly'] = $data['is_friendly'] == 1 ? 'Game': 'Friendly';
+
+            // Check for the gender who will play the match
             if($data['gender_allowed'] == 1) {
                 $dataArray['gender'] = 'Female';
             } elseif ($data['gender_allowed'] == 2) {
@@ -217,6 +249,8 @@ class MatchesServiceImpl implements MatchesService
             } else {
                 $dataArray['gender'] = 'Mix';
             }
+
+            // Getting levels of the match
             $levelArray = explode(',',$data['level']);
             foreach($levelArray as $i => $row) {
                 $level = $this->levelsServiceImpl->getLevelById($row);
@@ -230,21 +264,27 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['minimum_level'] = (object)$dataArray['minimum_level'];
             
             $dataArray['booked_by'] = $data['booking'][0]['user_id'];  
-            $dataArray['isMatchCompleted'] = 0;  
+            $dataArray['isMatchCompleted'] = 0;
+            
+            // Getting data of all the booked bats
             $dataArray['bats'] = $this->getBookedBats($data['bookedBats']);  
             
             $clubLatitude = $data['clubs'][0]['latitude'];
             $clubLongitude = $data['clubs'][0]['longitude'];
             $dataArray['distance'] = number_format($this->clubDataServiceImpl->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
 
+
+            // getting images of the clubs
             $images = $data['clubs'][0]['images'];
             foreach($images as $i => $image) {
                 $dataArray['images'][$i] = getenv("IMAGES")."club_images/".$image['image'];
             }
     
+            // Getting list of all the players playing in the match
             $arrayIds = explode(',', $data['playersIds']); 
             $dataArray['players'] = $this->getPlayersList($arrayIds); 
-    
+
+            // If match is public i.e. match type is 1. Then getting listing of all requetsed players for this match
             if($data['match_type'] == 1) {
                 $requestIds = explode(',', $data['requestedPlayersIds']);
                 if($data['requestedPlayersIds'] != "") {
@@ -253,8 +293,8 @@ class MatchesServiceImpl implements MatchesService
                     $dataArray['requestedPlayers'] = []; 
                 }
             }
-            $userId = auth()->user()->id;
-            $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
+
+            // Code for the player if it is added in the match or not
             if(in_array($userData['id'], $requestIds)) {
                 $dataArray['isRequested'] = 1; 
             } else {
@@ -292,6 +332,7 @@ class MatchesServiceImpl implements MatchesService
         $matchId = $request->match_id;
         $playerId =$request->player_id;
 
+        // Getting match data to get requested players ids
         $data = $this->matchesRepository->getMatchData($matchId);
         $requestedIdsArray = explode(',',$data['requestedPlayersIds']);
         $idsPacket = explode(',',$data['playersIds']);
@@ -326,30 +367,41 @@ class MatchesServiceImpl implements MatchesService
 
         $idsPacket = explode(',',$data['requestedPlayersIds']);
         $arrayIds = explode(',', $data['playersIds']);
-        if($data['game_type'] == 1) {
-            if(count($arrayIds) == 2) {
-                return ['message' => 'You can not add more players.'];
-            }
-        } else {
-            if(count($arrayIds) == 4) {
-                return ['message' => 'You can not add more players.'];
-            }
-        }
+
+        // If no request for the player exists
         if(!in_array($playerId, $idsPacket)) {
             return ['message' => 'No such request for this player'];
         }
+
         if($request->isAccept) {
+
+            // If game is public then this code works
+            if($data['game_type'] == 1) {
+                // For maximum players equals 2
+                if(count($arrayIds) == 2) {
+                    return ['message' => 'You can not add more players.'];
+                }
+            } else {
+                // For maximum players equals 2
+                if(count($arrayIds) == 4) {
+                    return ['message' => 'You can not add more players.'];
+                }
+            }
+
+            // Pushing player id  in the players Array who are playing this match
             foreach($idsPacket as $row) {
                 if($playerId == $row) {
                     array_push($arrayIds, $row);
                 }
             }
+
             if($arrayIds[0] == ''){
                 unset($arrayIds[0]);
             }
             $finalPacket = implode(',', $arrayIds);
         }
 
+        // Removing player_id from the requested players array
         foreach($idsPacket as $key => $row) {
             if($playerId == $row) {
                 unset($idsPacket[$key]);
@@ -357,27 +409,43 @@ class MatchesServiceImpl implements MatchesService
         }
         $dataSet = implode(',', $idsPacket);
 
+        // Storing values in the database
         $data = $this->matchesRepository->acceptRequest($request->isAccept, $matchId, $finalPacket, $dataSet);
         return $data;
     }
 
     public function playersRatingList($request)
     {
+        // Validation for entered match_id
         if(!$request->match_id) {
             return ['error' => "Please enter the value of the match_id"];
         }
+
+        // Getting match details from match_id
         $data = $this->matchesRepository->getMatchDetails($request->match_id);
         $dataArray = [];
+
+        // No match exists for entered match_id
         if(!$data) {
             return ['message' => "No match data for this match_id"];
         }
+
+        // Getting player_id of logged in player
+        $userId = auth()->user()->id;
+        $data = $this->playersRepository->getPlayerDetailsByUser($userId);
+
+        // Removing the player id of the logged in player
         $arrayIds = explode(',', $data['playersIds']); 
-        if (($key = array_search($data['player_id'], $arrayIds)) !== false) {
+        if (($key = array_search($data['id'], $arrayIds)) !== false) {
             unset($arrayIds[$key]);
         }
+
+        // If no player is added to play that match
         if(count($arrayIds) == 0) {
             return $dataArray;
         }
+
+        // Getting list of details of the players
         $arrayIds = array_values($arrayIds);
         $dataArray = $this->getPlayersList($arrayIds);
         return $dataArray;
@@ -394,6 +462,7 @@ class MatchesServiceImpl implements MatchesService
             return ['error' => 'You have already been rated this match players.'];
         }
 
+        // Storing the rate data in the db
         if($rateData) {
             foreach($rateData['packet'] as $i => $rate) {
                 $dataPacket[$i]['match_id'] = $rateData['match_id'];
@@ -460,27 +529,26 @@ class MatchesServiceImpl implements MatchesService
         $team2_players = explode(',',  $playersIds[1]);
         $players = array_merge($team1_players, $team2_players);
         
+        // Checkinng if players for which we are entering result is associated with the match or not
         $diff1 = array_diff($players, $playersInMatch);
         $diff2 = array_diff($playersInMatch, $players);
         if(count($diff1) > 0 || count($diff2) > 0) {
             return ['error' => 'The player you are entering for this match is not associated with the match'];
         }
+
         // Adding result data and update match status in the database
         $query1 = $this->matchesRepository->addMatchResult($resultPacket);
         $query2 = $this->matchesRepository->updateMatch($request->match_id);
 
         // Updating players data in the table
         foreach ($players as $key => $value) {
+            $val = 0;
             if(in_array($value, $winner)) {
                 $val = 1;
-                $query3 = $this->playersRepository->updatePlayerData($value, $val);
-            } else {
-                $val = 0;
-                $query3 = $this->playersRepository->updatePlayerData($value, $val);
             }
+            $query3 = $this->playersRepository->updatePlayerData($value, $val);
         }
         return ['message' => "Winner player_ids are ". $resultPacket['winner'] ];
-
     }
 
     public function getBookedBats($data)
