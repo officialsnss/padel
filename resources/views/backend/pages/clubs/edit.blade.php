@@ -331,7 +331,7 @@
       </div>
     </div>
 <input type="hidden" value="{{ $clubData->id }}" id="clubid">
-    
+<input type="hidden" value="{{ auth()->user()->role }}" id="userrole">  
   <script>
     var APP_URL = {!! json_encode(url('/')) !!}
       

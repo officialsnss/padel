@@ -79,13 +79,13 @@ class ClubController extends Controller
             $data['featured_image']= $filename;
              }
             $data['name'] = $request->clubname;
-
-            $vendorInfo = User::where('id', $clubUser)->first();
-            $userInfo['name'] = $request->fullname;
-            $userInfo['email'] = $request->email;
-            $userInfo['phone'] = $request->phone;
-            $final = $vendorInfo->update($userInfo); 
-            
+        if(auth()->user()->role != 5){
+                $vendorInfo = User::where('id', $clubUser)->first();
+                $userInfo['name'] = $request->fullname;
+                $userInfo['email'] = $request->email;
+                $userInfo['phone'] = $request->phone;
+                $final = $vendorInfo->update($userInfo); 
+        }
             $res = $club->update($data); 
             
             if($res){
