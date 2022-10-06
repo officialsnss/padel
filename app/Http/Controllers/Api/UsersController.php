@@ -55,7 +55,7 @@ class UsersController extends Controller
 
         // Check for wrong password
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
-            return ResponseUtil::errorWithMessage('401', 'The entered password is incorrect.', false, 401);
+            return ResponseUtil::errorWithMessage('201', 'The entered password is incorrect.', false, 201);
         }
 
         // Getting players details by user id
@@ -64,7 +64,7 @@ class UsersController extends Controller
 
         // In case admin has deleted a player
         if($user['isDeleted'] != 0) {
-            return ResponseUtil::errorWithMessage('403',"You have been deleted by the admin. You can't login now.", false, 403 );
+            return ResponseUtil::errorWithMessage('201',"You have been deleted by the admin. You can't login now.", false, 201 );
         }
 
         // Status of a player is 1 means it is active
@@ -101,7 +101,7 @@ class UsersController extends Controller
             }
         }
         // The status of the player is 0, it means admin has deactivated it.
-        return ResponseUtil::errorWithMessage('403','Admin has deactiaved you.', false, 403 );
+        return ResponseUtil::errorWithMessage('201','Admin has deactiaved you.', false, 201 );
     }
 
     /**
@@ -209,7 +209,7 @@ class UsersController extends Controller
         $otp = 1234;
         $user = User::where('device_id', $request->device_id)->where('phone', $request->phone)->first();
         if(!$user) {
-            return ResponseUtil::errorWithMessage(401, 'No user exists for this phone and device_id', false, 401);
+            return ResponseUtil::errorWithMessage(201, 'No user exists for this phone and device_id', false, 201);
         }
         // // Send Otp to Phone number
         // $receiverNumber = "+91".$user->phone;
@@ -280,7 +280,7 @@ class UsersController extends Controller
             // Expiration time set for the
             // if(strtotime($currentTime) - $otpSendTime > 60) {
             //     User::where('device_id',$request->device_id)->update(['otp' => null]);
-            //     return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 401);
+            //     return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 201);
             // }
         
             // If users Otp matches with the otp stored in db
@@ -313,11 +313,11 @@ class UsersController extends Controller
                 return ResponseUtil::successWithDataToken($array, $message, $access_token, $expires_at, true, 200);
             } else {
                 //If the Otp is invalid
-                return ResponseUtil::errorWithMessage('401','Invalid Otp', false, 401);
+                return ResponseUtil::errorWithMessage('201','Invalid Otp', false, 201);
             }
         } else {
             // If no users exists on entered phone and device id
-            return ResponseUtil::errorWithMessage('401', 'No user exists for this phone and device_id', false, 401);
+            return ResponseUtil::errorWithMessage('201', 'No user exists for this phone and device_id', false, 201);
         }
     }
 
