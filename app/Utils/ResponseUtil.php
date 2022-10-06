@@ -36,7 +36,7 @@ class ResponseUtil
      */
     public static function errorWithMessage($code, $message, $success = false, $status = 400): JsonResponse
     {
-        return response()->json(['code' => $code, 'success' => $success, 'message' => $message, 'data' => []], $status);
+        return response()->json(['code' => $code, 'success' => $success, 'message' => $message], $status);
     }
 
 
@@ -94,7 +94,7 @@ class ResponseUtil
      */
     public static function successWithMessage($message, $success = true, $status = 200): JsonResponse
     {
-        return response()->json(['code' => 200, 'success' => $success, 'message' => $message, 'data' => []], $status);
+        return response()->json(['code' => 200, 'success' => $success, 'message' => $message], $status);
     }
 
     /**
