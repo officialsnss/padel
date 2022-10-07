@@ -143,7 +143,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
 
 
    //Clubs Ordering
-   Route::get('/clubs-listing', 'App\Http\Controllers\Backend\ClubController@clubs')->name('clubs.listing');
+//    Route::get('/clubs-listing', 'App\Http\Controllers\Backend\ClubController@clubs')->name('clubs.listing');
    Route::post('clubs/reorder', 'App\Http\Controllers\Backend\ClubController@reorder')->name('clubs.reorder');
    Route::get('/clubs/popular/update', 'App\Http\Controllers\Backend\ClubController@popularStatus')->name('clubs.popular.status');
 
@@ -169,6 +169,13 @@ Route::group(['middleware' =>['role:1,2']], function(){
     Route::get('/coach/edit/{id}', 'App\Http\Controllers\Backend\CoachController@edit')->name('coach.edit');
     Route::post('/coach/update/{id}', 'App\Http\Controllers\Backend\CoachController@update')->name('coach.update');
     Route::get('/coach/delete/{id}', 'App\Http\Controllers\Backend\CoachController@delete')->name('coach.delete');
+
+    //Matches
+    Route::get('/matches', 'App\Http\Controllers\Backend\MatchController@index')->name('matches');
+    Route::get('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@edit')->name('matches.edit');
+    Route::post('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@update')->name('matches.update');
+    Route::get('/matches/view/{id}', 'App\Http\Controllers\Backend\MatchController@view')->name('matches.view');
+    Route::post('/matches/create/{id}', 'App\Http\Controllers\Backend\MatchController@create')->name('matches.result.create');
     });
 
 
@@ -218,6 +225,12 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
     // Pdf
     Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));
 
+    Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
+    Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
+    //Get Region
+    Route::get('/get-region', 'App\Http\Controllers\Backend\ClubController@getRegion')->name('regionlist');
+    Route::get('/get-city', 'App\Http\Controllers\Backend\ClubController@getCity')->name('citylist');
+
    //Matches
    Route::get('/bookings/matches/{id}', 'App\Http\Controllers\Backend\BookingController@matches')->name('matches');
     // Pdf
@@ -230,8 +243,8 @@ Route::group(['middleware' =>['role:5']], function(){
 
         //Clubs
       Route::get('/clubs', 'App\Http\Controllers\Backend\ClubController@index')->name('clubs');
-      Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
-      Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
+
+
 
        // Calender
        Route::get('calendar', 'App\Http\Controllers\Backend\BookingController@calendar')->name('bookings.calendar');
@@ -246,9 +259,7 @@ Route::group(['middleware' =>['role:5']], function(){
       Route::get('/club/timeslots/book/fetch', 'App\Http\Controllers\Backend\ClubController@fetchList')->name('club.timeslots.book.fetch');
       Route::post('/club/timeslots/booking/{id}', 'App\Http\Controllers\Backend\ClubController@bookingSlot')->name('club.timeslots.booking.slot');
 
-      //Get Region
-      Route::get('/get-region', 'App\Http\Controllers\Backend\ClubController@getRegion')->name('regionlist');
-      Route::get('/get-city', 'App\Http\Controllers\Backend\ClubController@getCity')->name('citylist');
+
 
      //Bats
      Route::get('/vendor/bats', 'App\Http\Controllers\Backend\BatController@vendorBats')->name('vendor.bats');

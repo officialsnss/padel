@@ -1,50 +1,34 @@
 @extends('backend.layouts.app')
 @section('content')
-
-    <div class="row report-table">
+    <div class="row">
         <div class="col-12">
             <div class="card">
+                {{-- <div class="card-header">
+                <div class="add">
+                 <a href="{{ route('bat.create') }}" class="btn btn-info">Add New</a>
+                </div>
+              </div> --}}
                 <div class="card-body">
                     <div class="row filter-row">
                         <div class="col-md-12">
                             <form action="" method="post" id="date-filter">
-                                <div class="item">
-                                    <label>From:</label>
-                                    <input type="text" id="from_date" value="" class="form-control input-daterange"
-                                        name="from_date">
-                                </div>
-                                <div class="item">
-                                    <label>To:</label>
-                                    <input type="text" id="to_date" value="" class="form-control input-daterange"
-                                        name="to_date">
-                                </div>
-                                @if (auth()->user()->role != '5')
-                                    <div class="item">
-                                        <label>Select Club</label>
-                                        <select id="clubs-filter" class="form-control">
-                                            <option value="">Select Club</option>
-                                            @foreach ($clubs as $club)
-                                                <option value="{{ $club->id }}">{{ $club->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                @endif
-                                <div class="item">
-                                    <label>Select Payment Method</label>
-                                    <select id="payment_type" class="form-control">
-                                        <option value="">Select Payment Method</option>
-                                        <option value="1">KNET</option>
-                                        <option value="2">COD</option>
-
-                                    </select>
-                                </div>
+                                {{-- <div class="item">
+                                <label>From:</label>
+                                <input type="text" id="from_date" value="" class="form-control input-daterange"
+                                    name="from_date">
+                            </div>
+                            <div class="item">
+                                <label>To:</label>
+                                <input type="text" id="to_date" value="" class="form-control input-daterange"
+                                    name="to_date">
+                            </div> --}}
                                 <div class="item">
                                     <label>Status</label>
-                                    <select id="order_status" class="form-control">
+                                    <select id="clubs-filter" class="form-control">
                                         <option value="">Select Status</option>
-                                        <option value="1">Booked</option>
-                                        <option value="3">Cancellation</option>
-
+                                        <option value="1">Upcomming</option>
+                                        <option value="2">Played</option>
+                                        <option value="3">Cancelled</option>
                                     </select>
                                 </div>
                                 <div class="item filter-btn">
@@ -61,32 +45,66 @@
 
 
                     </div>
-                    <div class="summary-view" style="margin-bottom:20px">
-                        <strong>Total Amount: </strong><span class="total-b"></span><br>
-                        <strong>Total Cancellation: </strong><span class="cancel-b">0</span><br>
-                        <strong>Total Refunded Amount:</strong><span class="refund"></span><br>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="order_table" class="table table-bordered table-striped" style="width:100%">
-                            <thead>
+                    <table id="example1" class="table table-bordered table-striped">
 
+                        <thead>
+                            <tr>
+                                <th>Sr.no</th>
+                                <th>Club Name</th>
+                                <th>Image</th>
+                                <th>Match Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- @php
+                        echo "<pre>";print_r($matchs);die;
+                    @endphp --}}
+                            @foreach ($matchs as $match)
                                 <tr>
-                                    <th>Order Number</th>
-                                    <th>Club Name</th>
-                                    <th>User Email</th>
-                                    <th>Booking Date</th>
-                                    <th>Commission(in %)</th>
-                                    <th>Status</th>
-                                    <th>Payment Type</th>
-                                    <th>Payment Status</th>
-                                    <th>Order Date-Time</th>
+                                    <td></td>
+                                    <td>{{ $match['name'] }}</td>
+                                    <td>
+                                        <div id="image-holder">
+                                            @if ($match['featured_image'])
+                                                <img src="{{ URL::to('/') }}/Images/club_images/{{ $match['featured_image'] }}"
+                                                    class="thumb-image-list">
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @php
+                                            if ($match['status'] == 1) {
+                                                $status = 'Upcomming';
+                                            } elseif ($match['status'] == 2) {
+                                                $status = 'Played';
+                                            } else {
+                                                $status = 'Cancelled';
+                                            }
+                                            echo $status;
+                                        @endphp
+                                    </td>
+                                    <td>@php
+                                        echo date('d-M-Y',strtotime($match['created_at']))
+                                    @endphp</td>
+                                    <td>
+                                        @php
+                                            if ($match['status'] == 2) {
+                                        @endphp
+                                        <a href="{{ route('matches.edit', $match['id']) }}"
+                                            class="btn btn-secondary">Edit Result</a>
+                                        @php
+                                            }
+                                        @endphp
+                                        <a href="{{ route('matches.view', $match['id']) }}" class="btn btn-primary">View</a>
 
                                 </tr>
-                            </thead>
+                            @endforeach
 
+                        </tbody>
 
-                        </table>
-                    </div>
+                    </table>
                 </div>
                 <!-- /.card-body -->
             </div>
@@ -257,17 +275,13 @@
             });
 
             $('#refresh').click(function() {
-                $('#from_date').val('');
-                $('#to_date').val('');
                 $('#clubs-filter').val('');
-                $('#order_status').val('');
-                $('#order_table').DataTable().destroy();
+                $('#example1').DataTable().destroy();
                 load_data();
             });
 
 
 
         });
-    </script>
     </script>
 @endsection

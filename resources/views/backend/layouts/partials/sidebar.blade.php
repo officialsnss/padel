@@ -14,7 +14,7 @@
           <i class="fas fa-table-tennis"></i>
       </div>
        <div class="info">
-       <?php   $userId = auth()->user()->id; 
+       <?php   $userId = auth()->user()->id;
         $res =  \App\Models\Club::where(['user_id' => $userId])->pluck('name')->first();
         ?>
          <a>{{ $res }}</a>
@@ -26,7 +26,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          
+
           <li class="nav-item">
             <a href="{{url('admin/dashboard')}}" class="nav-link {{ (request()->segment(2) == 'dashboard') || (request()->segment(2) == '') ? 'active' : '' }}">
               <i class="nav-icon fas fa-home"></i>
@@ -36,9 +36,9 @@
             </a>
           </li>
           @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
-            
+
           <li class="nav-item">
-            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users'))? 'active' : '' }}">
+            <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users') || request()->segment(3) == 'gallery' || request()->segment(2) == 'clubs')? 'active' : '' }}">
               <i class="nav-icon 	fas fa-users"></i>
               <p>
                 Users
@@ -47,13 +47,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{url('/admin/users/customers')}}" class="nav-link  {{ (request()->segment(3) == 'customers') ? 'active' : '' }}">
+                <a href="{{url('/admin/users/customers')}}" class="nav-link  {{ (request()->segment(3) == 'customers' || (request()->segment(2) == 'users' && request()->segment(3) == 'view')) ? 'active' : '' }}">
                   <i class="fas fa-user-tie nav-icon"></i>
                   <p>Customers</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners') ? 'active' : '' }}">
+                <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners' || (request()->segment(3) == 'create' && request()->segment(2) == 'users') || request()->segment(3) == 'gallery' || request()->segment(2) == 'clubs') ? 'active' : '' }}">
                   <i class="fas fa-user-graduate nav-icon"></i>
                   <p>Court Owners</p>
                 </a>
@@ -69,9 +69,9 @@
               </p>
             </a>
           </li>
-          
-          @if ( auth()->user()->role == '5')   
-          
+
+          @if ( auth()->user()->role == '5')
+
            <li class="nav-item">
             <a href="{{url('/admin/outside-booking')}}" class="nav-link  {{ (request()->segment(2) == 'outside-booking') ? 'active' : '' }}">
             <i class="nav-icon fas fa-box-open"></i>
@@ -80,7 +80,7 @@
               </p>
             </a>
           </li>
-          
+
           <li class="nav-item">
             <a href="#" class="nav-link  {{ (request()->segment(2) == 'clubs' || request()->segment(3) == 'timeslots') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-building"></i>
@@ -95,7 +95,7 @@
                 <i class="nav-icon fas fa-info-circle"></i>
                 <p>
                   Details
-                  
+
                 </p>
                 </a>
               </li>
@@ -112,11 +112,11 @@
                   <p>Book Timeslots</p>
                 </a>
               </li>
-             
-          
+
+
             </ul>
-          </li> 
-         
+          </li>
+
 
           <li class="nav-item">
             <a href="{{url('/admin/vendor/bats')}}" class="nav-link  {{ request()->segment(2) == 'vendor' ? 'active' : '' }}">
@@ -124,28 +124,28 @@
               <p>
                 Bats </p>
             </a>
-          </li>  
-       
+          </li>
+
           @endif
-          
-      
-          @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
+
+
+          <!-- @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
           <li class="nav-item">
             <a href="{{url('/admin/clubs-listing/')}}" class="nav-link  {{ (request()->segment(2) == 'clubs-listing') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-building"></i>
               <p>
                 Clubs
-               
+
               </p>
             </a>
-         </li>
+         </li> -->
 
          <!--<li class="nav-item">-->
          <!--   <a href="{{url('/admin/players')}}" class="nav-link  {{ (request()->segment(2) == 'players') ? 'active' : '' }}">-->
          <!--   <i class="nav-icon 	fas fa-users"></i>-->
          <!--     <p>-->
          <!--       Players-->
-               
+
          <!--     </p>-->
          <!--   </a>-->
          <!--</li>-->
@@ -177,7 +177,7 @@
                   <p>Amenities</p>
                 </a>
               </li>
-            
+
               <li class="nav-item">
                 <a href="{{url('/admin/pages')}}" class="nav-link  {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'page'))? 'active' : '' }}">
                 <i class="nav-icon fas fa-edit"></i>
@@ -185,7 +185,7 @@
                     Pages
                   </p>
                 </a>
-             </li> 
+             </li>
 
              <li class="nav-item">
                 <a href="{{url('/admin/settings')}}" class="nav-link  {{ ( request()->segment(2) == 'settings')? 'active' : '' }}">
@@ -194,7 +194,7 @@
                     Settings
                   </p>
                 </a>
-             </li> 
+             </li>
 
              <li class="nav-item">
                 <a href="{{url('/admin/home-slider')}}" class="nav-link  {{ ( request()->segment(2) == 'home-slider')? 'active' : '' }}">
@@ -203,10 +203,10 @@
                     Homepage Slider
                   </p>
                 </a>
-             </li> 
+             </li>
 
 
-           
+
 
             </ul>
           </li>
@@ -219,11 +219,11 @@
             <i class="nav-icon 	fas fa-file"></i>
               <p>
                 Reports
-               
+
               </p>
             </a>
-           
-          </li>  
+
+          </li>
           @endif
 
           @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
@@ -234,8 +234,8 @@
                 Coaches
               </p>
             </a>
-           
-          </li>  
+
+          </li>
           @endif
 
           @if ( auth()->user()->role == '4')
@@ -246,21 +246,21 @@
                 Off Days
               </p>
             </a>
-           
-          </li>  
+
+          </li>
           @endif
 
-         
+
          @if ( auth()->user()->role == '1' || auth()->user()->role == '2')
-          
+
          <li class="nav-item">
             <a href="{{url('/admin/refunds')}}" class="nav-link  {{ request()->segment(2) == 'refunds' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
               <p>
                 Refunds </p>
             </a>
-          </li> 
-          
+          </li>
+
           <!-- <li class="nav-item">
             <a href="{{url('/admin/wallets')}}" class="nav-link  {{ request()->segment(2) == 'wallets' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
@@ -275,7 +275,7 @@
               <p>
                 Bats </p>
             </a>
-          </li>  
+          </li>
 
           <li class="nav-item">
             <a href="{{url('/admin/coupons')}}" class="nav-link  {{ request()->segment(2) == 'coupons' ? 'active' : '' }}">
@@ -283,7 +283,7 @@
               <p>
                 Coupons </p>
             </a>
-          </li>  
+          </li>
 
 
 
@@ -294,8 +294,19 @@
                 Contact us
               </p>
             </a>
-          </li>  
+          </li>
 
+          @endif
+
+          @if ( auth()->user()->role == '1')
+          <li class="nav-item">
+            <a href="{{url('/admin/matches')}}" class="nav-link  {{(request()->segment(2) == 'contact' || (request()->segment(3) == 'contact' && request()->segment(2) == 'view')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-dice"></i>
+              <p>
+                Matches
+              </p>
+            </a>
+          </li>
           @endif
         </ul>
       </nav>

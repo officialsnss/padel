@@ -17,7 +17,9 @@ class Club extends Model
 
     protected $fillable = [
         'name',
+        'name_arabic',
         'description',
+        'description_arabic',
         'user_id',
         'service_charge',
         'single_price',

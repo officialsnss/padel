@@ -53,14 +53,16 @@ class BatController extends Controller
 
     public function add(Request $request)
     {
-       $request->validate([
-             'bat_name' => 'required|string',
-           //  'description' => 'required|string',
-     ]);
+    //    $request->validate([
+    //          'bat_name' => 'required|string',
+    //        //  'description' => 'required|string',
+    //  ]);
             
          try{
             $data['name'] = $request->bat_name;
             $data['description'] = $request->desc;
+            $data['name_arabic'] = $request->name_arabic;
+            $data['description_arabic'] = $request->desc_arabic;
                
              if($request->file('featured_image')){
                 $file= $request->file('featured_image');
@@ -114,10 +116,10 @@ class BatController extends Controller
     public function update(Request $request, $id)
        {
         
-            $request->validate([
-                'bat_name' => 'required|string',
+            // $request->validate([
+            //     'bat_name' => 'required|string',
               
-            ]);
+            // ]);
         try{ 
           
            $bat = Bat::findOrFail($id);
@@ -137,6 +139,8 @@ class BatController extends Controller
              }
            $bat->name = $request->bat_name;
            $bat->description = $request->desc;
+           $bat->name_arabic = $request->name_arabic;
+           $bat->description_arabic = $request->desc_arabic;
           // $page->slug = Str::slug($request->title);
            $bat->save(); 
            return redirect('/admin/bats')->with('success', 'Bat Updated successfully');

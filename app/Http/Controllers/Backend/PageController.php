@@ -29,13 +29,13 @@ class PageController extends Controller
         }
         catch (\Exception $e) {
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }    
+        }
     }
 
     // Page Create
 
     public function create()
-    { 
+    {
         try{
             $title = 'Create Page';
             return view('backend.pages.pageCreate', compact('title'));
@@ -47,12 +47,12 @@ class PageController extends Controller
 
     public function add(Request $request)
     {
-        
+
             // $request->validate([
             //  'title' => 'required|string',
             //  'content' => 'required'
             // ]);
-            
+
             try{
                 $isPage = Page::where('title', $request->title)
                 ->where('status','1')
@@ -63,7 +63,7 @@ class PageController extends Controller
                 else{
                     $pslug = Str::slug($request->title);
                 }
-              
+
             $result = Page::create([
                 'title' => $request->title,
                 'title_arabic' => $request->title_arabic,
@@ -71,14 +71,14 @@ class PageController extends Controller
                 'content_arabic' => $request->content_arabic,
                 'slug' => $pslug
             ]);
-        
+
             if($result){
             return redirect('/admin/pages')->with('success', 'Page Created Successfully.');
             }
         }
         catch (\Exception $e) {
             return redirect('/admin/pages')->with('error', 'Something went wrong.');
-        }    
+        }
     }
 
     // Page View
@@ -93,7 +93,7 @@ class PageController extends Controller
         }
     }
 
-     // Page Edit 
+     // Page Edit
 
     public function edit($id)
     {
@@ -108,20 +108,20 @@ class PageController extends Controller
     }
     public function update(Request $request, $id)
        {
-        
+
             // $request->validate([
             //     'title' => 'required|string',
             //     'content' => 'required'
             // ]);
-        try{ 
-          
+        try{
+
            $page = Page::findOrFail($id);
            $page->title = $request->title;
            $page->content = $request->content;
            $page->title_arabic = $request->title_arabic;
            $page->content_arabic = $request->content_arabic;
           // $page->slug = Str::slug($request->title);
-           $page->save(); 
+           $page->save();
            return redirect('/admin/pages')->with('success', 'Page Updated successfully');
         }
         catch (\Exception $e) {
@@ -140,11 +140,11 @@ class PageController extends Controller
     }
     catch (\Exception $e) {
         return redirect('/admin/pages')->with('error', 'Something went wrong.');
-    
+
      }
     }
 
-    // Amenities Listing 
+    // Amenities Listing
 
     public function amenities()
     {
@@ -158,8 +158,8 @@ class PageController extends Controller
         }
     }
 
-     // Amenities Create 
-    
+     // Amenities Create
+
     public function amenitiesCreate()
     {
         try{
@@ -171,26 +171,26 @@ class PageController extends Controller
         }
     }
 
-  
+
 
     public function amenitiesAdd(Request $request)
     {
-        
-            $request->validate([
-                'amenity' => 'required|string',
-            ]);
+
+            // $request->validate([
+            //     'amenity' => 'required|string',
+            // ]);
         try{
             $data['name'] = $request->amenity;
-           
-               
+            $data['name_arabic'] = $request->name_arabic;
+
              if($request->file('icon_image')){
                 $file= $request->file('icon_image');
                 $filename= date('YmdHi').$file->getClientOriginalName();
                 $file->move(base_path('Images/amenities'), $filename);
                 $data['image']= $filename;
                  }
-               $result =  Amenities::insert($data);  
-        
+               $result =  Amenities::insert($data);
+
             if($result){
                 return redirect('/admin/amenities')->with('success', 'Amenities Created Successfully.');
             }
@@ -200,9 +200,9 @@ class PageController extends Controller
             return redirect('/admin/amenities')->with('error', 'Something went wrong.');
         }
     }
-    
+
      // Amenities Edit
-    
+
     public function amenitiesEdit(Request $request, $id)
     {
         try{
@@ -216,11 +216,11 @@ class PageController extends Controller
     }
 
     public function amenitiesUpdate(Request $request, $id){
-        
-            $request->validate([
-                'amenity' => 'required|string',
-            ]);
-        try{ 
+
+            // $request->validate([
+            //     'amenity' => 'required|string',
+            // ]);
+        try{
             $amenity = Amenities::findOrFail($id);
             if($request->file('icon_image')){
                 if($amenity->image){
@@ -234,16 +234,17 @@ class PageController extends Controller
                 $file->move(base_path('Images/amenities'), $filename);
                 $amenity->image= $filename;
         }
-           
-              
+
+
             $amenity->name = $request->amenity;
-            $amenity->save(); 
+            $amenity->name_arabic = $request->name_arabic;
+            $amenity->save();
             return redirect('/admin/amenities')->with('success', 'Amenity Updated successfully');
         }
         catch (\Exception $e) {
            // dd($e->getMessage());
             return redirect('/admin/amenities')->with('error', 'Something went wrong.');
-           
+
         }
     }
 
@@ -258,41 +259,41 @@ class PageController extends Controller
          }
          catch (\Exception $e) {
              return redirect('/admin/amenities')->with('error', 'Something went wrong.');
-         
+
           }
         }
 
-     // Region Listing 
+     // Region Listing
 
      public function regions()
      {
         try{
             $title = 'Regions';
-          
+
             $regions = Regions::leftJoin('countries', 'regions.country_id', '=', 'countries.id')
                       ->select('regions.*','countries.name as cname')
                       ->get();
-    
+
             return view('backend.pages.regions', compact('title','regions'));
          }
          catch (\Exception $e) {
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }    
+        }
      }
 
-     // Region Create 
+     // Region Create
 
      public function regionsCreate()
      {
         try{
             $title = 'Create Region';
             $countries = Countries::all();
-           
+
             return view('backend.pages.regionCreate', compact('title','countries'));
         }
         catch (\Exception $e) {
             return redirect('/admin/regions')->with('error', 'Something went wrong.');
-        } 
+        }
      }
 
      public function regionsAdd(Request $request)
@@ -308,18 +309,18 @@ class PageController extends Controller
             ]);
 
            // dd($request->country_name);
-      
+
             if($result){
                 return redirect('/admin/regions')->with('success', 'Region Created Successfully.');
             }
        }
         catch (\Exception  $e) {
-        
+
            return redirect('/admin/regions')->with('error', 'Something went wrong.');
         }
     }
 
-   // Region Edit 
+   // Region Edit
 
    public function regionsEdit($id)
    {
@@ -335,7 +336,7 @@ class PageController extends Controller
    }
 
    public function regionsUpdate(Request $request, $id){
-     
+
         $request->validate([
             'country_name' => 'required',
             'region' => 'required|string',
@@ -344,12 +345,12 @@ class PageController extends Controller
         $region = Regions::findOrFail($id);
         $region->country_id = $request->country_name;
         $region->name = $request->region;
-        $region->save(); 
+        $region->save();
         return redirect('/admin/regions')->with('success', 'Region Updated successfully');
     }
     catch (\Exception $e) {
         return redirect('/admin/regions')->with('error', 'Something went wrong.');
-       
+
     }
 }
 
@@ -364,7 +365,7 @@ class PageController extends Controller
     }
     catch (\Exception $e) {
         return redirect('/admin/regions')->with('error', 'Something went wrong.');
-    
+
      }
    }
 
@@ -377,12 +378,12 @@ class PageController extends Controller
                              ->leftJoin('countries', 'regions.country_id', '=', 'countries.id')
                              ->select('cities.*','countries.name as cname','regions.name as regionname')
                              ->get();
-    
+
             return view('backend.pages.cities', compact('title','cities'));
          }
          catch (\Exception $e) {
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }    
+        }
      }
 
      // City Create
@@ -392,12 +393,12 @@ class PageController extends Controller
             $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
                         ->select('regions.*','countries.name as cname')
                         ->get();
-          
+
             return view('backend.pages.cityCreate', compact('title','regions'));
         }
         catch (\Exception $e) {
             return redirect('/admin/cities')->with('error', 'Something went wrong.');
-        } 
+        }
      }
 
      public function citiesAdd(Request $request){
@@ -405,19 +406,19 @@ class PageController extends Controller
                 'region_name' => 'required',
                 'city' => 'required|string',
             ]);
-        try{ 
+        try{
                 $result = Cities::create([
                     'region_id' => $request->region_name,
                     'name' => $request->city,
-                  
+
             ]);
-           
+
             if($result){
                 return redirect('/admin/cities')->with('success', 'City Created Successfully.');
             }
         }
         catch (ValidationException  $e) {
-        
+
            return redirect('/admin/cities')->with('error', 'Something went wrong.');
         }
      }
@@ -437,21 +438,21 @@ class PageController extends Controller
         }
      }
      public function citiesUpdate(Request $request, $id){
-        
+
         $request->validate([
             'region_name' => 'required',
             'city' => 'required|string',
         ]);
-        try { 
+        try {
             $city = Cities::findOrFail($id);
             $city->region_id = $request->region_name;
             $city->name = $request->city;
-            $city->save(); 
+            $city->save();
               return redirect('/admin/cities')->with('success', 'City Updated successfully');
         }
         catch (\Exception $e) {
             return redirect('/admin/cities')->with('error', 'Something went wrong.');
-        
+
         }
     }
 
@@ -466,7 +467,7 @@ class PageController extends Controller
         }
         catch (\Exception $e) {
             return redirect('/admin/cities')->with('error', 'Something went wrong.');
-        
+
          }
         }
 }
