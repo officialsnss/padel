@@ -30,6 +30,7 @@ class CoachesServiceImpl implements CoachesService
     */
     public function getCoachesList()
     {
+        // Getting data of all the coaches from the db
         $data = $this->coachesRepository->getCoachesList();
 
         $dataPacket = [];
@@ -56,6 +57,8 @@ class CoachesServiceImpl implements CoachesService
                 $experience[$i] = $years.''.$months;
             }
             $dataPacket[$key]['experience'] = end($experience);
+
+            // Getting rating of all the coaches
             $dataPacket[$key]['rating'] = $this->getCoachRating($row['rating']);
         }
         return $dataPacket;
@@ -63,23 +66,30 @@ class CoachesServiceImpl implements CoachesService
 
     public function getCoachRating($rating) 
     {
+        // If coach have rating by any user
         if(isset($rating)) {
             $numberOfRatings = count($rating);
             $RatingArray = [];
             foreach($rating as $rate) {
                 $RatingArray[] += $rate['rate'];
             }
+
+            // Getting sum of all the ratings
             $totalRatings = array_sum($RatingArray);
+
+            // Calculating average rating of the coach
             if($numberOfRatings) {
                 $AverageRating = round($totalRatings/$numberOfRatings, 2);
                 return $AverageRating;
             }
         }
+        // In case club have no rating, then default rating is 0
         return 0;
     }
 
     public function getCoachDetails($request)
     {
+        // Getting coach data by coach_id
         $coach_id = $request->coach_id;
         $data = $this->coachesRepository->getCoachDetails($coach_id);
 
@@ -111,7 +121,11 @@ class CoachesServiceImpl implements CoachesService
             $experience[$i] = $years.''.$months;
         }
         $dataPacket['experience'] = end($experience);
+
+        // getting rating of a coach
         $dataPacket['rating'] = $this->getCoachRating($data['rating']);
+
+        // Getting the details of all the clubs to which coach is associated with
         $dataPacket['clubs_assigned'] = $this->getAssociatedClubsData($data['clubs_assigned']);
         return $dataPacket;
     }

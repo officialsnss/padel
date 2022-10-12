@@ -63,6 +63,8 @@ class PlayersServiceImpl implements PlayersService
     {
         $dataArray = [];
         $following = [];
+
+        // Getting Players data from user_id
         if(auth()->user()) {
             $userId = auth()->user()->id;
             $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
@@ -88,6 +90,7 @@ class PlayersServiceImpl implements PlayersService
 
     public function getPlayerDetails($id)
     {
+        // Getting players info from user id
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
 
@@ -108,12 +111,14 @@ class PlayersServiceImpl implements PlayersService
             $dataArray['match_loose'] = $data['match_loose'];  
             $dataArray['match_draw'] = $data['match_played'] - ($data['match_loose'] + $data['match_won']);
             
+            // Calculating followers for the player 
             $followers = explode(',',$data['followers']);
             if($followers[0] == "") {
                 array_shift($followers);
             }
             $dataArray['followers'] = count($followers);  
             
+            // Calculating followers for the player 
             $followings = explode(',',$data['following']);
             if($followings[0] == "") {
                 array_shift($followings);
@@ -129,7 +134,7 @@ class PlayersServiceImpl implements PlayersService
                 $key = 0;
                 foreach($matches as $i => $row) {
                     $booking_date = $row['booking'][0]['booking_date'];
-                    $booking_time = $row['booking'][0]['bookingSlots']['slots'];
+                    $booking_time = $row['booking'][0]['bookingSlots'][0]['slots'];
                     $date = date('Y-m-d H:i:s', strtotime("$booking_date $booking_time"));
                     $match_date = strtotime($date);
                     $currentDate = strtotime($currentDate);
@@ -204,11 +209,13 @@ class PlayersServiceImpl implements PlayersService
         $userId = auth()->user()->id;
         $playerId = $request->player_id;
 
+        // Getting player data from the db
         $playerData = $this->playersRepository->getPlayerDetails($playerId);
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
         $followers = explode(',',$playerData['followers']);
         $followings = explode(',',$userData['following']);
 
+        // If the request if for follow the player
         if($request->isFollow) {
             array_push($followers, $userData['id']);
             if($followers[0] == "") {
@@ -219,6 +226,7 @@ class PlayersServiceImpl implements PlayersService
                 array_shift($followings);
             }
         } else {
+            // Request is for unfollow the player
             foreach($followings as $key => $row) {
                 if($playerId == $row) {
                     unset($followings[$key]);
@@ -233,6 +241,7 @@ class PlayersServiceImpl implements PlayersService
         $followersPacket = implode(',', $followers);
         $followingsPacket = implode(',', $followings);
 
+        // Storing data in the db
         $data = $this->playersRepository->followPlayer($playerId, $followersPacket, $followingsPacket);
         return $data;
     }
@@ -247,6 +256,7 @@ class PlayersServiceImpl implements PlayersService
         $dataArray['dob'] = $request->dob ? date('Y-m-d', $request->dob): null;
         $dataArray['court_side'] = $request->court_side ? $request->court_side : null;
 
+        // Calculating play time for the player
         $playArray = [];
         $play_time = $request->play_time;
         if($play_time) {
@@ -258,9 +268,11 @@ class PlayersServiceImpl implements PlayersService
         } else {
             $dataArray['play_time'] = null;
         }
+
         $dataArray['best_shot'] = $request->best_shot ? $request->best_shot : null;
         $dataArray['levels'] = $request->level ? $request->level : null;
 
+        // Storing data in the db
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
         $addDetails = $this->playersRepository->addPlayerDetails($dataArray, $userData['id']);
@@ -298,13 +310,20 @@ class PlayersServiceImpl implements PlayersService
     
     public function playersListInMatch($request)
     {
+        // Validations for the match_id
         if(!$request->match_id) {
             return ['error' => "Please enter the value of the match_id"];
         }
+
+        // Gettinf data from the db
         $data = $this->matchesRepository->getMatchData($request->match_id);
+        
+        // If data doesn't exists for that match
         if(!$data) {
             return ['message' => "No match data for this match_id"];
         }
+
+        // Getting players list in a match 
         $playerIds = explode(',', $data['playersIds']);
         $playersData = $this->playersRepository->playersListInMatch($playerIds);
         return $this->getPlayers($playersData);

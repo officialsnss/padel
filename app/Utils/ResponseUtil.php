@@ -36,7 +36,7 @@ class ResponseUtil
      */
     public static function errorWithMessage($code, $message, $success = false, $status = 400): JsonResponse
     {
-        return response()->json(['code' => $code, 'success' => $success, 'message' => $message, 'data' => []], $status);
+        return response()->json(['code' => $code, 'success' => $success, 'message' => $message], $status);
     }
 
 
@@ -52,6 +52,20 @@ class ResponseUtil
     public static function errorWithMessageBag($errors, $success = false, $status = 400): JsonResponse
     {
         return response()->json(['code' => 400, 'errors' => $errors, 'success' => $success], $status);
+    }
+
+    /**
+     * This method can be used to send success response with data
+     *
+     * @param $data
+     * @param string $code
+     * @param int $status
+     *
+     * @return JsonResponse
+     */
+    public static function errorWithData($data, $message, $success = false, $status = 202)
+    {
+        return response()->json(['code' => 202, 'success' => $success, 'message' => $message, 'data' => $data], $status);
     }
 
 
@@ -80,7 +94,7 @@ class ResponseUtil
      */
     public static function successWithMessage($message, $success = true, $status = 200): JsonResponse
     {
-        return response()->json(['code' => 200, 'success' => $success, 'message' => $message, 'data' => []], $status);
+        return response()->json(['code' => 200, 'success' => $success, 'message' => $message], $status);
     }
 
     /**

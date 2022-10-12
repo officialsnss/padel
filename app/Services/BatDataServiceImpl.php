@@ -42,7 +42,6 @@ class BatDataServiceImpl implements BatDataService
             $batData[$i]['quantity'] = $row['quantity']; 
             $batData[$i]['price'] = $row['price'] ? number_format((float)$row['price'], 3, '.', '') :null;                      
         }
-
         return $batData;
     }
 }

@@ -131,4 +131,11 @@ class MatchesRepository extends BaseRepository
     {
       return MatchResults::where('match_id', $matchId)->first();
     }
+
+    public function checkPlayerRated($matchId)
+    {
+      return PlayersRating::where('match_id', $matchId)->first();
+    }
+
+    
 }

@@ -38,6 +38,7 @@ class DashboardServiceImpl implements DashboardService
      */
     public function getDashboard($request)
     {
+        // Getting data of all the clubs
         $clubData = $this->clubDataServiceImpl->getClubsList($request);
 
         $popularClubs = $this->getPopularClubs($clubData);
@@ -61,17 +62,10 @@ class DashboardServiceImpl implements DashboardService
         usort($clubData, function($a, $b) {
             return $a['ordering'] - $b['ordering'];
         });
-
+                
+        //Pushing the clubs in the popularClubs variable
         foreach($clubData as $club) {
             if($club['isPopular'] == 1) {
-                
-                // Removing the indexes which is not required in the packet
-                // unset($club['ordering']);
-                // unset($club['latitude']);
-                // unset($club['longitude']);
-                // unset($club['isPopular']);
-
-                //Pushing the clubs in the popularClubs variable
                 array_push($popularClubs,$club);
             }
         }
@@ -80,19 +74,21 @@ class DashboardServiceImpl implements DashboardService
 
     public function getUpcomingMatches($request)
     {
-        // Getting Listing of Upcoming Matches
+        // Getting List of all the Matches
         $matchData = $this->matchesServiceImpl->getMatchesList($request);
         $upcomingMatches = [];
         
         foreach($matchData as $match) {
-            
             $matchTime = $match['startTime'];
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
 
+            // We are getting all matches above, so check on only players bookings
             $userId = auth()->user()->id;
             if($match['booked_by'] == $userId) {
                 unset($match['booked_by']);
+
+                // If matchTime is greater than currentTime, then the match is upcoming
                 if($currentDate < $matchTime) {
                     array_push($upcomingMatches, $match);
                 } else {
@@ -101,13 +97,14 @@ class DashboardServiceImpl implements DashboardService
             }
         }
 
+        // Sorting the match data with date order
         $upcomingMatches = collect($upcomingMatches)->sortBy('date')->toArray();
         return $upcomingMatches;
     }
 
     public function getPopularPlayers($request)
     {
-        // Getting List of Popular Players
+        // Getting List of All Players
         $playerData = $this->playersServiceImpl->getPlayersList($request);
         $popularPlayers = [];
 
@@ -133,7 +130,6 @@ class DashboardServiceImpl implements DashboardService
     public function getNearClubs($clubData, $request)
     {
         $nearClubs = [];
-
         foreach($clubData as $club) {
             $clubLatitude = round($club['latitude'],2);
             $clubLongitude = round($club['longitude'],2);

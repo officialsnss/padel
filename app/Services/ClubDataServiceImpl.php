@@ -31,20 +31,20 @@ class ClubDataServiceImpl implements ClubDataService
      */
     public function getClubsList($request)
     {
+        // Getting all clubs from the db
         $data = $this->clubDataRepository->getClubsList($request);
 
         $dataPacket = [];
-        $i =0;
         foreach($data as $i => $row) {
             $dataPacket[$i]['id'] = $row['id'];
             $dataPacket[$i]['name'] = $row['name'];
             $dataPacket[$i]['name_arabic'] = $row['name_arabic'];
 
+            // Getting address of the club
             $address = $row['address'];
             $city = $row['cities'] != null ? $row['cities'][0]['name'] : null;
             $dataPacket[$i]['address'] = $address . ', ' . $city;
-            // $clubPrice = $this->getClubPrice($row['court']);
-            // $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
+            
             $dataPacket[$i]['price'] = $row['single_price'];
             $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
             $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
@@ -54,6 +54,7 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket[$i]['latitude'] = $row['latitude'];
             $dataPacket[$i]['longitude'] = $row['longitude'];
 
+            // Creating aminities packet
             $amenitiesPacket = [];
             $amenities = explode(',',$row['amenities']);
             $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
@@ -65,13 +66,13 @@ class ClubDataServiceImpl implements ClubDataService
                 $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
             }
             $dataPacket[$i]['amenities']  = $amenitiesPacket;
-            $i++;
         }
         return $dataPacket;
     }
 
     public function getPopularClubs($request)
     {
+        // Getting all the clubs data
         $data = $this->getClubsList($request);
 
         // Sorting of clubs based on ordering
@@ -79,16 +80,10 @@ class ClubDataServiceImpl implements ClubDataService
             return $a['ordering'] - $b['ordering'];
         });
 
+        // Pushing only popular clubs in the clubdata packet
         $clubData = [];
         foreach($data as $club) {
             if($club['isPopular'] == 1) {
-
-                // Removing the indexes which is not required in the packet
-                // unset($club['ordering']);
-                // unset($club['latitude']);
-                // unset($club['longitude']);
-                // unset($club['isPopular']);
-
                 array_push($clubData,$club);
             }
         }
@@ -97,10 +92,11 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getNearClubs($request)
     {
+        // Getting data of all the clubs
         $data = $this->getClubsList($request);
 
+        //Pushing the clubs in the nearClubs packet
         $nearClubs = [];
-
         foreach($data as $club) {
             $clubLatitude = $club['latitude'];
             $clubLongitude = $club['longitude'];
@@ -108,15 +104,8 @@ class ClubDataServiceImpl implements ClubDataService
             // Calculating the distance by lat and long
             $club['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
 
-            if($club['latitude'] || $club['longitude']) {
-
-                // Removing the indexes which is not required in the packet
-                // unset($club['latitude']);
-                // unset($club['longitude']);
-                // unset($club['ordering']);
-                // unset($club['isPopular']);
-
-                //Pushing the clubs in the popularClubs variable
+            // Only show nearclubs if we have entered our location
+            if($request->latitude || $request->longitude) {
                 array_push($nearClubs,$club);
             }
         }
@@ -125,7 +114,6 @@ class ClubDataServiceImpl implements ClubDataService
         usort($nearClubs, function($a, $b) {
             return $a['distance'] - $b['distance'];
         });
-
         return $nearClubs;
     }
 
@@ -133,9 +121,12 @@ class ClubDataServiceImpl implements ClubDataService
     {
         $dataPacket = [];
         $id = $request->club_id;
+
+        // Getting data of a club by club_id
         $data = $this->clubDataRepository->getSingleClubData($id);
         $clubData = $data['data'];
 
+        // If club data exists for the entered club_id
         if($clubData) {
             $clubLatitude = $clubData['latitude'];
             $clubLongitude = $clubData['longitude'];
@@ -146,9 +137,11 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket['description'] = $clubData['description'];
             $dataPacket['description_arabic'] = $clubData['description_arabic'];
             
+            // Getting bats count
             $batCount = $this->batDataRepository->getBatCount($clubData['id']);
             $dataPacket['isBat'] = $batCount > 0 ? true : false;
     
+            // Creating aminities packet
             $amenitiesPacket = [];
             $amenities = explode(',',$clubData['amenities']);
             $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
@@ -160,11 +153,12 @@ class ClubDataServiceImpl implements ClubDataService
                 $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$row->image;
             }
             $dataPacket['amenities']  = $amenitiesPacket;
+
+            // Getting address of the club
             $address = $clubData['address'];
             $city = count($clubData['cities']->all()) > 0 ? $clubData['cities'][0]['name'] : null;
             $dataPacket['address'] = $address . ',' . $city;
-            // $clubPrice = $this->getClubPrice($clubData['court']);
-            // $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
+
             $dataPacket['price'] = $clubData['single_price'];
             $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
             $dataPacket['featured_image'] = getenv("IMAGES")."club_images/".$clubData['featured_image'];
@@ -175,40 +169,28 @@ class ClubDataServiceImpl implements ClubDataService
         return $dataPacket; 
     }
 
-    public function getClubPrice($courts)
-    {
-        if(isset($courts)) {
-            foreach($courts as $court) {
-                return $court['single_price'];
-            }
-        }
-        return null;
-    }
-
-    public function getFeaturedImage($courts)
-    {
-        if(isset($courts)) {
-            foreach($courts as $court) {
-                return $court['featured_image'];
-            }
-        }
-        return 0;
-    }
-
     public function getClubRating($rating) 
     {
+        // If club have rating by any user
         if(isset($rating)) {
             $numberOfRatings = count($rating);
-            $RatingArray = [];
+            $ratingArray = [];
+
+            // Storing all ratings in teh $ratingArray
             foreach($rating as $rate) {
-                $RatingArray[] += $rate['rate'];
+                $ratingArray[] += $rate['rate'];
             }
-            $totalRatings = array_sum($RatingArray);
+
+            // Getting sum of all the ratings
+            $totalRatings = array_sum($ratingArray);
+
+            // Calculating average rating of the club
             if($numberOfRatings) {
                 $AverageRating = round($totalRatings/$numberOfRatings, 2);
                 return $AverageRating;
             }
         }
+        // In case club have no rating, then default rating is 0
         return 0;
     }
 

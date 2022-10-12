@@ -43,6 +43,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Dashboard
     Route::get('dashboard', 'App\Http\Controllers\Api\DashboardController@getDashboard');
+    Route::post('uploadImage', 'App\Http\Controllers\Api\UsersController@uploadUserImage');
 
     //CLUBS
     Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');

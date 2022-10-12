@@ -69,7 +69,7 @@ class BookingController extends Controller
     {
         $data = $this->bookingService->getCoupons();
         if($data == []) {
-            return ResponseUtil::errorWithMessage(201, 'No coupons in the wallet', true, 201);
+            return ResponseUtil::errorWithMessage(201, 'No coupons in the wallet', false, 201);
         }
         return ResponseUtil::successWithData($data, 'Coupons details', true, 200);
     }
