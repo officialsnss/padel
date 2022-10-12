@@ -36,8 +36,8 @@ class MatchController extends Controller
         try{
             $matchStatus = Matches::where('status',2)->where('id', $id)->get();
             if($matchStatus->count() == 1){
-                $matchResult= MatchResults::where('id', $id)->get();
-                $matchResults= MatchResults::where('id', $id)->get()->toArray();
+                $matchResult= MatchResults::where('match_id', $id)->get();
+                $matchResults= MatchResults::where('match_id', $id)->get()->toArray();
                 $title = 'Edit Match Result';
                 // echo "<pre>";print_r($matchResults);die;
                 // dd($matchResult);die;
@@ -58,7 +58,7 @@ class MatchController extends Controller
             $title = 'Match Details';
             $match_details = Matches::Join('clubs','matches.club_id', '=', 'clubs.id')
             ->Join('players_details','matches.player_id', '=', 'players_details.id')
-            ->Join('bookings','matches.booking_id', '=', 'bookings.id')
+            // ->Join('bookings','matches.booking_id', '=', 'bookings.id')
             // ->Join('booking_slots','matches.slot_id', '=', 'booking_slots.id')
             ->Join('levels','matches.level', '=', 'levels.id')
             ->where('matches.id', $id)
@@ -226,8 +226,8 @@ class MatchController extends Controller
             $result = MatchResults::create([
                 'team1' => $request->team1,
                 'team2' => $request->team2,
-                'team1_score' => $request->ts1,
-                'team2_score' => $request->ts2,
+                'team1_score' => implode(',', $request->ts1),
+                'team2_score' => implode(',', $request->ts2),
                 'no_of_rounds' => $request->no_of_rounds,
                 'winner' => $request->winner,
                 'match_id' => $request->match_id,
@@ -238,7 +238,7 @@ class MatchController extends Controller
             }
         }
         catch (\Exception $e) {
-            // dd($e->getMessage());
+            dd($e->getMessage());
             return redirect('/admin/matches')->with('error', 'Something went wrong.');
         }
     }
