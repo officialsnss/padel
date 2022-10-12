@@ -133,6 +133,7 @@ $(document).ready(function () {
 
         },
         error: function (error) {
+            // alert("Error");
             console.log(error);
         }
     });
@@ -150,7 +151,12 @@ $(document).ready(function () {
 
                 ply += '<div class="swiper-slide">';
                 ply += '<div class="playerscoach-div">';
-                ply += '<img src="http://127.0.0.1:8000/Images/'+playerslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
+                if(playerslistdata.data[i].image === null){
+                    ply += '<img src="http://127.0.0.1:8000/Images/player_images/202208191043wpt-mejor-set-pista-de-padel-1024x745.jpg" class="img-fluid players-coach-img" alt="">';
+                } else {
+                    ply += '<img src="http://127.0.0.1:8000/Images/'+playerslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
+                }
+                // ply += '<img src="http://127.0.0.1:8000/Images/'+playerslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
                 ply += '</div>';
                 ply += '<div class="playerscoach-details">';
                 ply += '<h4>'+playerslistdata.data[i].name+'</h4>';
@@ -184,7 +190,11 @@ $(document).ready(function () {
 
                 coa += '<div class="swiper-slide">';
                 coa += '<div class="playerscoach-div">';
-                coa += '<img src="http://127.0.0.1:8000/Images/'+coachslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
+                if(coachslistdata.data[i].image === null){
+                    coa += '<img src="http://127.0.0.1:8000/Images/coach_images/default.jpg" class="img-fluid players-coach-img" alt="">';
+                } else {
+                    coa += '<img src="http://127.0.0.1:8000/Images/'+coachslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
+                }
                 coa += '</div>';
                 coa += '<div class="playerscoach-details">';
                 coa += '<h4>'+coachslistdata.data[i].name+'</h4>';
