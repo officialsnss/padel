@@ -11,6 +11,7 @@ class Cities extends Model
     public $table = 'cities';
     protected $fillable = [
         'name',
+        'name_arabic',
         'region_id',
         'status',
         'created_at',

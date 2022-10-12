@@ -674,6 +674,52 @@ $("#cms-pages").validate({
  
 })
 
+//Regions Form
+$("#regions-form").validate({
+  //ignore: [],
+  rules: {
+    country_name: {
+        required: true,
+        
+    },
+    region: {
+      required: true,
+      lettersonly: true
+      
+    },
+    arabic_region: {
+      required: true,
+    
+    },
+   
+    
+  },  
+})
+
+
+//Regions Form
+$("#cities-form").validate({
+  //ignore: [],
+  rules: {
+    
+    region_name: {
+      required: true,
+      
+    },
+    city: {
+      required: true,
+      lettersonly: true
+      
+    },
+    arabic_city: {
+      required: true,
+    
+    },
+   
+    
+  },  
+})
+
 
 
 
