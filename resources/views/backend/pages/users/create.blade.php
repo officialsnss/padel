@@ -34,10 +34,28 @@
                 <div class="form-error">{{ $message }}</div>
                 @enderror
               </div>
-              <div class="form-group col-md-6">
+              <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="inputName">Commission(In Percent on each product)</label>
+                          <input type="text" id="commission" class="form-control" value="{{old('commission')}}" name="commission">
+                              @error('commission')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                </div> 
+             </div>
+             <div class="row"> 
+               <div class="form-group col-md-6">
                 <label for="inputName">Club Name</label>
                 <input type="text" id="clubname" class="form-control" value="{{old('clubname')}}" name="clubname">
                 @error('clubname')
+                <div class="form-error">{{ $message }}</div>
+                @enderror
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputName">Arabic Club Name</label>
+                <input type="text" id="name_arabic" class="form-control" value="{{old('name_arabic')}}" name="name_arabic">
+                @error('name_arabic')
                 <div class="form-error">{{ $message }}</div>
                 @enderror
               </div>
@@ -58,33 +76,7 @@
                @enderror
               </div>
             </div>
-            <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                          <label for="inputName">Commission(In Percent on each product)</label>
-                          <input type="text" id="commission" class="form-control" value="{{old('commission')}}" name="commission">
-                              @error('commission')
-                                <div class="form-error">{{ $message }}</div>
-                              @enderror
-                       </div>
-                    </div>   
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="inputName">Service Charge</label>
-                            <div class="row">
-                              <div class="col-md-10">
-                              <input type="text" id="service_charge" class="form-control" value="{{ old('service_charge')}}" name="service_charge">
-                              </div>
-                              <div class="col-md-2">
-                                <input type="text" class="form-control" value="KWD" readonly>
-                              </div>
-                            </div>    
-                              @error('service_charge')
-                                <div class="form-error">{{ $message }}</div>
-                              @enderror
-                       </div>
-                      </div>
-                  </div>
+            
                  
                 <div class="row">
                     <div class="col-md-6">
@@ -245,10 +237,8 @@
                      </div> 
                   </div>
 
-
-
                   <div class="row">
-                    <div class="col-md-6">
+                  <div class="col-md-6">
                        <div class="form-group">
                           <label for="inputName">Zip Code</label>
                           <input type="text" id="zipcode" class="form-control" value="{{old('zipcode')}}" name="zipcode">
@@ -256,8 +246,40 @@
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
                       </div>
+                    </div>   
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputName">Service Charge</label>
+                            <div class="row">
+                              <div class="col-md-10">
+                              <input type="text" id="service_charge" class="form-control" value="{{ old('service_charge')}}" name="service_charge">
+                              </div>
+                              <div class="col-md-2">
+                                <input type="text" class="form-control" value="KWD" readonly>
+                              </div>
+                            </div>    
+                              @error('service_charge')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                      </div>
+                  </div>
 
-                      <div class="form-group">
+                  <div class="row">
+                      <div class="col-md-6">
+                       <div class="form-group">
+                          <label for="inputName">Featured Image</label><br>
+                          <input id="fileUpload" type="file" name="featured_image"><br />
+                          <div id="image-holder"> 
+                        
+                         </div>
+                            @error('featured_image')
+                            <div class="form-error">{{ $message }}</div>
+                            @enderror
+                      </div>
+                     </div> 
+                 
+                  <div class="form-group col-md-6">
                           <label for="inputName">Amenities</label><br>
                           <ul class="amenity-list">
                            
@@ -274,27 +296,24 @@
                             <div class="form-error">{{ $message }}</div>
                             @enderror
                       </div>
-
-                   </div> 
-                     <div class="col-md-6">
-                       <div class="form-group">
-                          <label for="inputName">Featured Image</label><br>
-                          <input id="fileUpload" type="file" name="featured_image"><br />
-                          <div id="image-holder"> 
-                        
-                         </div>
-                            @error('featured_image')
-                            <div class="form-error">{{ $message }}</div>
-                            @enderror
-                      </div>
-                     </div> 
-                  </div>
+                </div>
                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
                             <label for="inputName">Description</label>
                             <textarea id="description" class="ckeditor form-control" name="description">{{old('description')}}</textarea>
                                 @error('description')
+                                <div class="form-error">{{ $message }}</div>
+                                @enderror
+                      </div> 
+                    </div>  
+                  </div>  
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                            <label for="inputName">Arabic Description</label>
+                            <textarea id="description_arabic" class="ckeditor form-control" name="description_arabic">{{old('description_arabic')}}</textarea>
+                                @error('description_arabic')
                                 <div class="form-error">{{ $message }}</div>
                                 @enderror
                       </div> 

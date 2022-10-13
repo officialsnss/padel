@@ -13,7 +13,9 @@ class Page extends Model
     public $timestamps = true;
     protected $fillable = [
         'title',
+        'title_arabic',
         'content',
+        'content_arabic',
         'slug',
         'status',
         'created_at',

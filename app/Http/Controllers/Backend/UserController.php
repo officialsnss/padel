@@ -66,12 +66,17 @@ class UserController extends Controller
     // Customer Status Updation
     public function updateStatus(Request $request)
     {
+      
         try{
             $user = User::findOrFail($request->user_id);
             $user->status = $request->status;
             $user->save();
-
-            return response()->json(['message' => 'User status updated successfully.']);
+            if($user->role == '5'){
+              $club = Club::where('user_id', $request->user_id)->first();
+              $club->status = $request->status;
+              $club->save();
+            }
+            return response()->json(['message' => 'Status updated successfully.']);
         }
         catch (\Exception $e) {
             return redirect('/admin/users/customers')->with('error', 'Something went wrong.');
@@ -119,7 +124,12 @@ class UserController extends Controller
     { 
       try{
         $title = 'Court Owners';
-        $courtUsers = User::whereIn('role', [5])->get();
+        $courtUsers = User::leftJoin('clubs', 'clubs.user_id', '=', 'users.id')
+        ->where('users.role', '5')
+        ->select('users.*', 'clubs.name as clubname','clubs.ordering as cordering','clubs.isPopular','clubs.id as cid')
+        ->orderBy('clubs.ordering','ASC')
+        ->get();
+       // dd($courtUsers);
         return view('backend.pages.users.court-owner', compact('title','courtUsers'));
       }
       catch (\Exception $e) {
@@ -172,7 +182,7 @@ class UserController extends Controller
           $data['amenities'] = $amList;
           $data['user_id'] =  $result->id;
           $data['name'] =  $clubName;
-
+         
           if($request->file('featured_image')){
             $file= $request->file('featured_image');
             $filename= date('YmdHi').$file->getClientOriginalName();

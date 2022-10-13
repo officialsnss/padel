@@ -68,6 +68,9 @@ $("#vendorform").validate({
     clubname: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+      },
     password: {
     required: true,
     minlength: 8
@@ -141,6 +144,71 @@ $("#vendorform").validate({
 $("#club-edit").validate({
   ignore: [],
   rules: {
+    fullname:{
+      required : function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") { 
+            return true;
+        } else {
+            return false;
+        }
+    },
+    lettersonly: function(element) {
+      var action = $("#userrole").val();
+      if(action != "5") { 
+          return true;
+      } else {
+          return false;
+      }
+  },
+    },
+
+    email:{
+      required : function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") { 
+            return true;
+        } else {
+            return false;
+        }
+    },
+    email : function(element) {
+      var action = $("#userrole").val();
+      if(action != "5") { 
+          return true;
+      } else {
+          return false;
+      }
+  },
+    },
+    phone: {
+      digits: function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") { 
+            return true;
+        } else {
+            return false;
+        }
+    }
+    },
+    commission:{
+      required : function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") { 
+            return true;
+        } else {
+            return false;
+        }
+    },
+    number:function(element) {
+      var action = $("#userrole").val();
+      if(action != "5") { 
+          return true;
+      } else {
+          return false;
+      }
+    },
+    },
     clubname: {
     required: true,
     },
@@ -312,7 +380,18 @@ $("#batform").validate({
         required: true,
         
     },
+    name_arabic: {
+      required: true,
+      
+  },
     featured_image: {
+      required: function(element) {
+        if ($(".thumb-image").attr('src') !== '') {
+            return false;
+        } else {
+            return true;
+        }
+      },
       extension: "jpg|jpeg|png"
      
     },
@@ -392,8 +471,19 @@ $("#amenity-form").validate({
     amenity: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+      },
    
     icon_image: {
+
+        required: function(element) {
+          if ($(".thumb-image").attr('src') !== '') {
+              return false;
+          } else {
+              return true;
+          }
+      },
     // required: true,
       extension: "jpg|jpeg|png"
     }
@@ -557,6 +647,80 @@ $("#slideform").validate({
  },
  
 })
+
+// cms pages
+$("#cms-pages").validate({
+ 
+  ignore: [], 
+  rules: {
+    title: {
+    required: true,
+    },
+   
+    title_arabic: {
+      required: true,
+    
+    },
+    content:{
+      required: true,
+    },
+    content_arabic:{
+      required: true,
+    }
+   
+    
+  },
+  
+ 
+})
+
+//Regions Form
+$("#regions-form").validate({
+  //ignore: [],
+  rules: {
+    country_name: {
+        required: true,
+        
+    },
+    region: {
+      required: true,
+      lettersonly: true
+      
+    },
+    arabic_region: {
+      required: true,
+    
+    },
+   
+    
+  },  
+})
+
+
+//Regions Form
+$("#cities-form").validate({
+  //ignore: [],
+  rules: {
+    
+    region_name: {
+      required: true,
+      
+    },
+    city: {
+      required: true,
+      lettersonly: true
+      
+    },
+    arabic_city: {
+      required: true,
+    
+    },
+   
+    
+  },  
+})
+
+
 
 
 

@@ -48,17 +48,28 @@ class PageController extends Controller
     public function add(Request $request)
     {
         
-            $request->validate([
-             'title' => 'required|string',
-             'content' => 'required'
-            ]);
+            // $request->validate([
+            //  'title' => 'required|string',
+            //  'content' => 'required'
+            // ]);
             
             try{
-
+                $isPage = Page::where('title', $request->title)
+                ->where('status','1')
+                ->count();
+                if($isPage > 0){
+                    $pslug = (Str::slug($request->title)).'_'.$isPage;
+                }
+                else{
+                    $pslug = Str::slug($request->title);
+                }
+              
             $result = Page::create([
                 'title' => $request->title,
+                'title_arabic' => $request->title_arabic,
                 'content' => $request->content,
-                'slug' => Str::slug($request->title),
+                'content_arabic' => $request->content_arabic,
+                'slug' => $pslug
             ]);
         
             if($result){
@@ -98,15 +109,17 @@ class PageController extends Controller
     public function update(Request $request, $id)
        {
         
-            $request->validate([
-                'title' => 'required|string',
-                'content' => 'required'
-            ]);
+            // $request->validate([
+            //     'title' => 'required|string',
+            //     'content' => 'required'
+            // ]);
         try{ 
           
            $page = Page::findOrFail($id);
            $page->title = $request->title;
            $page->content = $request->content;
+           $page->title_arabic = $request->title_arabic;
+           $page->content_arabic = $request->content_arabic;
           // $page->slug = Str::slug($request->title);
            $page->save(); 
            return redirect('/admin/pages')->with('success', 'Page Updated successfully');
@@ -163,12 +176,12 @@ class PageController extends Controller
     public function amenitiesAdd(Request $request)
     {
         
-            $request->validate([
-                'amenity' => 'required|string',
-            ]);
+            // $request->validate([
+            //     'amenity' => 'required|string',
+            // ]);
         try{
             $data['name'] = $request->amenity;
-           
+            $data['name_arabic'] = $request->name_arabic;
                
              if($request->file('icon_image')){
                 $file= $request->file('icon_image');
@@ -204,9 +217,9 @@ class PageController extends Controller
 
     public function amenitiesUpdate(Request $request, $id){
         
-            $request->validate([
-                'amenity' => 'required|string',
-            ]);
+            // $request->validate([
+            //     'amenity' => 'required|string',
+            // ]);
         try{ 
             $amenity = Amenities::findOrFail($id);
             if($request->file('icon_image')){
@@ -224,6 +237,7 @@ class PageController extends Controller
            
               
             $amenity->name = $request->amenity;
+            $amenity->name_arabic = $request->name_arabic;
             $amenity->save(); 
             return redirect('/admin/amenities')->with('success', 'Amenity Updated successfully');
         }
@@ -286,12 +300,14 @@ class PageController extends Controller
     {
         $request->validate([
                 'country_name' => 'required',
-                'region' => 'required|string',
+                'region' => 'required',
+                'arabic_region' => 'required',
             ]);
          try{
             $result = Regions::create([
                     'country_id' => $request->country_name,
                     'name' => $request->region,
+                    'name_arabic' => $request->arabic_region,
             ]);
 
            // dd($request->country_name);
@@ -325,12 +341,14 @@ class PageController extends Controller
      
         $request->validate([
             'country_name' => 'required',
-            'region' => 'required|string',
+            'region' => 'required',
+            'arabic_region' => 'required',
         ]);
     try{
         $region = Regions::findOrFail($id);
         $region->country_id = $request->country_name;
         $region->name = $request->region;
+        $region->name_arabic = $request->arabic_region;
         $region->save(); 
         return redirect('/admin/regions')->with('success', 'Region Updated successfully');
     }
@@ -377,7 +395,7 @@ class PageController extends Controller
         try{
             $title = 'Create City';
             $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
-                        ->select('regions.*','countries.name as cname')
+                        ->select('regions.*','countries.name as cname', 'countries.name_arabic as aname')
                         ->get();
           
             return view('backend.pages.cityCreate', compact('title','regions'));
@@ -390,13 +408,14 @@ class PageController extends Controller
      public function citiesAdd(Request $request){
          $request->validate([
                 'region_name' => 'required',
-                'city' => 'required|string',
+                'city' => 'required',
+                'arabic_city' => 'required',
             ]);
         try{ 
                 $result = Cities::create([
                     'region_id' => $request->region_name,
                     'name' => $request->city,
-                  
+                    'name_arabic' => $request->arabic_city,
             ]);
            
             if($result){
@@ -414,7 +433,7 @@ class PageController extends Controller
         try{
             $cityData = Cities::where('id', $id)->first();
             $regions = Regions:: leftJoin('countries', 'regions.country_id', '=', 'countries.id')
-                        ->select('regions.*','countries.name as cname')
+                        ->select('regions.*','countries.name as cname', 'countries.name_arabic as aname')
                         ->get();
             $title = 'Edit City';
             return view('backend.pages.cityEdit', compact('title','cityData', 'regions'));
@@ -427,12 +446,14 @@ class PageController extends Controller
         
         $request->validate([
             'region_name' => 'required',
-            'city' => 'required|string',
+            'city' => 'required',
+            'arabic_city' => 'required',
         ]);
         try { 
             $city = Cities::findOrFail($id);
             $city->region_id = $request->region_name;
             $city->name = $request->city;
+            $city->name_arabic = $request->arabic_city;
             $city->save(); 
               return redirect('/admin/cities')->with('success', 'City Updated successfully');
         }

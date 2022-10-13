@@ -1,15 +1,54 @@
 @extends('backend.layouts.app')
 @section('content')
+
     <div class="row">
       <div class="col-md-12">
           <div class="card card-primary">
             <div class="card-body reset-form">
               <form method="post" action="{{ route('club.update', $clubData->clubid) }}" id="club-edit" enctype="multipart/form-data">
                   {{ csrf_field() }}
+                  @if(auth()->user()->role != '5')
+                  <div class="row">  
+            
+            <div class="form-group col-md-6">
+              <label for="inputName">Full Name</label>
+              <input type="text" id="fullname" class="form-control" value="{{ $clubData->fullname }}" name="fullname">
+              @error('fullname')
+              <div class="form-error">{{ $message }}</div>
+              @enderror
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="inputName">Phone Number</label>
+              <input type="text" id="phone" class="form-control" value="{{ $clubData->userphone }}" name="phone">
+             @error('phone')
+              <div class="form-error">{{ $message }}</div>
+             @enderror
+            </div>
+           </div>  
+           <div class="row"> 
+             <div class="form-group col-md-6">
+              <label for="inputName">Email</label>
+              <input type="text" id="Email" class="form-control" value="{{ $clubData->useremail }}" name="email">
+              @error('email')
+              <div class="form-error">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="inputName">Commission(In Percent on each product)</label>
+                        <input type="text" id="commission" class="form-control" value="{{ $clubData->commission }}" name="commission">
+                            @error('commission')
+                              <div class="form-error">{{ $message }}</div>
+                            @enderror
+                     </div>
+              </div> 
+           </div>
+                  @endif
                 <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                          <label for="inputName">Title</label>
+                          <label for="inputName">Club Name</label>
                           <input type="text" id="clubname" class="form-control" value="{{ $clubData->name }}" name="clubname">
                               @error('clubname')
                                 <div class="form-error">{{ $message }}</div>
@@ -18,19 +57,12 @@
                     </div>   
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="inputName">Service Charge</label>
-                            <div class="row">
-                              <div class="col-md-10">
-                              <input type="text" id="service_charge" class="form-control" value="{{ $clubData->service_charge }}" name="service_charge">
-                              </div>
-                              <div class="col-md-2">
-                                <input type="text" class="form-control" value="{{ $clubData->code }}" readonly>
-                              </div>
-                            </div>    
-                              @error('service_charge')
-                                <div class="form-error">{{ $message }}</div>
-                              @enderror
-                       </div>
+                          <label for="inputName">Arabic Club Name</label>
+                          <input type="text" id="name_arabic" class="form-control" value="{{ $clubData->name_arabic }}" name="name_arabic">
+                          @error('name_arabic')
+                          <div class="form-error">{{ $message }}</div>
+                          @enderror
+                      </div>
                       </div>
                   </div>
                  
@@ -203,8 +235,43 @@
                                 <div class="form-error">{{ $message }}</div>
                               @enderror
                       </div>
+                   </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="inputName">Service Charge</label>
+                            <div class="row">
+                              <div class="col-md-10">
+                              <input type="text" id="service_charge" class="form-control" value="{{ $clubData->service_charge }}" name="service_charge">
+                              </div>
+                              <div class="col-md-2">
+                                <input type="text" class="form-control" value="{{ $clubData->code }}" readonly>
+                              </div>
+                            </div>    
+                              @error('service_charge')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                          <label for="inputName">Featured Image</label><br>
+                          <input id="fileUpload" type="file" name="featured_image"><br />
+                          <div id="image-holder"> 
+                         @if($clubData->featured_image)
+                            <img src="{{ URL::to('/') }}/Images/club_images/{{ $clubData->featured_image }}" class="thumb-image">
+                         @endif
+                         </div>
+                            @error('featured_image')
+                            <div class="form-error">{{ $message }}</div>
+                            @enderror
+                      </div>
+                     
 
-                      <div class="form-group">
+                   </div> 
+                     <div class="col-md-6">
+                        <div class="form-group">
                           <label for="inputName">Amenities</label><br>
                           <ul class="amenity-list">
                             <?php $amenitiesList = $clubData->amenities;
@@ -226,22 +293,7 @@
                           @error('amenities')
                             <div class="form-error">{{ $message }}</div>
                             @enderror
-                      </div>
-
-                   </div> 
-                     <div class="col-md-6">
-                       <div class="form-group">
-                          <label for="inputName">Featured Image</label><br>
-                          <input id="fileUpload" type="file" name="featured_image"><br />
-                          <div id="image-holder"> 
-                         @if($clubData->featured_image)
-                            <img src="{{ URL::to('/') }}/Images/club_images/{{ $clubData->featured_image }}" class="thumb-image">
-                         @endif
-                         </div>
-                            @error('featured_image')
-                            <div class="form-error">{{ $message }}</div>
-                            @enderror
-                      </div>
+                       </div>
                      </div> 
                   </div>
                  <div class="row">
@@ -250,6 +302,17 @@
                             <label for="inputName">Description</label>
                             <textarea id="description" class="ckeditor form-control" name="description">{{ $clubData->description }}</textarea>
                                 @error('description')
+                                <div class="form-error">{{ $message }}</div>
+                                @enderror
+                      </div> 
+                    </div>  
+                  </div>  
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                            <label for="inputName">Arabic Description</label>
+                            <textarea id="description_arabic" class="ckeditor form-control" name="description_arabic">{{ $clubData->description_arabic }}</textarea>
+                                @error('description_arabic')
                                 <div class="form-error">{{ $message }}</div>
                                 @enderror
                       </div> 
@@ -268,7 +331,7 @@
       </div>
     </div>
 <input type="hidden" value="{{ $clubData->id }}" id="clubid">
-    
+<input type="hidden" value="{{ auth()->user()->role }}" id="userrole">  
   <script>
     var APP_URL = {!! json_encode(url('/')) !!}
       

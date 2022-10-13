@@ -11,6 +11,7 @@ class Regions extends Model
     public $timestamps = true;
     protected $fillable = [
         'name',
+        'name_arabic',
         'country_id',
         'status',
         'created_at',

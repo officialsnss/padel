@@ -17,7 +17,8 @@
                     <th>Sr.no</th>
                     <th>Country</th>
                     <th>Region</th>
-                    <th>City</th>
+                    <th>City Name</th>
+                    <th>Arabic City Name</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
@@ -30,6 +31,7 @@
                       <td>{{ $city->cname }}</td>
                       <td>{{ $city->regionname }}</td>
                       <td>{{ $city->name }}</td>
+                      <td>{{ $city->name_arabic }}</td>
                      <td>
                         <a href="{{ route('city.edit',$city->id)}}" class="btn btn-secondary">Edit</a>
                         <a href="{{ route('city.delete',$city->id)}}" class="btn btn-danger">Delete</a>
