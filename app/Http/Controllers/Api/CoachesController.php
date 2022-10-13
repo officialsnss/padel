@@ -40,4 +40,13 @@ class CoachesController extends Controller
         }
         return ResponseUtil::successWithData($data, 'Data of coach', true, 200);
     }
+
+    public function getCoachesListForBooking(Request $request)
+    {
+        $data = $this->coachesService->getCoachesListForBooking($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201); 
+        }
+        return ResponseUtil::successWithData($data, 'Data of coach', true, 200);
+    }
 }

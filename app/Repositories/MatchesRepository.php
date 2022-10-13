@@ -55,6 +55,14 @@ class MatchesRepository extends BaseRepository
               ->get(); 
     }
 
+    public function getBookedMatches()
+    {
+      return Matches::with('slots')
+              ->with('clubs.cities')
+              ->with('bookedBats')
+              ->get(); 
+    }
+
     public function getMatchDetails($matchId)
     {
       return Matches::where('id', $matchId)
