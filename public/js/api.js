@@ -34,21 +34,10 @@ $(document).ready(function () {
                 } else{
                     featured_image = data.data[i].featured_image;
                 }
+                var rating = data.data[i].rating;
                 // res += '<div class="star-rating">';
-                res += '<div class="rateyo" id="rateyo></div>';
-
-                    var rating = data.data[i].rating;
-                    // alert(rating);
-
-                    $("#rateyo").rateYo({
-                        rating: rating,
-                        starWidth: "40px",
-                        numStars: 5,
-                        minValue: 0,
-                        maxValue: 5,
-                        normalFill: "gray",
-                        ratedFill: "orange",
-                    });
+                res += '<div class="rateyo" id="rateyo" data-rateyo-rating="'+rating+'"></div>';
+                    // alert(rating)
                 res += '<div class="clearfix-space"></div>';
                 res += '<div class="row">';
                 res += '<div class="col-6 col-lg-6 col-md-6 col-sm-6">';
@@ -80,6 +69,16 @@ $(document).ready(function () {
             // alert(res);
 
             $(".res-data").append(res);
+            $(".rateyo").rateYo({
+                // rating: 5,
+                starWidth: "25px",
+                numStars: 5,
+                minValue: 0,
+                maxValue: 5,
+                normalFill: "gray",
+                ratedFill: "orange",
+                readOnly: true
+            });
 
         },
         error: function (error) {
