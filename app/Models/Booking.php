@@ -17,6 +17,7 @@ class Booking extends Model
         'currency_id',
         'isBatBooked',
         'batPrice',
+        'coach_id',
         'booking_date',
         'order_id'
     ];

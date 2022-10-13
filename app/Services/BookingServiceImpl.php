@@ -6,6 +6,7 @@ use App\Repositories\BookingRepository;
 use App\Services\MatchesServiceImpl;
 use App\Services\PlayersServiceImpl;
 use App\Repositories\ClubDataRepository;
+use App\Repositories\CoachesRepository;
 use Carbon\Carbon;
 /**
  * Class BookingServiceImpl
@@ -21,12 +22,14 @@ class BookingServiceImpl implements BookingService
     public function __construct(MatchesServiceImpl $matchesServiceImpl, 
                                 PlayersServiceImpl $playersServiceImpl,
                                 BookingRepository $bookingRepository,
-                                ClubDataRepository $clubDataRepository)
+                                ClubDataRepository $clubDataRepository,
+                                CoachesRepository $coachesRepository)
     {
         $this->matchesServiceImpl = $matchesServiceImpl;
         $this->playersServiceImpl = $playersServiceImpl;
         $this->bookingRepository = $bookingRepository;
         $this->clubDataRepository = $clubDataRepository;
+        $this->coachesRepository = $coachesRepository;
     }
 
 
@@ -38,7 +41,7 @@ class BookingServiceImpl implements BookingService
     public function getBookingsList($request)
     {
         // Getting match data from getMatches function
-        $matchData = $this->matchesServiceImpl->getMatches($request);
+        $matchData = $this->matchesServiceImpl->getBookedMatches($request);
         $bookedMatches = [];
         $userId = auth()->user()->id;
 
@@ -135,6 +138,16 @@ class BookingServiceImpl implements BookingService
         }
         $bookingArray['batPrice'] = $batPrice;
 
+        //Adding coach id in booking table
+        $bookingArray['coach_id'] = $request->coach_id;
+
+        // Calculating coach price
+        $coachPrice = 0;
+        if($request->coach_id) {
+            $coachData = $this->coachesRepository->getCoachDetails($request->coach_id);
+            $coachPrice = number_format((float)$coachData->price, 3, '.', '');
+        }
+
         //store the booking data in the database and get the booking_id for further use
         $booked = $this->bookingRepository->storeBookingData($bookingArray);
 
@@ -178,7 +191,7 @@ class BookingServiceImpl implements BookingService
         $paymentArray['user_id'] = $userId;
         $paymentArray['booking_id'] = $booked;
         $paymentArray['invoice'] = "E".str_replace(' ', '', time());
-        $paymentArray['price'] = $bookingArray['price'] + $batPrice;
+        $paymentArray['price'] = $bookingArray['price'] + $batPrice + $coachPrice;
         $paymentArray['payment_method'] = $request->payment_method;
         $paymentArray['isRefunded'] = "0";
         $paymentArray['isCancellationRequest'] = "0";
@@ -463,7 +476,8 @@ class BookingServiceImpl implements BookingService
             $batPrice += number_format((float)$batData->price * $bat['qty'], 3, '.', '');
         }
         $finalPacket['batPrice'] = number_format((float)$batPrice, 3, '.', '');
-        $finalPacket['sub_total'] = number_format((float)$batPrice + $bookingPrice, 3, '.', '');
+        $finalPacket['coachPrice'] = number_format((float)$coachPrice, 3, '.', '');
+        $finalPacket['sub_total'] = number_format((float)$batPrice + (float)$coachPrice + $bookingPrice, 3, '.', '');
         
         if($request->coupon_id) {
             $couponData = $this->bookingRepository->getCouponById($request->coupon_id);

@@ -41,10 +41,7 @@ class PasswordReset extends Notification
      */
     public function toMail($notifiable)
     {
-       
-       // $urlFrontEnd = "http://127.0.0.1:8000";
         $urlFrontEnd = url('/');
-                // $url = $urlFrontEnd.'/password-update?token='.$this->token;
         $url = $urlFrontEnd.'/admin/password/reset/'.$this->token.'?email='.$notifiable->email;
         return (new MailMessage)
             ->subject('Reset Password from Sports Arena')

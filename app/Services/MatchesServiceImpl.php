@@ -79,6 +79,12 @@ class MatchesServiceImpl implements MatchesService
         return $this->getMatchArray($data);
     }
 
+    public function getBookedMatches($request)
+    {
+        $data = $this->matchesRepository->getBookedMatches($request);
+        return $this->getMatchArray($data);
+    }
+
     public function filterMatchData($request)
     {
         // Validations for the filters key
@@ -292,13 +298,13 @@ class MatchesServiceImpl implements MatchesService
                 } else {
                     $dataArray['requestedPlayers'] = []; 
                 }
-            }
-
-            // Code for the player if it is added in the match or not
-            if(in_array($userData['id'], $requestIds)) {
-                $dataArray['isRequested'] = 1; 
-            } else {
-                $dataArray['isRequested'] = 0; 
+                
+                // Code for the player if it is added in the match or not
+                if(in_array($userData['id'], $requestIds)) {
+                    $dataArray['isRequested'] = 1; 
+                } else {
+                    $dataArray['isRequested'] = 0; 
+                }
             }
             $dataArray['isResultAdded'] = false; 
             $dataArray['isPlayerRated'] = false;

@@ -19,4 +19,6 @@ interface CoachesService
     public function getCoachesList();
 
     public function getCoachDetails($request);
+
+    public function getCoachesListForBooking($request);
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\CoachesRepository;
 use App\Repositories\ClubDataRepository;
+use App\Repositories\BookingRepository;
 
 /**
  * Class CoachesServiceImpl
@@ -17,10 +18,12 @@ class CoachesServiceImpl implements CoachesService
      *
      */
     public function __construct(CoachesRepository $coachesRepository,
-                                ClubDataRepository $clubDataRepository)
+                                ClubDataRepository $clubDataRepository,
+                                BookingRepository $bookingRepository)
     {
         $this->coachesRepository = $coachesRepository;
         $this->clubDataRepository = $clubDataRepository;
+        $this->bookingRepository = $bookingRepository;
     }
 
     /**
@@ -39,6 +42,7 @@ class CoachesServiceImpl implements CoachesService
             $dataPacket[$key]['user_id'] = $row['user_id'];
             $dataPacket[$key]['name'] = $row['users'][0]['name'];
             $dataPacket[$key]['price'] = $row['price'];
+            $dataPacket[$key]['clubs_assigned'] = explode(',', $row['clubs_assigned']);
             $dataPacket[$key]['image'] = $row['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$row['users'][0]['profile_pic'] : null;  
 
             //Calculating number of months to years and months
@@ -103,6 +107,7 @@ class CoachesServiceImpl implements CoachesService
         $dataPacket['user_id'] = $data['user_id'];
         $dataPacket['name'] = $data['users'][0]['name'];
         $dataPacket['price'] = $data['price'];
+        $dataPacket['clubs_assigned'] = explode(',', $data['clubs_assigned']);
         $dataPacket['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$data['users'][0]['profile_pic'] : null;  
 
         //Calculating number of months to years and months
@@ -141,5 +146,33 @@ class CoachesServiceImpl implements CoachesService
             $clubData[$i]['image'] = getenv("IMAGES")."club_images/".$data['data']['featured_image'];
         }
         return $clubData;
+    }
+
+    public function getCoachesListForBooking($request)
+    {
+        // Getting data of all coaches
+        $coachesList = $this->getCoachesList();
+
+        // Getting bookings by date
+        $booking = $this->bookingRepository->getBookingByDate($request->dateTime);
+
+        // Making an array of coaches associated with the bookings
+        $coaches = [];
+        foreach ($booking as $i => $value) {
+            $coaches[] = $value['coach_id'];
+        }
+
+        foreach ($coachesList as $i => $coach) {
+            // Removing coaches if they are already booked
+            if(in_array($coach['id'], $coaches)) {
+                unset($coachesList[$i]);
+            }
+
+            // Removing coaches if they are not assigned to a particular club
+            if(!in_array($request->club_id, $coach['clubs_assigned'])) {
+                unset($coachesList[$i]);
+            }
+        }
+        return $coachesList;
     }
 }

@@ -146,4 +146,12 @@ class BookingRepository extends BaseRepository
       return Matches::where('booking_id', $booking_id)
               ->update($data);
     }
+
+    public function getBookingByDate($date)
+    {
+      return Booking::where(['booking_date'=> date('Y-m-d', $date)])
+                ->with('bookingSlots')->whereHas('bookingSlots', function ($q) use ($date) {
+                      $q->where('slots', '=', date('H:i:s', $date));
+                })->get();
+    }
 }
