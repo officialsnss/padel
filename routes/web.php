@@ -171,7 +171,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
     Route::get('/coach/delete/{id}', 'App\Http\Controllers\Backend\CoachController@delete')->name('coach.delete');
 
     //Matches
-    Route::get('/matches', 'App\Http\Controllers\Backend\MatchController@index')->name('matches');
+    Route::get('/matches', 'App\Http\Controllers\Backend\MatchController@index')->name('admin.matches');
     Route::get('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@edit')->name('matches.edit');
     Route::post('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@update')->name('matches.update');
     Route::get('/matches/view/{id}', 'App\Http\Controllers\Backend\MatchController@view')->name('matches.view');

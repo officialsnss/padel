@@ -24,7 +24,7 @@
                             </div> --}}
                                 <div class="item">
                                     <label>Status</label>
-                                    <select id="clubs-filter" class="form-control">
+                                    <select id="match_filter" class="form-control">
                                         <option value="">Select Status</option>
                                         <option value="1">Upcomming</option>
                                         <option value="2">Played</option>
@@ -57,10 +57,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {{-- @php
-                        echo "<pre>";print_r($matchs);die;
-                    @endphp --}}
+                        <tbody id="tbody">
                             @foreach ($matchs as $match)
                                 <tr>
                                     <td></td>
@@ -259,20 +256,66 @@
 
             $('#filter').click(function() {
 
-                var from_date = $('#from_date').val();
-                var to_date = $('#to_date').val();
-                var club_id = $('#clubs-filter').val();
-                var order_status = $('#order_status').val();
-                var payment_type = $('#payment_type').val();
-                if (from_date != '' || to_date != '' || club_id != '' || order_status != '' ||
-                    payment_type != '') {
-                    $('#order_table').DataTable().destroy();
-                    var resr = load_data(from_date, to_date, club_id, order_status, payment_type);
+                var status = $('#match_filter').val();
+                $.ajax({
+                    url:"{{ route('admin.matches') }}",
+                    type:"GET",
+                    data:{'status':status},
+                    success:function(data){
+                        console.log(data);
+                        var matches = data.matchs;
+                        var html = "";
+                        if(matches.length > 0){
+                            let j = 0;
+                            const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                            for(let i = 0; i < matches.length; i++){
+                                let matchId = matches[i]['id'];
+                                let editRoute = "{{ route('matches.edit', ":editid") }}";
+                                editRoute = editRoute.replace(':editid', matches[i]['id']);
+                                let viewRoute = "{{ route('matches.view', ":viewid") }}";
+                                viewRoute = viewRoute.replace(':viewid', matches[i]['id']);
+                                let hidden = "";
+                                if(matches[i]['status'] == 2){
+                                    match_status_response = "Played";
+                                    hidden = "";
+                                } else if(matches[i]['status'] == 1){
+                                    match_status_response = "Upcoming";
+                                    hidden = "hidden";
+                                } else {
+                                    match_status_response = "Cancelled";
+                                    hidden = "hidden";
+                                }
+                                var date = new Date(matches[i]['created_at']);
+                                var day = date.getDate();
+                                var month = months[date.getMonth()];
+                                var year = date.getFullYear();
 
-                }
+                                var getUrl = window.location;
+                                var baseUrl = getUrl .protocol + "//" + getUrl.host;
+
+                                html += '<tr>\
+                                    <td>'+i+'</td>\
+                                    <td>'+matches[i]['name']+'</td>\
+                                    <td><img src="'+baseUrl+'/Images/club_images/'+matches[i]['featured_image']+'" class="thumb-image-list"></td>\
+                                    <td>'+match_status_response+'</td>\
+                                    <td>'+day + '-' + month + '-' + year+'</td>\
+                                    <td><a href="'+editRoute+'" class="btn btn-secondary" '+hidden+'>Edit Result</a>\
+                                        <a href="'+viewRoute+'" class="btn btn-primary">View</a>\
+                                        </td>\
+                                    </td>';
+                            }
+                        } else {
+                            html += '<tr>\
+                                    <td colspan="6" class="text-center">No matching records found</td>\
+                                    </td>';
+                        }
+                        $("#tbody").html(html);
+                    }
+                });
 
 
             });
+
 
             $('#refresh').click(function() {
                 $('#clubs-filter').val('');

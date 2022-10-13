@@ -15,13 +15,23 @@ use App\Models\MatchResults;
 
 class MatchController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try{
             $title = 'Match Listing';
             // $matchs = Matches::Join('clubs','matches.club_id', '=', 'clubs.id')->get();
             $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->get()->toArray();
             // echo "<pre>";print_r($matchs);die;
+
+            if($request->ajax()){
+                if($request->status == null){
+                    $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->get()->toArray();
+                    return response()->json(['matchs'=>$matchs]);
+                } else {
+                    $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->where('matches.status',$request->status)->get()->toArray();
+                    return response()->json(['matchs'=>$matchs]);
+                }
+            }
 
            return view('backend.pages.matches', compact('title','matchs'));
         }
