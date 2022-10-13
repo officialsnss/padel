@@ -107,7 +107,7 @@
                             <li><a href="javascript:void(0);">{{ __('home.menu.Booking') }}</a></li>
                             <li><a href="javascript:void(0);">{{ __('home.menu.Games') }}</a></li>
                             <li><a href="javascript:void(0);">{{ __('home.menu.Coaches') }}</a></li>
-                            <li><a href="javascript:void(0);">{{ __('home.menu.About') }}</a></li>
+                            <li class="text-white"><a href="/pages/about-us">{{ __('home.menu.About') }}</a></li>
                             <li><a href="javascript:void(0);">{{ __('home.menu.Contact_us') }}</a></li>
 
                         </ul>

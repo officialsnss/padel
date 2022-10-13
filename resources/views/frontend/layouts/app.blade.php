@@ -34,11 +34,11 @@
     <link href="http://retalkapp.com/tbaree/01/css/webslidemenu.css" rel="stylesheet" type="text/css" media="all" />
     <link href="http://retalkapp.com/tbaree/01/css/tbaree.css" rel="stylesheet" type="text/css" media="all" />
     <link href="http://retalkapp.com/tbaree/01/css/responsive.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/jquery.rateyo.min.css') }}"/>
+    {{-- <link rel="stylesheet" href="{{ asset('starrr.css') }}"/> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="{{asset('js/rating.js')}}"></script>
-    <script src="{{asset('js/jquery.rateyo.js')}}"></script>
 </head>
 
 <body>
@@ -71,7 +71,10 @@
     <script src="http://retalkapp.com/tbaree/01/fancybox-master/fancybox.js"></script>
     <script src="http://retalkapp.com/tbaree/01/js/jquery.lavalamp.min.js"></script>
     <script src="http://retalkapp.com/tbaree/01/js/custom.js"></script>
-
+    {{-- <script src="{{asset('js/starrr.js')}}"></script> --}}
+    <script src="{{asset('js/rating.js')}}"></script>
+    <script src="{{asset('js/jquery.rateyo.js')}}"></script>
+    <script src="{{asset('js/jquery.rateyo.min.js')}}"></script>
     <script src="{{asset('js/api.js')}}"></script>
 </body>
 

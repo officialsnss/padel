@@ -21,7 +21,7 @@
                     @endphp
                     @foreach ($extra_texts as $extra_text)
                         @if ($extra_text->value != '')
-                            <p class="designed">Managed by: <a href="https://designmasterevents.com" target="_blank">{{ $extra_text->value }}</a></p>
+                            <p class="designed"><a href="https://designmasterevents.com" target="_blank">{{ $extra_text->value }}</a></p>
                         @endif
                     @endforeach
                     {{-- <p class="copyright">Copyright 2022-2023 - Tbaree. All Rights Reserved</p> --}}
