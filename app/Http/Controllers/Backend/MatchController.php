@@ -19,9 +19,7 @@ class MatchController extends Controller
     {
         try{
             $title = 'Match Listing';
-            // $matchs = Matches::Join('clubs','matches.club_id', '=', 'clubs.id')->get();
             $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->get()->toArray();
-            // echo "<pre>";print_r($matchs);die;
 
             if($request->ajax()){
                 if($request->status == null){
@@ -36,7 +34,6 @@ class MatchController extends Controller
            return view('backend.pages.matches', compact('title','matchs'));
         }
         catch (\Exception $e) {
-        //   dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
         }
     }
@@ -49,8 +46,6 @@ class MatchController extends Controller
                 $matchResult= MatchResults::where('match_id', $id)->get();
                 $matchResults= MatchResults::where('match_id', $id)->get()->toArray();
                 $title = 'Edit Match Result';
-                // echo "<pre>";print_r($matchResults);die;
-                // dd($matchResult);die;
                 return view('backend.pages.matchEdit', compact('title','id','matchResult','matchResults'));
             } else {
                 return redirect('/admin/matches')->with('error', 'Match is not finished yet.');
@@ -59,7 +54,6 @@ class MatchController extends Controller
         catch (\Exception $e) {
             return redirect('/admin/matches')->with('error', 'Something went wrong.');
         }
-        // return view('backend.pages.matchEdit');
     }
 
     public function view($id)
@@ -166,15 +160,11 @@ class MatchController extends Controller
                 }
             // }
 
-            // dd($match_details);die;
-            // echo "<pre>";print_r($match_details);die;
            return view('backend.pages.matchView', compact('slotList','title','court','match','game','friendly','gender','game','MatchStatus','match_details','playerList','playerName','BookingStatus','levelList'));
         }
         catch (\Exception $e) {
-          dd($e->getMessage());
-            // return redirect('/admin')->with('error', 'Something went wrong.');
+            return redirect('/admin')->with('error', 'Something went wrong.');
         }
-        // return view('backend.pages.matchView');
     }
 
     //Get User Name
@@ -231,7 +221,6 @@ class MatchController extends Controller
 
     public function create(Request $request)
     {
-        // dd($request->all());die;
         try{
             $result = MatchResults::create([
                 'team1' => $request->team1,
@@ -255,8 +244,6 @@ class MatchController extends Controller
 
     public function update(Request $request)
     {
-
-        // dd(implode(',', $request->ts1));die;
         try{
             $result = MatchResults::where('match_id',$request->match_id)->update([
                 'team1' => $request->team1,
@@ -272,7 +259,6 @@ class MatchController extends Controller
             }
         }
         catch (\Exception $e) {
-            // dd($e->getMessage());
             return redirect('/admin/matches')->with('error', 'Something went wrong.');
         }
     }

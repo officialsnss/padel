@@ -3,25 +3,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                {{-- <div class="card-header">
-                <div class="add">
-                 <a href="{{ route('bat.create') }}" class="btn btn-info">Add New</a>
-                </div>
-              </div> --}}
                 <div class="card-body">
                     <div class="row filter-row">
                         <div class="col-md-12">
                             <form action="" method="post" id="date-filter">
-                                {{-- <div class="item">
-                                <label>From:</label>
-                                <input type="text" id="from_date" value="" class="form-control input-daterange"
-                                    name="from_date">
-                            </div>
-                            <div class="item">
-                                <label>To:</label>
-                                <input type="text" id="to_date" value="" class="form-control input-daterange"
-                                    name="to_date">
-                            </div> --}}
                                 <div class="item">
                                     <label>Status</label>
                                     <select id="match_filter" class="form-control">
@@ -129,13 +114,6 @@
                     buttons: [{
                         extend: 'collection',
                         text: 'Export',
-                        // buttons: [
-                        //     'copy',
-                        //     'excel',
-                        //     'csv',
-                        //     'pdf',
-                        //     'print'
-                        // ],
                         buttons: [
 
                             {
@@ -181,10 +159,6 @@
                             data: 'clubname',
                             name: 'clubname'
                         },
-                        // {
-                        //  data:'usrname',
-                        //  name:'usrname'
-                        // },
                         {
                             data: 'usremail',
                             name: 'usremail'
