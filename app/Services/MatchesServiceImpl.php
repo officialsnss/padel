@@ -49,21 +49,13 @@ class MatchesServiceImpl implements MatchesService
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
 
-            // We are getting all matches above, so check on only players bookings
-            $userId = auth()->user()->id;
-            if($match['booked_by'] == $userId) {
-                unset($match['booked_by']);
-
-                // If matchTime is greater than currentTime, then the match is upcoming
-                if($currentDate < $matchTime) {
-                    array_push($upcomingMatches, $match);
-                } else {
-                    $match['isMatchCompleted'] = 1;
-                }
+            // If matchTime is less than currentTime, then the match is completed
+            if($currentDate > $matchTime) {
+                $match['isMatchCompleted'] = 1;
             }
         }
 
-        $upcomingMatches = collect($upcomingMatches)->sortBy('date')->toArray();
+        $upcomingMatches = collect($matchData)->sortBy('date')->toArray();
         return $upcomingMatches;
     }
 

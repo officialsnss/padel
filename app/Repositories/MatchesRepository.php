@@ -9,6 +9,7 @@ use App\Models\Clubs;
 use App\Models\BookingSlots; 
 use App\Models\PlayersRating; 
 use App\Models\MatchResults; 
+use Carbon\Carbon;
 
 /**
  * Class MatchesRepository
@@ -28,9 +29,16 @@ class MatchesRepository extends BaseRepository
      */
     public function getUpcomingMatches($request)
     {
+      $userId = auth()->user()->id;
+      $date = Carbon::now()->toDateString();
       return Matches::with('slots')
               ->with('clubs.cities')
               ->with('bookingSlots')
+              ->with('booking')
+              ->whereHas('booking', function ($q) use ($userId, $date) {
+                        $q->where('user_id', '=', $userId);
+                        $q->where('booking_date', '>', $date);
+              })
               ->whereHas('clubs', function ($q) use ($request) {
                         $q->where('name', 'like', '%' . $request->searchData . '%');
               })->get(); 
@@ -40,13 +48,16 @@ class MatchesRepository extends BaseRepository
     {
       if($request->dateData) {
         $date = date('Y-m-d', $request->dateData);
-        return Matches::where('match_type', 1)->with('booking')->whereHas('booking', function ($q) use ($date) {
-                    $q->where('booking_date', '=', $date);
-              })->with('slots')
+        return Matches::where('match_type', 1)
+                ->with('booking')
+                ->whereHas('booking', function ($q) use ($date) {
+                          $q->where('booking_date', '=', $date);
+                })
+                ->with('slots')
                 ->with('bookedBats')
                 ->with('clubs.cities')->whereHas('clubs', function ($q) use ($request) {
-                  $q->where('name', 'like', '%' . $request->searchData . '%');
-              })->get(); 
+                          $q->where('name', 'like', '%' . $request->searchData . '%');
+                })->get(); 
       }
       return Matches::where('match_type', 1)
               ->with('slots')

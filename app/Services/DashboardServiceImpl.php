@@ -83,22 +83,14 @@ class DashboardServiceImpl implements DashboardService
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
 
-            // We are getting all matches above, so check on only players bookings
-            $userId = auth()->user()->id;
-            if($match['booked_by'] == $userId) {
-                unset($match['booked_by']);
-
-                // If matchTime is greater than currentTime, then the match is upcoming
-                if($currentDate < $matchTime) {
-                    array_push($upcomingMatches, $match);
-                } else {
-                    $match['isMatchCompleted'] = 1;
-                }
+            // If matchTime is greater than currentTime, then the match is upcoming
+            if($currentDate > $matchTime) {
+                $match['isMatchCompleted'] = 1;
             }
         }
 
         // Sorting the match data with date order
-        $upcomingMatches = collect($upcomingMatches)->sortBy('date')->toArray();
+        $upcomingMatches = collect($matchData)->sortBy('date')->toArray();
         return $upcomingMatches;
     }
 
