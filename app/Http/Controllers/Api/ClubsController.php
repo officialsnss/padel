@@ -57,6 +57,6 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Club Details', true, 200);
         }
-        return ResponseUtil::errorWithMessage(201,'No club found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No club found.', false, 201);
     }
 }

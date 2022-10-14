@@ -23,9 +23,9 @@ class CoachesController extends Controller
         $this->coachesService = $coachesService;
     }
 
-    public function getCoachesList()
+    public function getCoachesList(Request $request)
     {
-        $data = $this->coachesService->getCoachesList();
+        $data = $this->coachesService->getCoachesList($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'List of Coaches', true, 200);
         }

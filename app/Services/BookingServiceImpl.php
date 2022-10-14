@@ -421,14 +421,24 @@ class BookingServiceImpl implements BookingService
 
     public function getCoupons()
     {
+        $lang = auth()->user()->lang;
+
         $data = $this->bookingRepository->getCoupons();
         $dataPacket = [];
         $dataArray = [];
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];
-            $dataArray[$i]['name'] = $row['name'];
-            $dataArray[$i]['code'] = $row['code'];
+
+            // Getting name and code of the coupon based on the selected language
+            if($lang == "en") {
+                $dataArray[$i]['name'] = $row['name'];
+                $dataArray[$i]['code'] = $row['code'];
+            } elseif ($lang == "ar") {
+                $dataArray[$i]['name'] = $row['name_arabic'];
+                $dataArray[$i]['code'] = $row['code_arabic'];
+            }
+            
             if($row['discount_type'] == 1) {
                 $dataArray[$i]['amount'] = $row['amount'];
             } else {
@@ -475,6 +485,14 @@ class BookingServiceImpl implements BookingService
             $batData = $this->bookingRepository->getBatDetails($bat['bat_id']);
             $batPrice += number_format((float)$batData->price * $bat['qty'], 3, '.', '');
         }
+
+        // Calculating coach price
+        $coachPrice = 0;
+        if($request->coach_id) {
+            $coachData = $this->coachesRepository->getCoachDetails($request->coach_id);
+            $coachPrice = number_format((float)$coachData->price, 3, '.', '');
+        }
+
         $finalPacket['batPrice'] = number_format((float)$batPrice, 3, '.', '');
         $finalPacket['coachPrice'] = number_format((float)$coachPrice, 3, '.', '');
         $finalPacket['sub_total'] = number_format((float)$batPrice + (float)$coachPrice + $bookingPrice, 3, '.', '');

@@ -16,5 +16,5 @@ interface PolicyService
      *
      * @return mixed
      */
-    public function getPolicies($id);
+    public function getPolicies($request);
 }

@@ -31,8 +31,15 @@ class CoachesServiceImpl implements CoachesService
     *
     * @return mixed
     */
-    public function getCoachesList()
+    public function getCoachesList($request)
     {
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
         // Getting data of all the coaches from the db
         $data = $this->coachesRepository->getCoachesList();
 
@@ -40,25 +47,45 @@ class CoachesServiceImpl implements CoachesService
         foreach ($data as $key => $row) {
             $dataPacket[$key]['id'] = $row['id'];
             $dataPacket[$key]['user_id'] = $row['user_id'];
-            $dataPacket[$key]['name'] = $row['users'][0]['name'];
+
+            // Getting coach name based on the selected language
+            if($lang == "en") {
+                $dataPacket[$key]['name'] = $row['users'][0]['name'];
+            } elseif ($lang == "ar") {
+                $dataPacket[$key]['name'] = $row['users'][0]['name_arabic'];
+            }
+
             $dataPacket[$key]['price'] = $row['price'];
             $dataPacket[$key]['clubs_assigned'] = explode(',', $row['clubs_assigned']);
             $dataPacket[$key]['image'] = $row['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$row['users'][0]['profile_pic'] : null;  
 
-            //Calculating number of months to years and months
+            //Calculating expirence of the coach
             for($i=0; $i<=$row['experience']; $i++) {
                 if(!is_float($i/12)) {
-                    $years = floor($i / 12).' Year';
-                    $years = $years.($years > 1 ? 's' : '');
+                    if($lang == "en") {
+                        $years = floor($i / 12).' Year';
+                        $years = $years.(floor($i / 12) > 1 ? 's' : '');
+                    } elseif ($lang == "ar") {
+                        $years = floor($i / 12).'سنة';
+                        $years = $years.(floor($i / 12) > 1 ? 'س' : '');
+                    }
+                    
                     if($years == 0) {
                         $years = '';
                     }
                 }
-                $months = ' '.($i % 12).' Month';
-                if($months == 0 or $months > 1) {
-                    $months = $months.'s';
+                if($lang == "en") {
+                    $months = ' '.($i % 12).' Month';
+                    if($months == 0 or $months > 1) {
+                        $months = $months.'s';
+                    }
+                } elseif ($lang == "ar") {
+                    $months = ' '.($i % 12).' شهر';
+                    if($months == 0 or $months > 1) {
+                        $months = $months.'س';
+                    }
                 }
-                $experience[$i] = $years.''.$months;
+                $experience[$i] = $years.' '.$months;
             }
             $dataPacket[$key]['experience'] = end($experience);
 
@@ -93,6 +120,13 @@ class CoachesServiceImpl implements CoachesService
 
     public function getCoachDetails($request)
     {
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
         // Getting coach data by coach_id
         $coach_id = $request->coach_id;
         $data = $this->coachesRepository->getCoachDetails($coach_id);
@@ -105,23 +139,42 @@ class CoachesServiceImpl implements CoachesService
         $dataPacket = [];
         $dataPacket['id'] = $data['id'];
         $dataPacket['user_id'] = $data['user_id'];
-        $dataPacket['name'] = $data['users'][0]['name'];
+
+        // Getting coach name based on the selected language
+        if($lang == "en") {
+            $dataPacket['name'] = $data['users'][0]['name'];
+        } elseif ($lang == "ar") {
+            $dataPacket['name'] = $data['users'][0]['name_arabic'];
+        }
+
         $dataPacket['price'] = $data['price'];
         $dataPacket['clubs_assigned'] = explode(',', $data['clubs_assigned']);
         $dataPacket['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$data['users'][0]['profile_pic'] : null;  
 
-        //Calculating number of months to years and months
+        //Calculating expirence fof the coach
         for($i=0; $i<=$data['experience']; $i++) {
             if(!is_float($i/12)) {
-                $years = floor($i / 12).' Year';
-                $years = $years.($years > 1 ? 's' : '');
+                if($lang == "en") {
+                    $years = floor($i / 12).' Year';
+                    $years = $years.(floor($i / 12) > 1 ? 's' : '');
+                } elseif ($lang == "ar") {
+                    $years = floor($i / 12).'سنة';
+                    $years = $years.(floor($i / 12) > 1 ? 'س' : '');
+                }
                 if($years == 0) {
                     $years = '';
                 }
             }
-            $months = ' '.($i % 12).' Month';
-            if($months == 0 or $months > 1) {
-                $months = $months.'s';
+            if($lang == "en") {
+                $months = ' '.($i % 12).' Month';
+                if($months == 0 or $months > 1) {
+                    $months = $months.'s';
+                }
+            } elseif ($lang == "ar") {
+                $months = ' '.($i % 12).' شهر';
+                if($months == 0 or $months > 1) {
+                    $months = $months.'س';
+                }
             }
             $experience[$i] = $years.''.$months;
         }
@@ -131,18 +184,25 @@ class CoachesServiceImpl implements CoachesService
         $dataPacket['rating'] = $this->getCoachRating($data['rating']);
 
         // Getting the details of all the clubs to which coach is associated with
-        $dataPacket['clubs_assigned'] = $this->getAssociatedClubsData($data['clubs_assigned']);
+        $dataPacket['clubs_assigned'] = $this->getAssociatedClubsData($data['clubs_assigned'], $lang);
         return $dataPacket;
     }
 
-    public function getAssociatedClubsData($clubIds)
+    public function getAssociatedClubsData($clubIds, $lang)
     {
         $clubData = [];
         $idsArray = explode(",", $clubIds);
         foreach($idsArray as $i => $id) {
             $data = $this->clubDataRepository->getSingleClubData($id);
             $clubData[$i]['id'] = $data['data']['id'];
-            $clubData[$i]['name'] = $data['data']['name'];
+
+            // Getting club name based on the selected language
+            if($lang == "en") {
+                $clubData[$i]['name'] = $data['data']['name'];
+            } elseif ($lang == "ar") {
+                $clubData[$i]['name'] = $data['data']['name_arabic'];
+            }
+
             $clubData[$i]['image'] = getenv("IMAGES")."club_images/".$data['data']['featured_image'];
         }
         return $clubData;
