@@ -168,6 +168,7 @@ class UserController extends Controller
            
            $result = User::create([
             'name' => $request->fullname,
+            'name_arabic' => $request->full_name_arabic,
             'email' => $request->email,
             'phone' => $request->phone,
             'role'=> 5,
@@ -176,7 +177,7 @@ class UserController extends Controller
        
         if($result){
            $clubName = $request->clubname;
-          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation','start_time','end_time');
+          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation','start_time','end_time','full_name_arabic');
           $amList = implode(',', $request->amenities);
         
           $data['amenities'] = $amList;
@@ -205,7 +206,7 @@ class UserController extends Controller
         }
       }
         catch (\Exception $e) {
-           // dd($e->getMessage());
+           dd($e->getMessage());
             return redirect('/admin/users/court-owners')->with('error', 'Something went wrong.');
          }
     }
@@ -387,7 +388,7 @@ class UserController extends Controller
     elseif(!$regions->isEmpty()){
         foreach($regions as $region){
            
-            echo '<option value="'.$region->id.'">'.$region->name.'</option>'; 
+            echo '<option value="'.$region->id.'">'.$region->name.' - '.$region->name_arabic.'</option>'; 
         }
     }
     else{
@@ -406,7 +407,7 @@ class UserController extends Controller
     elseif(!$cities->isEmpty()){
     foreach($cities as $city){
       
-            echo '<option value="'.$city->id.'">'.$city->name.'</option>'; 
+            echo '<option value="'.$city->id.'">'.$city->name.' - '.$city->name_arabic.'</option>'; 
         }
     }
     else{

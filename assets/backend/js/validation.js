@@ -58,6 +58,9 @@ $("#vendorform").validate({
     required: true,
     lettersonly: true
     },
+    full_name_arabic: {
+      required: true,
+      },
     phone: {
       digits: true
     },
