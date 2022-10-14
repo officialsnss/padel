@@ -135,8 +135,7 @@ class HomeController extends Controller
           ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
           ->get()
           ->take(10);
-
-         }
+        }
 
 
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));

@@ -31,7 +31,7 @@
             <a href="{{url('admin/dashboard')}}" class="nav-link {{ (request()->segment(2) == 'dashboard') || (request()->segment(2) == '') ? 'active' : '' }}">
               <i class="nav-icon fas fa-home"></i>
               <p>
-                Dashboard
+                {{ (__('backend.menuTop.Dashboard')) }}
               </p>
             </a>
           </li>
@@ -41,7 +41,7 @@
             <a href="#" class="nav-link {{ ((request()->segment(3) == 'customers') || (request()->segment(3) == 'court-owners') || (request()->segment(2) == 'users') || request()->segment(3) == 'gallery' || request()->segment(2) == 'clubs')? 'active' : '' }}">
               <i class="nav-icon 	fas fa-users"></i>
               <p>
-                Users
+                {{ (__('backend.menuTop.Users')) }}
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -49,13 +49,13 @@
               <li class="nav-item">
                 <a href="{{url('/admin/users/customers')}}" class="nav-link  {{ (request()->segment(3) == 'customers' || (request()->segment(2) == 'users' && request()->segment(3) == 'view')) ? 'active' : '' }}">
                   <i class="fas fa-user-tie nav-icon"></i>
-                  <p>Customers</p>
+                  <p>{{ (__('backend.menuTop.Customers')) }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{url('/admin/users/court-owners')}}" class="nav-link {{ (request()->segment(3) == 'court-owners' || (request()->segment(3) == 'create' && request()->segment(2) == 'users') || request()->segment(3) == 'gallery' || request()->segment(2) == 'clubs') ? 'active' : '' }}">
                   <i class="fas fa-user-graduate nav-icon"></i>
-                  <p>Court Owners</p>
+                  <p>{{ (__('backend.menuTop.CourtOwners')) }}</p>
                 </a>
               </li>
             </ul>
@@ -65,7 +65,7 @@
             <a href="{{url('/admin/bookings')}}" class="nav-link  {{ (request()->segment(2) == 'bookings' || request()->segment(2) == 'calendar' || (request()->segment(3) == 'view' &&  request()->segment(2) == 'booking' )) ? 'active' : '' }}">
             <i class="nav-icon fas fa-user-edit"></i>
               <p>
-                Bookings
+                {{ (__('backend.menuTop.Bookings')) }}
               </p>
             </a>
           </li>
@@ -76,7 +76,7 @@
             <a href="{{url('/admin/outside-booking')}}" class="nav-link  {{ (request()->segment(2) == 'outside-booking') ? 'active' : '' }}">
             <i class="nav-icon fas fa-box-open"></i>
               <p>
-                Outside Bookings
+                {{ (__('backend.menuTop.OutsideBookings')) }}
               </p>
             </a>
           </li>
@@ -85,7 +85,7 @@
             <a href="#" class="nav-link  {{ (request()->segment(2) == 'clubs' || request()->segment(3) == 'timeslots') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-building"></i>
               <p>
-                Club
+                {{ (__('backend.menuTop.Club')) }}
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -94,7 +94,7 @@
                <a href="{{url('/admin/clubs')}}" class="nav-link  {{ request()->segment(2) == 'clubs' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-info-circle"></i>
                 <p>
-                  Details
+                    {{ (__('backend.menuTop.Details')) }}
 
                 </p>
                 </a>
@@ -109,7 +109,7 @@
               <li class="nav-item">
                 <a href="{{url('/admin/club/timeslots/book')}}" class="nav-link  {{ (request()->segment(4) == 'book') ? 'active' : '' }}">
                   <i class="fas fa-book nav-icon"></i>
-                  <p>Book Timeslots</p>
+                  <p>{{ (__('backend.menuTop.BookTimeslots')) }}</p>
                 </a>
               </li>
 
@@ -122,7 +122,7 @@
             <a href="{{url('/admin/vendor/bats')}}" class="nav-link  {{ request()->segment(2) == 'vendor' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-table-tennis"></i>
               <p>
-                Bats </p>
+                {{ (__('backend.menuTop.Bats')) }} </p>
             </a>
           </li>
 
@@ -154,7 +154,7 @@
             <a href="#" class="nav-link {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'amenities') || (request()->segment(2) == 'regions') || (request()->segment(2) == 'cities') || (request()->segment(2) == 'page') || (request()->segment(2) == 'amenity') || (request()->segment(2) == 'settings') || (request()->segment(2) == 'home-slider'))? 'active' : '' }}">
               <i class="nav-icon 	fas fa-plug"></i>
               <p>
-                System Settings
+                {{ (__('backend.menuTop.SystemSettings')) }}
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -162,19 +162,19 @@
              <li class="nav-item">
                 <a href="{{url('/admin/regions')}}" class="nav-link {{ (request()->segment(2) == 'regions') ? 'active' : '' }}">
                   <i class="fas fa-building nav-icon"></i>
-                  <p>Regions</p>
+                  <p>{{ (__('backend.menuTop.Regions')) }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{url('/admin/cities')}}" class="nav-link {{ (request()->segment(2) == 'cities') ? 'active' : '' }}">
                   <i class="fas fa-calendar nav-icon"></i>
-                  <p>Cities</p>
+                  <p>{{ (__('backend.menuTop.Cities')) }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{url('/admin/amenities')}}" class="nav-link {{ ((request()->segment(2) == 'amenities') || (request()->segment(2) == 'amenity')) ? 'active' : '' }}">
                   <i class="fas fa-clone nav-icon"></i>
-                  <p>Amenities</p>
+                  <p>{{ (__('backend.menuTop.Amenities')) }}</p>
                 </a>
               </li>
 
@@ -182,7 +182,7 @@
                 <a href="{{url('/admin/pages')}}" class="nav-link  {{ ((request()->segment(2) == 'pages') || (request()->segment(2) == 'page'))? 'active' : '' }}">
                 <i class="nav-icon fas fa-edit"></i>
                   <p>
-                    Pages
+                    {{ (__('backend.menuTop.Pages')) }}
                   </p>
                 </a>
              </li>
@@ -191,7 +191,7 @@
                 <a href="{{url('/admin/settings')}}" class="nav-link  {{ ( request()->segment(2) == 'settings')? 'active' : '' }}">
                 <i class="nav-icon fas fa-cogs"></i>
                   <p>
-                    Settings
+                    {{ (__('backend.menuTop.Settings')) }}
                   </p>
                 </a>
              </li>
@@ -200,7 +200,7 @@
                 <a href="{{url('/admin/home-slider')}}" class="nav-link  {{ ( request()->segment(2) == 'home-slider')? 'active' : '' }}">
                 <i class="nav-icon fas fa-image"></i>
                   <p>
-                    Homepage Slider
+                    {{ (__('backend.menuTop.HomepageSlider')) }}
                   </p>
                 </a>
              </li>
@@ -218,7 +218,7 @@
             <a href="{{url('/admin/reports')}}" class="nav-link  {{ request()->segment(2) == 'reports' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-file"></i>
               <p>
-                Reports
+                {{ (__('backend.menuTop.Reports')) }}
 
               </p>
             </a>
@@ -231,7 +231,7 @@
             <a href="{{ route('coaches') }}" class="nav-link  {{ (request()->segment(2) == 'coaches' || request()->segment(2) == 'coach' || request()->segment(2) == 'off-da') ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-user"></i>
               <p>
-                Coaches
+                {{ (__('backend.menuTop.Coaches')) }}
               </p>
             </a>
 
@@ -243,7 +243,7 @@
             <a href="{{ route('holidays') }}" class="nav-link  {{ request()->segment(2) == 'off-days' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-file"></i>
               <p>
-                Off Days
+                {{ (__('backend.menuTop.OffDays')) }}
               </p>
             </a>
 
@@ -257,7 +257,7 @@
             <a href="{{url('/admin/refunds')}}" class="nav-link  {{ request()->segment(2) == 'refunds' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-money-bill-alt"></i>
               <p>
-                Refunds </p>
+                {{ (__('backend.menuTop.Refunds')) }} </p>
             </a>
           </li>
 
@@ -273,7 +273,7 @@
             <a href="{{url('/admin/bats')}}" class="nav-link  {{ request()->segment(2) == 'bats' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-table-tennis"></i>
               <p>
-                Bats </p>
+                {{ (__('backend.menuTop.Bats')) }} </p>
             </a>
           </li>
 
@@ -281,7 +281,8 @@
             <a href="{{url('/admin/coupons')}}" class="nav-link  {{ request()->segment(2) == 'coupons' ? 'active' : '' }}">
             <i class="nav-icon 	fas fa-gift"></i>
               <p>
-                Coupons </p>
+                {{ (__('backend.menuTop.Coupons')) }}
+              </p>
             </a>
           </li>
 
@@ -291,7 +292,7 @@
             <a href="{{url('/admin/contact')}}" class="nav-link  {{(request()->segment(2) == 'contact' || (request()->segment(3) == 'contact' && request()->segment(2) == 'view')) ? 'active' : '' }}">
             <i class="nav-icon fas fa-id-card-alt"></i>
               <p>
-                Contact us
+                {{ (__('backend.menuTop.Contact_us')) }}
               </p>
             </a>
           </li>
@@ -300,10 +301,10 @@
 
           @if ( auth()->user()->role == '1')
           <li class="nav-item">
-            <a href="{{url('/admin/matches')}}" class="nav-link  {{(request()->segment(2) == 'contact' || (request()->segment(3) == 'contact' && request()->segment(2) == 'view')) ? 'active' : '' }}">
+            <a href="{{url('/admin/matches')}}" class="nav-link  {{(request()->segment(2) == 'matches' || (request()->segment(3) == 'matches' && request()->segment(2) == 'view')) ? 'active' : '' }}">
             <i class="nav-icon fas fa-dice"></i>
               <p>
-                Matches
+                {{ (__('backend.menuTop.Matches')) }}
               </p>
             </a>
           </li>
