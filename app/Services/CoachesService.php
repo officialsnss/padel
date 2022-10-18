@@ -16,7 +16,7 @@ interface CoachesService
      *
      * @return mixed
      */
-    public function getCoachesList();
+    public function getCoachesList($request);
 
     public function getCoachDetails($request);
 

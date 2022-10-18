@@ -49,21 +49,13 @@ class MatchesServiceImpl implements MatchesService
             $current = Carbon::now()->toDateTimeString();
             $currentDate = strtotime($current);
 
-            // We are getting all matches above, so check on only players bookings
-            $userId = auth()->user()->id;
-            if($match['booked_by'] == $userId) {
-                unset($match['booked_by']);
-
-                // If matchTime is greater than currentTime, then the match is upcoming
-                if($currentDate < $matchTime) {
-                    array_push($upcomingMatches, $match);
-                } else {
-                    $match['isMatchCompleted'] = 1;
-                }
+            // If matchTime is less than currentTime, then the match is completed
+            if($currentDate > $matchTime) {
+                $match['isMatchCompleted'] = 1;
             }
         }
 
-        $upcomingMatches = collect($upcomingMatches)->sortBy('date')->toArray();
+        $upcomingMatches = collect($matchData)->sortBy('date')->toArray();
         return $upcomingMatches;
     }
 
@@ -112,18 +104,35 @@ class MatchesServiceImpl implements MatchesService
 
     public function getMatchArray($data) 
     {
+        $lang = auth()->user()->lang;
         $dataArray = [];
 
         foreach($data as $i => $row) {
             $dataArray[$i]['id'] = $row['id'];
             $dataArray[$i]['booking_id'] = $row['booking_id'];
             $dataArray[$i]['player_id'] = $row['player_id'];            
-            $dataArray[$i]['club_id'] = $row['clubs'] ? $row['clubs'][0]['id'] : null; 
-            $dataArray[$i]['name'] = $row['clubs'] ? $row['clubs'][0]['name'] : null;  
+            $dataArray[$i]['club_id'] = $row['clubs'] ? $row['clubs'][0]['id'] : null;
+
+            // Getting clubs name as per the selected language
+            if(count($row['clubs']) > 0) {
+                if($lang == "en") {
+                    $dataArray[$i]['name'] = $row['clubs'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $dataArray[$i]['name'] = $row['clubs'][0]['name_arabic'];
+                }
+            } else {
+                $dataArray[$i]['name'] = null;
+            }
 
             // Getting the address of the club
             $address = $row['clubs'] ? $row['clubs'][0]['address'] : null;
-            $city = $row['clubs'][0]['cities'] != null ? $row['clubs'][0]['cities'][0]['name'] : null;
+            if(count($row['clubs'][0]['cities']) > 0) {
+                if($lang == "en") {
+                    $city = $row['clubs'][0]['cities'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $city = $row['clubs'][0]['cities'][0]['name_arabic'];
+                }
+            }
             $dataArray[$i]['address'] = $address . ', ' . $city;
 
             $dateStr = $row['booking'] ? $row['booking'][0]['booking_date'] : null;
@@ -162,7 +171,11 @@ class MatchesServiceImpl implements MatchesService
             foreach($levelArray as $key => $level) {
                 $level = $this->levelsServiceImpl->getLevelById($level);
                 $dataArray[$i]['level'][$key]['id'] = $level['id'];
-                $dataArray[$i]['level'][$key]['name'] = $level['name'];
+                if($lang == "en") {
+                    $dataArray[$i]['level'][$key]['name'] = $level['name'];
+                } elseif ($lang == "ar") {
+                    $dataArray[$i]['level'][$key]['name'] = $level['name_arabic'];
+                }
             }
             $min = min($levelArray);
             $min_level = $this->levelsServiceImpl->getLevelById($min);
@@ -198,6 +211,8 @@ class MatchesServiceImpl implements MatchesService
     }
     public function getMatchDetails($request)
     {
+        $lang = auth()->user()->lang;
+
         // Getting player details from user id
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
@@ -216,11 +231,27 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['booking_id'] = $data['booking_id'];
             $dataArray['player_id'] = $data['player_id'];            
             $dataArray['club_id'] = $data['clubs'] ? $data['clubs'][0]['id'] : null;
-            $dataArray['club_name'] = $data['clubs'] ? $data['clubs'][0]['name'] : null;
+            
+            // Getting clubs name as per the selected language
+            if(count($data['clubs']) > 0) {
+                if($lang == "en") {
+                    $dataArray['club_name'] = $data['clubs'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $dataArray['club_name'] = $data['clubs'][0]['name_arabic'];
+                }
+            } else {
+                $dataArray['club_name'] = null;
+            }
             
             // Getting the address of the club
             $address = $data['clubs'] ? $data['clubs'][0]['address'] : null;
-            $city = $data['clubs'][0]['cities'] != null ? $data['clubs'][0]['cities'][0]['name'] : null;
+            if(count($data['clubs'][0]['cities']) > 0) {
+                if($lang == "en") {
+                    $city = $data['clubs'][0]['cities'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $city = $data['clubs'][0]['cities'][0]['name_arabic'];
+                }
+            }
             $dataArray['address'] = $address . ', ' . $city;
 
             // Getting all the booked slots
@@ -261,13 +292,14 @@ class MatchesServiceImpl implements MatchesService
             foreach($levelArray as $i => $row) {
                 $level = $this->levelsServiceImpl->getLevelById($row);
                 $dataArray['level'][$i]['id'] = $level['id'];
-                $dataArray['level'][$i]['name'] = $level['name'];
-            }
+                if($lang == "en") {
+                    $dataArray['level'][$i]['name'] = $level['name'];
+                } elseif ($lang == "ar") {
+                    $dataArray['level'][$i]['name'] = $level['name_arabic'];
+                }            }
             $min = min($levelArray);
             $min_level = $this->levelsServiceImpl->getLevelById($min);
-            $dataArray['minimum_level']['id'] = $min_level['id'];
-            $dataArray['minimum_level']['name'] = $min_level['name'];
-            $dataArray['minimum_level'] = (object)$dataArray['minimum_level'];
+            $dataArray['minimum_level'] = $min_level['id'];
             
             $dataArray['booked_by'] = $data['booking'][0]['user_id'];  
             $dataArray['isMatchCompleted'] = 0;
@@ -438,11 +470,11 @@ class MatchesServiceImpl implements MatchesService
 
         // Getting player_id of logged in player
         $userId = auth()->user()->id;
-        $data = $this->playersRepository->getPlayerDetailsByUser($userId);
+        $playerData = $this->playersRepository->getPlayerDetailsByUser($userId);
 
         // Removing the player id of the logged in player
         $arrayIds = explode(',', $data['playersIds']); 
-        if (($key = array_search($data['id'], $arrayIds)) !== false) {
+        if (($key = array_search($playerData['id'], $arrayIds)) !== false) {
             unset($arrayIds[$key]);
         }
 

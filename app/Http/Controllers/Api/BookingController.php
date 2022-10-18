@@ -78,7 +78,7 @@ class BookingController extends Controller
     {
         $data = $this->bookingService->applyCoupon($request);
         if(isset($data['message'])) {
-            return ResponseUtil::errorWithMessage(201, $data['message'], true, 201);
+            return ResponseUtil::errorWithMessage(201, $data['message'], false, 201);
         }
         if($request->coupon_id) {
             return ResponseUtil::successWithData($data, 'Coupon applied', true, 200);

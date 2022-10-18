@@ -22,6 +22,8 @@ Route::post('register', 'App\Http\Controllers\Api\UsersController@register'); //
 Route::post('resendOtp', 'App\Http\Controllers\Api\UsersController@resendOtp'); // ResendOTP
 Route::post('verifyOtp', 'App\Http\Controllers\Api\UsersController@verifyOtp'); // verifyOtp
 
+
+// Apis used in then website without token
 Route::get('popular/players', 'App\Http\Controllers\Api\PlayersController@getPopularPlayers');
 Route::get('popularClubs', 'App\Http\Controllers\Api\ClubsController@getPopularClubs');
 Route::get('get/playersList', 'App\Http\Controllers\Api\PlayersController@getPlayersList');
@@ -69,7 +71,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('follow', 'App\Http\Controllers\Api\PlayersController@followPlayer');
     Route::post('addDetails', 'App\Http\Controllers\Api\PlayersController@addPlayerDetails');
     Route::post('addPlayer', 'App\Http\Controllers\Api\PlayersController@addPlayerInMatch');
-    Route::post('playersList/match', 'App\Http\Controllers\Api\PlayersController@playersListInMatch');
+    Route::get('playersList/match', 'App\Http\Controllers\Api\PlayersController@playersListInMatch');
 
     //COACHES
     Route::post('get/coaches/booking', 'App\Http\Controllers\Api\CoachesController@getCoachesListForBooking');
@@ -98,4 +100,7 @@ Route::middleware('auth:api')->group( function () {
     //Coupons
     Route::get('coupons', 'App\Http\Controllers\Api\BookingController@getCoupons');
     Route::post('apply/coupon', 'App\Http\Controllers\Api\BookingController@applyCoupon');
+
+    //Change Language
+    Route::get('changeLanguage', 'App\Http\Controllers\Api\UsersController@changeLanguage');
 });

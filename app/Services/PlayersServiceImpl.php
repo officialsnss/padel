@@ -283,29 +283,34 @@ class PlayersServiceImpl implements PlayersService
     {
         $dataArray = [];
         $matchId = $request->match_id;
+
+        // Getting match data with match_id
         $matchData = $this->matchesRepository->getMatchData($matchId);
-        
-        // Converting string to array of players to add
-        $playerIds = $request->ids;
-        if(!$playerIds[0]) {
-            return $dataArray;
-        }
-
-        // Converting string to array of players to already in match
-        $addedPlayers = explode(',', $matchData['playersIds']);
-
-        foreach($playerIds as $key => $row) {
-            // If players to add and already added players in the match are same then it will overwrite
-            if(in_array($row, $addedPlayers)) {
-                unset($playerIds[$key]);
+        if($matchData) {
+            // Converting string to array of players to add
+            $playerIds = $request->ids;
+            if(!$playerIds[0]) {
+                return $dataArray;
             }
-        }
-        // Add players to the packet
-        array_unshift($playerIds, $matchData['playersIds']);
 
-        $playersPacket = implode(',', $playerIds);
-        $data = $this->matchesRepository->addPlayer($matchId, $playersPacket);
-        return $data;
+            // Converting string to array of players to already in match
+            $addedPlayers = explode(',', $matchData['playersIds']);
+
+            foreach($playerIds as $key => $row) {
+                // If players to add and already added players in the match are same then it will overwrite
+                if(in_array($row, $addedPlayers)) {
+                    unset($playerIds[$key]);
+                }
+            }
+
+            // Add players to the packet
+            array_unshift($playerIds, $matchData['playersIds']);
+
+            $playersPacket = implode(',', $playerIds);
+            $data = $this->matchesRepository->addPlayer($matchId, $playersPacket);
+            return $data;
+        }
+        return $dataArray;
     }
     
     public function playersListInMatch($request)

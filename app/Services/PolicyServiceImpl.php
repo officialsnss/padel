@@ -25,15 +25,27 @@ class PolicyServiceImpl implements PolicyService
      *
      * @return mixed
      */
-    public function getPolicies($id)
+    public function getPolicies($request)
     {
-        $data = $this->policyRepository->getPolicies($id);
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
+        $data = $this->policyRepository->getPolicies($request->id);
         
         $dataPacket = [];
         if($data) {
-            $dataPacket['title'] = $data['title'];
-            $dataPacket['description'] = $data['content'];
+            if($lang == "en") {
+                $dataPacket['title'] = $data['title'];
+                $dataPacket['description'] = $data['content'];
+            } else {
+                $dataPacket['title'] = $data['title_arabic'];
+                $dataPacket['description'] = $data['content_arabic'];
+            }
         }
-        return $dataPacket;
+        return ['data' => $dataPacket, 'title' => $data['title']];
     }
 }

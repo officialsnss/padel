@@ -31,18 +31,38 @@ class ClubDataServiceImpl implements ClubDataService
      */
     public function getClubsList($request)
     {
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
         // Getting all clubs from the db
         $data = $this->clubDataRepository->getClubsList($request);
 
         $dataPacket = [];
         foreach($data as $i => $row) {
             $dataPacket[$i]['id'] = $row['id'];
-            $dataPacket[$i]['name'] = $row['name'];
-            $dataPacket[$i]['name_arabic'] = $row['name_arabic'];
+
+            // Getting name of the club based on the selected language
+            if($lang == "en") {
+                $dataPacket[$i]['name'] = $row['name'];
+            } elseif ($lang == "ar") {
+                $dataPacket[$i]['name'] = $row['name_arabic'];
+            }
 
             // Getting address of the club
             $address = $row['address'];
-            $city = count($row['cities']) > 0  ? $row['cities'][0]['name'] : null;
+            if(count($row['cities']) > 0) {
+                if($lang == "en") {
+                    $city = $row['cities'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $city = $row['cities'][0]['name_arabic'];
+                }
+            } else {
+                $city = null;
+            }
             $dataPacket[$i]['address'] = $address . ', ' . $city;
             // echo "<pre>";print_r($row['cities']);
 
@@ -62,8 +82,12 @@ class ClubDataServiceImpl implements ClubDataService
 
             foreach($amenitiesData as $key => $data) {
                 $amenitiesPacket[$key]['id'] = $data->id;
-                $amenitiesPacket[$key]['name'] = $data->name;
-                $amenitiesPacket[$key]['name_arabic'] = $data->name_arabic;
+                // Getting name of the animities based on the selected language
+                if($lang == "en") {
+                    $amenitiesPacket[$key]['name'] = $data->name;
+                } elseif ($lang == "ar") {
+                    $amenitiesPacket[$key]['name'] = $data->name_arabic;
+                }
                 $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
             }
             $dataPacket[$i]['amenities']  = $amenitiesPacket;
@@ -120,6 +144,8 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getSingleClub($request)
     {
+        $lang = auth()->user()->lang;
+
         $dataPacket = [];
         $id = $request->club_id;
 
@@ -133,10 +159,15 @@ class ClubDataServiceImpl implements ClubDataService
             $clubLongitude = $clubData['longitude'];
 
             $dataPacket['id'] = $clubData['id'];
-            $dataPacket['name'] = $clubData['name'];
-            $dataPacket['name_arabic'] = $clubData['name_arabic'];
-            $dataPacket['description'] = $clubData['description'];
-            $dataPacket['description_arabic'] = $clubData['description_arabic'];
+
+            // Getting name and description of the club based on the selected language
+            if($lang == "en") {
+                $dataPacket['name'] = $clubData['name'];
+                $dataPacket['description'] = $clubData['description'];
+            } elseif ($lang == "ar") {
+                $dataPacket['name'] = $clubData['name_arabic'];
+                $dataPacket['description'] = $clubData['description_arabic'];
+            }
 
             // Getting bats count
             $batCount = $this->batDataRepository->getBatCount($clubData['id']);
@@ -149,15 +180,29 @@ class ClubDataServiceImpl implements ClubDataService
 
             foreach($amenitiesData as $key => $row) {
                 $amenitiesPacket[$key]['id'] = $row->id;
-                $amenitiesPacket[$key]['name'] = $row->name;
-                $amenitiesPacket[$key]['name_arabic'] = $row->name_arabic;
+
+                // Getting name of the animities based on the selected language
+                if($lang == "en") {
+                    $amenitiesPacket[$key]['name'] = $row->name;
+                } elseif ($lang == "ar") {
+                    $amenitiesPacket[$key]['name'] = $row->name_arabic;
+                }
                 $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$row->image;
             }
             $dataPacket['amenities']  = $amenitiesPacket;
 
             // Getting address of the club
             $address = $clubData['address'];
-            $city = count($clubData['cities']->all()) > 0 ? $clubData['cities'][0]['name'] : null;
+            if(count($clubData['cities']->all()) > 0) {
+                if($lang == "en") {
+                    $city = $clubData['cities'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $city = $clubData['cities'][0]['name_arabic'];
+                }
+            } else {
+                $city = null;
+            }
+
             $dataPacket['address'] = $address . ',' . $city;
 
             $dataPacket['price'] = $clubData['single_price'];

@@ -382,4 +382,23 @@ class UsersController extends Controller
         User::where('id', $user['id'])->update($dataPacket);
         return ResponseUtil::successWithMessage('Images uploaded successfully!', true, 200);
     }
+
+    public function changeLanguage(Request $request)
+    {
+        $userId = auth()->user()->id;
+
+        // If there is no paramneter lang in the reuqest then it will throw this error
+        if(!$request->lang) {
+            return ResponseUtil::errorWithMessage(201, 'Please send a language', false, 201);
+        }
+
+        if($request->lang == "en" || $request->lang == "ar") {
+            // Saving language in the users table
+            User::where('id', $userId)->update(['lang' => $request->lang]);
+            return ResponseUtil::successWithMessage('Language updated successfully!', true, 200);
+        } else {
+            return ResponseUtil::errorWithMessage(201, 'Please send a valid language (ar->arabic, en->english)', false, 201);
+        }
+        
+    }
 }
