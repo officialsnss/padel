@@ -41,29 +41,29 @@ class ReportController extends Controller
                    $data = $data->where('bookings.created_at','>=', $request->from_date);
                 }
 
-                 if(!empty($request->to_date)){
+                if(!empty($request->to_date)){
 
                     $data = $data->where('bookings.created_at','<=', $request->to_date);
-                    }
-                 if(!empty($request->club_id)){
+                }
+                if(!empty($request->club_id)){
 
                     $data = $data->where('bookings.club_id','=', $request->club_id);
-                 }
-                 if(!empty($request->order_status)){
+                }
+                if(!empty($request->order_status)){
 
                     $data = $data->where('bookings.status','=', $request->order_status);
-                 }
-                 if(!empty($request->payment_type)){
+                }
+                if(!empty($request->payment_type)){
 
                     $data = $data->where('payments.payment_method','=', $request->payment_type);
-                 }
+                }
 
-                 if(auth()->user()->role == '5'){
+                if(auth()->user()->role == '5'){
 
                   $data =  $data->where('clubs.user_id', '=', $userId);
 
-                 }
-                 $data = $data->select('payments.total_amount', 'payments.payment_status as pay_status', 'payments.payment_method as payment_method','users.name as usrname', 'users.email as usremail', 'bookings.booking_date', 'bookings.id as bookId','clubs.name as clubname','payments.total_amount','payments.refund_price', 'payments.isRefunded as refundStatus','bookings.order_id', 'bookings.status as booked_status','bookings.created_at as booking_created_at','clubs.commission as commission');
+                }
+                $data = $data->select('payments.total_amount', 'payments.payment_status as pay_status', 'payments.payment_method as payment_method','users.name as usrname', 'users.email as usremail', 'bookings.booking_date', 'bookings.id as bookId','clubs.name as clubname','payments.total_amount','payments.refund_price', 'payments.isRefunded as refundStatus','bookings.order_id', 'bookings.status as booked_status','bookings.created_at as booking_created_at','clubs.commission as commission');
 
 
                 $data =  $data->get();

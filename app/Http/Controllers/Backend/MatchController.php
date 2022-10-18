@@ -19,39 +19,93 @@ class MatchController extends Controller
     {
         try{
             $title = 'Match Listing';
-            $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->get()->toArray();
-
-            if($request->ajax()){
-                if($request->status == null){
-                    $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->get()->toArray();
-                    return response()->json(['matchs'=>$matchs]);
-                } else {
-                    $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')->where('matches.status',$request->status)->get()->toArray();
-                    return response()->json(['matchs'=>$matchs]);
+            $matchs = Club::Join('matches','clubs.id', '=', 'matches.club_id')
+            ->select('clubs.name as clubname', 'clubs.featured_image as clubimage', 'matches.status as status', 'matches.created_at as date')->get();
+            if(request()->ajax()){
+                $data = Club::Join('matches','clubs.id', '=', 'matches.club_id');
+                if(!empty($request->status)){
+                    $data = $data->where('matches.status', $request->status);
                 }
+
+                $data = $data->select('clubs.name as clubname', 'clubs.featured_image as clubimage', 'matches.status as status' ,'matches.id as id', 'matches.created_at as date');
+                $data =  $data->get();
+                return datatables()->of($data)->addIndexColumn()
+                ->addColumn('action', function($row){
+                    if($row->status == 2){
+                        $btn = '<a href="'.route('matches.edit',$row->id).'" class="btn btn-secondary btn-sm">Edit</a>&nbsp;&nbsp;<a href="'.route('matches.view',$row->id).'" class="btn btn-primary btn-sm">View</a>';
+                    } else {
+                        $btn = '<a href="'.route('matches.view',$row->id).'" class="btn btn-primary btn-sm">View</a>';
+                    }
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
             }
 
            return view('backend.pages.matches', compact('title','matchs'));
         }
         catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
         }
     }
 
     public function edit($id)
     {
+        $team1 = [];
+        $team2 = [];
+        $winnerName = [];
+        $playerName = [];
         try{
             $matchStatus = Matches::where('status',2)->where('id', $id)->get();
+            $title = 'Edit Match Result';
             if($matchStatus->count() == 1){
                 $matchResult= MatchResults::where('match_id', $id)->get();
+                $matchteamIds= MatchResults::where('match_id', $id)->first();
                 $matchResults= MatchResults::where('match_id', $id)->get()->toArray();
-                $title = 'Edit Match Result';
-                return view('backend.pages.matchEdit', compact('title','id','matchResult','matchResults'));
+
+                if($matchResult->count() > 0){
+                    if($matchteamIds->team1 != 'NULL'){
+                        $t1lists = explode(',', $matchteamIds->team1);
+                        foreach( $t1lists as $team1sID){
+                            $team1[] = $this->userName($team1sID);
+                        }
+                        $team1 = implode(', ', $team1);
+                    }
+                    if($matchteamIds->team2 != 'NULL'){
+                        $t2lists = explode(',', $matchteamIds->team2);
+                        foreach( $t2lists as $team2sID){
+                            $team2[] = $this->userName($team2sID);
+                        }
+                        $team2 = implode(', ', $team2);
+                    }
+                    // dd($matchteamIds->winner);
+                    if($matchteamIds->winner != 'NULL'){
+                        $wlists = explode(',', $matchteamIds->winner);
+                        foreach( $wlists as $wlistsID){
+                            $winnerName[] = $this->userName($wlistsID);
+                        }
+                        $winnerName = implode(', ', $winnerName);
+                    }
+                } else {
+                    $matchteamIds= Matches::where('status',2)->where('id', $id)->first();
+                    if($matchteamIds->playersIds != 'NULL'){
+                        $plists = explode(',', $matchteamIds->playersIds);
+                        foreach($plists as $plistsID){
+                            $playerName[$plistsID] = $this->userName($plistsID);
+                        }
+                    }
+                    // dd($playerName);
+                    return view('backend.pages.matchEdit', compact('title','id','matchResult','matchResults','playerName'));
+                }
+                // dd($winnerName);
+                return view('backend.pages.matchEdit', compact('title','id','matchResult','matchResults','team1','team2','winnerName'));
             } else {
                 return redirect('/admin/matches')->with('error', 'Match is not finished yet.');
             }
         }
         catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect('/admin/matches')->with('error', 'Something went wrong.');
         }
     }
