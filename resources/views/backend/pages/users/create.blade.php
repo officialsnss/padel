@@ -19,9 +19,9 @@
               </div>
 
               <div class="form-group col-md-6">
-                <label for="inputName">Phone Number</label>
-                <input type="text" id="phone" class="form-control" value="{{old('phone')}}" name="phone">
-               @error('phone')
+                <label for="inputName">Arabic Name</label>
+                <input type="text" id="full_name_arabic" class="form-control" value="{{old('full_name_arabic')}}" name="full_name_arabic">
+               @error('full_name_arabic')
                 <div class="form-error">{{ $message }}</div>
                @enderror
               </div>
@@ -34,15 +34,13 @@
                 <div class="form-error">{{ $message }}</div>
                 @enderror
               </div>
-              <div class="col-md-6">
-                      <div class="form-group">
-                          <label for="inputName">Commission(In Percent on each product)</label>
-                          <input type="text" id="commission" class="form-control" value="{{old('commission')}}" name="commission">
-                              @error('commission')
-                                <div class="form-error">{{ $message }}</div>
-                              @enderror
-                       </div>
-                </div> 
+              <div class="form-group col-md-6">
+                <label for="inputName">Phone Number</label>
+                <input type="text" id="phone" class="form-control" value="{{old('phone')}}" name="phone">
+               @error('phone')
+                <div class="form-error">{{ $message }}</div>
+               @enderror
+              </div>
              </div>
              <div class="row"> 
                <div class="form-group col-md-6">
@@ -192,7 +190,7 @@
                           <select id="country_name" name="country" class="form-control">
                             <option value="">---Select Country---</option>
                               @foreach ($countries as $country)
-                              <option value="{{$country->id}}">{{$country->name}}</option>
+                              <option value="{{$country->id}}">{{$country->name}} - {{$country->name_arabic}}</option>
                               @endforeach
                           </select>
                             @error('country_name')
@@ -267,6 +265,15 @@
 
                   <div class="row">
                       <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="inputName">Commission(In Percent on each product)</label>
+                          <input type="text" id="commission" class="form-control" value="{{old('commission')}}" name="commission">
+                              @error('commission')
+                                <div class="form-error">{{ $message }}</div>
+                              @enderror
+                       </div>
+                      </div> 
+                      <div class="col-md-6">
                        <div class="form-group">
                           <label for="inputName">Featured Image</label><br>
                           <input id="fileUpload" type="file" name="featured_image"><br />
@@ -278,7 +285,8 @@
                             @enderror
                       </div>
                      </div> 
-                 
+                </div>
+                <div class="row">
                   <div class="form-group col-md-6">
                           <label for="inputName">Amenities</label><br>
                           <ul class="amenity-list">

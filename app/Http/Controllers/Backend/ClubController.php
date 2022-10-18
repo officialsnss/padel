@@ -292,7 +292,7 @@ class ClubController extends Controller
                     $sel = '';
                 }
 
-                echo '<option value="'.$region->id.'" '.$sel.'>'.$region->name.'</option>'; 
+                echo '<option value="'.$region->id.'" '.$sel.'>'.$region->name.' - '.$region->name_arabic.'</option>'; 
             }
         }
         else{
@@ -319,7 +319,7 @@ class ClubController extends Controller
             else{
                 $sel = '';
             }
-                echo '<option value="'.$city->id.'" '.$sel.'>'.$city->name.'</option>'; 
+                echo '<option value="'.$city->id.'" '.$sel.'>'.$city->name.'-'.$city->name_arabic.'</option>'; 
             }
         }
         else{

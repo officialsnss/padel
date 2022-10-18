@@ -179,7 +179,7 @@
                           <select id="country_name" name="country" class="form-control">
                             <option value="">---Select Country---</option>
                               @foreach ($countries as $country)
-                              <option value="{{$country->id}}" {{ ($country->id ==  $clubData->country)?'selected':'' }}>{{$country->name}}</option>
+                              <option value="{{$country->id}}" {{ ($country->id ==  $clubData->country)?'selected':'' }}>{{$country->name}} - {{$country->name_arabic}}</option>
                               @endforeach
                           </select>
                             @error('country_name')
