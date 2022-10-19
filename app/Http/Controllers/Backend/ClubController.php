@@ -44,7 +44,7 @@ class ClubController extends Controller
             $clubData= Club::leftJoin('users', 'users.id' ,'=', 'clubs.user_id')
                             ->leftJoin('currencies', 'currencies.id' ,'=', 'clubs.currency_id')
                             ->leftJoin('time_slots', 'clubs.id' ,'=', 'time_slots.club_id')
-                            ->select('currencies.code', 'clubs.*','time_slots.*','clubs.id as clubid', 'time_slots.id as timeid','users.name as fullname', 'users.email as useremail', 'users.phone as userphone') 
+                            ->select('currencies.code', 'clubs.*','time_slots.*','clubs.id as clubid', 'time_slots.id as timeid','users.name as fullname', 'users.email as useremail', 'users.phone as userphone','users.name_arabic as arabicname') 
                             ->where('clubs.id', $id)->first();
             $countries = Countries::all();
             $amenities = Amenities::all();
@@ -64,7 +64,7 @@ class ClubController extends Controller
 
     public function update(Request $request, $id){
         
-   
+      
         try { 
             $club = Club::findOrFail($id);
             $clubUser = $club->user_id;
@@ -79,13 +79,15 @@ class ClubController extends Controller
             $data['featured_image']= $filename;
              }
             $data['name'] = $request->clubname;
-        if(auth()->user()->role != 5){
+        //if(auth()->user()->role != 5){
                 $vendorInfo = User::where('id', $clubUser)->first();
+              
                 $userInfo['name'] = $request->fullname;
+                $userInfo['name_arabic'] = $request->full_name_arabic;
                 $userInfo['email'] = $request->email;
                 $userInfo['phone'] = $request->phone;
                 $final = $vendorInfo->update($userInfo); 
-        }
+       // }
             $res = $club->update($data); 
             
             if($res){
@@ -99,7 +101,7 @@ class ClubController extends Controller
               return Redirect::back()->with('success', 'Club Updated successfully');
         }
          catch (\Exception $e) {
-            dd($e->getMessage());
+           // dd($e->getMessage());
             return redirect('/admin/clubs')->with('error', 'Something went wrong.');
         
         }
