@@ -147,53 +147,20 @@ $("#vendorform").validate({
 $("#club-edit").validate({
   ignore: [],
   rules: {
-    fullname:{
-      required : function(element) {
-        var action = $("#userrole").val();
-        if(action != "5") {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    lettersonly: function(element) {
-      var action = $("#userrole").val();
-      if(action != "5") {
-          return true;
-      } else {
-          return false;
-      }
-  },
-    },
-
-    email:{
-      required : function(element) {
-        var action = $("#userrole").val();
-        if(action != "5") {
-            return true;
-        } else {
-            return false;
-        }
-    },
-    email : function(element) {
-      var action = $("#userrole").val();
-      if(action != "5") {
-          return true;
-      } else {
-          return false;
-      }
-  },
-    },
-    phone: {
-      digits: function(element) {
-        var action = $("#userrole").val();
-        if(action != "5") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    },
+    fullname: {
+      required: true,
+      lettersonly: true
+      },
+      full_name_arabic: {
+        required: true,
+        },
+      phone: {
+        digits: true
+      },
+      email: {
+      required: true,
+      email: true
+      },
     commission:{
       required : function(element) {
         var action = $("#userrole").val();
@@ -215,6 +182,9 @@ $("#club-edit").validate({
     clubname: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+      },
     service_charge: {
       required: true,
       number: true,
@@ -548,6 +518,9 @@ $("#coachform").validate({
   rules: {
     coach_name: {
     required: true,
+    },
+    name_arabic: {
+      required: true,
     },
     coach_email: {
       required: true,

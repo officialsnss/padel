@@ -196,6 +196,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/status/update', 'App\Http\Controllers\Backend\UserController@updateStatus')->name('users.update.status');
         Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('courtOwners');
         Route::get('/court-owners/view/{id}', 'App\Http\Controllers\Backend\UserController@courtOwnersview')->name('court-owners.view');
+        Route::get('/reset-password/{id}', 'App\Http\Controllers\Backend\ClubController@resetPassword')->name('court-owners.resetPassword');
+        Route::post('/newPassword/{id}', 'App\Http\Controllers\Backend\ClubController@newPassword')->name('court-owners.newPassword');
         Route::get('/create', 'App\Http\Controllers\Backend\UserController@create')->name('create');
         Route::post('/add', 'App\Http\Controllers\Backend\UserController@add')->name('user.add');
         Route::get('/wallets/{id}', 'App\Http\Controllers\Backend\UserController@wallets')->name('wallets');

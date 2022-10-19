@@ -26,9 +26,9 @@
                   </tr>
                   </thead>
                   <tbody id="tablecontentt">
-                    
+
                   @foreach ($courtUsers as $courtUser)
-                 
+
                    <tr class="row1" data-id="{{ $courtUser->cid }}">
                    <td class="pl-3"><i class="fa fa-sort"></i></td>
                       <td>{{ $courtUser->name }}</td>
@@ -37,16 +37,17 @@
                       <td>{{ $courtUser->cordering }}</td>
                       <td><input type="checkbox" data-id="{{ $courtUser->cid }}" name="popular" class="js-switchs" {{ $courtUser->isPopular == 1 ? 'checked' : '' }}></td>
                       <td><input type="checkbox" data-id="{{ $courtUser->id }}" name="status" class="js-switch" {{ $courtUser->status == 1 ? 'checked' : '' }}></td>
-                       
+
                       <td><a href="{{ route('court-owners.view',$courtUser->id)}}" class="btn btn-info">View</a>
                       <a href="{{ route('club.edit', $courtUser->cid )}}" class="btn btn-secondary">Edit</a>
                       <a href="{{ route('club.images', $courtUser->cid )}}" class="btn btn-warning">Upload Images</a>
+                      <a href="{{ route('court-owners.resetPassword', $courtUser->id)}}" class="btn btn-success">Reset Password</a>
                       </td>
                     </tr>
                   @endforeach
-                  
+
                   </tbody>
-                
+
                 </table>
               </div>
               <!-- /.card-body -->
@@ -61,9 +62,9 @@
 <script type="text/javascript">
 $(function () {
  var datatable = $("#tablevendor").DataTable({
-  
+
  });
-   
+
 $("#tablecontentt").sortable({
   items: "tr",
   cursor: 'move',
@@ -85,15 +86,15 @@ function sendOrderToServer() {
   });
 
   $.ajax({
-   
-    type: "POST", 
-    dataType: "json", 
+
+    type: "POST",
+    dataType: "json",
     url: "{{ url('admin/clubs/reorder') }}",
      data: {
       order: order,
       _token: '{{csrf_token()}}'
     },
-   
+
     success: function(response) {
        if (response.status == "200") {
         $('#loader').removeClass('hidden')
@@ -102,11 +103,10 @@ function sendOrderToServer() {
           console.log(response);
         }
     },
-   
+
   });
 }
 });
 </script>
 
         @endsection
-  

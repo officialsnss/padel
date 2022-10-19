@@ -69,6 +69,7 @@ class CoachController extends Controller
 
          try{
             $data['name'] = $request->coach_name;
+            $data['name_arabic'] = $request->name_arabic;
             $data['email'] = $request->coach_email;
             $data['password'] = Hash::make($request->password);
             $data['role'] = '4';
@@ -90,6 +91,7 @@ class CoachController extends Controller
                   'user_id' => $result,
                   'experience' => $request->experience,
                   'description' => $request->desc,
+                  'arabic_description' => $request->arabic_description,
                   'price' => $request->price,
                   'currency_id' => 129,
                   'clubs_assigned' => $ids
@@ -160,6 +162,7 @@ class CoachController extends Controller
 
            $user['name'] = $request->coach_name;
            $user['email'] = $request->coach_email;
+           $user['name_arabic'] = $request->name_arabic;
           // $data = $request->except('_method','_token','submit');
 
            if($request->file('profile_img')){
@@ -186,6 +189,7 @@ class CoachController extends Controller
                 $coach['experience'] = $request->experience;
                 $coach['price'] = $request->price;
                 $coach['description'] = $request->desc;
+                $coach['arabic_description'] = $request->arabic_description;
                 $coach['clubs_assigned'] = $ids;
                 $coach->save();
             }

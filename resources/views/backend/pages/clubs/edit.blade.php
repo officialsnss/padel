@@ -7,43 +7,53 @@
             <div class="card-body reset-form">
               <form method="post" action="{{ route('club.update', $clubData->clubid) }}" id="club-edit" enctype="multipart/form-data">
                   {{ csrf_field() }}
-                  @if(auth()->user()->role != '5')
-                  <div class="row">  
-            
-            <div class="form-group col-md-6">
-              <label for="inputName">Full Name</label>
-              <input type="text" id="fullname" class="form-control" value="{{ $clubData->fullname }}" name="fullname">
-              @error('fullname')
-              <div class="form-error">{{ $message }}</div>
-              @enderror
-            </div>
+                
+                <div class="row">  
+                  <div class="form-group col-md-6">
+                    <label for="inputName">Full Name</label>
+                    <input type="text" id="fullname" class="form-control" value="{{ $clubData->fullname }}" name="fullname">
+                    @error('fullname')
+                    <div class="form-error">{{ $message }}</div>
+                    @enderror
+                  </div>
 
+                  <div class="form-group col-md-6">
+                    <label for="inputName">Full Name in Arabic</label>
+                    <input type="text" id="full_name_arabic" class="form-control" value="{{ $clubData->arabicname }}" name="full_name_arabic">
+                  @error('full_name_arabic')
+                    <div class="form-error">{{ $message }}</div>
+                  @enderror
+                  </div>
+              </div>  
+             <div class="row"> 
+                <div class="form-group col-md-6">
+                  <label for="inputName">Email</label>
+                  <input type="text" id="Email" class="form-control" value="{{ $clubData->useremail }}" name="email">
+                  @error('email')
+                  <div class="form-error">{{ $message }}</div>
+                  @enderror
+                </div>
             <div class="form-group col-md-6">
               <label for="inputName">Phone Number</label>
               <input type="text" id="phone" class="form-control" value="{{ $clubData->userphone }}" name="phone">
              @error('phone')
               <div class="form-error">{{ $message }}</div>
              @enderror
-            </div>
-           </div>  
-           <div class="row"> 
-             <div class="form-group col-md-6">
-              <label for="inputName">Email</label>
-              <input type="text" id="Email" class="form-control" value="{{ $clubData->useremail }}" name="email">
-              @error('email')
-              <div class="form-error">{{ $message }}</div>
-              @enderror
-            </div>
-            <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="inputName">Commission(In Percent on each product)</label>
-                        <input type="text" id="commission" class="form-control" value="{{ $clubData->commission }}" name="commission">
-                            @error('commission')
-                              <div class="form-error">{{ $message }}</div>
-                            @enderror
-                     </div>
-              </div> 
+            </div>  
            </div>
+           @if(auth()->user()->role != '5')
+           <div class="row">
+              <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="inputName">Commission(In Percent on each product)</label>
+                            <input type="text" id="commission" class="form-control" value="{{ $clubData->commission }}" name="commission">
+                                @error('commission')
+                                  <div class="form-error">{{ $message }}</div>
+                                @enderror
+                        </div>
+                  </div> 
+           </div>
+          
                   @endif
                 <div class="row">
                     <div class="col-md-6">
