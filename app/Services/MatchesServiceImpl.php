@@ -42,19 +42,6 @@ class MatchesServiceImpl implements MatchesService
     {
         // Getting Listing of all Matches
         $matchData = $this->getMatchesList($request);
-        $upcomingMatches = [];
-
-        foreach($matchData as $match) {
-            $matchTime = $match['startTime'];
-            $current = Carbon::now()->toDateTimeString();
-            $currentDate = strtotime($current);
-
-            // If matchTime is less than currentTime, then the match is completed
-            if($currentDate > $matchTime) {
-                $match['isMatchCompleted'] = 1;
-            }
-        }
-
         $upcomingMatches = collect($matchData)->sortBy('date')->toArray();
         return $upcomingMatches;
     }
@@ -182,7 +169,14 @@ class MatchesServiceImpl implements MatchesService
             $dataArray[$i]['minimum_level'] = (string)$min_level['id'];
             
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
-            $dataArray[$i]['isMatchCompleted'] = 0;  
+            
+            // Checking match status of completion
+            $dataArray[$i]['isMatchCompleted'] = 0;
+            $current = Carbon::now()->toDateTimeString();
+            $currentDate = strtotime($current);  
+            if($currentDate > $dataArray[$i]['startTime']) {
+                $dataArray[$i]['isMatchCompleted'] = 1;
+            }
 
             // Getting bats list for this match booking
             $dataArray[$i]['bats'] = $this->getBookedBats($row['bookedBats']);  
@@ -302,8 +296,15 @@ class MatchesServiceImpl implements MatchesService
             $dataArray['minimum_level'] = $min_level['id'];
             
             $dataArray['booked_by'] = $data['booking'][0]['user_id'];  
-            $dataArray['isMatchCompleted'] = 0;
             
+            // Check for match complete or not
+            $dataArray['isMatchCompleted'] = 0;
+            $current = Carbon::now()->toDateTimeString();
+            $currentDate = strtotime($current);
+            if($currentDate > $dataArray['startTime']) {
+                $dataArray['isMatchCompleted'] = 1;
+            }
+
             // Getting data of all the booked bats
             $dataArray['bats'] = $this->getBookedBats($data['bookedBats']);  
             

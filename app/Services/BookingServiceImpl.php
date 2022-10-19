@@ -46,18 +46,9 @@ class BookingServiceImpl implements BookingService
         $userId = auth()->user()->id;
 
         foreach($matchData as $match) {
-            $matchTime = $match['startTime'];
-            $current = Carbon::now()->toDateTimeString();
-            $currentDate = strtotime($current);
-
             // We are getting all matches above, so check on only players bookings
             if($match['booked_by'] == $userId) {
                 unset($match['booked_by']);
-
-                // If matchTime is less than currentTime, then the match is completed
-                if($currentDate > $matchTime) {
-                    $match['isMatchCompleted'] = 1;
-                }
                 array_push($bookedMatches, $match);
             }
         }
@@ -70,6 +61,16 @@ class BookingServiceImpl implements BookingService
     public function addBooking($request)
     {
         $userId = auth()->user()->id;
+
+        // Validations for the necessary fields
+        if(!$request->dateTime) {
+            return ['error' => 'Please enter the value of dateTime!'];
+        }
+        if($request->match_type == 1) {
+            if(!$request->level) {
+                return ['error' => 'Please enter the value of level!'];
+            }
+        }
 
         // Edit booking 
         if($request->isEdit == true) {
