@@ -12,7 +12,16 @@ class ContactUs extends Model
     use HasFactory;
     
     protected $table = "contact_us";
-    protected $fillable = ['sender_id', 'message'];
+    
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'sender_id',
+        'receiver_id', 
+        'message'
+    ];
+    
     public function userData()
     {
         return $this->belongsTo(User::class, 'sender_id', 'id');

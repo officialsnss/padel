@@ -23,12 +23,12 @@ class PolicyController extends Controller
         $this->policyService = $policyService;
     }
 
-    public function getPolicies($id)
+    public function getPolicies(Request $request)
     {
-        $data =  $this->policyService->getPolicies($id);
+        $data =  $this->policyService->getPolicies($request);
         if($data){
-            return ResponseUtil::successWithData($data, true, 200);
+            return ResponseUtil::successWithData($data['data'], $data['title']. " data", true, 200);
         }
-        return ResponseUtil::successWithData($data, true, 200);
+        return ResponseUtil::errorWithMessage(201, 'No data found. Please enter id = 1,2,3', false, 201);
     }
 }

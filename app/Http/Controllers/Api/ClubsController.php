@@ -24,13 +24,13 @@ class ClubsController extends Controller
         $this->clubDataService = $clubDataService;
     }
 
-    public function getClubsList()
+    public function getClubsList(Request $request)
     {
-        $data = $this->clubDataService->getClubsList();
+        $data = $this->clubDataService->getClubsList($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'Clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No clubs found.', true, 201);
     }
 
     public function getNearClubs(Request $request)
@@ -39,21 +39,24 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Near Clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No near clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No near clubs found.', true, 201);
     }
 
-    public function getPopularClubs()
+    public function getPopularClubs(Request $request)
     {
-        $data = $this->clubDataService->getPopularClubs();
+        $data = $this->clubDataService->getPopularClubs($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'Popular clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage('201','No popular clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No popular clubs found.', true, 201);
     }
 
-    public function getSingleClub(Request $request, $id)
+    public function getSingleClub(Request $request)
     {
-        $data = $this->clubDataService->getSingleClub($request, $id);
-        return ResponseUtil::successWithData($data, true, 200);
+        $data = $this->clubDataService->getSingleClub($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Club Details', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201,'No club found.', false, 201);
     }
 }

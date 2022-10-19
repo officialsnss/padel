@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\ClubDataRepository;
+use App\Repositories\BatDataRepository;
 
 /**
  * Class ClubDataServiceImpl
@@ -15,9 +16,11 @@ class ClubDataServiceImpl implements ClubDataService
      * ClubDataServiceImpl constructor.
      *
      */
-    public function __construct(ClubDataRepository $clubDataRepository)
+    public function __construct(ClubDataRepository $clubDataRepository,
+                                BatDataRepository $batDataRepository)
     {
         $this->clubDataRepository = $clubDataRepository;
+        $this->batDataRepository = $batDataRepository;
     }
 
 
@@ -26,47 +29,85 @@ class ClubDataServiceImpl implements ClubDataService
      *
      * @return mixed
      */
-    public function getClubsList()
+    public function getClubsList($request)
     {
-        $data = $this->clubDataRepository->getClubsList();
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
+        // Getting all clubs from the db
+        $data = $this->clubDataRepository->getClubsList($request);
 
         $dataPacket = [];
-        $i =0;
         foreach($data as $i => $row) {
-            $dataPacket[$i]['name'] = $row['name'];
-            $clubPrice = $this->getClubPrice($row['court']);
-            $dataPacket[$i]['price'] = $clubPrice ? $clubPrice. " " . $row['currencies'][0]['code']. "/hr" : null;
-            $dataPacket[$i]['featured_image'] = $this->getFeaturedImage($row['court']);
+            $dataPacket[$i]['id'] = $row['id'];
+
+            // Getting name of the club based on the selected language
+            if($lang == "en") {
+                $dataPacket[$i]['name'] = $row['name'];
+            } elseif ($lang == "ar") {
+                $dataPacket[$i]['name'] = $row['name_arabic'];
+            }
+
+            // Getting address of the club
+            $address = $row['address'];
+            if(count($row['cities']) > 0) {
+                if($lang == "en") {
+                    $city = $row['cities'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $city = $row['cities'][0]['name_arabic'];
+                }
+            } else {
+                $city = null;
+            }
+            $dataPacket[$i]['address'] = $address . ', ' . $city;
+            
+            $dataPacket[$i]['price'] = $row['single_price'];
+            $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
             $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
             $dataPacket[$i]['isPopular'] = $row['isPopular'];
-            $dataPacket[$i]['rating'] = $this->getClubRating($row['club_rating']);
+            $dataPacket[$i]['rating'] = number_format($this->getClubRating($row['club_rating']),1,'.','');
             $dataPacket[$i]['ordering'] = $row['ordering'];
             $dataPacket[$i]['latitude'] = $row['latitude'];
             $dataPacket[$i]['longitude'] = $row['longitude'];
-            $i++;
+
+            // Creating aminities packet
+            $amenitiesPacket = [];
+            $amenities = explode(',',$row['amenities']);
+            $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
+    
+            foreach($amenitiesData as $key => $data) {
+                $amenitiesPacket[$key]['id'] = $data->id;
+                // Getting name of the animities based on the selected language
+                if($lang == "en") {
+                    $amenitiesPacket[$key]['name'] = $data->name;
+                } elseif ($lang == "ar") {
+                    $amenitiesPacket[$key]['name'] = $data->name_arabic;
+                }
+                $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
+            }
+            $dataPacket[$i]['amenities']  = $amenitiesPacket;
         }
         return $dataPacket;
     }
 
-    public function getPopularClubs()
+    public function getPopularClubs($request)
     {
-        $data = $this->getClubsList();
+        // Getting all the clubs data
+        $data = $this->getClubsList($request);
 
         // Sorting of clubs based on ordering
         usort($data, function($a, $b) {
             return $a['ordering'] - $b['ordering'];
         });
 
+        // Pushing only popular clubs in the clubdata packet
         $clubData = [];
         foreach($data as $club) {
             if($club['isPopular'] == 1) {
-
-                // Removing the indexes which is not required in the packet
-                unset($club['ordering']);
-                unset($club['latitude']);
-                unset($club['longitude']);
-                unset($club['isPopular']);
-
                 array_push($clubData,$club);
             }
         }
@@ -75,26 +116,20 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getNearClubs($request)
     {
-        $data = $this->getClubsList();
+        // Getting data of all the clubs
+        $data = $this->getClubsList($request);
 
+        //Pushing the clubs in the nearClubs packet
         $nearClubs = [];
-
         foreach($data as $club) {
             $clubLatitude = $club['latitude'];
             $clubLongitude = $club['longitude'];
 
             // Calculating the distance by lat and long
-            $club['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
-                
-            if($club['latitude'] || $club['longitude']) {
+            $club['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
 
-                // Removing the indexes which is not required in the packet
-                unset($club['latitude']);
-                unset($club['longitude']);
-                unset($club['ordering']);
-                unset($club['isPopular']);
-
-                //Pushing the clubs in the popularClubs variable
+            // Only show nearclubs if we have entered our location
+            if($request->latitude || $request->longitude) {
                 array_push($nearClubs,$club);
             }
         }
@@ -103,68 +138,104 @@ class ClubDataServiceImpl implements ClubDataService
         usort($nearClubs, function($a, $b) {
             return $a['distance'] - $b['distance'];
         });
-
         return $nearClubs;
     }
 
-    public function getSingleClub($request, $id)
+    public function getSingleClub($request)
     {
+        $lang = auth()->user()->lang;
+
+        $dataPacket = [];
+        $id = $request->club_id;
+
+        // Getting data of a club by club_id
         $data = $this->clubDataRepository->getSingleClubData($id);
         $clubData = $data['data'];
-        $clubLatitude = $clubData['latitude'];
-        $clubLongitude = $clubData['longitude'];
-        $dataPacket = [];
-        
-        $dataPacket['name'] = $clubData['name'];
-        $dataPacket['description'] = $clubData['description'];
-        $address = $clubData['address'];
-        $city = $clubData['cities'] == '' ? $clubData['cities'][0]['name'] : null;
-        $dataPacket['address'] = $address . ',' . $city;
-        $clubPrice = $this->getClubPrice($clubData['court']);
-        $dataPacket['price'] = $clubPrice ? $clubPrice. " " . $clubData['currencies'][0]['code']. "/hr" : null;
-        $dataPacket['distance'] = round($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1);
-        $dataPacket['featured_image'] = $this->getFeaturedImage($clubData['court']);
-        $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
-        $dataPacket['rating'] = $this->getClubRating($clubData['club_rating']);
-        $dataPacket['bookingsCount'] = $data['bookingsCount'];
-        
+
+        // If club data exists for the entered club_id
+        if($clubData) {
+            $clubLatitude = $clubData['latitude'];
+            $clubLongitude = $clubData['longitude'];
+    
+            $dataPacket['id'] = $clubData['id'];
+
+            // Getting name and description of the club based on the selected language
+            if($lang == "en") {
+                $dataPacket['name'] = $clubData['name'];
+                $dataPacket['description'] = $clubData['description'];
+            } elseif ($lang == "ar") {
+                $dataPacket['name'] = $clubData['name_arabic'];
+                $dataPacket['description'] = $clubData['description_arabic'];
+            }
+
+            // Getting bats count
+            $batCount = $this->batDataRepository->getBatCount($clubData['id']);
+            $dataPacket['isBat'] = $batCount > 0 ? true : false;
+    
+            // Creating aminities packet
+            $amenitiesPacket = [];
+            $amenities = explode(',',$clubData['amenities']);
+            $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
+    
+            foreach($amenitiesData as $key => $row) {
+                $amenitiesPacket[$key]['id'] = $row->id;
+
+                // Getting name of the animities based on the selected language
+                if($lang == "en") {
+                    $amenitiesPacket[$key]['name'] = $row->name;
+                } elseif ($lang == "ar") {
+                    $amenitiesPacket[$key]['name'] = $row->name_arabic;
+                }
+                $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$row->image;
+            }
+            $dataPacket['amenities']  = $amenitiesPacket;
+
+            // Getting address of the club
+            $address = $clubData['address'];
+            if(count($clubData['cities']->all()) > 0) {
+                if($lang == "en") {
+                    $city = $clubData['cities'][0]['name'];
+                } elseif ($lang == "ar") {
+                    $city = $clubData['cities'][0]['name_arabic'];
+                }
+            } else {
+                $city = null;
+            }
+
+            $dataPacket['address'] = $address . ',' . $city;
+
+            $dataPacket['price'] = $clubData['single_price'];
+            $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');
+            $dataPacket['featured_image'] = getenv("IMAGES")."club_images/".$clubData['featured_image'];
+            $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
+            $dataPacket['rating'] = number_format($this->getClubRating($clubData['club_rating']),1,'.','');
+            $dataPacket['bookingsCount'] = $data['bookingsCount'];
+        }
         return $dataPacket; 
-    }
-
-    public function getClubPrice($courts)
-    {
-        if(isset($courts)) {
-            foreach($courts as $court) {
-                return $court['single_price'];
-            }
-        }
-        return null;
-    }
-
-    public function getFeaturedImage($courts)
-    {
-        if(isset($courts)) {
-            foreach($courts as $court) {
-                return $court['featured_image'];
-            }
-        }
-        return 0;
     }
 
     public function getClubRating($rating) 
     {
+        // If club have rating by any user
         if(isset($rating)) {
             $numberOfRatings = count($rating);
-            $RatingArray = [];
+            $ratingArray = [];
+
+            // Storing all ratings in teh $ratingArray
             foreach($rating as $rate) {
-                $RatingArray[] += $rate['rate'];
+                $ratingArray[] += $rate['rate'];
             }
-            $totalRatings = array_sum($RatingArray);
+
+            // Getting sum of all the ratings
+            $totalRatings = array_sum($ratingArray);
+
+            // Calculating average rating of the club
             if($numberOfRatings) {
                 $AverageRating = round($totalRatings/$numberOfRatings, 2);
                 return $AverageRating;
             }
         }
+        // In case club have no rating, then default rating is 0
         return 0;
     }
 

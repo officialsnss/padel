@@ -23,27 +23,27 @@ class PlayersController extends Controller
         $this->playersService = $playersService;
     }
 
-    public function getPopularPlayers()
+    public function getPopularPlayers(Request $request)
     {
-        $data =  $this->playersService->getPopularPlayers();
+        $data =  $this->playersService->getPopularPlayers($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'List of Popular Players', true, 200);
         }
         return ResponseUtil::errorWithMessage(201, 'No data for popular players', false, 201);
     }
 
-    public function getPlayersList()
+    public function getPlayersList(Request $request)
     {
-        $data =  $this->playersService->getPlayersList();
+        $data =  $this->playersService->getPlayersList($request);
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all players', true, 200);
         }
         return ResponseUtil::errorWithMessage(201, 'No data for players', false, 201);
     }
 
-    public function getPlayerDetails($id)
+    public function getPlayerDetails(Request $request)
     {
-        $data = $this->playersService->getPlayerDetails($id);
+        $data = $this->playersService->getPlayerDetails($request->player_id);
         if($data) {
             return ResponseUtil::successWithData($data, 'Players details', true, 200);
         }
@@ -63,8 +63,28 @@ class PlayersController extends Controller
     {
         $data = $this->playersService->addPlayerDetails($request);
         if($data) {
-            return ResponseUtil::successWithMessage('Players data updated successfully', true, 200);
+            return ResponseUtil::successWithData($data, 'Players data updated successfully', true, 200);
         }
         return ResponseUtil::successWithMessage('There is an error in updating', true, 200);
+    }
+
+    public function addPlayerInMatch(Request $request)
+    {
+        $data = $this->playersService->addPlayerInMatch($request);
+        if($data) {
+            return ResponseUtil::successWithMessage('Player added to the match.', true, 200);
+        }
+        return ResponseUtil::successWithMessage('There is an error while adding the player.', false, 200);
+    }
+
+    public function playersListInMatch(Request $request)
+    {
+        $data = $this->playersService->playersListInMatch($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if (isset($data['message'])) {
+            return ResponseUtil::successWithMessage($data['message'], true, 200);
+        }
+        return ResponseUtil::successWithData($data, 'List of players in this match', true, 200);
     }
 }

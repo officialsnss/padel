@@ -371,7 +371,7 @@ class UserController extends Controller
       $user->save();  // updating the password and remember_token in the users table
       $passwordReset->delete(); // delete the value from password_reset table
       $user->notify(new PasswordResetSuccess($request->password));
-      return back()->with('status', 'Ypur password has been updated and has been sent to your email. Please check.');
+      return back()->with('status', 'Your password has been updated and has been sent to your email. Please check.');
      
   }
 

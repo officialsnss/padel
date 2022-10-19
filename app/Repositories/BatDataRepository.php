@@ -30,4 +30,12 @@ class BatDataRepository extends BaseRepository
               ->with('currencies')
               ->get(); 
     }
+
+    public function getBatCount($clubId)
+    {
+      return VendorBats::where('club_id', $clubId)
+              ->count(); 
+    }
+
+    
 }

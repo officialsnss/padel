@@ -11,6 +11,22 @@ class Matches extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'player_id',
+        'playersIds',
+        'club_id',
+        'booking_id',
+        'slot_id',
+        'level',
+        'court_type',
+        'game_type',
+        'match_type',
+        'is_friendly',
+        'gender_allowed',
+        'status',
+        'requestedPlayersIds',
+    ];
+
     protected $table = "matches";
 
     public function slots()
@@ -31,5 +47,15 @@ class Matches extends Model
     public function booking()
     {
         return $this->hasMany(Booking::class, 'id', 'booking_id');
+    }
+
+    public function bookingSlots()
+    {
+        return $this->hasMany(BookingSlots::class, 'booking_id', 'booking_id');
+    }
+
+    public function bookedBats()
+    {
+        return $this->hasMany(BookedBats::class, 'booking_id', 'booking_id');
     }
 }

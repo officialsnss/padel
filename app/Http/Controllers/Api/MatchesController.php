@@ -23,16 +23,33 @@ class MatchesController extends Controller
         $this->matchesService = $matchesService;
     }
 
-    public function getMatchesList()
+    public function getUpcomingMatches(Request $request)
     {
-        $data = $this->matchesService->getMatchesList();
-        return ResponseUtil::successWithData($data, true, 200);
+        $data = $this->matchesService->getUpcomingMatches($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Upcoming matches list', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No upcoming matches', false, 201);
     }
 
-    public function getMatchDetails($matchId)
+    public function getMatches(Request $request)
     {
-        $data = $this->matchesService->getMatchDetails($matchId);
-        return ResponseUtil::successWithData($data, true, 200);
+        $data = $this->matchesService->getMatches($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'All Matches list', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No matches list', false, 201);
+    }
+
+    public function getMatchDetails(Request $request)
+    {
+        $data = $this->matchesService->getMatchDetails($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if($data) {
+            return ResponseUtil::successWithData($data, 'Match Details', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No match details', false, 201);
     }
 
     public function sendRequest(Request $request)
@@ -48,11 +65,51 @@ class MatchesController extends Controller
     {
         $data = $this->matchesService->acceptRequest($request);
         if(isset($data['message'])) {
-            return ResponseUtil::errorWithMessage(201, 'No such request for this player', false, 201);
+            return ResponseUtil::errorWithMessage(201, $data['message'], false, 201);
         }
         if($request->isAccept) {
             return ResponseUtil::successWithMessage('The request has been accepted!', true, 200);
         }
         return ResponseUtil::successWithMessage('The request has been rejected!', true, 200);
+    }
+
+    public function filterMatchData(Request $request)
+    {
+        $data = $this->matchesService->filterMatchData($request);
+        if($data) {
+            return ResponseUtil::successWithData($data, 'Match Details', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'No match details', false, 201);
+    }
+
+    public function playersRatingList(Request $request)
+    {
+        $data = $this->matchesService->playersRatingList($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if (isset($data['message'])) {
+            return ResponseUtil::successWithMessage($data['message'], true, 200);
+        }
+        return ResponseUtil::successWithData($data, 'List of players in this match', true, 200);
+    }
+
+    public function ratePlayer(Request $request)
+    {
+        $data = $this->matchesService->ratePlayer($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if($data) {
+            return ResponseUtil::successWithData($data, 'Rating submitted successfully!', true, 200);
+        }
+        return ResponseUtil::errorWithMessage(201, 'Please fill the details', false, 201);
+    }
+
+    public function addMatchResult(Request $request)
+    {
+        $data = $this->matchesService->addMatchResult($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        }
+        return ResponseUtil::successWithData($data = [], 'Result added successfully!', true, 200);
     }
 }

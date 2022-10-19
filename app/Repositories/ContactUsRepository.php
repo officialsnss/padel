@@ -23,15 +23,9 @@ class ContactUsRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getContactDetails()
-    {
-        $userId = auth()->user()->id;
-        return User::where('id', $userId)->first(); 
-    }
 
-    public function sendMessage($message)
+    public function sendMessage($data)
     {
-        $userId = auth()->user()->id;
-        return ContactUs::create(['sender_id' => $userId, 'receiver_id' => 1, 'message' => $message]);
+        return ContactUs::create($data);
     }
 }

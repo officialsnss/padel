@@ -16,7 +16,15 @@ interface BookingService
      *
      * @return mixed
      */
-    public function getBookingsList();
+    public function getBookingsList($request);
+
+    public function addBooking($request);
+
+    public function getBookingSlots($request);
 
     public function getWallet();
+
+    public function getCoupons();
+
+    public function applyCoupon($request);
 }

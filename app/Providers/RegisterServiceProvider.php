@@ -22,6 +22,8 @@ use App\Services\PolicyService;
 use App\Services\PolicyServiceImpl;
 use App\Services\ContactUsService;
 use App\Services\ContactUsServiceImpl;
+use App\Services\CoachesService;
+use App\Services\CoachesServiceImpl;
 
 
 
@@ -43,6 +45,7 @@ class RegisterServiceProvider extends ServiceProvider
         $this->app->singleton(BookingService::class, BookingServiceImpl::class);
         $this->app->singleton(PolicyService::class, PolicyServiceImpl::class);
         $this->app->singleton(ContactUsService::class, ContactUsServiceImpl::class);
+        $this->app->singleton(CoachesService::class, CoachesServiceImpl::class);
     }
 
     /**

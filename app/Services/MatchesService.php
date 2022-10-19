@@ -16,12 +16,21 @@ interface MatchesService
      *
      * @return mixed
      */
-    public function getMatchesList();
+    public function getUpcomingMatches($request);
 
-    public function getMatchDetails($matchId);
+    public function getMatches($request);
+
+    public function getMatchDetails($request);
 
     public function sendRequest($request);
 
     public function acceptRequest($request);
 
+    public function filterMatchData($request);
+
+    public function playersRatingList($request);
+
+    public function ratePlayer($request);
+
+    public function addMatchResult($request);
 }
