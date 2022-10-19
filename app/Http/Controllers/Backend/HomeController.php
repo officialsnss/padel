@@ -21,13 +21,13 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-   
+
 
     public function index()
     {
-   
+
       try{
-      
+
           // Backend page
           $userId = auth()->user()->id;
           $title = 'Dashboard';
@@ -41,12 +41,12 @@ class HomeController extends Controller
           ->where('payments.isCancellationRequest', '1')
           ->whereIn('payments.isRefunded', ['1', '2'])
           ->count();
-         
+
           $refund= DB::table('payments')
           ->where('payments.isCancellationRequest', '1')
           ->where('payments.isRefunded', '0')
            ->count();
-  
+
 
         if(auth()->user()->role == '5'){
           $totalBooking =  DB::table('bookings')
@@ -63,7 +63,7 @@ class HomeController extends Controller
             ->where('clubs.user_id', '=', $userId)
             ->where('payments.created_at', '>=', date('Y-m-d').' 00:00:00')
             ->count();
-            
+
 
           $sale = DB::table('bookings')
                  ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
@@ -71,7 +71,7 @@ class HomeController extends Controller
                  ->where('payments.isRefunded', '0')
                  ->where('clubs.user_id', '=', $userId)
                  ->where('payments.created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
-        
+
           $topBooking = DB::table('bookings')
                  ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
                  ->leftjoin('users', 'users.id', '=', 'bookings.user_id')
@@ -81,9 +81,9 @@ class HomeController extends Controller
                  ->orderBy('bookings.id', 'desc')
                  ->select('clubs.*','bookings.*','users.name as clubname','payments.*','users.email as playeremail')
                  ->get()
-                 ->take(10);  
-                   
-        
+                 ->take(10);
+
+
         }
         if(auth()->user()->role == '4'){
           $todayBooking = DB::table('bookings')
@@ -107,10 +107,10 @@ class HomeController extends Controller
           ->where('payments.isRefunded', '0')
           ->where('bookings.coach_id', $userId)
           ->orderBy('bookings.id', 'desc')
-          
+
           ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
           ->get()
-          ->take(10);  
+          ->take(10);
 
           $sale = '0';
 
@@ -124,9 +124,9 @@ class HomeController extends Controller
          $sale = DB::table('payments')
                   ->where('isRefunded', '0')
                   ->where('created_at', '>=', date('Y-m-d').' 00:00:00')->sum('total_amount');
-        
+
           //$topBooking = Booking::with('courts');
-         
+
           $topBooking = DB::table('bookings')
           ->leftjoin('payments', 'payments.booking_id', '=', 'bookings.id')
           ->leftjoin('clubs', 'bookings.club_id', '=', 'clubs.id')
@@ -134,11 +134,10 @@ class HomeController extends Controller
           ->orderBy('bookings.id', 'desc')
           ->select('clubs.*','bookings.*','clubs.name as clubname','payments.*')
           ->get()
-          ->take(10);  
+          ->take(10);
+        }
 
-         }
-        
-      
+
          return view('backend.pages.home', compact('title', 'regUsers', 'regClubs','totalBooking', 'todayBooking', 'cancel', 'refund', 'sale','topBooking'));
        }
        catch (\Exception $e) {
@@ -153,7 +152,7 @@ class HomeController extends Controller
      * @return \Illuminate\View\View
      */
     public function contact()
-    { 
+    {
       try{
         $title = 'Contact Form Queries';
         // $information = DB::table('contact_us')->leftJoin('users', 'users.id', '=', 'contact_us.sender_id')
@@ -168,7 +167,7 @@ class HomeController extends Controller
       catch (\Exception $e) {
        // dd($e->getMessage());
           return redirect('/admin')->with('error', 'Something went wrong.');
-      }    
+      }
     }
 
     public function contactView($id){
@@ -189,29 +188,29 @@ class HomeController extends Controller
 
     //Refunds Settings
     public function settings()
-    { 
+    {
        $title = 'Homepage Settings';
        $settings = DB::table('settings')->get();
        return view('backend.pages.settings', compact('title','settings'));
     }
 
     public function settingsUpdate(Request $request)
-    { 
-     
+    {
+
       try{
-       
+
         foreach($request->setting as $key => $value){
            DB::table('settings')
              ->where('label', $key)->update(['value' => $value]);
-          
+
         }
-       
+
         return redirect('/admin/settings')->with('success', 'Settings Updated!');
       }
       catch (\Exception $e) {
        //dd(getMessage());
         return redirect('/admin/settings')->with('error', 'Something went wrong.');
-      
+
       }
     }
 
@@ -220,8 +219,11 @@ class HomeController extends Controller
                     ->pluck('email');
 
       return response()->json($userEmails);
-   
+
+
   }
+
+
 
      //homepage slider Listing
      public function homeslider()
@@ -233,12 +235,12 @@ class HomeController extends Controller
          }
          catch (\Exception $e) {
              return redirect('/admin')->with('error', 'Something went wrong.');
-         }    
+         }
      }
 
     // Slide Create
      public function slideCreate()
-     { 
+     {
          try{
              $title = 'Add Slide';
              return view('backend.pages.slideCreate', compact('title'));
@@ -248,11 +250,11 @@ class HomeController extends Controller
          }
      }
 
-     
+
     public function slideAdd(Request $request)
     {
-      
-            
+
+
          try{
             $data['heading'] = $request->slide_heading;
             $data['button_label'] = $request->button_label;
@@ -264,8 +266,8 @@ class HomeController extends Controller
                 $file->move(base_path('Images/homeslider_images'), $filename);
                 $data['image']= $filename;
                  }
-               $result =  HomeSlider::insert($data);  
-        
+               $result =  HomeSlider::insert($data);
+
             if($result){
             return redirect('/admin/home-slider')->with('success', 'Slide Created Successfully.');
             }
@@ -275,7 +277,7 @@ class HomeController extends Controller
             return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
         }
 
-    
+
     }
 
     public function slideEdit($id)
@@ -292,16 +294,16 @@ class HomeController extends Controller
 
     public function slideUpdate(Request $request, $id)
        {
-        
-        try{ 
-          
+
+        try{
+
            $slide = HomeSlider::findOrFail($id);
           // $data = $request->except('_method','_token','submit');
-         
+
            if($request->file('image')){
              if($slide->image){
                 $imagePath = base_path('Images/homeslider_images/'. $slide->image);
-                
+
                 if(File::exists($imagePath)){
                     unlink($imagePath);
                 }
@@ -315,7 +317,7 @@ class HomeController extends Controller
            $slide->button_label = $request->button_label;
            $slide->button_url = $request->button_val;
           // $page->slug = Str::slug($request->title);
-           $slide->save(); 
+           $slide->save();
            return redirect('/admin/home-slider')->with('success', 'Slide Updated successfully');
         }
         catch (\Exception $e) {
@@ -335,10 +337,11 @@ class HomeController extends Controller
         }
         catch (\Exception $e) {
             return redirect('/admin/home-slider')->with('error', 'Something went wrong.');
-        
+
          }
        }
 
 
-    
+
 }
+

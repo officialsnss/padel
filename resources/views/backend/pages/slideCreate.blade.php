@@ -3,13 +3,13 @@
     <div class="row">
        <div class="col-md-12">
           <div class="card card-primary">
-           
+
             <div class="card-body reset-form">
          <form method="post" action="{{ route('slide.add') }}" id="slideform" enctype="multipart/form-data">
             {{ csrf_field() }}
-      
+
           <div class="row">
-            <div class="col-md-12"> 
+            <div class="col-md-12">
               <div class="form-group">
                   <label for="inputName">Slide Heading</label>
                   <textarea id="s-heading" class="form-control" value="" name="slide_heading"></textarea>
@@ -20,7 +20,7 @@
               </div>
           </div>
            <div class="row">
-            <div class="col-md-6"> 
+            <div class="col-md-6">
               <div class="form-group">
                   <label for="inputName">Button Label</label>
                   <input type="text" id="button-label" class="form-control" value="" name="button_label">
@@ -29,7 +29,7 @@
                   @enderror
                 </div>
               </div>
-              <div class="col-md-6"> 
+              <div class="col-md-6">
               <div class="form-group">
                   <label for="inputName">Button Value</label>
                   <input type="text" id="button-val" class="form-control" value="" name="button_val">
@@ -52,27 +52,26 @@
               </div>
             </div>
 
-          
-         
-             
+
+
+
 
              <div class="row">
-               <div class="col-md-12"> 
+               <div class="col-md-12">
                   <div class="form-group">
                     <button type="submit" class="btn btn-success">Save</button>
-                  </div> 
+                  </div>
                 </div>
              </div>
-              
-             </div>  
-            </form> 
+
+             </div>
+            </form>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
         </div>
-        
+
      </div>
 
-   
+
         @endsection
-        

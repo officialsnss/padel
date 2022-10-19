@@ -19,7 +19,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-       
+
     try{
         $title = 'Bookings';
         $userId = auth()->user()->id;
@@ -27,12 +27,12 @@ class BookingController extends Controller
             ->leftJoin('users','users.id', '=', 'bookings.user_id')
             ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
             ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id');
-      
-      
-          if(auth()->user()->role == 5){  
+
+
+          if(auth()->user()->role == 5){
             $bookings = $bookings->where('clubs.user_id', '=', $userId);
           }
-            if(auth()->user()->role == 4){  
+            if(auth()->user()->role == 4){
               $bookings = $bookings->where('bookings.coach_id', '=', $userId);
           }
           else{
@@ -47,7 +47,7 @@ class BookingController extends Controller
     catch (\Exception $e) {
      // dd($e->getMessage());
         return redirect('/admin')->with('error', 'Something went wrong.');
-    }    
+    }
    }
 
      // Booking Details View
@@ -77,8 +77,8 @@ class BookingController extends Controller
           }
           $amenityList = implode(',', $amenityList);
          }
-         
-       
+
+
           return view('backend.pages.bookingdetails', compact('title','bookingInfo', 'amenityList'));
       }
       catch (\Exception $e) {
@@ -88,7 +88,7 @@ class BookingController extends Controller
   }
 
 
-  
+
   //Get Amenity
   public function amentityName($id){
     $res = Amenities::where('id',$id)->first();
@@ -96,15 +96,15 @@ class BookingController extends Controller
       return $res->name;
     }
    else{
-    return ; 
+    return ;
    }
  }
 
   //PDF
   public function generateInvoicePDF(Request $request, $id)
   {
-   
-   
+
+
         $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
         ->leftJoin('users','users.id', '=', 'bookings.user_id')
         ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
@@ -127,7 +127,7 @@ class BookingController extends Controller
           }
           $amenityList = implode(',', $amenityList);
          }
-         
+
          // dd($bookingInfo);
       $amenityList = [];
          if($bookingInfo->clubamenities != 'NULL'){
@@ -138,7 +138,7 @@ class BookingController extends Controller
           }
           $amenityList = implode(',', $amenityList);
          }
-    
+
     $pdf = PDF::loadView('myPDF', ['bookingInfo'=> $bookingInfo, 'amenityList' => $amenityList]);
     return $pdf->download('invoice.pdf');
   }
@@ -155,24 +155,24 @@ class BookingController extends Controller
                 ->select('bookings.id as bookid','bookings.booking_date', 'users.email as custemail','users.name as uname','clubs.name as clubname')
                 ->get();
       $events = [];
-      
-     
-    
+
+
+
       foreach ($getEvents as $values) {
-        
+
          $firstslot = BookingSlots::where(['booking_id' =>  $values->bookid])->pluck('slots')->first();
-        
+
          $lastslot = BookingSlots::where(['booking_id' =>  $values->bookid])->pluck('slots')->last();
-          
+
           $start_time_format = date("h:i", strtotime($firstslot));
           //$end_time_format = date("h:i", strtotime($lastslot));
-          
+
           $timestamp = strtotime($lastslot) + 60*60;
           $end_time_format = date('h:i', $timestamp);
-        
+
           $event = [];
           $eventtext = $values->clubname;
-                       
+
           $event['title'] = $eventtext;
           $event['start'] = $values->booking_date.'T'.$start_time_format;
           $event['end'] =  $values->booking_date.'T'.$end_time_format;
@@ -182,17 +182,17 @@ class BookingController extends Controller
           $event['booking_date'] = date('d-m-Y', strtotime($values->booking_date));
           $event['uname'] = $values->uname;
           $events[] = $event;
-         
+
          // Debugbar::info($events);
       }
     //  echo '<pre>';
      // print_r($events);die;
       return view('backend.pages.calendar' ,['events' => $events]);
-  
+
   }
    public function outside()
   {
-     
+
   try{
       $title = 'Outside Bookings';
       $userId = auth()->user()->id;
@@ -204,19 +204,19 @@ class BookingController extends Controller
       ->select('clubs.*','outside_bookings.*','outside_bookings.id as oid')
       ->get();
       //dd($out_bookings);
-  
+
       return view('backend.pages.outsidebookings', compact('title','out_bookings'));
   }
   catch (\Exception $e) {
    // dd($e->getMessage());
       return redirect('/admin')->with('error', 'Something went wrong.');
-  }    
+  }
  }
 
   // Outside Booking Delete
   public function delete(Request $request, $id)
   {
-   
+
   try{
       $res= DB::table('outside_bookings')->where('id',$id)->delete();
      if($res){
@@ -226,7 +226,7 @@ class BookingController extends Controller
   catch (\Exception $e) {
    // dd($e->getMessage());
       return redirect('/admin/pages')->with('error', 'Something went wrong.');
-  
+
    }
   }
 
@@ -247,7 +247,7 @@ class BookingController extends Controller
     }
 
     //Club Status
-    
+
     public function updateClubStatus(Request $request)
     {
         try{
@@ -263,14 +263,14 @@ class BookingController extends Controller
         }
     }
       //Coach Status
-    
+
       public function updateCoachStatus(Request $request)
       {
           try{
               $co_status = Booking::findOrFail($request->bookId);
               $co_status->coach_status = $request->status;
               $co_status->save();
-  
+
               return response()->json(['message' => 'Coach status updated successfully.']);
           }
           catch (\Exception $e) {
@@ -279,5 +279,5 @@ class BookingController extends Controller
           }
       }
 
-   
+
 }
