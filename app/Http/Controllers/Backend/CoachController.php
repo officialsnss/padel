@@ -397,6 +397,44 @@ class CoachController extends Controller
           }
       }
 
+        // Reset Password
+        public function resetPassword(Request $request, $id)
+        {
+           try{
+                $user = User::findOrFail($id);
+                $userId = $id;
+                $userEmail = $user->email;
+                $title = 'Reset Password';
+                return view('backend.pages.coach.resetPassword', compact('title', 'userEmail','userId'));
+           }
+           catch (\Exception $e) {
+              return redirect('/admin/coaches')->with('error', 'Something went wrong.');
+           }
+        }
+
+        // Reset Password
+        public function newPassword(Request $request, $id)
+        {
+            // dd($request->all());
+
+                $request->validate([
+                    'password' => 'required|min:8',
+                    'password_confirmation' => 'required|same:password'
+                ]);
+              try{
+                $user = User::findOrFail($id);
+                $user->password = bcrypt($request->password);
+
+                $user->save();
+
+                return redirect('/admin/coaches')->with('success', 'Password reset successfully');
+            }
+            catch (\Exception $e) {
+                return redirect('/admin/coaches')->with('error', 'Something went wrong.');
+             }
+
+        }
+
 }
 
 

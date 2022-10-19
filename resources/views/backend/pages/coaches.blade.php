@@ -33,6 +33,7 @@
                                         <a href="{{ route('coach.edit', $coach->cid) }}" class="btn btn-secondary">Edit</a>
                                         <a href="{{ route('coach.delete', $coach->cid) }}" class="btn btn-danger">Delete</a>
                                         <a href="{{ route('offdays', $coach->id) }}" class="btn btn-success">Off-days</a>
+                                        <a href="{{ route('coach.resetPassword', $coach->id)}}" class="btn btn-info">Reset Password</a>
 
 
                                 </tr>

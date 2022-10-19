@@ -169,6 +169,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
     Route::get('/coach/edit/{id}', 'App\Http\Controllers\Backend\CoachController@edit')->name('coach.edit');
     Route::post('/coach/update/{id}', 'App\Http\Controllers\Backend\CoachController@update')->name('coach.update');
     Route::get('/coach/delete/{id}', 'App\Http\Controllers\Backend\CoachController@delete')->name('coach.delete');
+    Route::get('/reset-password/{id}', 'App\Http\Controllers\Backend\CoachController@resetPassword')->name('coach.resetPassword');
+    Route::post('/newPassword/{id}', 'App\Http\Controllers\Backend\CoachController@newPassword')->name('coach.newPassword');
 
     //Matches
     Route::get('/matches', 'App\Http\Controllers\Backend\MatchController@index')->name('admin.matches');
