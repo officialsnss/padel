@@ -152,22 +152,23 @@ class MatchesServiceImpl implements MatchesService
             } else {
                 $dataArray[$i]['gender'] = 'Mix';
             }
-
+                
             // Getting levels of the match
-            $levelArray = explode(',',$row['level']);
-            foreach($levelArray as $key => $level) {
-                $level = $this->levelsServiceImpl->getLevelById($level);
-                $dataArray[$i]['level'][$key]['id'] = $level['id'];
-                if($lang == "en") {
-                    $dataArray[$i]['level'][$key]['name'] = $level['name'];
-                } elseif ($lang == "ar") {
-                    $dataArray[$i]['level'][$key]['name'] = $level['name_arabic'];
+            if($dataArray[$i]['match_type'] == 'Public') {
+                $levelArray = explode(',',$row['level']);
+                foreach($levelArray as $key => $level) {
+                    $level = $this->levelsServiceImpl->getLevelById($level);
+                    $dataArray[$i]['level'][$key]['id'] = $level['id'];
+                    if($lang == "en") {
+                        $dataArray[$i]['level'][$key]['name'] = $level['name'];
+                    } elseif ($lang == "ar") {
+                        $dataArray[$i]['level'][$key]['name'] = $level['name_arabic'];
+                    }
                 }
+                $min = min($levelArray);
+                $min_level = $this->levelsServiceImpl->getLevelById($min);
+                $dataArray[$i]['minimum_level'] = (string)$min_level['id'];
             }
-            $min = min($levelArray);
-            $min_level = $this->levelsServiceImpl->getLevelById($min);
-            $dataArray[$i]['minimum_level'] = (string)$min_level['id'];
-            
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
             
             // Checking match status of completion
