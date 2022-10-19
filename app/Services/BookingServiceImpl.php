@@ -99,10 +99,11 @@ class BookingServiceImpl implements BookingService
             }
 
             // Match array data to be filled in matches table
-            $matchArray = [];
-            $matchArray['level'] = implode(',',$request->level);
-            $match = $this->bookingRepository->updateMatchData($matchArray, $request->booking_id);
-
+            if($request->match_type == "1") {
+                $matchArray = [];
+                $matchArray['level'] = implode(',',$request->level);
+                $match = $this->bookingRepository->updateMatchData($matchArray, $request->booking_id);
+            }
             return ['message' => 'Booking data updated successfully!'];
         }
 
@@ -176,12 +177,14 @@ class BookingServiceImpl implements BookingService
         $matchArray['club_id'] = $request->club_id;
         $matchArray['booking_id'] = $booked;
         $matchArray['slot_id'] = implode(',',$slot);
-        $matchArray['level'] = implode(',',$request->level);
+        if($request->match_type == "1") {
+            $matchArray['level'] = implode(',',$request->level);
+            $matchArray['gender_allowed'] = $request->gender;
+        }
         $matchArray['match_type'] = $request->match_type;
         $matchArray['game_type'] = $request->game_type;
         $matchArray['court_type'] = $request->court_type;
         $matchArray['is_friendly'] = $request->isFriendly;
-        $matchArray['gender_allowed'] = $request->gender;
         $matchArray['status'] = "1";
 
         //store the match data in the database 
