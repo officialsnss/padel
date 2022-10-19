@@ -2,5 +2,6 @@
 
 return [
     'en' => 'EN',
-    'kw' => 'Kw'
+    'kw' => 'Kw',
+    'ar' => 'ar'
 ];

@@ -76,10 +76,10 @@
                                             </div>
                                         </li>
                                         <li class="list-inline-item">
-                                            @if(App::getLocale() == 'kw')
+                                            @if(App::getLocale() == 'ar')
                                             <a href="{{url('lang/en')}}" class="arabic-lang">EN</a>
                                             @else
-                                            <a href="{{url('lang/kw')}}" class="arabic-lang">عربي</a>
+                                            <a href="{{url('lang/ar')}}" class="arabic-lang">عربي</a>
                                             @endif
                                         </li>
                                     </ul>

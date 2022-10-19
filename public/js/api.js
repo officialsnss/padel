@@ -1,11 +1,12 @@
 $(document).ready(function () {
-
+    // console.log(language);
     //------Fetch Header Token Ajax Code ------//
     var lang = $('#selectedLang').val();
 
     $.ajaxSetup({
         headers: {
-            "Authorization": localStorage.getItem('token')
+            "Authorization": localStorage.getItem('token'),
+            'Accept-Language' : language,
         }
     });
 
@@ -15,6 +16,9 @@ $(document).ready(function () {
         type: 'get',
         url: 'api/popularClubs',
         // data: formData.serialize(),
+        // headers: {
+        //     'Accept-Language' : language,
+        // },
         success: function (data) {
             // alert(lang);
             console.log(data);
@@ -23,11 +27,7 @@ $(document).ready(function () {
                 res += '<div class="swiper-slide">';
                 res += '<div class="courts-div">';
                 res += ' <div class="courts-name-desc">';
-                if(lang == 'en'){
-                    res += '<h4 class="text-white">' + data.data[i].name + '</h4>';
-                } else {
-                    res += '<h4 class="text-white">' + data.data[i].name_arabic + '</h4>';
-                }
+                res += '<h4 class="text-white">' + data.data[i].name + '</h4>';
 
                 if(data.data[i].featured_image == ''){
                     featured_image = "club_images/202208191047vpro_azul_gris_amarillo.jpg";
@@ -49,13 +49,13 @@ $(document).ready(function () {
                 res += ' </div>';
                 res += ' <div class="clearfix-space"></div>';
                 res += '<div class="row">';
-                // for (var j = 0; j < data.data[i].amenities.length; j++) {
-                // res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
-                // res += '<div class="court-icons">';
-                // res += '<img src="http://127.0.0.1:8000/Images/'+data.data[i].amenities[j].image+'" class="img-fluid" alt="">';
-                // res += '</div>';
-                // res += '</div>';
-                // }
+                for (var j = 0; j < data.data[i].amenities.length; j++) {
+                res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
+                res += '<div class="court-icons">';
+                res += '<img src="http://127.0.0.1:8000/Images/'+data.data[i].amenities[j].image+'" class="img-fluid" alt="">';
+                res += '</div><p style="font-size: 15px;">'+data.data[i].amenities[j].name+'</p>';
+                res += '</div>';
+                }
                 res += '</div>';
                 res += '</div>';
                 res += '<img src="http://127.0.0.1:8000/Images/'+featured_image+'" class="img-fluid" alt="">';

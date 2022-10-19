@@ -14,6 +14,8 @@ class CoachUnavailability extends Model
         'coach_id',
         'start_date',
         'end_date',
+        'start_time',
+        'end_time',
         'reason',
         'status',
         'created_at',

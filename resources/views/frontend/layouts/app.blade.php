@@ -76,6 +76,9 @@
     {{-- <script src="{{asset('js/rating.js')}}"></script> --}}
     <script src="{{asset('js/jquery.rateyo.js')}}"></script>
     <script src="{{asset('js/jquery.rateyo.min.js')}}"></script>
+    <script>
+        var language = "{{App::getLocale()}}";
+    </script>
     <script src="{{asset('js/api.js')}}"></script>
 </body>
 
