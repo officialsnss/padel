@@ -45,6 +45,7 @@ class ClubDataServiceImpl implements ClubDataService
         if($data) {
             foreach($data as $i => $row) {
                 if($row['status'] == '2') {
+
                     break;
                 }
                 $dataPacket[$i]['id'] = $row['id'];
@@ -93,10 +94,10 @@ class ClubDataServiceImpl implements ClubDataService
                     }
                     $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
                 }
+
                 $dataPacket[$i]['amenities']  = $amenitiesPacket;
             }
         }
-
         return $dataPacket;
     }
 
