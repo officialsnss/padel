@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <p class="note"><strong>Note: </strong>Please drag and drop the row to change the order of the clubs.
                     </p>
-                    <table id="tablevendor" class="table table-bordered table-striped">
+                    <table id="tablevendor" class="table table-bordered table-striped table-responsive">
                         <thead>
                             <tr>
                                 <th>#</th>

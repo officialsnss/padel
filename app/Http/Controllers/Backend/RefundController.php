@@ -38,7 +38,7 @@ class RefundController extends Controller
             return view('backend.pages.cancel', compact('title','payments'));
         }
         catch (\Exception $e) {
-          //dd($e->getMessage());
+        //   dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
         }
     }
