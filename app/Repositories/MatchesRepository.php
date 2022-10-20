@@ -37,7 +37,7 @@ class MatchesRepository extends BaseRepository
               ->with('booking')
               ->whereHas('booking', function ($q) use ($userId, $date) {
                         $q->where('user_id', '=', $userId);
-                        $q->where('booking_date', '>', $date);
+                        $q->where('booking_date', '>=', $date);
               })
               ->whereHas('clubs', function ($q) use ($request) {
                         $q->where('name', 'like', '%' . $request->searchData . '%');
