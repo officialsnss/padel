@@ -3,9 +3,9 @@ namespace App\Http\Controllers\Backend;
 use DB;
 use Auth;
 use File;
-use App\Models\Bat; 
-use App\Models\VendorBats; 
-use App\Models\Club; 
+use App\Models\Bat;
+use App\Models\VendorBats;
+use App\Models\Club;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -20,9 +20,9 @@ class BatController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
-   
+
 
     public function index()
     {
@@ -34,13 +34,13 @@ class BatController extends Controller
         catch (\Exception $e) {
           //dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }      
+        }
     }
 
     // Bat Create
 
     public function create()
-    { 
+    {
         try{
             $title = 'Create Bat';
             return view('backend.pages.batCreate', compact('title'));
@@ -57,21 +57,21 @@ class BatController extends Controller
     //          'bat_name' => 'required|string',
     //        //  'description' => 'required|string',
     //  ]);
-            
+
          try{
             $data['name'] = $request->bat_name;
             $data['description'] = $request->desc;
             $data['name_arabic'] = $request->name_arabic;
             $data['description_arabic'] = $request->desc_arabic;
-               
+
              if($request->file('featured_image')){
                 $file= $request->file('featured_image');
                 $filename= date('YmdHi').$file->getClientOriginalName();
                 $file->move(base_path('Images/bat_images'), $filename);
                 $data['featured_image']= $filename;
                  }
-               $result =  Bat::insert($data);  
-        
+               $result =  Bat::insert($data);
+
             if($result){
             return redirect('/admin/bats')->with('success', 'Bat Created Successfully.');
             }
@@ -81,7 +81,7 @@ class BatController extends Controller
             return redirect('/admin/bats')->with('error', 'Something went wrong.');
         }
 
-    
+
     }
 
     //  Delete
@@ -90,14 +90,14 @@ class BatController extends Controller
         try{
             $bats = Bat::findOrFail($id);
             $bats->status = '2';
-            $bats->save(); 
-         
+            $bats->save();
+
            return redirect('/admin/bats')->with('success', 'Deleted Successfully.');
-           
+
         }
         catch (\Exception $e) {
             return redirect('/admin/bats')->with('error', 'Something went wrong.');
-        
+
          }
     }
 
@@ -115,16 +115,16 @@ class BatController extends Controller
 
     public function update(Request $request, $id)
        {
-        
+
             // $request->validate([
             //     'bat_name' => 'required|string',
-              
+
             // ]);
-        try{ 
-          
+        try{
+
            $bat = Bat::findOrFail($id);
           // $data = $request->except('_method','_token','submit');
-         
+
            if($request->file('featured_image')){
              if($bat->featured_image){
                 $imagePath = base_path('Images/bat_images/'. $bat->featured_image);
@@ -142,7 +142,7 @@ class BatController extends Controller
            $bat->name_arabic = $request->name_arabic;
            $bat->description_arabic = $request->desc_arabic;
           // $page->slug = Str::slug($request->title);
-           $bat->save(); 
+           $bat->save();
            return redirect('/admin/bats')->with('success', 'Bat Updated successfully');
         }
         catch (\Exception $e) {
@@ -170,12 +170,12 @@ class BatController extends Controller
         catch (\Exception $e) {
          // dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }      
+        }
     }
 
     //Vendor Bat Create
     public function vendorCreate()
-    { 
+    {
         try{
             //$title = '';
             $bats =  Bat::where('status', 1)->get();
@@ -197,10 +197,10 @@ class BatController extends Controller
             $data['bat_id'] = $request->bat_id;
             $data['price'] = $request->price;
             $data['currency_id'] = '129';
-            $data['quantity'] = $request->quantity; 
-           
-            $result =  VendorBats::insert($data);  
-        
+            $data['quantity'] = $request->quantity;
+
+            $result =  VendorBats::insert($data);
+
             if($result){
             return redirect('/admin/vendor/bats')->with('success', 'Added Successfully.');
             }
@@ -210,7 +210,7 @@ class BatController extends Controller
             return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
         }
 
-    
+
     }
 
     public function vendorEdit($id)
@@ -226,13 +226,13 @@ class BatController extends Controller
         }
     }
 
-  
+
     public function vendorUpdate(Request $request, $id)
     {
-     
-        
-     try{ 
-       
+
+
+     try{
+
         $vendorbats = VendorBats::findOrFail($id);
         $userId = auth()->user()->id;
         $club =  Club::where('user_id',$userId)
@@ -243,9 +243,9 @@ class BatController extends Controller
         $vendorbats->price = $request->price;
         $vendorbats->quantity = $request->quantity;
         $userId = auth()->user()->id;
-       
+
        // $page->slug = Str::slug($request->title);
-        $vendorbats->save(); 
+        $vendorbats->save();
         return redirect('/admin/vendor/bats')->with('success', 'Updated successfully');
      }
      catch (\Exception $e) {
@@ -254,8 +254,8 @@ class BatController extends Controller
      }
  }
 
-   
-     
+
+
 }
 
 

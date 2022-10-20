@@ -28,7 +28,7 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-  
+
     /**
      * Create a new controller instance.
      *
@@ -40,14 +40,14 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {   
-     
+    {
+    //  dd('asdasd');
         $input = $request->all();
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
         ]);
-   
+
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'], 'isDeleted'=> '0'))) {
             if (auth()->user()->role != 3) {
                 return redirect()->route('dashboard');

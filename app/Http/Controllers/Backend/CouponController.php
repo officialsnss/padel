@@ -3,10 +3,10 @@ namespace App\Http\Controllers\Backend;
 use DB;
 use Auth;
 use File;
-use App\Models\Bat; 
-use App\Models\VendorBats; 
-use App\Models\Club; 
-use App\Models\Coupon; 
+use App\Models\Bat;
+use App\Models\VendorBats;
+use App\Models\Club;
+use App\Models\Coupon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -21,9 +21,9 @@ class CouponController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
-   
+
 
     public function index()
     {
@@ -37,13 +37,13 @@ class CouponController extends Controller
         catch (\Exception $e) {
           //dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
-        }      
+        }
     }
 
     // Bat Create
 
     public function create()
-    { 
+    {
         try{
             $title = 'Create Coupon';
             return view('backend.pages.couponCreate', compact('title'));
@@ -56,14 +56,14 @@ class CouponController extends Controller
 
     public function add(Request $request)
     {
-      
-            
+
+
          try{
 
             $data = $request->except('_method','_token','submit');
             $data['currency_id'] = '129';
-               $result =  Coupon::insert($data);  
-        
+               $result =  Coupon::insert($data);
+
             if($result){
             return redirect('/admin/coupons')->with('success', 'Coupons Created Successfully.');
             }
@@ -73,7 +73,7 @@ class CouponController extends Controller
             return redirect('/admin/coupons')->with('error', 'Something went wrong.');
         }
 
-    
+
     }
 
     //  Delete
@@ -85,17 +85,17 @@ class CouponController extends Controller
             if($currentStatus == '1'){
                 $coupon->status = '2';
             }
-            else { 
+            else {
               $coupon->status = '1';
             }
-            $coupon->save(); 
-         
+            $coupon->save();
+
            return redirect('/admin/coupons')->with('success', 'Status Updated Successfully.');
-           
+
         }
         catch (\Exception $e) {
             return redirect('/admin/coupons')->with('error', 'Something went wrong.');
-        
+
          }
     }
 
@@ -113,12 +113,12 @@ class CouponController extends Controller
 
     public function update(Request $request, $id)
        {
-        
-        try{ 
-          
+
+        try{
+
            $coupon = Coupon::findOrFail($id);
            $data = $request->except('_method','_token','submit');
-           $coupon->update($data); 
+           $coupon->update($data);
            return redirect('/admin/coupons')->with('success', 'Coupons Updated successfully');
         }
         catch (\Exception $e) {
@@ -128,8 +128,8 @@ class CouponController extends Controller
     }
 
 
-   
-     
+
+
 }
 
 

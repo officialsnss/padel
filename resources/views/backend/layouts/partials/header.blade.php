@@ -5,7 +5,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="{{ url('/') }}" class="nav-link">{{ (__('backend.menuTop.Home')) }}</a>
+            <a href="{{ url('/') }}" class="nav-link" target="_blank">{{ (__('backend.menuTop.Home')) }}</a>
         </li>
 
     </ul>

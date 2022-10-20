@@ -39,7 +39,7 @@ Route::post('contact', 'App\Http\Controllers\Api\ContactUsController@sendMessage
 Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
 // Route::post('register', [RegisterController::class, 'register']);
-     
+
 Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
 
