@@ -48,7 +48,7 @@ class ClubsController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'Popular clubs data listing', true, 200);
         }
-        return ResponseUtil::errorWithMessage(201,'No popular clubs found.', true, 201);
+        return ResponseUtil::errorWithMessage(201,'No popular clubs found.', false, 201);
     }
 
     public function getSingleClub(Request $request)
