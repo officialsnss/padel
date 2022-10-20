@@ -49,7 +49,17 @@ class MatchesServiceImpl implements MatchesService
     public function getMatchesList($request)
     {
         $data = $this->matchesRepository->getUpcomingMatches($request);
-        return $this->getMatchArray($data);
+        $matchData = $this->getMatchArray($data);
+        $matchArray = [];
+
+        foreach($matchData as $match) {
+            if($match['isMatchCompleted'] == 1) {
+                continue;
+            } else {
+                array_push($matchArray, $match);
+            }
+        }
+        return $matchArray;
     }
 
     public function getMatches($request)

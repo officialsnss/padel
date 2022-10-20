@@ -211,7 +211,7 @@ class CoachesServiceImpl implements CoachesService
     public function getCoachesListForBooking($request)
     {
         // Getting data of all coaches
-        $coachesList = $this->getCoachesList();
+        $coachesList = $this->getCoachesList($request);
 
         // Getting bookings by date
         $booking = $this->bookingRepository->getBookingByDate($request->dateTime);
