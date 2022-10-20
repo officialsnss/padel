@@ -45,7 +45,7 @@ class ClubDataServiceImpl implements ClubDataService
         if($data) {
             foreach($data as $i => $row) {
                 if($row['status'] == '2') {
-                    break;
+                    continue;
                 }
                 $dataPacket[$i]['id'] = $row['id'];
     
