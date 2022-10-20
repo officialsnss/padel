@@ -204,13 +204,16 @@ class BookingServiceImpl implements BookingService
         // Calculating total price of the booking based on coupons
         if($request->coupon_id) {
             $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
-            $paymentArray['coupons_id'] = $request->coupon_id;
-            if($couponData->discount_type == 1) {
-                $paymentArray['discount_price'] = $couponData->amount;
-            } else {
-                $paymentArray['discount_price'] = $couponData->amount * $paymentArray['price'] * 0.01;
+            if($couponData) {
+                $paymentArray['coupons_id'] = $request->coupon_id;
+                if($couponData->discount_type == 1) {
+                    $paymentArray['discount_price'] = $couponData->amount;
+                } else {
+                    $paymentArray['discount_price'] = $couponData->amount * $paymentArray['price'] * 0.01;
+                }
+                $paymentArray['total_amount'] = number_format((float)$paymentArray['price'] - $paymentArray['discount_price'], 3, '.', '');
             }
-            $paymentArray['total_amount'] = number_format((float)$paymentArray['price'] - $paymentArray['discount_price'], 3, '.', '');
+            $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
         } else {
             $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
         }
