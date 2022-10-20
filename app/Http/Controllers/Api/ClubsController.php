@@ -54,7 +54,9 @@ class ClubsController extends Controller
     public function getSingleClub(Request $request)
     {
         $data = $this->clubDataService->getSingleClub($request);
-        if($data) {
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        } else if($data) {
             return ResponseUtil::successWithData($data, 'Club Details', true, 200);
         }
         return ResponseUtil::errorWithMessage(201,'No club found.', false, 201);

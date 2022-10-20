@@ -40,57 +40,63 @@ class ClubDataServiceImpl implements ClubDataService
 
         // Getting all clubs from the db
         $data = $this->clubDataRepository->getClubsList($request);
-
         $dataPacket = [];
-        foreach($data as $i => $row) {
-            $dataPacket[$i]['id'] = $row['id'];
 
-            // Getting name of the club based on the selected language
-            if($lang == "en") {
-                $dataPacket[$i]['name'] = $row['name'];
-            } elseif ($lang == "ar") {
-                $dataPacket[$i]['name'] = $row['name_arabic'];
-            }
-
-            // Getting address of the club
-            $address = $row['address'];
-            if(count($row['cities']) > 0) {
-                if($lang == "en") {
-                    $city = $row['cities'][0]['name'];
-                } elseif ($lang == "ar") {
-                    $city = $row['cities'][0]['name_arabic'];
+        if($data) {
+            foreach($data as $i => $row) {
+                if($row['status'] == '2') {
+                    break;
                 }
-            } else {
-                $city = null;
-            }
-            $dataPacket[$i]['address'] = $address . ', ' . $city;
-            
-            $dataPacket[$i]['price'] = $row['single_price'];
-            $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
-            $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
-            $dataPacket[$i]['isPopular'] = $row['isPopular'];
-            $dataPacket[$i]['rating'] = number_format($this->getClubRating($row['club_rating']),1,'.','');
-            $dataPacket[$i]['ordering'] = $row['ordering'];
-            $dataPacket[$i]['latitude'] = $row['latitude'];
-            $dataPacket[$i]['longitude'] = $row['longitude'];
-
-            // Creating aminities packet
-            $amenitiesPacket = [];
-            $amenities = explode(',',$row['amenities']);
-            $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
+                $dataPacket[$i]['id'] = $row['id'];
     
-            foreach($amenitiesData as $key => $data) {
-                $amenitiesPacket[$key]['id'] = $data->id;
-                // Getting name of the animities based on the selected language
+                // Getting name of the club based on the selected language
                 if($lang == "en") {
-                    $amenitiesPacket[$key]['name'] = $data->name;
+                    $dataPacket[$i]['name'] = $row['name'];
                 } elseif ($lang == "ar") {
-                    $amenitiesPacket[$key]['name'] = $data->name_arabic;
+                    $dataPacket[$i]['name'] = $row['name_arabic'];
                 }
-                $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
+    
+                // Getting address of the club
+                $address = $row['address'];
+                if(count($row['cities']) > 0) {
+                    if($lang == "en") {
+                        $city = $row['cities'][0]['name'];
+                    } elseif ($lang == "ar") {
+                        $city = $row['cities'][0]['name_arabic'];
+                    }
+                } else {
+                    $city = null;
+                }
+                $dataPacket[$i]['address'] = $address . ', ' . $city;
+                
+                $dataPacket[$i]['price'] = $row['single_price'];
+                $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
+                $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
+                $dataPacket[$i]['isPopular'] = $row['isPopular'];
+                $dataPacket[$i]['rating'] = number_format($this->getClubRating($row['club_rating']),1,'.','');
+                $dataPacket[$i]['ordering'] = $row['ordering'];
+                $dataPacket[$i]['latitude'] = $row['latitude'];
+                $dataPacket[$i]['longitude'] = $row['longitude'];
+    
+                // Creating aminities packet
+                $amenitiesPacket = [];
+                $amenities = explode(',',$row['amenities']);
+                $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
+        
+                foreach($amenitiesData as $key => $data) {
+                    $amenitiesPacket[$key]['id'] = $data->id;
+                    // Getting name of the animities based on the selected language
+                    if($lang == "en") {
+                        $amenitiesPacket[$key]['name'] = $data->name;
+                    } elseif ($lang == "ar") {
+                        $amenitiesPacket[$key]['name'] = $data->name_arabic;
+                    }
+                    $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
+                }
+                $dataPacket[$i]['amenities']  = $amenitiesPacket;
             }
-            $dataPacket[$i]['amenities']  = $amenitiesPacket;
         }
+        
         return $dataPacket;
     }
 
@@ -151,6 +157,17 @@ class ClubDataServiceImpl implements ClubDataService
         // Getting data of a club by club_id
         $data = $this->clubDataRepository->getSingleClubData($id);
         $clubData = $data['data'];
+        
+        // If there is no club for the entered club_id
+        if(!$clubData) {
+            return ['error' => 'There is no club associated with the entered club id'];
+        }
+
+
+        // If the club is deactive by the admin
+        if($clubData['status'] == '2') {
+            return ['error' => 'The club is deactived by the admin'];
+        }
 
         // If club data exists for the entered club_id
         if($clubData) {

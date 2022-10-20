@@ -216,8 +216,10 @@ class MatchesServiceImpl implements MatchesService
         $data = $this->matchesRepository->getMatchDetails($request->match_id);
         $dataArray = [];
         if($data) {
+
+            // If the match is private
             if($data['match_type'] == 2) {
-                if($userData['id'] != $data['player_id']) {
+                if($userData['user_id'] != $data['booking'][0]['user_id']) {
                     return ['error' => 'You cannot see someone else private match'];
                 }
             }
