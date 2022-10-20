@@ -46,18 +46,9 @@ class BookingServiceImpl implements BookingService
         $userId = auth()->user()->id;
 
         foreach($matchData as $match) {
-            $matchTime = $match['startTime'];
-            $current = Carbon::now()->toDateTimeString();
-            $currentDate = strtotime($current);
-
             // We are getting all matches above, so check on only players bookings
             if($match['booked_by'] == $userId) {
                 unset($match['booked_by']);
-
-                // If matchTime is less than currentTime, then the match is completed
-                if($currentDate > $matchTime) {
-                    $match['isMatchCompleted'] = 1;
-                }
                 array_push($bookedMatches, $match);
             }
         }
@@ -70,6 +61,16 @@ class BookingServiceImpl implements BookingService
     public function addBooking($request)
     {
         $userId = auth()->user()->id;
+
+        // Validations for the necessary fields
+        if(!$request->dateTime) {
+            return ['error' => 'Please enter the value of dateTime!'];
+        }
+        if($request->match_type == 1) {
+            if(!$request->level) {
+                return ['error' => 'Please enter the value of level!'];
+            }
+        }
 
         // Edit booking 
         if($request->isEdit == true) {
@@ -98,10 +99,11 @@ class BookingServiceImpl implements BookingService
             }
 
             // Match array data to be filled in matches table
-            $matchArray = [];
-            $matchArray['level'] = implode(',',$request->level);
-            $match = $this->bookingRepository->updateMatchData($matchArray, $request->booking_id);
-
+            if($request->match_type == "1") {
+                $matchArray = [];
+                $matchArray['level'] = implode(',',$request->level);
+                $match = $this->bookingRepository->updateMatchData($matchArray, $request->booking_id);
+            }
             return ['message' => 'Booking data updated successfully!'];
         }
 
@@ -175,12 +177,14 @@ class BookingServiceImpl implements BookingService
         $matchArray['club_id'] = $request->club_id;
         $matchArray['booking_id'] = $booked;
         $matchArray['slot_id'] = implode(',',$slot);
-        $matchArray['level'] = implode(',',$request->level);
+        if($request->match_type == "1") {
+            $matchArray['level'] = implode(',',$request->level);
+            $matchArray['gender_allowed'] = $request->gender;
+        }
         $matchArray['match_type'] = $request->match_type;
         $matchArray['game_type'] = $request->game_type;
         $matchArray['court_type'] = $request->court_type;
         $matchArray['is_friendly'] = $request->isFriendly;
-        $matchArray['gender_allowed'] = $request->gender;
         $matchArray['status'] = "1";
 
         //store the match data in the database 

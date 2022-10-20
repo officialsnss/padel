@@ -76,18 +76,6 @@ class DashboardServiceImpl implements DashboardService
     {
         // Getting List of all the Matches
         $matchData = $this->matchesServiceImpl->getMatchesList($request);
-        $upcomingMatches = [];
-        
-        foreach($matchData as $match) {
-            $matchTime = $match['startTime'];
-            $current = Carbon::now()->toDateTimeString();
-            $currentDate = strtotime($current);
-
-            // If matchTime is greater than currentTime, then the match is upcoming
-            if($currentDate > $matchTime) {
-                $match['isMatchCompleted'] = 1;
-            }
-        }
 
         // Sorting the match data with date order
         $upcomingMatches = collect($matchData)->sortBy('date')->toArray();

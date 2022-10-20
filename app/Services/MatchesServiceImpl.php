@@ -42,19 +42,6 @@ class MatchesServiceImpl implements MatchesService
     {
         // Getting Listing of all Matches
         $matchData = $this->getMatchesList($request);
-        $upcomingMatches = [];
-
-        foreach($matchData as $match) {
-            $matchTime = $match['startTime'];
-            $current = Carbon::now()->toDateTimeString();
-            $currentDate = strtotime($current);
-
-            // If matchTime is less than currentTime, then the match is completed
-            if($currentDate > $matchTime) {
-                $match['isMatchCompleted'] = 1;
-            }
-        }
-
         $upcomingMatches = collect($matchData)->sortBy('date')->toArray();
         return $upcomingMatches;
     }
@@ -165,24 +152,32 @@ class MatchesServiceImpl implements MatchesService
             } else {
                 $dataArray[$i]['gender'] = 'Mix';
             }
-
+                
             // Getting levels of the match
-            $levelArray = explode(',',$row['level']);
-            foreach($levelArray as $key => $level) {
-                $level = $this->levelsServiceImpl->getLevelById($level);
-                $dataArray[$i]['level'][$key]['id'] = $level['id'];
-                if($lang == "en") {
-                    $dataArray[$i]['level'][$key]['name'] = $level['name'];
-                } elseif ($lang == "ar") {
-                    $dataArray[$i]['level'][$key]['name'] = $level['name_arabic'];
+            if($dataArray[$i]['match_type'] == 'Public') {
+                $levelArray = explode(',',$row['level']);
+                foreach($levelArray as $key => $level) {
+                    $level = $this->levelsServiceImpl->getLevelById($level);
+                    $dataArray[$i]['level'][$key]['id'] = $level['id'];
+                    if($lang == "en") {
+                        $dataArray[$i]['level'][$key]['name'] = $level['name'];
+                    } elseif ($lang == "ar") {
+                        $dataArray[$i]['level'][$key]['name'] = $level['name_arabic'];
+                    }
                 }
+                $min = min($levelArray);
+                $min_level = $this->levelsServiceImpl->getLevelById($min);
+                $dataArray[$i]['minimum_level'] = (string)$min_level['id'];
             }
-            $min = min($levelArray);
-            $min_level = $this->levelsServiceImpl->getLevelById($min);
-            $dataArray[$i]['minimum_level'] = (string)$min_level['id'];
-            
             $dataArray[$i]['booked_by'] = $row['booking'][0]['user_id'];  
-            $dataArray[$i]['isMatchCompleted'] = 0;  
+            
+            // Checking match status of completion
+            $dataArray[$i]['isMatchCompleted'] = 0;
+            $current = Carbon::now()->toDateTimeString();
+            $currentDate = strtotime($current);  
+            if($currentDate > $dataArray[$i]['startTime']) {
+                $dataArray[$i]['isMatchCompleted'] = 1;
+            }
 
             // Getting bats list for this match booking
             $dataArray[$i]['bats'] = $this->getBookedBats($row['bookedBats']);  
@@ -221,8 +216,10 @@ class MatchesServiceImpl implements MatchesService
         $data = $this->matchesRepository->getMatchDetails($request->match_id);
         $dataArray = [];
         if($data) {
+
+            // If the match is private
             if($data['match_type'] == 2) {
-                if($userData['id'] != $data['player_id']) {
+                if($userData['user_id'] != $data['booking'][0]['user_id']) {
                     return ['error' => 'You cannot see someone else private match'];
                 }
             }
@@ -288,22 +285,30 @@ class MatchesServiceImpl implements MatchesService
             }
 
             // Getting levels of the match
-            $levelArray = explode(',',$data['level']);
-            foreach($levelArray as $i => $row) {
-                $level = $this->levelsServiceImpl->getLevelById($row);
-                $dataArray['level'][$i]['id'] = $level['id'];
-                if($lang == "en") {
-                    $dataArray['level'][$i]['name'] = $level['name'];
-                } elseif ($lang == "ar") {
-                    $dataArray['level'][$i]['name'] = $level['name_arabic'];
-                }            }
-            $min = min($levelArray);
-            $min_level = $this->levelsServiceImpl->getLevelById($min);
-            $dataArray['minimum_level'] = $min_level['id'];
-            
+            if($dataArray['match_type'] == 'Public') {
+                $levelArray = explode(',',$data['level']);
+                foreach($levelArray as $i => $row) {
+                    $level = $this->levelsServiceImpl->getLevelById($row);
+                    $dataArray['level'][$i]['id'] = $level['id'];
+                    if($lang == "en") {
+                        $dataArray['level'][$i]['name'] = $level['name'];
+                    } elseif ($lang == "ar") {
+                        $dataArray['level'][$i]['name'] = $level['name_arabic'];
+                    }            }
+                $min = min($levelArray);
+                $min_level = $this->levelsServiceImpl->getLevelById($min);
+                $dataArray['minimum_level'] = $min_level['id'];
+            }
             $dataArray['booked_by'] = $data['booking'][0]['user_id'];  
-            $dataArray['isMatchCompleted'] = 0;
             
+            // Check for match complete or not
+            $dataArray['isMatchCompleted'] = 0;
+            $current = Carbon::now()->toDateTimeString();
+            $currentDate = strtotime($current);
+            if($currentDate > $dataArray['startTime']) {
+                $dataArray['isMatchCompleted'] = 1;
+            }
+
             // Getting data of all the booked bats
             $dataArray['bats'] = $this->getBookedBats($data['bookedBats']);  
             
