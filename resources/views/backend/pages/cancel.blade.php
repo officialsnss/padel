@@ -10,6 +10,7 @@
                   <thead>
                   <tr>
                     <th>Sr.no</th>
+                    <th>Booking Id</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Total Amount Paid</th>
@@ -25,6 +26,7 @@
                   @foreach ($payments as $payment)
                     <tr>
                       <td></td>
+                      <td>{{ $payment->order_id }}</td>
                       <td>{{ $payment->name }}</td>
                       <td>{{ $payment->email }}</td>
                       <td>{{ $payment->total_amount }} {{ $payment->code }}</td>

@@ -56,17 +56,31 @@ class BookingController extends Controller
           $title = 'Bookings Details';
           $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
           ->leftJoin('users','users.id', '=', 'bookings.user_id')
-          ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
+          ->leftJoin('coaches_details','coaches_details.id', '=', 'bookings.coach_id')
+          ->leftJoin('users as coachusers','coachusers.id', '=', 'coaches_details.user_id')
           ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-          ->leftJoin('coaches_details','coachusers.id', '=', 'coaches_details.user_id')
-         // ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
+        //   ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
           ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
           ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
-          //->whereIn('payments.payment_status',[1,2])
           ->where('bookings.id', $id)
           ->where('payments.isRefunded', '0')
-          ->select('coaches_details.price as coachprice', 'coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
+          ->select('coaches_details.price as coachprice','coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
           ->first();
+
+
+        //   $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
+        //   ->leftJoin('users','users.id', '=', 'bookings.user_id')
+        //   ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
+        //   ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+        //   ->leftJoin('coaches_details','coachusers.id', '=', 'coaches_details.user_id')
+        //  // ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
+        //   ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
+        //   ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
+        //   //->whereIn('payments.payment_status',[1,2])
+        //   ->where('bookings.id', $id)
+        //   ->where('payments.isRefunded', '0')
+        //   ->select('coaches_details.price as coachprice', 'coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
+        //   ->first();
     // dd($bookingInfo);
           $amenityList = [];
          if($bookingInfo->clubamenities != 'NULL'){
@@ -82,7 +96,7 @@ class BookingController extends Controller
           return view('backend.pages.bookingdetails', compact('title','bookingInfo', 'amenityList'));
       }
       catch (\Exception $e) {
-       // dd($e->getMessage());
+    //    dd($e->getMessage());
           return redirect('/admin/bookings')->with('error', 'Something went wrong.');
       }
   }
@@ -104,20 +118,32 @@ class BookingController extends Controller
   public function generateInvoicePDF(Request $request, $id)
   {
 
-
         $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
-        ->leftJoin('users','users.id', '=', 'bookings.user_id')
-        ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
-        ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
-        ->leftJoin('coaches_details','coachusers.id', '=', 'coaches_details.user_id')
-      // ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
-        ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
-        ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
-        //->whereIn('payments.payment_status',[1,2])
-        ->where('bookings.id', $id)
-        ->where('payments.isRefunded', '0')
-        ->select('coaches_details.price as coachprice', 'coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
-        ->first();
+          ->leftJoin('users','users.id', '=', 'bookings.user_id')
+          ->leftJoin('coaches_details','coaches_details.id', '=', 'bookings.coach_id')
+          ->leftJoin('users as coachusers','coachusers.id', '=', 'coaches_details.user_id')
+          ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+        //   ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
+          ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
+          ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
+          ->where('bookings.id', $id)
+          ->where('payments.isRefunded', '0')
+          ->select('coaches_details.price as coachprice','coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
+          ->first();
+
+    //     $bookingInfo = Booking::leftJoin('payments','payments.booking_id', '=', 'bookings.id')
+    //     ->leftJoin('users','users.id', '=', 'bookings.user_id')
+    //     ->leftJoin('users as coachusers','coachusers.id', '=', 'bookings.coach_id')
+    //     ->leftJoin('clubs','clubs.id', '=', 'bookings.club_id')
+    //     ->leftJoin('coaches_details','coachusers.id', '=', 'coaches_details.user_id')
+    //   // ->leftJoin('time_slots as slots','slots.id', '=', 'bookings.slot_id')
+    //     ->leftJoin('currencies', 'currencies.id' ,'=', 'payments.currency_id')
+    //     ->leftJoin('coupons','coupons.id', '=', 'payments.coupons_id')
+    //     //->whereIn('payments.payment_status',[1,2])
+    //     ->where('bookings.id', $id)
+    //     ->where('payments.isRefunded', '0')
+    //     ->select('coaches_details.price as coachprice', 'coachusers.name as coachname','bookings.created_at as orderDate', 'bookings.order_id as bookingorderId','payments.invoice','bookings.booking_date as bookdate','bookings.id as bookingid','payments.payment_status', 'payments.payment_method', 'payments.advance_price', 'payments.pending_amount','payments.discount_price', 'bookings.price as cprice', 'payments.total_amount', 'clubs.service_charge', 'payments.coupons_id', 'users.email as usremail', 'users.name as usrname', 'users.phone as phone', 'bookings.id as bookid','clubs.name as clubname','clubs.amenities as clubamenities', 'bookings.*','currencies.code as unit','payments.wallet_amount')
+    //     ->first();
           $amenityList = [];
          if($bookingInfo->clubamenities != 'NULL'){
           $amenityList = [];
@@ -138,9 +164,8 @@ class BookingController extends Controller
           }
           $amenityList = implode(',', $amenityList);
          }
-
     $pdf = PDF::loadView('myPDF', ['bookingInfo'=> $bookingInfo, 'amenityList' => $amenityList]);
-    return $pdf->download('invoice.pdf');
+    return $pdf->download($bookingInfo->invoice.'-invoice.pdf');
   }
 
   // Calender View
