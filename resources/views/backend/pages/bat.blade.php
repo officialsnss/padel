@@ -18,34 +18,36 @@
                     <th>Bat Name</th>
                     <th>Arabic Name</th>
                     <th>Image</th>
+                    <th>Status</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
                   <tbody>
-                    
+
                   @foreach ($bats as $bat)
                     <tr>
                       <td></td>
                       <td>{{ $bat->name }}</td>
                       <td>{{ $bat->name_arabic }}</td>
                       <!-- <td>{{ str_replace("&nbsp;", "", strip_tags($bat->description)) }}</td> -->
-                      <td><div id="image-holder"> 
+                      <td><div id="image-holder">
                          @if($bat->featured_image)
                             <img src="{{ URL::to('/') }}/Images/bat_images/{{ $bat->featured_image }}" class="thumb-image-list">
                          @endif
-                         </div></td>
-                        
+                         </div>
+                        </td>
+                        <td><input type="checkbox" data-id="{{ $bat->id }}" name="status" class="js-switchesss" {{ $bat->status == 1 ? 'checked' : '' }}></td>
                        <td>
                         <a href="{{ route('bat.edit',$bat->id) }}" class="btn btn-secondary">Edit</a>
                         <a href="{{ route('bat.delete',$bat->id) }}" class="btn btn-danger">Delete</a>
-                      
-                       
-                       
+
+
+
                       </tr>
                   @endforeach
-                  
+
                   </tbody>
-                
+
                 </table>
               </div>
               <!-- /.card-body -->
@@ -57,4 +59,3 @@
         <!-- /.row -->
 
         @endsection
-  

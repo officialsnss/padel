@@ -28,7 +28,7 @@ class BatController extends Controller
     {
         try{
             $title = 'Bats Listing';
-            $bats =  Bat::where('status', 1)->get();
+            $bats =  Bat::get();
            return view('backend.pages.bat', compact('title','bats'));
         }
         catch (\Exception $e) {
@@ -252,7 +252,21 @@ class BatController extends Controller
          //dd($e->getMessage());
          return redirect('/admin/vendor/bats')->with('error', 'Something went wrong.');
      }
- }
+    }
+
+    // Bat Status Updation
+    public function updateStatus(Request $request)
+    {
+        try{
+            $coach = Bat::findOrFail($request->id);
+            $coach->status = $request->status;
+            $coach->save();
+            return response()->json(['message' => 'Status updated successfully.']);
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/coaches')->with('error', 'Something went wrong.');
+        }
+    }
 
 
 

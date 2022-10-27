@@ -160,6 +160,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
      Route::get('/bat/delete/{id}', 'App\Http\Controllers\Backend\BatController@delete')->name('bat.delete');
      Route::get('/bat/edit/{id}', 'App\Http\Controllers\Backend\BatController@edit')->name('bat.edit');
      Route::post('/bat/update/{id}', 'App\Http\Controllers\Backend\BatController@update')->name('bat.update');
+     Route::get('/bat/status/update', 'App\Http\Controllers\Backend\BatController@updateStatus')->name('bat.update.status');
 
 
     //Coaches
