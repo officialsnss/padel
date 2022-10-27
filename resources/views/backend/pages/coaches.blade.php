@@ -16,6 +16,7 @@
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Experience(in Months)</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -28,7 +29,7 @@
 
                                     <td>{{ $coach->price }} {{ $coach->currencyCode }}</td>
                                     <td>{{ $coach->experience }} </td>
-
+                                    <td><input type="checkbox" data-id="{{ $coach->cid }}" name="status" class="js-switchess" {{ $coach->coachstatus == 1 ? 'checked' : '' }}></td>
                                     <td>
                                         <a href="{{ route('coach.edit', $coach->cid) }}" class="btn btn-secondary">Edit</a>
                                         <a href="{{ route('coach.delete', $coach->cid) }}" class="btn btn-danger">Delete</a>
@@ -50,4 +51,5 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
+
 @endsection

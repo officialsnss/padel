@@ -110,6 +110,33 @@
   });
 
 </script>
+
+<script>let elemst = Array.prototype.slice.call(document.querySelectorAll('.js-switchess'));
+
+    elemst.forEach(function(html) {
+        let switchery = new Switchery(html,  { size: 'small' });
+    });</script>
+          <script>
+            $(document).ready(function(){
+        $('.js-switchess').change(function () {
+            let status = $(this).prop('checked') === true ? 1 : 2;
+            let Id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: '{{ route('coach.update.status') }}',
+                data: {'status': status, 'id': Id},
+                success: function (data) {
+                    toastr.options.closeButton = true;
+                    toastr.options.closeMethod = 'fadeOut';
+                    toastr.options.closeDuration = 100;
+                    toastr.success(data.message);
+                }
+            });
+        });
+    });
+</script>
+
 <script>let elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
 elems.forEach(function(html) {

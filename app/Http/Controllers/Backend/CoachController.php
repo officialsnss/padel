@@ -33,14 +33,14 @@ class CoachController extends Controller
             $title = 'Coaches Listing';
             $coaches =  Coach::leftJoin('users','users.id','=' ,'coaches_details.user_id')
                      ->leftJoin('currencies', 'currencies.id' ,'=', 'coaches_details.currency_id')
-                     ->where('coaches_details.status', '1')
+                    //  ->where('coaches_details.status', '1')
                      ->where('coaches_details.isDeleted', '0')
-                     ->select('coaches_details.*','users.*','currencies.code as currencyCode','coaches_details.id as cid')
+                     ->select('coaches_details.*','users.*','currencies.code as currencyCode','coaches_details.id as cid','coaches_details.status as coachstatus')
                      ->get();
            return view('backend.pages.coaches', compact('title','coaches'));
         }
         catch (\Exception $e) {
-          //dd($e->getMessage());
+          dd($e->getMessage());
             return redirect('/admin')->with('error', 'Something went wrong.');
         }
     }
@@ -439,6 +439,19 @@ class CoachController extends Controller
 
         }
 
+    // Coach Status Updation
+    public function updateStatus(Request $request)
+    {
+        try{
+            $coach = Coach::findOrFail($request->id);
+            $coach->status = $request->status;
+            $coach->save();
+            return response()->json(['message' => 'Status updated successfully.']);
+        }
+        catch (\Exception $e) {
+            return redirect('/admin/coaches')->with('error', 'Something went wrong.');
+        }
+    }
 }
 
 

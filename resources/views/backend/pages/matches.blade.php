@@ -25,63 +25,65 @@
                             </form>
                         </div>
                     </div>
-                    <table id="matches_table" class="table table-bordered table-striped">
+                    <div class="table-responsive">
+                        <table id="matches_table" class="table table-bordered table-striped">
 
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Club Name</th>
-                                <th>Image</th>
-                                <th>Match Status</th>
-                                <th>Date</th>
-                                <th width="100px">Action</th>
-                            </tr>
-                        </thead>
-                        {{-- <tbody id="tbody">
-                            @foreach ($matchs as $match)
+                            <thead>
                                 <tr>
-                                    <td></td>
-                                    <td>{{ $match['name'] }}</td>
-                                    <td>
-                                        <div id="image-holder">
-                                            @if ($match['featured_image'])
-                                                <img src="{{ URL::to('/') }}/Images/club_images/{{ $match['featured_image'] }}"
-                                                    class="thumb-image-list">
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @php
-                                            if ($match['status'] == 1) {
-                                                $status = 'Upcomming';
-                                            } elseif ($match['status'] == 2) {
-                                                $status = 'Played';
-                                            } else {
-                                                $status = 'Cancelled';
-                                            }
-                                            echo $status;
-                                        @endphp
-                                    </td>
-                                    <td>@php
-                                        echo date('d-M-Y',strtotime($match['created_at']))
-                                    @endphp</td>
-                                    <td>
-                                        @php
-                                            if ($match['status'] == 2) {
-                                        @endphp
-                                        <a href="{{ route('matches.edit', $match['id']) }}"
-                                            class="btn btn-secondary">Edit Result</a>
-                                        @php
-                                            }
-                                        @endphp
-                                        <a href="{{ route('matches.view', $match['id']) }}" class="btn btn-primary">View</a>
-
+                                    <th>Sr. No.</th>
+                                    <th>Club Name</th>
+                                    <th>Image</th>
+                                    <th>Match Status</th>
+                                    <th>Date</th>
+                                    <th width="100px">Action</th>
                                 </tr>
-                            @endforeach
+                            </thead>
+                            {{-- <tbody id="tbody">
+                                @foreach ($matchs as $match)
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ $match['name'] }}</td>
+                                        <td>
+                                            <div id="image-holder">
+                                                @if ($match['featured_image'])
+                                                    <img src="{{ URL::to('/') }}/Images/club_images/{{ $match['featured_image'] }}"
+                                                        class="thumb-image-list">
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @php
+                                                if ($match['status'] == 1) {
+                                                    $status = 'Upcomming';
+                                                } elseif ($match['status'] == 2) {
+                                                    $status = 'Played';
+                                                } else {
+                                                    $status = 'Cancelled';
+                                                }
+                                                echo $status;
+                                            @endphp
+                                        </td>
+                                        <td>@php
+                                            echo date('d-M-Y',strtotime($match['created_at']))
+                                        @endphp</td>
+                                        <td>
+                                            @php
+                                                if ($match['status'] == 2) {
+                                            @endphp
+                                            <a href="{{ route('matches.edit', $match['id']) }}"
+                                                class="btn btn-secondary">Edit Result</a>
+                                            @php
+                                                }
+                                            @endphp
+                                            <a href="{{ route('matches.view', $match['id']) }}" class="btn btn-primary">View</a>
 
-                        </tbody> --}}
+                                    </tr>
+                                @endforeach
 
-                    </table>
+                            </tbody> --}}
+
+                        </table>
+                    </div>
                 </div>
                 <!-- /.card-body -->
             </div>
