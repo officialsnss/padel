@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\CoachesRepository;
 use App\Repositories\ClubDataRepository;
 use App\Repositories\BookingRepository;
+use Carbon\Carbon;
 
 /**
  * Class CoachesServiceImpl
@@ -148,6 +149,8 @@ class CoachesServiceImpl implements CoachesService
         }
 
         $dataPacket['price'] = $data['price'];
+        $current = Carbon::now()->toDateString();
+        $dataPacket['completed_bookings'] = $this->coachesRepository->getCoachesCompletedBookings($data['id'], $current);
         $dataPacket['clubs_assigned'] = explode(',', $data['clubs_assigned']);
         $dataPacket['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$data['users'][0]['profile_pic'] : null;  
 

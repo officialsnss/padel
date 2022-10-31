@@ -4,7 +4,7 @@ namespace App\Repositories;
 use Auth;
 use App\Utils\ResponseUtil;
 use App\Models\Coach; 
-
+use App\Models\Booking;
 /**
  * Class PropertyRepository
  */
@@ -41,5 +41,14 @@ class CoachesRepository extends BaseRepository
                     ->with('users')
                     ->with('rating')
                     ->first(); 
+    }
+
+    public function getCoachesCompletedBookings($coach_id, $date)
+    {
+        return Booking::where([
+                                ['booking_date', '<', $date],
+                                ['coach_id', $coach_id]
+                            ])
+                    ->count(); 
     }
 }
