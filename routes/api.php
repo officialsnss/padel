@@ -103,4 +103,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Change Language
     Route::get('changeLanguage', 'App\Http\Controllers\Api\UsersController@changeLanguage');
+
+    //Payment Response
+    Route::get('api/payment-res', 'App\Http\Controllers\Api\PaymentController@paymentRes');
 });

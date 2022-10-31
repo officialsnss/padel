@@ -21,7 +21,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Club Name</th>
-                   <!-- <th>Status</th> -->
+                   <th>Payment Status</th>
                     @if( auth()->user()->role == '1' ||  auth()->user()->role == '2')
                     <th>Club Status</th>
                     <th>Coach Status</th>
@@ -38,6 +38,7 @@
                       <td>{{ $booking->usrname }}</td>
                       <td>{{ $booking->usremail }}</td>
                       <td>{{ $booking->clubname }}</td>
+                      <td>{!! ($booking->payment_status == '1')?'<span class="text-success">Success</span>':'<span class="text-danger">Incomplete</span>' !!}</td>
                       <!-- <td> <select class="p_status form-control">
                        <option value="1" data-id="{{ $booking->payid }}" {{ ($booking->payment_status == '1')?'selected':'' }}>Completed</option>
                        <option value="2" data-id="{{ $booking->payid }}" {{ ($booking->payment_status == '2')?'selected':'' }}>Pending</option>

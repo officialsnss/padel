@@ -7,6 +7,8 @@ use App\Services\MatchesServiceImpl;
 use App\Services\PlayersServiceImpl;
 use App\Repositories\ClubDataRepository;
 use App\Repositories\CoachesRepository;
+use App\Traits\PaymentRes;
+use App\Traits\ReqPayment;
 use Carbon\Carbon;
 /**
  * Class BookingServiceImpl
@@ -15,11 +17,15 @@ use Carbon\Carbon;
  */
 class BookingServiceImpl implements BookingService
 {
+
+    use PaymentRes,ReqPayment;
+
+
     /**
      * BookingServiceImpl constructor.
      *
      */
-    public function __construct(MatchesServiceImpl $matchesServiceImpl, 
+    public function __construct(MatchesServiceImpl $matchesServiceImpl,
                                 PlayersServiceImpl $playersServiceImpl,
                                 BookingRepository $bookingRepository,
                                 ClubDataRepository $clubDataRepository,
@@ -72,7 +78,7 @@ class BookingServiceImpl implements BookingService
             }
         }
 
-        // Edit booking 
+        // Edit booking
         if($request->isEdit == true) {
 
             // Validation for null booking id value
@@ -187,7 +193,7 @@ class BookingServiceImpl implements BookingService
         $matchArray['is_friendly'] = $request->isFriendly;
         $matchArray['status'] = "1";
 
-        //store the match data in the database 
+        //store the match data in the database
         $match = $this->bookingRepository->storeMatchesData($matchArray);
 
         // Payment array data to be filled in payments table
@@ -199,8 +205,8 @@ class BookingServiceImpl implements BookingService
         $paymentArray['payment_method'] = $request->payment_method;
         $paymentArray['isRefunded'] = "0";
         $paymentArray['isCancellationRequest'] = "0";
-        $paymentArray['transaction_id'] = str_replace(' ', '', time());
-        
+        $paymentArray['transaction_id'] = "";
+
         // Calculating total price of the booking based on coupons
         if($request->coupon_id) {
             $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
@@ -217,12 +223,12 @@ class BookingServiceImpl implements BookingService
         } else {
             $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
         }
-        $paymentArray['payment_status'] = "1";
+        $paymentArray['payment_status'] = "2";
 
         // Checking if player is using wallet for the booking
         if($request->isWallet == 0) {
             $paymentArray['wallet_amount'] = "0.000";
-        } else { 
+        } else {
             // Getting total amount left in the wallet
             $walletAmount = $this->getWalletAmount();
 
@@ -241,7 +247,7 @@ class BookingServiceImpl implements BookingService
                 $walletArray['currency_id'] = "129";
                 $walletArray['amount'] = $walletEntry;
                 $walletArray['status'] = "2";
-    
+
                 // Storing wallet transaction data in the db
                 $walletLeft = $this->bookingRepository->storeTransaction($walletArray);
                 $paymentArray['wallet_amount'] = $walletEntry;
@@ -252,14 +258,17 @@ class BookingServiceImpl implements BookingService
         $paymentArray['online_amount'] = number_format((float)$paymentArray['total_amount'] - $paymentArray['wallet_amount'], 3, '.', '');
         $paymentArray['refund_price'] = "0.000";
         $paymentArray['currency_id'] = "129";
-        
+
         // Storing payment data in the db
         $payment = $this->bookingRepository->storePaymentData($paymentArray);
-        return ['message'=> 'Booking successfull'];
+
+        $this->paymentReq($payment['id']);
+
+        // return ['message'=> 'Booking successfull'.$payment['id']];
     }
 
 
-    public function getBookingSlots($request) 
+    public function getBookingSlots($request)
     {
         $result = [];
 
@@ -295,7 +304,7 @@ class BookingServiceImpl implements BookingService
             $dateNow = Carbon::parse($newTime)->format('H:i');
         }
 
-        // Getting booked slots 
+        // Getting booked slots
         $data = $this->bookingRepository->getBookingSlots($selectedDate, $request->club_id);
 
         // Getting all the time slots when club is open
@@ -323,8 +332,8 @@ class BookingServiceImpl implements BookingService
             } elseif ($request->court_type == 2) {
                 $maxCourts = $clubData['data']->outdoor_courts;
             }
-    
-            // Getting booked slots on particular date 
+
+            // Getting booked slots on particular date
             foreach ($data as $i => $row) {
                 foreach ($row['bookingSlots'] as $key => $value) {
                     $slot = $value['slots'];
@@ -346,7 +355,7 @@ class BookingServiceImpl implements BookingService
                 // Timings when club is open
                 if(in_array($date, $clubsArray)) {
                     $result[$n]['isAvailable'] = true;
-                } else { 
+                } else {
                     // Timings when club is closed
                     $result[$n]['isAvailable'] = false;
                 }
@@ -370,7 +379,7 @@ class BookingServiceImpl implements BookingService
                 $date = sprintf('%02d:%02d', $n , $n % 1);
                 $result[$n]['id'] = $n + 1;
                 $result[$n]['slot'] = $date;
-                                
+
                 // Timings when club is open
                 if(in_array($date, $clubsArray)) {
                     $result[$n]['isAvailable'] = true;
@@ -445,7 +454,7 @@ class BookingServiceImpl implements BookingService
                 $dataArray[$i]['name'] = $row['name_arabic'];
                 $dataArray[$i]['code'] = $row['code_arabic'];
             }
-            
+
             if($row['discount_type'] == 1) {
                 $dataArray[$i]['amount'] = $row['amount'];
             } else {
@@ -481,7 +490,7 @@ class BookingServiceImpl implements BookingService
             $bookingPrice = $clubData['data']['double_price'] * count($request->dateTime);
         }
         $finalPacket['club_price'] = number_format((float)$bookingPrice, 3, '.', '');
-        
+
         // Service Charge
         $finalPacket['service_charge'] = number_format((float)$clubData['data']['service_charge'], 3, '.', '');
 
@@ -503,7 +512,7 @@ class BookingServiceImpl implements BookingService
         $finalPacket['batPrice'] = number_format((float)$batPrice, 3, '.', '');
         $finalPacket['coachPrice'] = number_format((float)$coachPrice, 3, '.', '');
         $finalPacket['sub_total'] = number_format((float)$batPrice + (float)$coachPrice + $bookingPrice, 3, '.', '');
-        
+
         if($request->coupon_id) {
             $couponData = $this->bookingRepository->getCouponById($request->coupon_id);
 
@@ -514,7 +523,7 @@ class BookingServiceImpl implements BookingService
 
             $finalPacket['coupons_id'] = $request->coupon_id;
             $finalPacket['coupon_name'] = $couponData->code;
-            
+
             // Check on discount_type. If it is 1, then it is amount, if it is 2, then it is percentage.
             if($couponData->discount_type == 1) {
                 $finalPacket['isPercentage'] = false;
@@ -526,14 +535,14 @@ class BookingServiceImpl implements BookingService
 
             // Calculating total amount to be paid
             $finalPacket['total_amount'] = number_format((float)$finalPacket['sub_total'] + $finalPacket['service_charge'] - $finalPacket['discount_price'], 3, '.', '');
-            
+
             // Calculating amount to be used from the wallet
             $finalPacket['wallet_amount'] = number_format((float)$this->getWalletAmount(), 3, '.', '');
             if($finalPacket['wallet_amount'] == "0.000") {
                 $finalPacket['wallet_amount'] = "";
             }
         } else {
-            // In case we want to remove the coupon 
+            // In case we want to remove the coupon
             $finalPacket['coupons_id'] = $request->coupon_id;
             $finalPacket['coupon_name'] = "";
             $finalPacket['isPercentage'] = false;
