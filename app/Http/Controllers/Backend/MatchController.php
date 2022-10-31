@@ -116,9 +116,9 @@ class MatchController extends Controller
             $title = 'Match Details';
             $match_details = Matches::Join('clubs','matches.club_id', '=', 'clubs.id')
             ->Join('players_details','matches.player_id', '=', 'players_details.id')
-            // ->Join('bookings','matches.booking_id', '=', 'bookings.id')
-            // ->Join('booking_slots','matches.slot_id', '=', 'booking_slots.id')
-            ->Join('levels','matches.level', '=', 'levels.id')
+            ->Join('bookings','matches.booking_id', '=', 'bookings.id')
+            ->Join('booking_slots','matches.slot_id', '=', 'booking_slots.id')
+            // ->Join('levels','matches.level', '=', 'levels.id')
             ->where('matches.id', $id)
             ->select('clubs.name as clubEngName', 'clubs.name_arabic as clubArabicName','matches.id as id','matches.playersIds as playersIds','matches.player_id as player_id','matches.booking_id as booking_id','matches.slot_id as slot_id','matches.level as level','matches.status  as MatchStatus','matches.court_type as court_type','matches.match_type as match_type','matches.game_type as game_type','matches.is_friendly as is_friendly','matches.gender_allowed as gender_allowed')
             ->first();
@@ -217,7 +217,7 @@ class MatchController extends Controller
            return view('backend.pages.matchView', compact('slotList','title','court','match','game','friendly','gender','game','MatchStatus','match_details','playerList','playerName','BookingStatus','levelList'));
         }
         catch (\Exception $e) {
-            return redirect('/admin')->with('error', 'Something went wrong.');
+            return redirect('/admin/matches')->with('error', 'Something went wrong.');
         }
     }
 

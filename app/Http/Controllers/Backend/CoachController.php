@@ -376,11 +376,11 @@ class CoachController extends Controller
             $coach_av->status = '1';
             $coach_av->save();
 
-        return redirect('/admin/off-days')->with('success', 'Leave Approved Successfully.');
+        return redirect()->back()->with('success', 'Leave Approved Successfully.');
 
         }
         catch (\Exception $e) {
-            return redirect('/admin/off-days')->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'Something went wrong.');
 
         }
     }
@@ -392,11 +392,11 @@ class CoachController extends Controller
               $coach_av->status = '0';
               $coach_av->save();
 
-          return redirect('/admin/off-days')->with('success', 'Leave Rejected.');
+          return redirect()->back()->with('success', 'Leave Rejected.');
 
           }
           catch (\Exception $e) {
-              return redirect('/admin/off-days')->with('error', 'Something went wrong.');
+              return redirect()->back()->with('error', 'Something went wrong.');
 
           }
       }
