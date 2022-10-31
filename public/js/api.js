@@ -21,48 +21,34 @@ $(document).ready(function () {
         // },
         success: function (data) {
             // alert(lang);
-            console.log(data);
+            // console.log(data);
             var res = "";
             for (var i = 0; i < data.data.length; i++) {
                 res += '<div class="swiper-slide">';
-                res += '<div class="courts-div">';
-                res += ' <div class="courts-name-desc">';
-                res += '<h4 class="text-white">' + data.data[i].name + '</h4>';
-
+                res += '<div class="pc-block">';
+                res += '<div class="pc-button"><a href="javascript:void(0)"><i class="bi bi-chevron-right"></i></a></div>';
+                res += '<div class="line-a">' + data.data[i].name + '</div>';
+                var rating = data.data[i].rating;
+                res += '<div class="line-b"><div class="rateyo" id="rateyo" data-rateyo-rating="'+rating+'"></div></div>';
+                res += '<div class="line-c">';
+                res += '<div class="row g-4 justify-content-between align-items-center">';
+                res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/wallet-icon.png" alt=""> ' + data.data[i].price + ' KD/hr</div>';
+                res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/location-icon.png" alt=""> ' + data.data[i].address + '</div>';
+                res += '</div>';
+                res += '</div>';
+                res += '<div class="line-d">';
+                res += '<div class="row g-2">';
+                for (var j = 0; j < data.data[i].amenities.length; j++) {
+                res += '<div class="col-auto"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'+data.data[i].amenities[j].name+'" data-bs-custom-class="custom-tooltip"><img title="'+data.data[i].amenities[j].name+'" src="http://127.0.0.1:8000/Images/'+data.data[i].amenities[j].image+'" alt="'+data.data[i].amenities[j].name+'"></a></div>';
+                }
+                res += '</div>';
+                res += '</div>';
                 if(data.data[i].featured_image == ''){
                     featured_image = "club_images/202208191047vpro_azul_gris_amarillo.jpg";
                 } else{
                     featured_image = data.data[i].featured_image;
                 }
-                var rating = data.data[i].rating;
-                // res += '<div class="star-rating">';
-                res += '<div class="rateyo" id="rateyo" data-rateyo-rating="'+rating+'"></div>';
-                    // alert(rating)
-                res += '<div class="clearfix-space"></div>';
-                res += '<div class="row">';
-                res += '<div class="col-6 col-lg-6 col-md-6 col-sm-6">';
-                res += ' <span><img src="http://retalkapp.com/tbaree/01/images/icons/wallet.png" class="img-fluid" alt=""> ' + data.data[i].price + 'KD/hr</span>';
-                res += ' </div>';
-                res += ' <div class="col-6 col-lg-6 col-md-6 col-sm-6">';
-                res += ' <span><img src="http://retalkapp.com/tbaree/01/images/icons/location-pin.png" class="img-fluid" alt=""> ' + data.data[i].address + '</span>';
-                res += ' </div>';
-                res += ' </div>';
-                res += ' <div class="clearfix-space"></div>';
-                res += '<div class="row">';
-                for (var j = 0; j < data.data[i].amenities.length; j++) {
-                res += '<div class="col-2 col-lg-2 col-md-2 col-sm-2">';
-                res += '<div class="court-icons">';
-                res += '<img src="http://127.0.0.1:8000/Images/'+data.data[i].amenities[j].image+'" class="img-fluid" alt="">';
-                res += '</div><p style="font-size: 15px;">'+data.data[i].amenities[j].name+'</p>';
-                res += '</div>';
-                }
-                res += '</div>';
-                res += '</div>';
-                res += '<img src="http://127.0.0.1:8000/Images/'+featured_image+'" class="img-fluid" alt="">';
-                res += '</div>';
-                res += '<div class="know-more-arrow">';
-                res += '<a href="' + data.data[i].id + '"><img src="http://retalkapp.com/tbaree/01/images/arrow-next-icon.png" class="img-fluid" alt=""></a>';
-                res += '</div>';
+                res += '<div class="line-e"><img src="http://127.0.0.1:8000/Images/'+featured_image+'" alt="" class="img-fluid"></div>';
                 res += '</div>';
                 res += '</div>';
             }
@@ -83,7 +69,7 @@ $(document).ready(function () {
         },
         error: function (error) {
             // alert("Error");
-            console.log(error);
+            // console.log(error);
         }
     });
 
@@ -95,34 +81,26 @@ $(document).ready(function () {
         // data: formData.serialize(),
         success: function (playerslistdata) {
             var ply = "";
-            console.log(playerslistdata);
+            // console.log(playerslistdata);
             for (var i = 0; i < playerslistdata.data.length; i++) {
 
                 ply += '<div class="swiper-slide">';
-                ply += '<div class="playerscoach-div">';
-                if(playerslistdata.data[i].image === null){
-                    ply += '<img src="http://127.0.0.1:8000/Images/player_images/202208191043wpt-mejor-set-pista-de-padel-1024x745.jpg" class="img-fluid players-coach-img" alt="">';
+                ply += '<div class="players-coach-block">';
+                if(playerslistdata.data[i].image == ''){
+                    ply += '<div class="line-a"><img src="images/player-coach/a.jpg" alt="" class="img-fluid"></div>';
                 } else {
-                    ply += '<img src="http://127.0.0.1:8000/Images/'+playerslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
+                    ply += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/'+playerslistdata.data[i].image+'" alt="" class="img-fluid"></div>';
                 }
-                // ply += '<img src="http://127.0.0.1:8000/Images/'+playerslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
-                ply += '</div>';
-                ply += '<div class="playerscoach-details">';
-                ply += '<h4>'+playerslistdata.data[i].name+'</h4>';
-                // ply += '<h6>Experience: 12 Years</h6>';
-                // ply += '<div class="star-rating-players">';
-                // ply += '<div class="star-rating">';
-                // ply += '<label for="5-stars" class="star" style="color: #fc0;">&#9733;</label>';
-                // ply += '<label for="5-stars" class="star" style="color: #fc0;">&#9733;</label>';
-                // ply += '</div>';
-                // ply += '</div>';
+                ply += '<div class="line-b">'+playerslistdata.data[i].name+'</div>';
+                ply += '<div class="line-c">Experience: 12 years</div>';
+                ply += '<div class="line-d"><img src="images/star.png" alt=""></div>';
                 ply += '</div>';
                 ply += '</div>';
             }
             $(".player-list-data").append(ply);
         },
         error: function (error) {
-            console.log(error);
+            // console.log(error);
         }
     });
 
@@ -134,33 +112,21 @@ $(document).ready(function () {
         // data: formData.serialize(),
         success: function (coachslistdata) {
             var coa = "";
-            console.log(coachslistdata);
+            // console.log(coachslistdata);
             for (var i = 0; i < coachslistdata.data.length; i++) {
-
                 coa += '<div class="swiper-slide">';
-                coa += '<div class="playerscoach-div">';
-                if(coachslistdata.data[i].image === null){
-                    coa += '<img src="http://127.0.0.1:8000/Images/coach_images/default.jpg" class="img-fluid players-coach-img" alt="">';
-                } else {
-                    coa += '<img src="http://127.0.0.1:8000/Images/'+coachslistdata.data[i].image+'" class="img-fluid players-coach-img" alt="">';
-                }
-                coa += '</div>';
-                coa += '<div class="playerscoach-details">';
-                coa += '<h4>'+coachslistdata.data[i].name+'</h4>';
-                coa += '<h6>Experience: '+coachslistdata.data[i].experience+'</h6>';
-                // coa += '<div class="star-rating-players">';
-                // coa += '<div class="star-rating">';
-                // coa += '<label for="5-stars" class="star" style="color: #fc0;">&#9733;</label>';
-                // coa += '<label for="5-stars" class="star" style="color: #fc0;">&#9733;</label>';
-                // coa += '</div>';
-                // coa += '</div>';
+                coa += '<div class="players-coach-block">';
+                coa += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/'+coachslistdata.data[i].image+'" alt="" class="img-fluid"></div>';
+                coa += '<div class="line-b">'+coachslistdata.data[i].name+'</div>';
+                coa += '<div class="line-c">Experience: '+coachslistdata.data[i].experience+'</div>';
+                coa += '<div class="line-d"><img src="images/star.png" alt=""></div>';
                 coa += '</div>';
                 coa += '</div>';
             }
             $(".coach-list-data").append(coa);
         },
         error: function (error) {
-            console.log(error);
+            // console.log(error);
         }
     });
 
