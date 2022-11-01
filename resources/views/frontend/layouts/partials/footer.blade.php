@@ -1,9 +1,25 @@
 <div class="footer-wrap">
     <div class="container">
         <div class="row justify-content-between">
-            <div class="col-auto">© Copyright Tbaree 2022. All Rights Reserved</div>
+            @php
+                $copyrights = \App\Models\Setting::where('type', '2')->get();
+            @endphp
+            @foreach ($copyrights as $copyright)
+                @if ($copyright->value != '')
+                    <div class="col-auto">{{ $copyright->value }}</div>
+                @endif
+            @endforeach
+
             <div class="col-auto term-policy"><a href="terms-and-condition.html">Terms & Condition</a> <a href="refund-policy.html">Refund Policy</a> <a href="privacy-policy.html">Privacy Policy</a></div>
-            <div class="col-auto">Designed by <a href="https://www.design-master.com/" target="_blank">Design Master</a></div>
+            @php
+                $extra_texts = \App\Models\Setting::where('type', '3')->get();
+            @endphp
+            @foreach ($extra_texts as $extra_text)
+                @if ($extra_text->value != '')
+                <div class="col-auto"><a href="https://www.design-master.com/" target="_blank">{{ $extra_text->value }}</a></div>
+                @endif
+            @endforeach
         </div>
     </div>
 </div>
+<input type="hidden" id="selectedLang" value="{{App::getLocale()}}">
