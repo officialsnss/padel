@@ -38,6 +38,16 @@ class ClubDataServiceImpl implements ClubDataService
             $lang = $request->header('Accept-Language');
         }
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+
         // Getting all clubs from the db
         $data = $this->clubDataRepository->getClubsList($request);
         $dataPacket = [];
@@ -48,14 +58,14 @@ class ClubDataServiceImpl implements ClubDataService
                     continue;
                 }
                 $dataPacket[$i]['id'] = $row['id'];
-    
+
                 // Getting name of the club based on the selected language
                 if($lang == "en") {
                     $dataPacket[$i]['name'] = $row['name'];
                 } elseif ($lang == "ar") {
                     $dataPacket[$i]['name'] = $row['name_arabic'];
                 }
-    
+
                 // Getting address of the club
                 $address = $row['address'];
                 if(count($row['cities']) > 0) {
@@ -68,7 +78,7 @@ class ClubDataServiceImpl implements ClubDataService
                     $city = null;
                 }
                 $dataPacket[$i]['address'] = $address . ', ' . $city;
-                
+
                 $dataPacket[$i]['price'] = $row['single_price'];
                 $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
                 $dataPacket[$i]['courtsCount'] = $this->clubDataRepository->getCourtsCount($row['id']);
@@ -77,12 +87,12 @@ class ClubDataServiceImpl implements ClubDataService
                 $dataPacket[$i]['ordering'] = $row['ordering'];
                 $dataPacket[$i]['latitude'] = $row['latitude'];
                 $dataPacket[$i]['longitude'] = $row['longitude'];
-    
+
                 // Creating aminities packet
                 $amenitiesPacket = [];
                 $amenities = explode(',',$row['amenities']);
                 $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
-        
+
                 foreach($amenitiesData as $key => $data) {
                     $amenitiesPacket[$key]['id'] = $data->id;
                     // Getting name of the animities based on the selected language
@@ -93,10 +103,10 @@ class ClubDataServiceImpl implements ClubDataService
                     }
                     $amenitiesPacket[$key]['image'] = getenv("IMAGES")."amenities/".$data->image;
                 }
+
                 $dataPacket[$i]['amenities']  = $amenitiesPacket;
             }
         }
-        
         return $dataPacket;
     }
 
@@ -104,7 +114,9 @@ class ClubDataServiceImpl implements ClubDataService
     {
         // Getting all the clubs data
         $data = $this->getClubsList($request);
-
+        if(isset($data['error'])) {
+            return $data;
+        }
         // Sorting of clubs based on ordering
         usort($data, function($a, $b) {
             return $a['ordering'] - $b['ordering'];
@@ -149,7 +161,22 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getSingleClub($request)
     {
-        $lang = auth()->user()->lang;
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
 
         $dataPacket = [];
         $id = $request->club_id;
@@ -157,7 +184,7 @@ class ClubDataServiceImpl implements ClubDataService
         // Getting data of a club by club_id
         $data = $this->clubDataRepository->getSingleClubData($id);
         $clubData = $data['data'];
-        
+
         // If there is no club for the entered club_id
         if(!$clubData) {
             return ['error' => 'There is no club associated with the entered club id'];
@@ -173,7 +200,7 @@ class ClubDataServiceImpl implements ClubDataService
         if($clubData) {
             $clubLatitude = $clubData['latitude'];
             $clubLongitude = $clubData['longitude'];
-    
+
             $dataPacket['id'] = $clubData['id'];
 
             // Getting name and description of the club based on the selected language
@@ -188,12 +215,12 @@ class ClubDataServiceImpl implements ClubDataService
             // Getting bats count
             $batCount = $this->batDataRepository->getBatCount($clubData['id']);
             $dataPacket['isBat'] = $batCount > 0 ? true : false;
-    
+
             // Creating aminities packet
             $amenitiesPacket = [];
             $amenities = explode(',',$clubData['amenities']);
             $amenitiesData = $this->clubDataRepository->getAmenities($amenities);
-    
+
             foreach($amenitiesData as $key => $row) {
                 $amenitiesPacket[$key]['id'] = $row->id;
 
@@ -228,10 +255,10 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket['rating'] = number_format($this->getClubRating($clubData['club_rating']),1,'.','');
             $dataPacket['bookingsCount'] = $data['bookingsCount'];
         }
-        return $dataPacket; 
+        return $dataPacket;
     }
 
-    public function getClubRating($rating) 
+    public function getClubRating($rating)
     {
         // If club have rating by any user
         if(isset($rating)) {
@@ -256,7 +283,7 @@ class ClubDataServiceImpl implements ClubDataService
         return 0;
     }
 
-    public function getDistance($lat1, $long1, $lat2, $long2, $unit) 
+    public function getDistance($lat1, $long1, $lat2, $long2, $unit)
     {
         $theta = $long1 - $long2;
         $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
@@ -264,7 +291,7 @@ class ClubDataServiceImpl implements ClubDataService
         $dist = rad2deg($dist);
         $miles = $dist * 60 * 1.1515;
         $unit = strtoupper($unit);
-      
+
         if ($unit == "K") {
             return ($miles * 1.609344);
         } else if ($unit == "N") {

@@ -19,6 +19,18 @@
               </div>
               <div class="col-md-6"> 
               <div class="form-group">
+                  <label for="inputName">Coach Name in Arabic</label>
+                  <input type="text" id="name_arabic" class="form-control" value="{{ old('name_arabic') ?? $coachData->name_arabic }}" name="name_arabic">
+                  @error('name_arabic')
+                  <div class="form-error">{{ $message }}</div>
+                  @enderror
+                </div>
+              </div>
+          </div>
+
+          <div class="row">
+           <div class="col-md-12"> 
+              <div class="form-group">
                   <label for="inputName">Email</label>
                   <input type="email" id="coach_email" class="form-control" value="{{ old('coach_email') ?? $coachData->email }}" name="coach_email">
                   @error('coach_email')
@@ -98,6 +110,17 @@
                 <label for="inputName">About Coach</label>
                 <textarea id="desc" class="ckeditor form-control" name="desc">{{ old('description') ?? $coachData->description }}</textarea>
                @error('desc')
+                <div class="form-error">{{ $message }}</div>
+               @enderror
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                <label for="inputName">About Coach in Arabic</label>
+                <textarea id="arabic_description" class="ckeditor form-control" name="arabic_description">{{ old('arabic_description') ?? $coachData->arabic_description }}</textarea>
+               @error('arabic_description')
                 <div class="form-error">{{ $message }}</div>
                @enderror
                 </div>

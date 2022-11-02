@@ -5,10 +5,10 @@
 <div class="row">
         <div class="col-12">
             <div class="card">
-              
+
               <div class="card-body">
                <p class="note"><strong>Note: </strong>Please drag and drop the row to change the order of the players.</p>
-                
+
               <table id="tableplayers" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -22,7 +22,7 @@
                   </tr>
                   </thead>
                   <tbody id="tablecontentss">
-                    
+
                     @foreach($players as $player)
                     <tr class="row1" data-id="{{ $player->playerid }}">
                     <td class="pl-3"><i class="fa fa-sort"></i></td>
@@ -35,9 +35,9 @@
                       <a href="{{ route('customer.resetPassword',$player->userid)}}" class="btn btn-info">Reset Password</a>
                      </tr>
                    @endforeach
-                  
+
                   </tbody>
-                
+
                 </table>
               </div>
               <!-- /.card-body -->
@@ -73,15 +73,15 @@
           });
 
           $.ajax({
-           
-            type: "POST", 
-            dataType: "json", 
+
+            type: "POST",
+            dataType: "json",
             url: "{{ url('admin/players/reorder') }}",
              data: {
               order: order,
               _token: '{{csrf_token()}}'
             },
-           
+
             success: function(response) {
                if (response.status == "200") {
                 $('#loader').removeClass('hidden')
@@ -90,12 +90,11 @@
                   console.log(response);
                 }
             },
-           
+
           });
         }
       });
     </script>
-    
-     
+
+
         @endsection
-  

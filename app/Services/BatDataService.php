@@ -16,6 +16,6 @@ interface BatDataService
      *
      * @return mixed
      */
-    public function getBatDetails($clubId);
+    public function getBatDetails($request);
 
 }

@@ -13,6 +13,7 @@ class Coach extends Model
     protected $fillable = [
         'user_id',
         'description',
+        'arabic_description',
         'experience',
         'price',
         'currency_id',

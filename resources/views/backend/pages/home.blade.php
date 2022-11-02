@@ -3,10 +3,10 @@
 @section('content')
 
 
-   
       <div class="container-fluid">
+        {{-- {{dd(auth()->user()->role)}} --}}
         <!-- Small boxes (Stat box) -->
- @if ( auth()->user()->role != '5' && auth()->user()->role != '4')          
+ @if ( auth()->user()->role != '5' && auth()->user()->role != '4')
         <div class="row">
 
           <!-- ./col -->
@@ -55,7 +55,7 @@
               <a href="{{url('/admin/bookings')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          
+
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
@@ -74,7 +74,7 @@
         </div>
         <!-- /.row -->
 @endif
-@if ( auth()->user()->role != '5' &&  auth()->user()->role != '4')  
+@if ( auth()->user()->role != '5' &&  auth()->user()->role != '4')
         <!-- .row -->
       <div class="row" {{  auth()->user()->role }}>
         <div class="col-lg-4 col-6">
@@ -128,7 +128,7 @@
         <!-- .row -->
         <!-- Court Owner Dashbored -->
         <!-- .row -->
-  @if ( auth()->user()->role == '5')  
+  @if ( auth()->user()->role == '5')
       <div class="row">
         <div class="col-lg-4 col-6">
             <!-- small box -->
@@ -183,9 +183,9 @@
 
  @endif
 
- @if ( auth()->user()->role == '4')  
+ @if ( auth()->user()->role == '4')
  <div class="row">
-       
+
    <div class="col-lg-4 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
@@ -230,7 +230,7 @@
                 <i class="ion ion-grid"></i>
                   New booked items
                 </h3>
-                
+
               </div><!-- /.card-header -->
               <div class="card-body">
                 <div class="tab-content p-0">
@@ -248,7 +248,7 @@
                  </tr>
                 </thead>
                   <?php
-                  $i = 1; 
+                  $i = 1;
                  foreach($topBooking as $data) {
                  // dd($data); ?>
                        <tr>
@@ -256,29 +256,29 @@
                       <td>{{$data->clubname}}</td>
                        @if(auth()->user()->role == 5)
                       <td>{{ $data->playeremail}}</td>
-                      @endif 
+                      @endif
                       <td>{{ $data->total_amount}} KWD</td>
                       </tr>
-                    
+
                  <?php   $i++;  }
 
                        ?>
                        </table>
-                
+
                 </div>
               </div><!-- /.card-body -->
             </div>
       </div>
 
-             
 
-            
 
-            
-          
 
-            
-          
-          
-     
+
+
+
+
+
+
+
+
 @endsection

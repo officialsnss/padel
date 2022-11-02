@@ -27,6 +27,9 @@ class ClubsController extends Controller
     public function getClubsList(Request $request)
     {
         $data = $this->clubDataService->getClubsList($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        }
         if($data) {
             return ResponseUtil::successWithData($data, 'Clubs data listing', true, 200);
         }
@@ -45,6 +48,9 @@ class ClubsController extends Controller
     public function getPopularClubs(Request $request)
     {
         $data = $this->clubDataService->getPopularClubs($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        }
         if($data) {
             return ResponseUtil::successWithData($data, 'Popular clubs data listing', true, 200);
         }

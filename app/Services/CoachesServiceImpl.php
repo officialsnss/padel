@@ -41,6 +41,16 @@ class CoachesServiceImpl implements CoachesService
             $lang = $request->header('Accept-Language');
         }
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+
         // Getting data of all the coaches from the db
         $data = $this->coachesRepository->getCoachesList();
 
@@ -128,6 +138,16 @@ class CoachesServiceImpl implements CoachesService
             $lang = $request->header('Accept-Language');
         }
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+        
         // Getting coach data by coach_id
         $coach_id = $request->coach_id;
         $data = $this->coachesRepository->getCoachDetails($coach_id);

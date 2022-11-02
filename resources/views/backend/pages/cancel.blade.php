@@ -10,29 +10,41 @@
                   <thead>
                   <tr>
                     <th>Sr.no</th>
+                    <th>Booking Id</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Total Amount Paid</th>
                     <th>Payment Method</th>
+                    <th>Refund Amount</th>
                     <th>Booking On</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
                   <tbody>
-                    
+
                   @foreach ($payments as $payment)
                     <tr>
                       <td></td>
+                      <td>{{ $payment->order_id }}</td>
                       <td>{{ $payment->name }}</td>
                       <td>{{ $payment->email }}</td>
                       <td>{{ $payment->total_amount }} {{ $payment->code }}</td>
                       <td>@if( $payment->payment_method == '1')
-                           {{'KNET'}}
-                          @else
-                          {{ 'COD' }}
-                          @endif
+                        {{'KNET'}}
+                        @else
+                        {{ 'COD' }}
+                        @endif
                        </td>
+                       <td>@if($payment->isRefunded === '1')
+                        <span class="st">{{ $payment->refund_price }} {{ $payment->code }}</span>
+                        @elseif($payment->isRefunded === '2')
+                        <span class="st">{{ '0 '.$payment->code }}</span>
+                        @else
+                        <span class="st">{{ '0 '.$payment->code }}</span>
+                        @endif
+
+                    </td>
                       <td>{{ date('d-m-Y', strtotime($payment->created_at)) }}</td>
                       @if($payment->isRefunded === '1')
                         <td><span class="st">Refunded</span></td>
@@ -47,7 +59,7 @@
                        <a class="btn btn-success" style="cursor: pointer" data-toggle="modal" data-target="#refundModal{{ $payment->pay_id }}">Approve</a>
                        @else
                        <a href="{{ route('refund.approve',$payment->pay_id) }}" class="btn btn-success" style="cursor: pointer">Approve</a>
-                       @endif 
+                       @endif
                        <a class="btn btn-danger" style="cursor: pointer" data-toggle="modal" data-target="#rejectModal{{ $payment->pay_id }}">Rejected</a>
                       @endif
                      <!--Refund Modal -->
@@ -98,7 +110,7 @@
                           </div>
                    <!--  End of refund modal-->
                     <!-- Reject MODAL -->
-                   
+
                     <div class="modal fade" id="rejectModal{{ $payment->pay_id }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
@@ -146,10 +158,9 @@
                     </tr>
                   @endforeach
               </tbody>
-          </table>        
+          </table>
         </div>
-      </div> 
+      </div>
   </div>
 </div>
 @endsection
-  

@@ -32,6 +32,13 @@ Route::get('get/playersList', 'App\Http\Controllers\Api\PlayersController@getPla
 Route::get('get/coaches', 'App\Http\Controllers\Api\CoachesController@getCoachesList');
 Route::get('get/coachDetails', 'App\Http\Controllers\Api\CoachesController@getCoachDetails');
 
+// CLUBS
+Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
+Route::get('get/clubDetails', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
+
+//BATS
+Route::get('get/bat_list', 'App\Http\Controllers\Api\BatsController@getBatDetails');
+
 //Contact_Us BY WEBSITE
 Route::post('contact', 'App\Http\Controllers\Api\ContactUsController@sendMessage');
 
@@ -39,7 +46,7 @@ Route::post('contact', 'App\Http\Controllers\Api\ContactUsController@sendMessage
 Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
 // Route::post('register', [RegisterController::class, 'register']);
-     
+
 Route::middleware('auth:api')->group( function () {
     Route::post('logout', 'App\Http\Controllers\Api\UsersController@logout');
 
@@ -48,12 +55,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('uploadImage', 'App\Http\Controllers\Api\UsersController@uploadUserImage');
 
     //CLUBS
-    Route::get('clubs', 'App\Http\Controllers\Api\ClubsController@getClubsList');
     Route::get('nearClubs', 'App\Http\Controllers\Api\ClubsController@getNearClubs');
-    Route::get('get/clubDetails', 'App\Http\Controllers\Api\ClubsController@getSingleClub');
-
-    //BATS
-    Route::get('get/bat_list', 'App\Http\Controllers\Api\BatsController@getBatDetails');
 
     //BOOKINGS
     Route::get('bookings/list', 'App\Http\Controllers\Api\BookingController@getBookingsList');
@@ -103,4 +105,7 @@ Route::middleware('auth:api')->group( function () {
 
     //Change Language
     Route::get('changeLanguage', 'App\Http\Controllers\Api\UsersController@changeLanguage');
+
+    //Payment Response
+    Route::get('api/payment-res', 'App\Http\Controllers\Api\PaymentController@paymentRes');
 });

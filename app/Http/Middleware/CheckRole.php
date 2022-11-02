@@ -17,25 +17,25 @@ class CheckRole
      */
     public function handle($request, Closure $next) {
         // I'm using the api guard
-        
+
         if(Auth::check()){
-            
+
         $role = strtolower( request()->user()->role );
-        
+
         $allowed_roles = array_slice(func_get_args(), 2);
-      
+
         if( in_array($role, $allowed_roles) ) {
-             
+
             return $next($request);
         }
-       
+
             return redirect('admin/dashboard')->with('error', 'No Access!');
         }
         else{
-           
+
             return redirect('admin/login')->with('error', 'No Access!');
         }
-      
+
         //throw new AuthenticationException();
     }
 }

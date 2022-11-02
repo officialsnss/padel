@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\HomeController; 
-use App\Http\Controllers\backend\UserController; 
+use App\Http\Controllers\backend\HomeController;
+use App\Http\Controllers\backend\UserController;
+use App\Http\Middleware\Language;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +23,29 @@ Route::get('clear', function () {
     Artisan::call('route:clear');
     Artisan::call('view:clear');
     Artisan::call('clear-compiled');
-  
+
     return 'Cleared.';
 });
 
 
 // Website Homepage
-Route::get('/', function(){
-    return view('frontend.pages.index');
-});
+Route::get('/', 'App\Http\Controllers\Frontend\HomeController@index');
+Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us');
+
+// Language Switcher Route
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
+
+// // Terms and condition route
+// Route::get('/terms_and_condition', 'App\Http\Controllers\Frontend\HomeController@terms_and_condition')->name('terms_and_condition');
+
+// // Privacy Policy route
+// Route::get('/privacy_policy', 'App\Http\Controllers\Frontend\HomeController@privacy_policy')->name('privacy_policy');
+
+// // Refund Policy route
+// Route::get('/refund_policy', 'App\Http\Controllers\Frontend\HomeController@refund_policy')->name('refund_policy');
+
+Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
+
 Route::prefix('/admin')->group(function () {
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');
 Route::post('/users/reset/', 'App\Http\Controllers\Backend\UserController@reset')->name('user.password.update');
@@ -55,18 +71,18 @@ Route::group(['middleware' =>['role:1,2,5,4']], function(){
 
 
 Route::group(['middleware' =>['role:1,2']], function(){
-      
-  
+
+
     Route::prefix('/admin')->group(function () {
-       
+
         //Dashboard Route
         //Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
 
         //Contact Page Route
         Route::get('/contact', 'App\Http\Controllers\Backend\HomeController@contact')->name('contact');
         Route::get('contact/view/{id}', 'App\Http\Controllers\Backend\HomeController@contactView')->name('contact.view');
-       
-       
+
+
       //Coupons
         Route::get('coupons', 'App\Http\Controllers\Backend\CouponController@index')->name('coupons');
         Route::get('/coupon/delete/{id}', 'App\Http\Controllers\Backend\CouponController@delete')->name('coupon.delete');
@@ -82,35 +98,35 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::get('page/view/{id}', 'App\Http\Controllers\Backend\PageController@view')->name('page.view');
       Route::get('/page/edit/{id}', 'App\Http\Controllers\Backend\PageController@edit')->name('page.edit');
       Route::post('/page/update/{id}', 'App\Http\Controllers\Backend\PageController@update')->name('page.update');
-      Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages'); 
+      Route::get('/pages', 'App\Http\Controllers\Backend\PageController@index')->name('pages');
       Route::get('/pages/delete/{id}', 'App\Http\Controllers\Backend\PageController@pageDelete')->name('page.delete');
       //Amenities
-      Route::get('/amenities', 'App\Http\Controllers\Backend\PageController@amenities')->name('amenities'); 
+      Route::get('/amenities', 'App\Http\Controllers\Backend\PageController@amenities')->name('amenities');
       Route::get('/amenities/create', 'App\Http\Controllers\Backend\PageController@amenitiesCreate')->name('amenity.create');
       Route::post('/amenities/add', 'App\Http\Controllers\Backend\PageController@amenitiesAdd')->name('amenity.add');
       Route::get('/amenities/edit/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesEdit')->name('amenity.edit');
       Route::post('/amenities/update/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesUpdate')->name('amenity.update');
       Route::get('/amenities/delete/{id}', 'App\Http\Controllers\Backend\PageController@amenitiesDelete')->name('amenity.delete');
-      //Regions
-      Route::get('/regions', 'App\Http\Controllers\Backend\PageController@regions')->name('regions'); 
+     //Regions
+      Route::get('/regions', 'App\Http\Controllers\Backend\PageController@regions')->name('regions');
       Route::get('/regions/create', 'App\Http\Controllers\Backend\PageController@regionsCreate')->name('region.create');
       Route::post('/regions/add', 'App\Http\Controllers\Backend\PageController@regionsAdd')->name('region.add');
       Route::get('/regions/edit/{id}', 'App\Http\Controllers\Backend\PageController@regionsEdit')->name('region.edit');
       Route::post('/regions/update/{id}', 'App\Http\Controllers\Backend\PageController@regionsUpdate')->name('region.update');
       Route::get('/regions/delete/{id}', 'App\Http\Controllers\Backend\PageController@regionsDelete')->name('region.delete');
-      
+
       //Cities
-      Route::get('/cities', 'App\Http\Controllers\Backend\PageController@cities')->name('cities'); 
+      Route::get('/cities', 'App\Http\Controllers\Backend\PageController@cities')->name('cities');
       Route::get('/cities/create', 'App\Http\Controllers\Backend\PageController@citiesCreate')->name('city.create');
       Route::post('/cities/add', 'App\Http\Controllers\Backend\PageController@citiesAdd')->name('city.add');
       Route::get('/cities/edit/{id}', 'App\Http\Controllers\Backend\PageController@citiesEdit')->name('city.edit');
       Route::post('/cities/update/{id}', 'App\Http\Controllers\Backend\PageController@citiesUpdate')->name('city.update');
       Route::get('/city/delete/{id}', 'App\Http\Controllers\Backend\PageController@citiesDelete')->name('city.delete');
-    
+
       //Settings
       Route::get('/settings', 'App\Http\Controllers\Backend\HomeController@settings')->name('settings');
       Route::post('/settings/update', 'App\Http\Controllers\Backend\HomeController@settingsUpdate')->name('settings.update');
-      
+
       Route::get('/home-slider', 'App\Http\Controllers\Backend\HomeController@homeslider')->name('homeslider');
       Route::get('/slide/create', 'App\Http\Controllers\Backend\HomeController@slideCreate')->name('slide.create');
       Route::post('/slide/add', 'App\Http\Controllers\Backend\HomeController@slideAdd')->name('slide.add');
@@ -118,23 +134,24 @@ Route::group(['middleware' =>['role:1,2']], function(){
       Route::post('/slide/update/{id}', 'App\Http\Controllers\Backend\HomeController@slideUpdate')->name('slide.update');
       Route::get('/slide/delete/{id}', 'App\Http\Controllers\Backend\HomeController@slideDelete')->name('slide.delete');
 
+
      //Refunds Listing
       Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');
       Route::post('/refunds/add', 'App\Http\Controllers\Backend\RefundController@add')->name('refund.add');
       Route::post('/refunds/reject', 'App\Http\Controllers\Backend\RefundController@reject')->name('refund.reject');
       Route::get('/refunds/approve/{id}', 'App\Http\Controllers\Backend\RefundController@approve')->name('refund.approve');
-    
+
 
    //Clubs Ordering
 //    Route::get('/clubs-listing', 'App\Http\Controllers\Backend\ClubController@clubs')->name('clubs.listing');
    Route::post('clubs/reorder', 'App\Http\Controllers\Backend\ClubController@reorder')->name('clubs.reorder');
    Route::get('/clubs/popular/update', 'App\Http\Controllers\Backend\ClubController@popularStatus')->name('clubs.popular.status');
-  
+
    //Players
    Route::get('/players', 'App\Http\Controllers\Backend\PlayerController@index')->name('players');
    Route::post('players/reorder', 'App\Http\Controllers\Backend\PlayerController@reorder')->name('players.reorder');
    Route::get('/players/popular/update', 'App\Http\Controllers\Backend\PlayerController@popularStatus')->name('players.popular.status');
- 
+
 
       //Bats
      Route::get('/bats', 'App\Http\Controllers\Backend\BatController@index');
@@ -143,20 +160,36 @@ Route::group(['middleware' =>['role:1,2']], function(){
      Route::get('/bat/delete/{id}', 'App\Http\Controllers\Backend\BatController@delete')->name('bat.delete');
      Route::get('/bat/edit/{id}', 'App\Http\Controllers\Backend\BatController@edit')->name('bat.edit');
      Route::post('/bat/update/{id}', 'App\Http\Controllers\Backend\BatController@update')->name('bat.update');
+     Route::get('/bat/status/update', 'App\Http\Controllers\Backend\BatController@updateStatus')->name('bat.update.status');
 
 
     //Coaches
     Route::get('/coaches', 'App\Http\Controllers\Backend\CoachController@index')->name('coaches');
     Route::get('/coach/create', 'App\Http\Controllers\Backend\CoachController@create')->name('coach.create');
-    Route::post('/coach/add', 'App\Http\Controllers\Backend\CoachController@add')->name('coach.add'); 
+    Route::post('/coach/add', 'App\Http\Controllers\Backend\CoachController@add')->name('coach.add');
     Route::get('/coach/edit/{id}', 'App\Http\Controllers\Backend\CoachController@edit')->name('coach.edit');
     Route::post('/coach/update/{id}', 'App\Http\Controllers\Backend\CoachController@update')->name('coach.update');
     Route::get('/coach/delete/{id}', 'App\Http\Controllers\Backend\CoachController@delete')->name('coach.delete');
+    Route::get('/coach-reset-password/{id}', 'App\Http\Controllers\Backend\CoachController@resetPassword')->name('coach.resetPassword');
+    Route::post('/coach-newPassword/{id}', 'App\Http\Controllers\Backend\CoachController@newPassword')->name('coach.newPassword');
+    Route::get('/coach/status/update', 'App\Http\Controllers\Backend\CoachController@updateStatus')->name('coach.update.status');
+
+    //Matches
+    Route::get('/matches', 'App\Http\Controllers\Backend\MatchController@index')->name('admin.matches');
+    Route::get('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@edit')->name('matches.edit');
+    Route::post('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@update')->name('matches.update');
+    Route::get('/matches/view/{id}', 'App\Http\Controllers\Backend\MatchController@view')->name('matches.view');
+    Route::post('/matches/create/{id}', 'App\Http\Controllers\Backend\MatchController@create')->name('matches.result.create');
+    Route::get('/test-payment', 'App\Http\Controllers\Backend\MatchController@payment')->name('testPaymentsgateway');
+    Route::get('/test-payment-redirect', 'App\Http\Controllers\Backend\MatchController@redirect')->name('testPaymentsredirect');
+
+    // Language Switcher Route
+    Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang'])->name('admin.lang');
     });
 
 
 
-    
+
 
    //Users Route
     Route::prefix('/admin/users')->group(function () {
@@ -167,6 +200,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/status/update', 'App\Http\Controllers\Backend\UserController@updateStatus')->name('users.update.status');
         Route::get('/court-owners', 'App\Http\Controllers\Backend\UserController@courtOwners')->name('courtOwners');
         Route::get('/court-owners/view/{id}', 'App\Http\Controllers\Backend\UserController@courtOwnersview')->name('court-owners.view');
+        Route::get('/court-owners-reset-password/{id}', 'App\Http\Controllers\Backend\ClubController@resetPassword')->name('court-owners.resetPassword');
+        Route::post('/court-owners-newPassword/{id}', 'App\Http\Controllers\Backend\ClubController@newPassword')->name('court-owners.newPassword');
         Route::get('/create', 'App\Http\Controllers\Backend\UserController@create')->name('create');
         Route::post('/add', 'App\Http\Controllers\Backend\UserController@add')->name('user.add');
         Route::get('/wallets/{id}', 'App\Http\Controllers\Backend\UserController@wallets')->name('wallets');
@@ -175,7 +210,7 @@ Route::group(['middleware' =>['role:1,2']], function(){
         Route::get('/get-user-city', 'App\Http\Controllers\Backend\UserController@getUserCity')->name('userCitylist');
     });
 
-    
+
 });
 
 
@@ -185,27 +220,32 @@ Route::group(['middleware' =>['role:1,2,5']], function(){
     Route::prefix('/admin')->group(function () {
     //   //Dashboard Route
     // Route::get('/dashboard', 'App\Http\Controllers\Backend\HomeController@index')->name('dashboard');
-     
+
     //Bookings
-   
+
     // Outside Bookings
     Route::get('/outside-booking', 'App\Http\Controllers\Backend\BookingController@outside')->name('bookings.outside');
     Route::get('/outside-booking/delete/{id}', 'App\Http\Controllers\Backend\BookingController@delete')->name('bookings.outside.delete');
     //Reports
     Route::get('/reports', 'App\Http\Controllers\Backend\ReportController@index')->name('reports');
-    
+
     Route::get('/clubs/gallery/{id}', 'App\Http\Controllers\Backend\ClubController@gallery')->name('club.images');
     Route::post('/clubs/save-image/{id}', 'App\Http\Controllers\Backend\ClubController@saveImage')->name('club.image.save');
     Route::get('/club/image/delete/{id}', 'App\Http\Controllers\Backend\ClubController@imageDelete')->name('club.image.delete');
+
+    // Pdf
+    Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));
+
     Route::get('/clubs/edit/{id}', 'App\Http\Controllers\Backend\ClubController@edit')->name('club.edit');
     Route::post('/clubs/update/{id}', 'App\Http\Controllers\Backend\ClubController@update')->name('club.update');
     //Get Region
     Route::get('/get-region', 'App\Http\Controllers\Backend\ClubController@getRegion')->name('regionlist');
     Route::get('/get-city', 'App\Http\Controllers\Backend\ClubController@getCity')->name('citylist');
+
    //Matches
    Route::get('/bookings/matches/{id}', 'App\Http\Controllers\Backend\BookingController@matches')->name('matches');
-    // Pdf 
-    Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));  
+    // Pdf
+    Route::get('generate-invoice-pdf/{id}', array('as'=> 'generate.invoice.pdf', 'uses' => 'App\Http\Controllers\Backend\BookingController@generateInvoicePDF'));
     });
 });
 
@@ -214,12 +254,12 @@ Route::group(['middleware' =>['role:5']], function(){
 
         //Clubs
       Route::get('/clubs', 'App\Http\Controllers\Backend\ClubController@index')->name('clubs');
-    
-     
+
+
 
        // Calender
        Route::get('calendar', 'App\Http\Controllers\Backend\BookingController@calendar')->name('bookings.calendar');
-       
+
       Route::get('/club/timeslots/add/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsAdd')->name('club.timeslots.add');
       Route::post('/club/timeslots/save/{id}', 'App\Http\Controllers\Backend\ClubController@timeSlotsSave')->name('club.timeslots.save');
       Route::get('/club/timeslots', 'App\Http\Controllers\Backend\ClubController@timeSlots')->name('club.timeslots');
@@ -230,7 +270,7 @@ Route::group(['middleware' =>['role:5']], function(){
       Route::get('/club/timeslots/book/fetch', 'App\Http\Controllers\Backend\ClubController@fetchList')->name('club.timeslots.book.fetch');
       Route::post('/club/timeslots/booking/{id}', 'App\Http\Controllers\Backend\ClubController@bookingSlot')->name('club.timeslots.booking.slot');
 
-      
+
 
      //Bats
      Route::get('/vendor/bats', 'App\Http\Controllers\Backend\BatController@vendorBats')->name('vendor.bats');
@@ -254,4 +294,4 @@ Route::group(['middleware' =>['role:1,2,4']], function(){
         Route::get('/off-days/approve/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysApprove')->name('holiday.approve');
         Route::get('/off-days/reject/{id}', 'App\Http\Controllers\Backend\CoachController@holidaysReject')->name('holiday.reject');
     });
-}); 
+});

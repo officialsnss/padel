@@ -4,16 +4,16 @@
 <div class="card">
         <div class="card-header">
           <h3 class="card-title">{{ $userInfo->name }} Details</h3>
-        
+
                 <div class="add">
                  <a href="{{ route('club.images', $userInfo->clubid)}}" class="btn btn-info">Gallery</a>
                 </div>
               </div>
-        
+
         <div class="card-body">
           <div class="row">
             <div class="col-12 col-md-12 col-lg-12">
-             
+
             <table class="details">
                <tr>
                 <td><strong>Full Name</strong></td>
@@ -37,11 +37,11 @@
                </tr>
                <tr>
                 <td><strong>Description</strong></td>
-                <td>{{ strip_tags($userInfo->description) }}</td>
+                <td>{!! $userInfo->description !!}</td>
                </tr>
                <tr>
                 <td><strong>Arabic Description</strong></td>
-                <td>{{ strip_tags($userInfo->description_arabic) }}</td>
+                <td>{!! strip_tags($userInfo->description_arabic) !!}</td>
                </tr>
                <tr>
                 <td><strong>Service Charge</strong></td>
@@ -107,8 +107,8 @@
                </tr>
                <tr>
                 <td><strong>Amenities</strong></td>
-                <td> <?php 
-              
+                <td> <?php
+
                 $lists = explode(',', $amenityList);
                      ?>
                      @foreach($lists as $list)
@@ -125,9 +125,9 @@
                             <img src="{{ URL::to('/') }}/Images/club_images/{{ $userInfo->featured_image }}" class="thumb-image">
                          @endif</td>
                </tr>
-              
-              
-              
+
+
+
             </table>
                 <div class="bk-btn">
                   <a href="#" onclick="history.go(-1)" class="btn btn-info">BACK</a>

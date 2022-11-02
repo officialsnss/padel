@@ -5,22 +5,23 @@
 <div class="row">
         <div class="col-12">
             <div class="card">
-       @if(auth()->user()->role == 5) 
+       @if(auth()->user()->role == 5)
             <div class="card-header">
                 <div class="add">
                  <a href="{{ route('bookings.calendar') }}" class="btn btn-info">View calendar View</a>
                 </div>
               </div>
-       @endif       
+       @endif
                 <div class="card-body">
                    <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Sr.no</th>
+                    <th>Booking Id</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Club Name</th>
-                   <!-- <th>Status</th> -->
+                   <th>Payment Status</th>
                     @if( auth()->user()->role == '1' ||  auth()->user()->role == '2')
                     <th>Club Status</th>
                     <th>Coach Status</th>
@@ -29,13 +30,15 @@
                  </tr>
                   </thead>
                   <tbody>
-                    
+
                   @foreach ($bookings as $booking)
                     <tr>
                       <td></td>
+                      <td>{{ $booking->order_id }}</td>
                       <td>{{ $booking->usrname }}</td>
                       <td>{{ $booking->usremail }}</td>
                       <td>{{ $booking->clubname }}</td>
+                      <td>{!! ($booking->payment_status == '1')?'<span class="text-success">Success</span>':'<span class="text-danger">Incomplete</span>' !!}</td>
                       <!-- <td> <select class="p_status form-control">
                        <option value="1" data-id="{{ $booking->payid }}" {{ ($booking->payment_status == '1')?'selected':'' }}>Completed</option>
                        <option value="2" data-id="{{ $booking->payid }}" {{ ($booking->payment_status == '2')?'selected':'' }}>Pending</option>
@@ -61,9 +64,9 @@
                      <td><a href="{{ route('booking.view',$booking->bookId)}}" class="btn btn-success">View Details</a></td>
                   </tr>
                   @endforeach
-                  
+
                   </tbody>
-                
+
                 </table>
               </div>
               <!-- /.card-body -->
@@ -76,8 +79,8 @@
 <script>
 
     // $('.p_status').change(function () {
-    
-    //      var status = $(this).val(); 
+
+    //      var status = $(this).val();
     //      var bookId = $(this).find(':selected').attr('data-id');
     //     // alert(bookId);
     //      $.ajax({
@@ -94,12 +97,12 @@
     //     });
     // });
 
-    
+
     $('.c_status').change(function () {
-    
-    var status = $(this).val(); 
+
+    var status = $(this).val();
     var bookId = $(this).find(':selected').attr('data-id');
-    
+
     $.ajax({
        type: "GET",
        dataType: "json",
@@ -115,10 +118,10 @@
 });
 
 $('.co_status').change(function () {
-    
-    var status = $(this).val(); 
+
+    var status = $(this).val();
     var bookId = $(this).find(':selected').attr('data-id');
-    
+
     $.ajax({
        type: "GET",
        dataType: "json",
@@ -135,4 +138,3 @@ $('.co_status').change(function () {
 
   </script>
         @endsection
-  

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
-  
+
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('assets/backend/css/adminlte.min.css')}}">
   <!-- Custom css -->
@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
   <link rel="stylesheet" href="{{asset('assets/plugins/jquery-ui/jquery-ui.min.css')}}">
+
   <!-- jQuery -->
   <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
   <script src="{{asset('assets/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
@@ -45,7 +46,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    
+
   @include('backend.layouts.partials.breadcrumb')
     <!-- Main content -->
     <section class="content">
@@ -56,7 +57,7 @@
   </div>
   @include('backend.layouts.partials.footer')
   <!-- /.content-wrapper -->
-  
+
 </div>
 <!-- ./wrapper -->
 
@@ -105,10 +106,63 @@
             },
      // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-  
+
   });
-  
+
 </script>
+
+<script>let elemst = Array.prototype.slice.call(document.querySelectorAll('.js-switchess'));
+
+    elemst.forEach(function(html) {
+        let switchery = new Switchery(html,  { size: 'small' });
+    });</script>
+          <script>
+            $(document).ready(function(){
+        $('.js-switchess').change(function () {
+            let status = $(this).prop('checked') === true ? 1 : 2;
+            let Id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: '{{ route('coach.update.status') }}',
+                data: {'status': status, 'id': Id},
+                success: function (data) {
+                    toastr.options.closeButton = true;
+                    toastr.options.closeMethod = 'fadeOut';
+                    toastr.options.closeDuration = 100;
+                    toastr.success(data.message);
+                }
+            });
+        });
+    });
+</script>
+
+<script>let elemstt = Array.prototype.slice.call(document.querySelectorAll('.js-switchesss'));
+
+    elemstt.forEach(function(html) {
+        let switchery = new Switchery(html,  { size: 'small' });
+    });</script>
+          <script>
+            $(document).ready(function(){
+        $('.js-switchesss').change(function () {
+            let status = $(this).prop('checked') === true ? 1 : 2;
+            let Id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: '{{ route('bat.update.status') }}',
+                data: {'status': status, 'id': Id},
+                success: function (data) {
+                    toastr.options.closeButton = true;
+                    toastr.options.closeMethod = 'fadeOut';
+                    toastr.options.closeDuration = 100;
+                    toastr.success(data.message);
+                }
+            });
+        });
+    });
+</script>
+
 <script>let elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
 
 elems.forEach(function(html) {
@@ -136,7 +190,7 @@ elems.forEach(function(html) {
 
 </script>
 <script>
- 
+
 
   @if(Session::has('error'))
   toastr.options =
@@ -157,7 +211,7 @@ elems.forEach(function(html) {
   @endif
 
   $(".timePicker").hunterTimePicker();
-  
+
   $("#fileUpload").on('change', function () {
 
 if (typeof (FileReader) != "undefined") {
@@ -190,7 +244,7 @@ elemss.forEach(function(html) {
     $('.js-switchs').change(function () {
         let status = $(this).prop('checked') === true ? 1 : 0;
         let clubid = $(this).data('id');
-      
+
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -216,10 +270,10 @@ elemen.forEach(function(html) {
       <script>
         $(document).ready(function(){
     $('.js-switch-player').change(function () {
-      
+
         let status = $(this).prop('checked') === true ? 1 : 0;
         let playerid = $(this).data('id');
-      
+
         $.ajax({
             type: "GET",
             dataType: "json",

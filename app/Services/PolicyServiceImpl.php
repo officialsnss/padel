@@ -34,6 +34,16 @@ class PolicyServiceImpl implements PolicyService
             $lang = $request->header('Accept-Language');
         }
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+        
         $data = $this->policyRepository->getPolicies($request->id);
         
         $dataPacket = [];

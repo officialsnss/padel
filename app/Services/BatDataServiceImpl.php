@@ -26,11 +26,26 @@ class BatDataServiceImpl implements BatDataService
      *
      * @return mixed
      */
-    public function getBatDetails($clubId)
+    public function getBatDetails($request)
     {
-        $lang = auth()->user()->lang;
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
 
-        $data = $this->batDataRepository->getBatDetails($clubId);
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+
+        $data = $this->batDataRepository->getBatDetails($request->club_id);
         $batData = [];
 
         foreach($data as $i => $row) {

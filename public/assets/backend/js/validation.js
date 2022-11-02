@@ -4,7 +4,7 @@ $.validator.addMethod("check_b", function( value, element, param ) {
 
  return this.optional(element) || (parseFloat(value) <= parseFloat(val_a));
 },"Your refund amount is greater than Amount Paid.");
- 
+
  $("#refundform").validate({
 
   rules: {
@@ -13,16 +13,16 @@ $.validator.addMethod("check_b", function( value, element, param ) {
     number: true,
     check_b: true
     }
-    
+
   },
   messages: {
     refund_amt: {
       required: "Please enter refund amount",
       number:"Please enter numeric value"
       }
-  
+
   },
-  
+
 })
 
 $("#rejectform").validate({
@@ -31,24 +31,24 @@ $("#rejectform").validate({
     messagebody: {
     required: true,
    }
-    
+
   },
   messages: {
     messagebody: {
       required: "Please enter message",
       }
-  
+
   },
-  
+
 })
 
 // Vendor Form
 
 
-jQuery.validator.addMethod("lettersonly", function(value, element) 
+jQuery.validator.addMethod("lettersonly", function(value, element)
 {
 return this.optional(element) || /^[a-z," "]+$/i.test(value);
-}, "Please enter Letters only"); 
+}, "Please enter Letters only");
 
 
 $("#vendorform").validate({
@@ -58,6 +58,9 @@ $("#vendorform").validate({
     required: true,
     lettersonly: true
     },
+    full_name_arabic: {
+      required: true,
+      },
     phone: {
       digits: true
     },
@@ -125,7 +128,7 @@ $("#vendorform").validate({
     featured_image: {
       extension: "jpg|jpeg|png"
     }
-    
+
   },
   messages: {
     password_confirmation: {
@@ -134,20 +137,20 @@ $("#vendorform").validate({
       featured_image: {
         extension: "Please upload file in these format only (jpg, jpeg, png)."
     }
-  
+
   },
-  
+
 })
 
 // Clubs
-  
+
 $("#club-edit").validate({
   ignore: [],
   rules: {
     fullname:{
       required : function(element) {
         var action = $("#userrole").val();
-        if(action != "5") { 
+        if(action != "5") {
             return true;
         } else {
             return false;
@@ -155,7 +158,7 @@ $("#club-edit").validate({
     },
     lettersonly: function(element) {
       var action = $("#userrole").val();
-      if(action != "5") { 
+      if(action != "5") {
           return true;
       } else {
           return false;
@@ -166,7 +169,7 @@ $("#club-edit").validate({
     email:{
       required : function(element) {
         var action = $("#userrole").val();
-        if(action != "5") { 
+        if(action != "5") {
             return true;
         } else {
             return false;
@@ -174,7 +177,7 @@ $("#club-edit").validate({
     },
     email : function(element) {
       var action = $("#userrole").val();
-      if(action != "5") { 
+      if(action != "5") {
           return true;
       } else {
           return false;
@@ -184,17 +187,31 @@ $("#club-edit").validate({
     phone: {
       digits: function(element) {
         var action = $("#userrole").val();
-        if(action != "5") { 
+        if(action != "5") {
             return true;
         } else {
             return false;
         }
     }
     },
+    fullname: {
+      required: true,
+      lettersonly: true
+      },
+      full_name_arabic: {
+        required: true,
+        },
+      phone: {
+        digits: true
+      },
+      email: {
+      required: true,
+      email: true
+      },
     commission:{
       required : function(element) {
         var action = $("#userrole").val();
-        if(action != "5") { 
+        if(action != "5") {
             return true;
         } else {
             return false;
@@ -202,7 +219,7 @@ $("#club-edit").validate({
     },
     number:function(element) {
       var action = $("#userrole").val();
-      if(action != "5") { 
+      if(action != "5") {
           return true;
       } else {
           return false;
@@ -212,6 +229,9 @@ $("#club-edit").validate({
     clubname: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+      },
     service_charge: {
       required: true,
       number: true,
@@ -253,22 +273,22 @@ $("#club-edit").validate({
     featured_image: {
       extension: "jpg|jpeg|png"
     }
-    
+
   },
   messages: {
     featured_image: {
         extension: "Please upload file in these format only (jpg, jpeg, png)."
     }
  },
- 
 
-  
+
+
 })
 
 // Time Slots
 
 $.validator.addMethod("endtime", function(value, element, params){
- 
+
   var startvalue = $('#start_time').val();
 
   var stt = new Date("November 13, 2013 " + startvalue);
@@ -301,14 +321,14 @@ $("#time_save").validate({
        regex: "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$",
        endtime:true,
     },
-    
+
   },
-  
+
 })
 
 
 $.validator.addMethod("endtimeupdate", function(value, element, params){
- 
+
   var startvalue = $('#start').val();
 
 var stt = new Date("November 13, 2013 " + startvalue);
@@ -331,16 +351,16 @@ $("#time_update").validate({
        required: true,
        regex: "^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$",
        endtimeupdate:true
-     
-    },
-    
-  },
-  
- 
 
-  
+    },
+
+  },
+
+
+
+
 })
-$(".bookforms").each(function() { 
+$(".bookforms").each(function() {
    var form = $(this);
 form.validate({
 
@@ -349,14 +369,14 @@ form.validate({
     required: true,
     email:true,
    }
-    
+
   },
 
-  
+
 })
 });
 
-$(".bookforms").each(function() { 
+$(".bookforms").each(function() {
    var form = $(this);
 form.validate({
 
@@ -365,10 +385,10 @@ form.validate({
     required: true,
     email:true,
    }
-    
+
   },
 
-  
+
 })
 });
 
@@ -378,11 +398,11 @@ $("#batform").validate({
   rules: {
     bat_name: {
         required: true,
-        
+
     },
     name_arabic: {
       required: true,
-      
+
   },
     featured_image: {
       required: function(element) {
@@ -393,18 +413,18 @@ $("#batform").validate({
         }
       },
       extension: "jpg|jpeg|png"
-     
+
     },
-    
+
   },
-  
+
   messages: {
     featured_image: {
         extension: "Please upload file in these format only (jpg, jpeg, png)."
     }
   }
 
-  
+
 })
 
 
@@ -413,7 +433,7 @@ $("#vendorcreateform").validate({
   rules: {
     bat_id: {
         required: true,
-        
+
     },
     price: {
       required: true,
@@ -423,25 +443,25 @@ $("#vendorcreateform").validate({
       required: true,
       number: true,
     },
-    
+
   },
-  
+
   messages: {
     bat_id: {
       required: "Please Select the bat."
     }
   }
 
-  
+
 })
 
 $.validator.addMethod("balance", function( value, element, param ) {
 
   var val_a = $("#balamount").val();
-   
+
  return this.optional(element) || (parseFloat(value) <= parseFloat(val_a));
 },"Your amount is greater than wallet balance");
- 
+
  $("#withdrawalform").validate({
 
   rules: {
@@ -450,21 +470,21 @@ $.validator.addMethod("balance", function( value, element, param ) {
     number: true,
     balance: true
     }
-    
+
   },
   messages: {
     withdrawal_amt: {
       required: "Please enter amount",
       number:"Please enter numeric value"
       }
-  
+
   },
-  
+
 })
 
 //amenity validation
 // Clubs
-  
+
 $("#amenity-form").validate({
   ignore: [],
   rules: {
@@ -474,7 +494,7 @@ $("#amenity-form").validate({
     name_arabic: {
       required: true,
       },
-   
+
     icon_image: {
 
         required: function(element) {
@@ -487,7 +507,7 @@ $("#amenity-form").validate({
     // required: true,
       extension: "jpg|jpeg|png"
     }
-    
+
   },
   messages: {
 
@@ -522,7 +542,7 @@ $("#couponform").validate({
     amount: {
     required: true,
     number: true,
-   
+
     },
     minimum_amount: {
     required: true,
@@ -531,25 +551,28 @@ $("#couponform").validate({
     status: {
     required: true,
     },
-    
+
   },
-  
- 
+
+
 })
 
 //coaches
 
 $("#coachform").validate({
- 
+
   onkeyup: false ,
   rules: {
     coach_name: {
     required: true,
     },
+    name_arabic: {
+      required: true,
+    },
     coach_email: {
       required: true,
       email: true,
-      
+
     },
     price: {
       required: true,
@@ -573,59 +596,62 @@ $("#coachform").validate({
     profile_img: {
       extension: "jpg|jpeg|png"
     }
-    
-    
+
+
   },
   messages: {
     profile_img: {
         extension: "Please upload file in these format only (jpg, jpeg, png)."
     }
  },
- 
+
 })
 
 // Holidays
-  
+
 $("#holidaysform").validate({
   ignore: [],
   rules: {
     start_date: {
-    required: true,
+    required: false,
     },
     end_date: {
-      required: true,
-    
+      required: false,
+
     },
-    
+    leave_type: {
+        required: true,
+    }
+
   },
- 
- 
+
+
 })
 
 // homeslider
 $("#slideform").validate({
- 
- 
+
+
   rules: {
     slide_heading: {
     required: true,
     },
-   
+
     button_label: {
       required: true,
-    
+
     },
-    
+
     button_label: {
         required: true,
-        
+
     },
     button_val: {
       required: true,
       url: true
-     
+
       },
-   
+
     image: {
       required: function(element) {
         if ($(".thumb-image").attr('src') !== '') {
@@ -635,31 +661,31 @@ $("#slideform").validate({
         }
     },
     extension: "jpg|jpeg|png"
-      
+
     }
-    
-    
+
+
   },
   messages: {
     image: {
         extension: "Please upload file in these format only (jpg, jpeg, png)."
     }
  },
- 
+
 })
 
 // cms pages
 $("#cms-pages").validate({
- 
-  ignore: [], 
+
+  ignore: [],
   rules: {
     title: {
     required: true,
     },
-   
+
     title_arabic: {
       required: true,
-    
+
     },
     content:{
       required: true,
@@ -667,11 +693,11 @@ $("#cms-pages").validate({
     content_arabic:{
       required: true,
     }
-   
-    
+
+
   },
-  
- 
+
+
 })
 
 //Regions Form
@@ -680,20 +706,20 @@ $("#regions-form").validate({
   rules: {
     country_name: {
         required: true,
-        
+
     },
     region: {
       required: true,
       lettersonly: true
-      
+
     },
     arabic_region: {
       required: true,
-    
+
     },
-   
-    
-  },  
+
+
+  },
 })
 
 
@@ -701,23 +727,23 @@ $("#regions-form").validate({
 $("#cities-form").validate({
   //ignore: [],
   rules: {
-    
+
     region_name: {
       required: true,
-      
+
     },
     city: {
       required: true,
       lettersonly: true
-      
+
     },
     arabic_city: {
       required: true,
-    
+
     },
-   
-    
-  },  
+
+
+  },
 })
 
 
