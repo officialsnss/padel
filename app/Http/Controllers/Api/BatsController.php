@@ -25,7 +25,10 @@ class BatsController extends Controller
 
     public function getBatDetails(Request $request)
     {
-        $data = $this->batDataService->getBatDetails($request->club_id);
+        $data = $this->batDataService->getBatDetails($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        }
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all bats', true, 200);
         }

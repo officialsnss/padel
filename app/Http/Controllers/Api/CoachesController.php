@@ -26,6 +26,9 @@ class CoachesController extends Controller
     public function getCoachesList(Request $request)
     {
         $data = $this->coachesService->getCoachesList($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201); 
+        }
         if($data) {
             return ResponseUtil::successWithData($data, 'List of Coaches', true, 200);
         }

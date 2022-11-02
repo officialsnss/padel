@@ -38,6 +38,16 @@ class ClubDataServiceImpl implements ClubDataService
             $lang = $request->header('Accept-Language');
         }
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+
         // Getting all clubs from the db
         $data = $this->clubDataRepository->getClubsList($request);
         $dataPacket = [];
@@ -104,7 +114,9 @@ class ClubDataServiceImpl implements ClubDataService
     {
         // Getting all the clubs data
         $data = $this->getClubsList($request);
-
+        if(isset($data['error'])) {
+            return $data;
+        }
         // Sorting of clubs based on ordering
         usort($data, function($a, $b) {
             return $a['ordering'] - $b['ordering'];
@@ -149,7 +161,22 @@ class ClubDataServiceImpl implements ClubDataService
 
     public function getSingleClub($request)
     {
-        $lang = auth()->user()->lang;
+        // Getting language from the token or from the header
+        if(auth()->user()) {
+            $lang = auth()->user()->lang;
+        } else {
+            $lang = $request->header('Accept-Language');
+        }
+
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
 
         $dataPacket = [];
         $id = $request->club_id;

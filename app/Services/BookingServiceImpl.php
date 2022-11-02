@@ -439,6 +439,16 @@ class BookingServiceImpl implements BookingService
     {
         $lang = auth()->user()->lang;
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+
         $data = $this->bookingRepository->getCoupons();
         $dataPacket = [];
         $dataArray = [];
@@ -449,11 +459,10 @@ class BookingServiceImpl implements BookingService
             // Getting name and code of the coupon based on the selected language
             if($lang == "en") {
                 $dataArray[$i]['name'] = $row['name'];
-                $dataArray[$i]['code'] = $row['code'];
             } elseif ($lang == "ar") {
                 $dataArray[$i]['name'] = $row['name_arabic'];
-                $dataArray[$i]['code'] = $row['code_arabic'];
             }
+            $dataArray[$i]['code'] = $row['code'];
 
             if($row['discount_type'] == 1) {
                 $dataArray[$i]['amount'] = $row['amount'];

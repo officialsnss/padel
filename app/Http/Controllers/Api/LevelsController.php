@@ -26,6 +26,9 @@ class LevelsController extends Controller
     public function getLevelsList()
     {
         $data = $this->levelsService->getLevelsList();
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        }
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all levels', true, 200);
         }

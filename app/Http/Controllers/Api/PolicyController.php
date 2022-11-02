@@ -26,6 +26,9 @@ class PolicyController extends Controller
     public function getPolicies(Request $request)
     {
         $data =  $this->policyService->getPolicies($request);
+        if(isset($data['error'])) {
+            return ResponseUtil::errorWithMessage(201, $data['error'], false, 201);
+        }
         if($data){
             return ResponseUtil::successWithData($data['data'], $data['title']. " data", true, 200);
         }
