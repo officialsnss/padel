@@ -54,9 +54,6 @@ class ClubDataServiceImpl implements ClubDataService
 
         if($data) {
             foreach($data as $i => $row) {
-                if($row['status'] == '2') {
-                    continue;
-                }
                 $dataPacket[$i]['id'] = $row['id'];
 
                 // Getting name of the club based on the selected language
