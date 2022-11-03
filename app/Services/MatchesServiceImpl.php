@@ -102,6 +102,17 @@ class MatchesServiceImpl implements MatchesService
     public function getMatchArray($data) 
     {
         $lang = auth()->user()->lang;
+
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+
         $dataArray = [];
 
         foreach($data as $i => $row) {
@@ -218,6 +229,16 @@ class MatchesServiceImpl implements MatchesService
     {
         $lang = auth()->user()->lang;
 
+        // Check for no language in the header
+        if($lang == null) {
+            return ['error' => 'Please send a language in the header.'];
+        }
+
+        // Check if the language is other than english and arabic
+        if($lang != "en" && $lang != "ar") {
+            return ['error' => 'Only English (en) and Arabic (ar) are allowed as languages.'];
+        }
+        
         // Getting player details from user id
         $userId = auth()->user()->id;
         $userData = $this->playersRepository->getPlayerDetailsByUser($userId);

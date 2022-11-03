@@ -195,6 +195,8 @@ Route::group(['middleware' =>['role:1,2']], function(){
     Route::post('/matches/edit/{id}', 'App\Http\Controllers\Backend\MatchController@update')->name('matches.update');
     Route::get('/matches/view/{id}', 'App\Http\Controllers\Backend\MatchController@view')->name('matches.view');
     Route::post('/matches/create/{id}', 'App\Http\Controllers\Backend\MatchController@create')->name('matches.result.create');
+    Route::get('/test-payment', 'App\Http\Controllers\Backend\MatchController@payment')->name('testPaymentsgateway');
+    Route::get('/test-payment-redirect', 'App\Http\Controllers\Backend\MatchController@redirect')->name('testPaymentsredirect');
 
     // Language Switcher Route
     Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang'])->name('admin.lang');

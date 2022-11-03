@@ -147,6 +147,53 @@ $("#vendorform").validate({
 $("#club-edit").validate({
   ignore: [],
   rules: {
+    fullname:{
+      required : function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    lettersonly: function(element) {
+      var action = $("#userrole").val();
+      if(action != "5") {
+          return true;
+      } else {
+          return false;
+      }
+  },
+    },
+
+    email:{
+      required : function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    email : function(element) {
+      var action = $("#userrole").val();
+      if(action != "5") {
+          return true;
+      } else {
+          return false;
+      }
+  },
+    },
+    phone: {
+      digits: function(element) {
+        var action = $("#userrole").val();
+        if(action != "5") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    },
     fullname: {
       required: true,
       lettersonly: true
