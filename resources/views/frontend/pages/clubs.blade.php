@@ -125,8 +125,9 @@
 <div class="mid-area-wrap">
     <div class="container">
 
-        <div class="row g-4">
-            <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+        <div class="row g-4 all-club-data">
+
+            {{-- <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                 <div class="courts-block">
                     <div class="courts-block-img">
                         <img src="{{ asset('frontend/images/hashimi-padel-court-1.jpg') }}" alt="" class="img-fluid">
@@ -148,55 +149,8 @@
                         <div class="line-c"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#court-details">More Details</a></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
-            <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                <div class="courts-block">
-                    <div class="courts-block-img">
-                        <img src="{{ asset('frontend/images/hashimi-padel-court-2.jpg') }}" alt="" class="img-fluid">
-                        <span class="rating"><i class="bi bi-star-fill"></i> 4.5</span>
-                        <span class="price"><i class="bi bi-ticket-fill"></i> 30.000 KWD/hr</span>
-                    </div>
-                    <div class="courts-block-desc">
-                        <div class="line-a">Hashimi Padel Court</div>
-                        <div class="line-b">
-                            <div class="row g-1">
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Racket" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-1.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Changing Room" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-2.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Fridge" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-3.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Parking" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-4.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lounge" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-5.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Prayer Room" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-6.png') }}" alt="" class="img-fluid"></div></div>
-                            </div>
-                        </div>
-                        <div class="line-c"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#court-details">More Details</a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                <div class="courts-block">
-                    <div class="courts-block-img">
-                        <img src="{{ asset('frontend/images/play-padel.jpg') }}" alt="" class="img-fluid">
-                        <span class="rating"><i class="bi bi-star-fill"></i> 4.5</span>
-                        <span class="price"><i class="bi bi-ticket-fill"></i> 30.000 KWD/hr</span>
-                    </div>
-                    <div class="courts-block-desc">
-                        <div class="line-a">Hashimi Padel Court</div>
-                        <div class="line-b">
-                            <div class="row g-1">
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Racket" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-1.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Changing Room" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-2.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Fridge" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-3.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Parking" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-4.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lounge" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-5.png') }}" alt="" class="img-fluid"></div></div>
-                                <div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Prayer Room" data-bs-custom-class="custom-tooltip"><img src="{{ asset('frontend/images/popular-courts/icon-6.png') }}" alt="" class="img-fluid"></div></div>
-                            </div>
-                        </div>
-                        <div class="line-c"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#court-details">More Details</a></div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

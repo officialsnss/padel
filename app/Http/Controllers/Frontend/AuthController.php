@@ -15,11 +15,8 @@ class AuthController extends Controller
 
     public function authenticate(Request $request)
     {
-        dd($request->all());
-        // $response = Http::get('http://127.0.0.1:8000/api/login');
-        // // $response = bearerToken();
-
-        // dd($response);
+        // dd($request->all());
+        dd($bearer=$request->header('Authorization'));
     }
 
     public function register()

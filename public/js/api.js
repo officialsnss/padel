@@ -171,41 +171,57 @@ $(document).ready(function () {
 
     //------Login Ajax Code ------//
 
-    // $("#login").click(function () {
-    //     var formData = {
-    //         email: $("#login-email").val(),
-    //         password: $("#login-password").val(),
+    $("#login").click(function () {
+        var formData = {
+            email: $("#login-email").val(),
+            password: $("#login-password").val(),
 
-    //         // email: "enridise@gmail.com",
-    //         // password: "12345678",
-    //     };
+            // email: "enridise@gmail.com",
+            // password: "12345678",
+        };
 
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "api/login",
-    //         data: formData,
-    //         dataType: "json",
-    //         encode: true,
-    //         success: function (data) {
+        $.ajax({
+            type: "POST",
+            url: "api/login",
+            data: formData,
+            dataType: "json",
+            encode: true,
+            success: function (data) {
 
-    //             if (data.success === true) {
-    //                 $('#error-class').hide();
-    //                 console.log(data);
-    //                 localStorage.setItem('token', data.token);
-    //                 window.location.href = "/authenticate";
-    //             } else {
-    //                 $('#error-text').html(data.message);
-    //                 $('#error-class').show();
-    //                 // console.log(data.message);
-    //             }
-    //         }
-    //         // error: function (data) {
-    //         //     console.log(data);
-    //         // }
-    //     });
+                if (data.success === true) {
+                    $('#error-class').hide();
+                    console.log(data);
+                    writeCookie('token',data.token,1);
+                    writeCookie('data',data.data,1);
+                    console.log(document.cookie);
+                    alert(document.cookie.token);
+                    localStorage.setItem('token', data.token);
+                    // window.location.href = "/authenticate";
+                } else {
+                    $('#error-text').html(data.message);
+                    $('#error-class').show();
+                    // console.log(data.message);
+                }
+            }
+            // error: function (data) {
+            //     console.log(data);
+            // }
+        });
 
-    //     // event.preventDefault();
-    // });
+        // event.preventDefault();
+    });
+
+    function writeCookie(name,value,days) {
+        var date, expires;
+        if (days) {
+            date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            expires = "; expires=" + date.toGMTString();
+                }else{
+            expires = "";
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
 
     //------Registration Ajax Code ------//
 
@@ -408,6 +424,70 @@ $(document).ready(function () {
         // event.preventDefault();
     });
 
+    //------All Club Ajax Code ------//
+
+    $.ajax({
+        type: 'get',
+        url: 'api/clubs',
+        // data: formData.serialize(),
+        // headers: {
+        //     'Accept-Language' : language,
+        // },
+        success: function (data) {
+            // alert(lang);
+
+            var res = "";
+            console.log(data);
+            for (var i = 0; i < data.data.length; i++) {
+                res += '<div class="col-12 col-sm-12 col-md-6 col-lg-4">';
+                res += '<div class="courts-block">';
+                res += '<div class="courts-block-img">';
+                console.log("All club listing");
+                if (data.data[i].featured_image == '') {
+                    featured_image = "club_images/202208191047vpro_azul_gris_amarillo.jpg";
+                } else {
+                    featured_image = data.data[i].featured_image;
+                }
+                res += '<img src="http://127.0.0.1:8000/Images/' + featured_image + '" alt="' + featured_image + '" class="img-fluid">';
+                var rating = data.data[i].rating;
+                res += '<span class="rating"><i class="bi bi-star-fill"></i> '+data.data[i].rating+'</span>';
+                res += '<span class="price"><i class="bi bi-ticket-fill"></i> ' + data.data[i].price + ' KWD/hr</span>';
+                res += '</div>';
+                res += '<div class="courts-block-desc">';
+                res += '<div class="line-a">' + data.data[i].name + '</div>';
+                res += '<div class="line-b">';
+                res += '<div class="row g-1">';
+                for (var j = 0; j < data.data[i].amenities.length; j++) {
+                res += '<div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="http://127.0.0.1:8000/Images/' + data.data[i].amenities[j].image + '" alt="' + data.data[i].amenities[j].name + '" class="img-fluid"></div></div>';
+                }
+                res += '</div>';
+                res += '</div>';
+                res += '<div class="line-c"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#court-details">More Details</a></div>';
+                res += '</div>';
+                res += '</div>';
+                res += '</div>';
+            }
+            // alert(res);
+            console.log(res);
+
+            $(".all-club-data").append(res);
+            $(".rateyo").rateYo({
+                // rating: 5,
+                starWidth: "25px",
+                numStars: 5,
+                minValue: 0,
+                maxValue: 5,
+                normalFill: "gray",
+                ratedFill: "orange",
+                readOnly: true
+            });
+
+        },
+        error: function (error) {
+            // alert("Error");
+            // console.log(error);
+        }
+    });
 
 
 });

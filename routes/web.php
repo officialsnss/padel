@@ -47,7 +47,7 @@ Route::get('/refund-policy', 'App\Http\Controllers\Frontend\HomeController@refun
 
 // // Login route
 Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name('login');
-Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
+Route::get('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
 
 // // Register Route
 Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register');
