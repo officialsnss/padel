@@ -45,6 +45,9 @@ Route::post('contact', 'App\Http\Controllers\Api\ContactUsController@sendMessage
 //POLICIES
 Route::get('policy', 'App\Http\Controllers\Api\PolicyController@getPolicies');
 
+//Payment Response
+Route::get('get/payment_response', 'App\Http\Controllers\Api\PaymentController@paymentResponse');
+
 // Route::post('register', [RegisterController::class, 'register']);
 
 Route::middleware('auth:api')->group( function () {
@@ -106,6 +109,6 @@ Route::middleware('auth:api')->group( function () {
     //Change Language
     Route::get('changeLanguage', 'App\Http\Controllers\Api\UsersController@changeLanguage');
 
-    //Payment Response
-    Route::get('api/payment-res', 'App\Http\Controllers\Api\PaymentController@paymentRes');
+    //Payment
+    Route::get('payment', 'App\Http\Controllers\Api\PaymentController@payment');
 });
