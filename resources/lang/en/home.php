@@ -6,8 +6,8 @@
         'Games' => 'Games',
         'Coaches' => 'Coaches',
         'About' => 'About',
-        'Contact_us' => 'Contact Us'
-
+        'Contact_us' => 'Contact Us',
+        'Courts' => 'Courts'
     ],
     'header' => [
         'follow_with_us' => 'Follow With Us',

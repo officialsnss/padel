@@ -16,15 +16,15 @@
                                 <div class="swiper-image"><img src="{{ URL::to('/') }}/Images/homeslider_images/{{ $banner->image }}" alt="{{ $banner->image }}" class="img-fluid"></div>
                                 <div class="swiper-caption">
                                     <h1 class="mb-4">
-                                        @if(App::getLocale() == 'kw')
-                                        {!! $banner->arabic_heading !!}
+                                        @if(App::getLocale() == 'ar')
+                                        {!! $banner->heading_arabic !!}
                                         @else
                                             {!! $banner->heading !!}
                                         @endif
                                     </h1>
                                     <a href="{{ $banner->button_url }}" class="banner-booknow">
-                                        @if(App::getLocale() == 'kw')
-                                            {{ $banner->arabic_button_label }}
+                                        @if(App::getLocale() == 'ar')
+                                            {{ $banner->button_label_arabic }}
                                         @else
                                             {{ $banner->button_label }}
                                         @endif
@@ -44,7 +44,7 @@
 
 <div class="upcoming-tournament-wrap">
     <div class="container">
-        <h1 class="mb-4">UPCOMMING TOURNAMENT</h1>
+        <h1 class="mb-4">{{ __('home.home_page.upcoming_tournament') }}</h1>
 
         <div class="ut-left-right">
             <div class="ut-left"><img src="{{ asset('frontend/images/ut-left.jpg') }}" class="img-fluid" alt=""></div>
@@ -64,7 +64,7 @@
 
 <div class="popular-courts-wrap">
     <div class="container">
-        <h1 class="mb-4">POPULAR COURTS</h1>
+        <h1 class="mb-4">{{ __('home.home_page.popular_courts') }}</h1>
 
 
         <div class="swiper popular-courts">
@@ -84,8 +84,8 @@
     <div class="container">
 
         <ul class="nav nav-pills mb-5 justify-content-center" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation"><button class="nav-link active" id="pills-players-tab" data-bs-toggle="pill" data-bs-target="#pills-players" type="button" role="tab" aria-controls="pills-players" aria-selected="true">PLAYERS</button></li>
-            <li class="nav-item" role="presentation"><button class="nav-link" id="pills-coach-tab" data-bs-toggle="pill" data-bs-target="#pills-coach" type="button" role="tab" aria-controls="pills-coach" aria-selected="false">COACH</button></li>
+            <li class="nav-item" role="presentation"><button class="nav-link active" id="pills-players-tab" data-bs-toggle="pill" data-bs-target="#pills-players" type="button" role="tab" aria-controls="pills-players" aria-selected="true">{{ __('home.home_page.players') }}</button></li>
+            <li class="nav-item" role="presentation"><button class="nav-link" id="pills-coach-tab" data-bs-toggle="pill" data-bs-target="#pills-coach" type="button" role="tab" aria-controls="pills-coach" aria-selected="false">{{ __('home.home_page.coach') }}</button></li>
         </ul>
 
         <div class="tab-content" id="pills-tabContent">

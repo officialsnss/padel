@@ -23,12 +23,26 @@ class HomeController extends Controller
         return view('frontend.pages.index',compact('settings'));
     }
 
+    public function contact()
+    {
+        return view('frontend.pages.contact_us');
+    }
+
     public function contact_us(Request $request)
     {
+        $request->validate([
+            'first_name'=> 'required',
+            'last_name'=> 'required',
+            'email'=> 'required|email',
+            'mobile'=> 'required',
+            'message'=> 'required',
+
+        ]);
         try{
-            $data['name'] = $request->name;
+
+            $data['name'] = $request->first_name." " .$request->last_name;
             $data['email'] = $request->email;
-            $data['phone'] = $request->phone;
+            $data['phone'] = $request->mobile;
             $data['message'] = $request->message;
 
             $result =  ContactUs::create([
@@ -38,12 +52,12 @@ class HomeController extends Controller
                 'message' => $data['message']
             ]);
             if($result){
-                return redirect('/contact_us')->with('success', 'Message sent successfully!.');
+                return redirect('/contact_us')->with('success', 'Feedback sent successfully!.');
             }
 
         }
         catch (\Exception $e) {
-           // dd($e->getMessage());
+           dd($e->getMessage());
             return redirect('/contact_us')->with('error', 'Something went wrong.');
         }
     }
@@ -51,6 +65,7 @@ class HomeController extends Controller
     // public function terms_and_condition()
     // {
     //     $tncs = CmsPages::all()->where('slug','terms-and-condition');
+    //     // dd($tncs);
     //     return view('frontend.pages.terms_and_condition',compact('tncs'));
     // }
 

@@ -46,11 +46,13 @@ class UsersController extends Controller
         }
 
         // Getting data of the user from email
+
         $user = USER::where('email', $request->email)->first();
-        
+
         // Check for the not registered email
         if(!$user) {
-            return ResponseUtil::errorWithMessage('422', 'The entered email is not registered with us.', false, 422);
+
+            return ResponseUtil::errorWithMessage('201', 'The entered email is not registered with us.', false, 201);
         }
 
         // Check for wrong password
@@ -73,7 +75,7 @@ class UsersController extends Controller
             $access_token = 'Bearer ' . $token->accessToken;
             $message = __('Login Successfully');
             $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-            
+
             $array = [];
             $array['id'] = $user->id;
             $array['player_id'] = $player_id;
@@ -150,9 +152,9 @@ class UsersController extends Controller
         }
 
         // Creating new user
-        $user = User::create(['name' => $request->name, 
-                              'email' => $request->email, 
-                              'password' => Hash::make($request->password), 
+        $user = User::create(['name' => $request->name,
+                              'email' => $request->email,
+                              'password' => Hash::make($request->password),
                               'phone' => $request->phone,
                               'device_id' => $request->device_id]);
         $player = Players::create(['user_id' => $user['id']]);
@@ -179,13 +181,13 @@ class UsersController extends Controller
 
         //     $client = new Client($account_sid, $auth_token);
         //     $client->messages->create($receiverNumber, [
-        //         'from' => $twilio_number, 
+        //         'from' => $twilio_number,
         //         'body' => $message]);
 
         // } catch (Exception $e) {
         //     dd("Error: ". $e->getMessage());
         // }
-        
+
         // Sending Otp to Email
         $user->notify(new NewRegister($otp));
         return User::where('id', $id)->update(['otp' => $otp]);
@@ -221,31 +223,31 @@ class UsersController extends Controller
 
         //     $client = new Client($account_sid, $auth_token);
         //     $client->messages->create($receiverNumber, [
-        //         'from' => $twilio_number, 
+        //         'from' => $twilio_number,
         //         'body' => $message]);
-  
+
         // } catch (Exception $e) {
         //     dd("Error: ". $e->getMessage());
         // }
 
         // try {
-  
+
         //     $basic  = new \Nexmo\Client\Credentials\Basic(getenv("NEXMO_KEY"), getenv("NEXMO_SECRET"));
         //     $client = new \Nexmo\Client($basic);
-  
+
         // $receiverNumber = "+91".$user->phone;
         // $message = "This the otp for you registration. " . $otp;
-  
+
         //     $message = $client->message()->send([
         //         'to' => $receiverNumber,
         //         'from' => 'Anmol Chugh',
         //         'text' => $message
         //     ]);
-  
+
         // } catch (Exception $e) {
         //     dd("Error: ". $e->getMessage());
         // }
-        
+
         // Send Otp to Email
         $user->notify(new NewRegister($otp));
         User::where('device_id', $request->device_id)->where('phone', $request->phone)->update(['otp' => $otp]);
@@ -268,7 +270,7 @@ class UsersController extends Controller
 
         // Getting users data from the phone and device_id
         $user  = User::where('device_id',$request->device_id)->where('phone', $request->phone)->first();
-        
+
         // If users exists
         if($user) {
             if(!$user['otp']) {
@@ -282,7 +284,7 @@ class UsersController extends Controller
             //     User::where('device_id',$request->device_id)->update(['otp' => null]);
             //     return ResponseUtil::errorWithMessage('Your Otp has been expired. Please resend it.', false, 201);
             // }
-        
+
             // If users Otp matches with the otp stored in db
             if($user['otp'] == $request->otp) {
 
@@ -297,7 +299,7 @@ class UsersController extends Controller
                 $access_token = 'Bearer ' . $token->accessToken;
                 $message = __('Login Successfully');
                 $expires_at = Carbon::parse($token->token->expires_at)->toDateTimeString();
-                
+
                 // Making an array for the response
                 $array = [];
                 $array['id'] = $user->id;
@@ -352,7 +354,7 @@ class UsersController extends Controller
             $error = head($validator->messages()->messages());
             return ResponseUtil::errorWithMessage(201, $error[0], false, 201);
         }
-        
+
         // Saving new password to the db
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return ResponseUtil::successWithMessage("Password change successfully.", true, 200);
@@ -362,7 +364,7 @@ class UsersController extends Controller
     {
         $user = auth()->user();
         $image = $request->image;
-        
+
         // Validation for the image
         if(!$image) {
             return ResponseUtil::errorWithMessage(201, 'Please upload the image', false, 201);
@@ -370,7 +372,7 @@ class UsersController extends Controller
 
         $dataPacket = [];
         $dataPacket['profile_pic'] = time() . '.' . $image->getClientOriginalExtension();
-        
+
         // Delete the old image from the folder if exists
         $imagePath = base_path('Images/user_Images/'. $user['profile_pic']);
         if(File::exists($imagePath)){
@@ -399,6 +401,6 @@ class UsersController extends Controller
         } else {
             return ResponseUtil::errorWithMessage(201, 'Please send a valid language (ar->arabic, en->english)', false, 201);
         }
-        
+
     }
 }

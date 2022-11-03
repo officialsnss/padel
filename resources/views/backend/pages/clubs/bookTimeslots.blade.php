@@ -5,10 +5,13 @@
 <div class="row">
         <div class="col-12">
             <div class="card">
-           
+
               <div class="card-body">
-            
+
                 <div class="row">
+                @if($indoorCourts == 0 && $outdoorCourts == 0)
+                      <strong><b class="text-danger text-center" style="text-align:center">No Courts Available</b><br></strong>
+                @else
                 <div class="col-md-8">
                     </div>
                   <div class="col-md-4">
@@ -20,53 +23,54 @@
                 </div>
                 <div class="book-time">
                     <ul class="time-list">
-                    <?php $i = 1;  
+                    <?php $i = 1;
                         $finaltimings = explode(',', $timings)  ?>
                        @foreach($finaltimings as $time)
                     <?php
-                          
+
                       $indoorbooking =   \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
                        ->leftJoin('payments','payments.booking_id', '=','bookings.id')
                         ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '1','bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
                        ->count();
-                   
-                       
+
+
                       $outsideindoorbooking =  DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=> date('Y-m-d'),'court_type' => '1'])
                                                 ->count();
-                      
-                      $totalindoorbooking =  $indoorbooking+$outsideindoorbooking; 
+
+                      $totalindoorbooking =  $indoorbooking+$outsideindoorbooking;
                       $outdoorbooking =    \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
                       ->leftJoin('payments','payments.booking_id', '=','bookings.id')
                       ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '2', 'bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
                       ->count();
-                
+
                       $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=>date('Y-m-d'),'court_type' => '2'])
                        ->count();
-            
-                      $totalOutdoorbooking = $outdoorbooking+$outsideoutdoorbooking; 
+
+                      $totalOutdoorbooking = $outdoorbooking+$outsideoutdoorbooking;
 
                       $rem_indoor = $indoorCourts -  $totalindoorbooking;
                       $rem_outdoor = $outdoorCourts - $totalOutdoorbooking;
                      ?>
-                         <li>
-                       
-                          <div data-toggle="modal" data-target="#bookModal{{ $i }}" class="b-time" style="{{ (($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)?'background:#fff;cursor: pointer;':'background:#e74c3c;color:#fff'}}"><strong>{{ $time  }}</strong>
-                         @if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)  
-                            <p class="inner-des">
-                              <small><b>Courts Available:</b><br>
-                              @if($rem_indoor > 0)
-                               {{ $rem_indoor }} Indoor<br>
-                               @endif
-                               @if($rem_outdoor > 0)
-                              {{  $rem_outdoor }} Outdoor
-                              @endif
-                       </small></p>
-                          @else
-                          <h4>Booked</h4>
-                          @endif
+
+                                <li>
+
+                                <div data-toggle="modal" data-target="#bookModal{{ $i }}" class="b-time" style="{{ (($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)?'background:#fff;cursor: pointer;':'background:#e74c3c;color:#fff'}}"><strong>{{ $time  }}</strong>
+                                @if(($rem_indoor > 0 && $rem_outdoor > 0) || $rem_indoor > 0 || $rem_outdoor > 0)
+                                    <p class="inner-des">
+                                        <small><b>Courts Available:</b><br>
+                                        @if($rem_indoor > 0)
+                                            {{ $rem_indoor }} Indoor<br>
+                                        @endif
+                                        @if($rem_outdoor > 0)
+                                            {{  $rem_outdoor }} Outdoor
+                                        @endif
+                                    </small></p>
+                                @else
+                                <h4>UnBooked</h4>
+                                @endif
 
                           <?php
-                          
+
                             if($rem_indoor > 0){
                                $courttype = '<input type="radio" class="ctype" name="court_type" value="1" checked><span class="indoor_court">Indoor</span>';
                             }
@@ -79,7 +83,7 @@
                           ?>
 
                             </div>
-                            @if(($rem_indoor > '0' && $rem_outdoor > '0') || $rem_indoor > '0' || $rem_outdoor > '0')  
+                            @if(($rem_indoor > '0' && $rem_outdoor > '0') || $rem_indoor > '0' || $rem_outdoor > '0')
                             <div class="modal fade" id="bookModal{{ $i }}" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                   <div class="modal-content">
@@ -90,7 +94,7 @@
                                           </button>
                                       </div>
                                       <div class="modal-body">
-                                      
+
                                           <form method="post" action="{{ route('club.timeslots.booking.slot', $clubId) }}" id="bookform" class="bookforms">
                                               @csrf
                                               <div class="form-group row">
@@ -118,7 +122,7 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label for="inputName">Court Type</label>
-                                                            <div class="ctype"> {!! $courttype !!}</div> 
+                                                            <div class="ctype"> {!! $courttype !!}</div>
                                                           </div>
                                                       </div>
                                                   </div>
@@ -154,23 +158,24 @@
                                                   </div>
                                               </div>
                                           </form>
-                                       
+
                                       </div>
                                   </div>
                               </div>
                           </div>
-                    
+
                 <!--  End of POPUP-->
                     @endif
-                            
+
                         </li>
-                        <?php $i++; ?> 
+                        <?php $i++; ?>
                        @endforeach
                     </ul>
                   </div>
                   <p class="note"><strong>Note: </strong>Please click on the time slot to book it manually.</p>
+                @endif
               </div>
-              
+
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -180,7 +185,7 @@
         <!-- /.row -->
         <script>
   $( function() {
-   
+
     $('#datepicker').datepicker({  dateFormat: 'dd-mm-yy', minDate: 0 });
     $('#datepicker').datepicker().datepicker('setDate', 'today');
   } );
@@ -188,14 +193,14 @@
   $(document).ready(function(){ /* PREPARE THE SCRIPT */
     $("#datepicker").change(function(){ /* WHEN YOU CHANGE AND SELECT FROM THE SELECT FIELD */
       var inputData = $(this).val(); /* GET THE VALUE OF THE SELECTED DATA */
-       $.ajax({ 
-        type: "GET", 
+       $.ajax({
+        type: "GET",
         url: '{{ route('club.timeslots.book.fetch') }}',
-        data: {'inputData':inputData}, 
-        success: function(result){ 
-          
-          $(".time-list").html(result); 
-          $(".bookforms").each(function() { 
+        data: {'inputData':inputData},
+        success: function(result){
+
+          $(".time-list").html(result);
+          $(".bookforms").each(function() {
             var form = $(this);
               form.validate({
 
@@ -204,10 +209,10 @@
                   required: true,
                   email:true,
                 }
-                  
+
                 },
 
-                
+
               })
               });
         }
@@ -216,11 +221,10 @@
     });
   });
 
- 
 
-  
 
-  
+
+
+
   </script>
         @endsection
-  

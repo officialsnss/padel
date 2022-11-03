@@ -6,7 +6,8 @@
         'Games' => 'لعبة',
         'Coaches' => 'المدربين',
         'About' => 'عنا',
-        'Contact_us' => 'اتصال'
+        'Contact_us' => 'اتصال',
+        'Courts' => 'المحاكم'
     ],
     'header' => [
         'follow_with_us' => 'تابعنا',

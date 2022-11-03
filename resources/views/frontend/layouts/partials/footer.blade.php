@@ -10,7 +10,7 @@
                 @endif
             @endforeach
 
-            <div class="col-auto term-policy"><a href="terms-and-condition.html">Terms & Condition</a> <a href="refund-policy.html">Refund Policy</a> <a href="privacy-policy.html">Privacy Policy</a></div>
+            <div class="col-auto term-policy"><a href="/pages/terms-and-condition">Terms & Condition</a> <a href="/pages/refund-policy">Refund Policy</a> <a href="/pages/privacy-policy">Privacy Policy</a></div>
             @php
                 $extra_texts = \App\Models\Setting::where('type', '3')->get();
             @endphp

@@ -30,19 +30,34 @@ Route::get('clear', function () {
 
 // Website Homepage
 Route::get('/', 'App\Http\Controllers\Frontend\HomeController@index');
-Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us');
+Route::get('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact');
+Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us')->name('contact.store');
 
 // Language Switcher Route
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
 
 // // Terms and condition route
-// Route::get('/terms_and_condition', 'App\Http\Controllers\Frontend\HomeController@terms_and_condition')->name('terms_and_condition');
+Route::get('/terms-and-condition', 'App\Http\Controllers\Frontend\HomeController@terms_and_condition')->name('terms_and_condition');
 
 // // Privacy Policy route
-// Route::get('/privacy_policy', 'App\Http\Controllers\Frontend\HomeController@privacy_policy')->name('privacy_policy');
+Route::get('/privacy-policy', 'App\Http\Controllers\Frontend\HomeController@privacy_policy')->name('privacy_policy');
 
 // // Refund Policy route
-// Route::get('/refund_policy', 'App\Http\Controllers\Frontend\HomeController@refund_policy')->name('refund_policy');
+Route::get('/refund-policy', 'App\Http\Controllers\Frontend\HomeController@refund_policy')->name('refund_policy');
+
+// // Login route
+Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name('login');
+Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
+
+// // Register Route
+Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register');
+Route::get('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController@verify')->name('verify');
+
+// // Club Route
+Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
+
+// // Players Route
+Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
 
 Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
 

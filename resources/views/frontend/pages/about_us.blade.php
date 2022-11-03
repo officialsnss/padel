@@ -1,35 +1,26 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    {{-- Popular Courts Layout --}}
-    <section class="popular-courts home-page-section">
-        <div class="padding-left-right">
-            <div class="container"><br><br><br><br><br>
-                @foreach ($abs as $ab)
-                    <h2>
-                        @if (App::getLocale() == 'kw')
-                            {{ $ab->title_arabic }}
+    <div class="mid-area-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    @foreach ($abs as $ab)
+                        <h1 class="text-center mb-4">
+                            @if (App::getLocale() == 'ar')
+                                {{ $ab->title_arabic }}
+                            @else
+                                {{ $ab->title }}
+                            @endif
+                        </h1>
+                        @if (App::getLocale() == 'ar')
+                            {!! $ab->content_arabic !!}
                         @else
-                            {{ $ab->title }}
+                            {!! $ab->content !!}
                         @endif
-                    </h2>
-                    <div class="carousel-main wow fadeInUp" data-wow-delay="0.4s">
-                        <div class="product-container swiper-container">
-                            <div class="swiper-wrapper text-white">
-
-
-                                @if (App::getLocale() == 'kw')
-                                    {!! $ab->content_arabic !!}
-                                @else
-                                {!! $ab->content !!}
-                                @endif
-
-
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 @endsection

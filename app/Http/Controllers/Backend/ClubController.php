@@ -74,7 +74,7 @@ class ClubController extends Controller
            $data['amenities'] = $amList;
            if($request->file('featured_image')){
             $file= $request->file('featured_image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
+            $filename= date('YmdHi').str_replace(' ', '-', $file->getClientOriginalName());
             $file->move(base_path('Images/club_images'), $filename);
             $data['featured_image']= $filename;
              }
