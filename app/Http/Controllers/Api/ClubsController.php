@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\ResponseUtil;
-use App\Models\Club; 
+use App\Models\Club;
 use App\Services\ClubDataService;
 
 class ClubsController extends Controller
@@ -19,7 +19,7 @@ class ClubsController extends Controller
      * ClubsController constructor.
      *
      */
-    public function __construct(ClubDataService $clubDataService)    
+    public function __construct(ClubDataService $clubDataService)
     {
         $this->clubDataService = $clubDataService;
     }

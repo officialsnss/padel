@@ -251,6 +251,14 @@ class ClubDataServiceImpl implements ClubDataService
             $dataPacket['courtsCount'] = $this->clubDataRepository->getCourtsCount($clubData['id']);
             $dataPacket['rating'] = number_format($this->getClubRating($clubData['club_rating']),1,'.','');
             $dataPacket['bookingsCount'] = $data['bookingsCount'];
+
+            $clubImagesData = $this->clubDataRepository->getClubImages($clubData['id']);
+            $clubImagesDataArray = [];
+            foreach($clubImagesData as $ciKey => $ci){
+                $clubImagesDataArray[$ciKey]['image'] = getenv("IMAGES")."club_images/".$ci->image;
+            }
+            $dataPacket['club_images']  = $clubImagesDataArray;
+
         }
         return $dataPacket;
     }

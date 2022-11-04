@@ -18,6 +18,7 @@
 <link href="{{ asset('frontend/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
 <link href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css">
 <link href="{{ asset('frontend/css/custom.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ asset('frontend/css/jquery.datetimepicker.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/jquery.rateyo.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/jquery.rateyo.css') }}"/>
     {{-- <link rel="stylesheet" href="{{ asset('starrr.css') }}"/> --}}
@@ -175,6 +176,10 @@ var swiper4 = new Swiper(".coach-swiper", {
 <script>
 	$.stickme();
 </script>
+<script src="{{ asset('frontend/js/jquery.datetimepicker.js') }}"></script>
+    <script>
+        $('#cb-date-time').datetimepicker();
+    </script>
 {{-- <script src="{{asset('js/starrr.js')}}"></script> --}}
     {{-- <script src="{{asset('js/rating.js')}}"></script> --}}
     <script src="{{asset('js/jquery.rateyo.js')}}"></script>

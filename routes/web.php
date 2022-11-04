@@ -55,6 +55,7 @@ Route::get('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController
 
 // // Club Route
 Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
+Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courtsbook');
 
 // // Players Route
 Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
