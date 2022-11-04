@@ -16,7 +16,7 @@ $(document).ready(function () {
     setTimeout(function () {
         $('#otp-success-class').hide();
     }, 10000);
-
+    $('.clickloader').hide();
 
     //------Popular Club Ajax Code ------//
 
@@ -288,6 +288,7 @@ $(document).ready(function () {
 
     $("#sendcontactus").click(function () {
         $('#sendcontactus').attr('disabled', 'disabled');
+        $('.clickloader').show();
         var $this = $(this);
         $this.button('loading');
         var contactformData = {
@@ -307,6 +308,7 @@ $(document).ready(function () {
 
                 if (data.success === true) {
                     $this.button('reset');
+                    $('.clickloader').hide();
                     $('#sendcontactus').attr('disabled', 'disabled');
                     $('#success-text').html(data.message);
                     $('#success-class').show();
@@ -315,8 +317,13 @@ $(document).ready(function () {
                     $("#email").val("");
                     $("#mobile").val("");
                     $("#message").val("");
+                    setTimeout(function () {
+                        $('#success-class').hide();
+                    }, 10000);
+                    window.location.href = 'contact_us';
                 } else {
                     $this.button('reset');
+                    $('.clickloader').hide();
                     $('#sendcontactus').removeAttr('disabled');
                     $('#error-text').html(data.message);
                     $('#error-class').show();
@@ -324,6 +331,7 @@ $(document).ready(function () {
             },
             error: function (data) {
                 $this.button('reset');
+                $('.clickloader').hide();
                 $('#sendcontactus').removeAttr('disabled');
                 $('#error-text').html(data.message);
                 $('#error-class').show();

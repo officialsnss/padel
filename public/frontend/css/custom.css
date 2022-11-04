@@ -38,7 +38,7 @@ a:focus, a:hover	{text-decoration:none;}
 :root {
 	--blue-color: #06053f;
 	--padding: 5rem;
-	
+
 }
 
 
@@ -186,15 +186,15 @@ a:focus, a:hover	{text-decoration:none;}
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 200px; 
-  padding: 2px; 
-  
-background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa); 
-  -webkit-mask: 
-     linear-gradient(#fff 0 0) content-box, 
+  border-radius: 200px;
+  padding: 2px;
+
+background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
+  -webkit-mask:
+     linear-gradient(#fff 0 0) content-box,
      linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
-          mask-composite: exclude; 
+          mask-composite: exclude;
 }
 
 
@@ -285,7 +285,7 @@ background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
 .modal-button:hover 	{background-position: 100% 0%; moz-transition: all .4s ease-in-out; -o-transition: all .4s ease-in-out; -webkit-transition: all .4s ease-in-out; transition: all .4s ease-in-out; color: #FFFFFF;}
 
 
-:root {	
+:root {
 	--cb-radius: 0.5rem;
 	--cb-bgcolor: #f2f2f2;
 	--cb-padding: 1rem;
@@ -300,7 +300,7 @@ background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
 .court-book-wrap .court-book-block .line-a	{text-transform: uppercase; font-weight: 500; font-size: 125%;}
 .court-book-wrap .court-book-block .line-b	{}
 
-.court-book-wrap .court-book-block:hover,	
+.court-book-wrap .court-book-block:hover,
 .court-book-wrap .court-book-block.selected	{background-color: var(--cb-hoverbgcolor); color: var(--cb-hovercolor);}
 
 
@@ -380,20 +380,20 @@ background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
 .add-racket-desc input:focus 	{outline: none;}
 .games-ul{justify-content: space-between}
 .games-ul li a{display: block;width:61px;height:61px;position:relative}
-.games-ul li::marker,.gallery li::marker{display:none;visibility: hidden;content:''} 
+.games-ul li::marker,.gallery li::marker{display:none;visibility: hidden;content:''}
 .games-ul li a div{border-radius:50%;width:100%;;height:100%;overflow:hidden}
-.games-ul li a div img{width:100%;min-height:100%} 
+.games-ul li a div img{width:100%;min-height:100%}
 .games-ul li a span{position: absolute;
     right: -15.2%;
     bottom: 0%;
-display:flex; background:url(../images/octahon.svg) center center no-repeat;background-size:100% auto;width:30px;height:30px;color:#ffff;text-align:center;  
-align-items: center;justify-content:center; 	
+display:flex; background:url(../images/octahon.svg) center center no-repeat;background-size:100% auto;width:30px;height:30px;color:#ffff;text-align:center;
+align-items: center;justify-content:center;
 /* New Gradient */
 
 /*background: linear-gradient(99.12deg, #00FFFA -67.87%, #00FFFA -62.07%, #008BFF 19.16%, #157FF3 30.77%, #4D61D4 55.91%, #A431A3 90.72%, #FF0070 125.54%);*/}
 .booking-col{}
 .court-book-row {
-    
+
 }
 
 .navbar-nav li a 		{color:white !important;}
@@ -547,24 +547,24 @@ align-items: center;justify-content:center;
 
 
 /* ----------- Non-Retina Screens ----------- */
-@media screen 
-  and (min-device-width: 1200px) 
-  and (max-device-width: 1600px) 
+@media screen
+  and (min-device-width: 1200px)
+  and (max-device-width: 1600px)
   and (-webkit-min-device-pixel-ratio: 1) {
- 
 
-	  
+
+
 }
 
 /* ----------- Retina Screens ----------- */
-@media screen 
-  and (min-device-width: 1200px) 
-  and (max-device-width: 1600px) 
+@media screen
+  and (min-device-width: 1200px)
+  and (max-device-width: 1600px)
   and (-webkit-min-device-pixel-ratio: 2)
   and (min-resolution: 192dpi) {
-	  
 
-	  
+
+
 }
 
 
@@ -573,9 +573,9 @@ align-items: center;justify-content:center;
 and (min-width: 1030px)
 and (max-width: 1366px)
 {
-	
 
-	
+
+
 }
 
 
@@ -583,22 +583,22 @@ and (max-width: 1366px)
 @media only screen
 and (min-width : 768px)
 and (max-width : 1024px)
-{	
+{
 
-	
 
-	
+
+
 }
 
 
 /* iPad Landscape */
-@media only screen   
-and (orientation : landscape)   
-and (-webkit-min-device-pixel-ratio: 2)  
-and (min-width : 768px)   
-and (max-width : 1024px)   
+@media only screen
+and (orientation : landscape)
+and (-webkit-min-device-pixel-ratio: 2)
+and (min-width : 768px)
+and (max-width : 1024px)
 {
-	
+
 body 				{font-size: 0.875rem;}
 
 
@@ -607,9 +607,9 @@ body 				{font-size: 0.875rem;}
 
 
 .banner-area .swiper-slide .swiper-caption h1 		{font-size: 200%;}
-	
+
 .banner-area .swiper-caption						{left: 5%;}
-	
+
 .upcoming-tournament-wrap .ut-left-right .ut-left			{width: 50%;}
 .upcoming-tournament-wrap .ut-left-right .ut-left img		{width: 100%; border-radius: 50px; -webkit-transform: skew(-5deg); -moz-transform: skew(-5deg); transform: skew(-5deg);}
 
@@ -617,30 +617,30 @@ body 				{font-size: 0.875rem;}
 .upcoming-tournament-wrap .ut-left-right .ut-right h3	 	{color: #FFFFFF;}
 
 .upcoming-tournament-wrap .ut-left-right .ut-right .ut-right-in		{-webkit-transform: skew(5deg); -moz-transform: skew(5deg); transform: skew(5deg);}
-	
+
 }
 
 
 /* iPad Portrait */
-/* Orientation : Portrait */  
-@media only screen   
-and (orientation : portrait)   
-and (-webkit-min-device-pixel-ratio: 2)   
-and (min-width : 768px)   
-and (max-width : 1024px)  
+/* Orientation : Portrait */
+@media only screen
+and (orientation : portrait)
+and (-webkit-min-device-pixel-ratio: 2)
+and (min-width : 768px)
+and (max-width : 1024px)
 {
 
 body 				{font-size: 0.875rem;}
-	
-	
+
+
 .header-a  .header-a-left .list-inline-item:not(:last-child) 	{margin-right: 0.75rem;}
 .header-a .header-a-right .list-inline-item:not(:last-child) 	{margin-right: 0.75rem;}
-	
+
 .banner-area .swiper-slide .swiper-caption h1 		{font-size: 200%;}
-	
+
 .banner-area .swiper-caption						{left: 5%;}
-	
-	
+
+
 .upcoming-tournament-wrap .ut-left-right .ut-left			{width: 50%;}
 .upcoming-tournament-wrap .ut-left-right .ut-left img		{width: 100%; border-radius: 50px; transform: skew(-5deg); -webkit-transform: skew(-5deg); -moz-transform: skew(-5deg);}
 
@@ -648,126 +648,126 @@ body 				{font-size: 0.875rem;}
 .upcoming-tournament-wrap .ut-left-right .ut-right h3	 	{color: #FFFFFF;}
 
 .upcoming-tournament-wrap .ut-left-right .ut-right .ut-right-in		{transform: skew(5deg); -webkit-transform: skew(5deg); -moz-transform: skew(5deg);}
-	
-	
-.header-b .nav-link 								{padding-top: 0.5rem; padding-bottom: 0.5rem;}
-.header-b .navbar-expand-lg .navbar-nav .nav-link 	{padding-left: 0rem;  padding-right: 0rem;}	
-.header-b .offcanvas-header							{border-bottom: 1px solid #666666;}	
-	
-	
-	
-.pc-block .line-d a 		{padding: 0.5rem;}
-.pc-block .line-d a img 	{width: 36px;}	
-	
-	
-}
 
-/* Generally, this dimension is recommended for mobile: - For 640 Resolution */  
-@media only screen   
-and (min-width : 360px)   
-and (max-width : 640px)  
-{
-	
-body 				{font-size: 0.875rem;}
-	
-.header-b			{padding: 0.5rem 0 0.5rem 0;}
-.header-a .header-a-logo		{position: absolute; left: 5%; right: auto; top: 0; margin: auto; width: 130px;}
-.header-a .header-a-logo		{background-color: #FFFFFF; padding: 1rem; border-bottom-right-radius: 1rem; border-bottom-left-radius: 1rem;}
-.header-a .header-a-logo img	{width: 100%;}	
-	
-.header-a .header-a-left 										{width: auto; float: right;}
-.header-a  .header-a-left .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
-.header-a .header-a-right .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
-	
-	
-.banner-area .swiper-slide .swiper-caption h1 		{font-size: 150%;}	
-
-.banner-area .swiper-caption		{left: 5%;}
-.banner-booknow			{padding: 0.5rem 1rem;}
-	
-
-
-.upcoming-tournament-wrap .ut-left-right .ut-left			{width: 100%;}
-.upcoming-tournament-wrap .ut-left-right .ut-left img		{border-radius: 20px; transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
-
-.upcoming-tournament-wrap .ut-left-right .ut-right			{border-radius: 20px; padding: 75% 5% 5% 5%; transform: skew(-0deg); -webkit-transform: skew(-0deg); -moz-transform: skew(-0deg); margin-top: 0%;}
-
-.upcoming-tournament-wrap .ut-left-right .ut-right .ut-right-in		{transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
-	
 
 .header-b .nav-link 								{padding-top: 0.5rem; padding-bottom: 0.5rem;}
-.header-b .navbar-expand-lg .navbar-nav .nav-link 	{padding-left: 0rem;  padding-right: 0rem;}	
-.header-b .offcanvas-header							{border-bottom: 1px solid #666666;}	
-	
-	
-	
-.pc-block .line-d a 		{padding: 0.5rem;}
-.pc-block .line-d a img 	{width: 36px;}
-	
-.players-coach-wrap .nav-pills .nav-item:not(:last-child)		{margin-right: 0.5rem;}
-.players-coach-wrap .nav-pills .nav-link 						{font-size: 200%; padding-left: 2rem; padding-right: 2rem;}	
-	
-	
-.login-register-in							{padding: 2rem 1rem;}	
-	
-
-	
-	
-}
-
-/* Mobile - For 480 Resolution */  
-@media only screen   
-and (min-width : 320px)   
-and (max-width : 480px)
-{
-	
-body 				{font-size: 0.875rem;}
-	
-.header-b			{padding: 0.5rem 0 0.5rem 0;}
-.header-a .header-a-logo		{position: absolute; left: 5%; right: auto; top: 0; margin: auto; width: 130px;}
-.header-a .header-a-logo		{background-color: #FFFFFF; padding: 1rem; border-bottom-right-radius: 1rem; border-bottom-left-radius: 1rem;}
-.header-a .header-a-logo img	{width: 100%;}	
-	
-.header-a .header-a-left 										{width: auto; float: right;}
-.header-a  .header-a-left .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
-.header-a .header-a-right .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
-	
-	
-.banner-area .swiper-slide .swiper-caption h1 		{font-size: 150%;}	
-
-.banner-area .swiper-caption		{left: 5%;}
-.banner-booknow			{padding: 0.5rem 1rem;}
-	
-
-
-.upcoming-tournament-wrap .ut-left-right .ut-left			{width: 100%;}
-.upcoming-tournament-wrap .ut-left-right .ut-left img		{border-radius: 20px; transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
-
-.upcoming-tournament-wrap .ut-left-right .ut-right			{border-radius: 20px; padding: 75% 5% 5% 5%; transform: skew(-0deg); -webkit-transform: skew(-0deg); -moz-transform: skew(-0deg); margin-top: 0%;}
-
-.upcoming-tournament-wrap .ut-left-right .ut-right .ut-right-in		{transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
-	
-	
-.header-b .nav-link 								{padding-top: 0.5rem; padding-bottom: 0.5rem;}
-.header-b .navbar-expand-lg .navbar-nav .nav-link 	{padding-left: 0rem;  padding-right: 0rem;}	
+.header-b .navbar-expand-lg .navbar-nav .nav-link 	{padding-left: 0rem;  padding-right: 0rem;}
 .header-b .offcanvas-header							{border-bottom: 1px solid #666666;}
-	
-	
+
+
+
 .pc-block .line-d a 		{padding: 0.5rem;}
 .pc-block .line-d a img 	{width: 36px;}
-	
-	
-	
+
+
+}
+
+/* Generally, this dimension is recommended for mobile: - For 640 Resolution */
+@media only screen
+and (min-width : 360px)
+and (max-width : 640px)
+{
+
+body 				{font-size: 0.875rem;}
+
+.header-b			{padding: 0.5rem 0 0.5rem 0;}
+.header-a .header-a-logo		{position: absolute; left: 5%; right: auto; top: 0; margin: auto; width: 130px;}
+.header-a .header-a-logo		{background-color: #FFFFFF; padding: 1rem; border-bottom-right-radius: 1rem; border-bottom-left-radius: 1rem;}
+.header-a .header-a-logo img	{width: 100%;}
+
+.header-a .header-a-left 										{width: auto; float: right;}
+.header-a  .header-a-left .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
+.header-a .header-a-right .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
+
+
+.banner-area .swiper-slide .swiper-caption h1 		{font-size: 150%;}
+
+.banner-area .swiper-caption		{left: 5%;}
+.banner-booknow			{padding: 0.5rem 1rem;}
+
+
+
+.upcoming-tournament-wrap .ut-left-right .ut-left			{width: 100%;}
+.upcoming-tournament-wrap .ut-left-right .ut-left img		{border-radius: 20px; transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
+
+.upcoming-tournament-wrap .ut-left-right .ut-right			{border-radius: 20px; padding: 75% 5% 5% 5%; transform: skew(-0deg); -webkit-transform: skew(-0deg); -moz-transform: skew(-0deg); margin-top: 0%;}
+
+.upcoming-tournament-wrap .ut-left-right .ut-right .ut-right-in		{transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
+
+
+.header-b .nav-link 								{padding-top: 0.5rem; padding-bottom: 0.5rem;}
+.header-b .navbar-expand-lg .navbar-nav .nav-link 	{padding-left: 0rem;  padding-right: 0rem;}
+.header-b .offcanvas-header							{border-bottom: 1px solid #666666;}
+
+
+
+.pc-block .line-d a 		{padding: 0.5rem;}
+.pc-block .line-d a img 	{width: 36px;}
+
 .players-coach-wrap .nav-pills .nav-item:not(:last-child)		{margin-right: 0.5rem;}
 .players-coach-wrap .nav-pills .nav-link 						{font-size: 200%; padding-left: 2rem; padding-right: 2rem;}
-	
-	
+
+
 .login-register-in							{padding: 2rem 1rem;}
 
 
-	
 
-	
+
+}
+
+/* Mobile - For 480 Resolution */
+@media only screen
+and (min-width : 320px)
+and (max-width : 480px)
+{
+
+body 				{font-size: 0.875rem;}
+
+.header-b			{padding: 0.5rem 0 0.5rem 0;}
+.header-a .header-a-logo		{position: absolute; left: 5%; right: auto; top: 0; margin: auto; width: 130px;}
+.header-a .header-a-logo		{background-color: #FFFFFF; padding: 1rem; border-bottom-right-radius: 1rem; border-bottom-left-radius: 1rem;}
+.header-a .header-a-logo img	{width: 100%;}
+
+.header-a .header-a-left 										{width: auto; float: right;}
+.header-a  .header-a-left .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
+.header-a .header-a-right .list-inline-item:not(:last-child) 	{margin-right: 0.5rem;}
+
+
+.banner-area .swiper-slide .swiper-caption h1 		{font-size: 150%;}
+
+.banner-area .swiper-caption		{left: 5%;}
+.banner-booknow			{padding: 0.5rem 1rem;}
+
+
+
+.upcoming-tournament-wrap .ut-left-right .ut-left			{width: 100%;}
+.upcoming-tournament-wrap .ut-left-right .ut-left img		{border-radius: 20px; transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
+
+.upcoming-tournament-wrap .ut-left-right .ut-right			{border-radius: 20px; padding: 75% 5% 5% 5%; transform: skew(-0deg); -webkit-transform: skew(-0deg); -moz-transform: skew(-0deg); margin-top: 0%;}
+
+.upcoming-tournament-wrap .ut-left-right .ut-right .ut-right-in		{transform: skew(0deg); -webkit-transform: skew(0deg); -moz-transform: skew(0deg);}
+
+
+.header-b .nav-link 								{padding-top: 0.5rem; padding-bottom: 0.5rem;}
+.header-b .navbar-expand-lg .navbar-nav .nav-link 	{padding-left: 0rem;  padding-right: 0rem;}
+.header-b .offcanvas-header							{border-bottom: 1px solid #666666;}
+
+
+.pc-block .line-d a 		{padding: 0.5rem;}
+.pc-block .line-d a img 	{width: 36px;}
+
+
+
+.players-coach-wrap .nav-pills .nav-item:not(:last-child)		{margin-right: 0.5rem;}
+.players-coach-wrap .nav-pills .nav-link 						{font-size: 200%; padding-left: 2rem; padding-right: 2rem;}
+
+
+.login-register-in							{padding: 2rem 1rem;}
+
+
+
+
+
 }
 
 
@@ -783,5 +783,24 @@ body 				{font-size: 0.875rem;}
 
 }
 
+.clickloader {
+    border: 8px solid #b7b6b6;
+    border-radius: 50%;
+    border-top: 8px solid #000;
+    width: 25px;
+    height: 25px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
 
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 

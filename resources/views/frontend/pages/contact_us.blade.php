@@ -64,9 +64,15 @@
                                     <div class="form-error text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-control-group"><button class="button" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing..." type="button" id="sendcontactus">Submit</button></div>
+                            <div class="row">
+                                <div class="col-lg-2 col-md-6 col-sm-6">
+                                    <div class="form-control-group"><button class="button" type="button" id="sendcontactus">Submit</button></div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="clickloader"></div>
+                                </div>
+                            </div>
                         </form>
-
                     </div>
                 </div>
                 <div class="col-12">
