@@ -30,7 +30,7 @@ class PaymentController extends Controller
         // $data['customer']['phone']['country_code'] = "91";
         $data['customer']['phone']['number'] = $user['phone'];
         $data['source']['id'] = "src_card";
-        $data['redirect']['url'] = "http://127.0.0.1:8000/api/get/payment_response";
+        $data['redirect']['url'] = "https://mastersofphp.com/padel/dev/api/get/payment_response";
 
         //User defined fields custom
         $data['metadata']['udf1'] = 1;
@@ -82,7 +82,7 @@ class PaymentController extends Controller
         }
         $responseArray['transaction_id'] = $response->id;
         $responseArray['payment_status'] = $response->status;
-        $responseArray['amount'] = $response->amount;
+        $responseArray['amount'] = number_format((float)$response->amount, 3, '.', '');
         return $responseArray;
     }
 
