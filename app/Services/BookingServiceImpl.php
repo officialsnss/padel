@@ -8,8 +8,6 @@ use App\Services\PlayersServiceImpl;
 use App\Repositories\ClubDataRepository;
 use App\Repositories\CoachesRepository;
 use App\Repositories\PlayersRepository;
-use App\Traits\PaymentRes;
-use App\Traits\ReqPayment;
 use Carbon\Carbon;
 /**
  * Class BookingServiceImpl
@@ -18,10 +16,6 @@ use Carbon\Carbon;
  */
 class BookingServiceImpl implements BookingService
 {
-
-    use PaymentRes,ReqPayment;
-
-
     /**
      * BookingServiceImpl constructor.
      *
