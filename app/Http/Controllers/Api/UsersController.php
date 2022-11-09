@@ -207,7 +207,7 @@ class UsersController extends Controller
 
         // $otp = rand(1000,9999);
         $otp = 1234;
-        $user = User::where('device_id', $request->device_id)->where('phone', $request->phone)->first();
+        $user = User::where('phone', $request->phone)->first();
         if(!$user) {
             return ResponseUtil::errorWithMessage(201, 'No user exists for this phone and device_id', false, 201);
         }
@@ -248,7 +248,7 @@ class UsersController extends Controller
         
         // Send Otp to Email
         $user->notify(new NewRegister($otp));
-        User::where('device_id', $request->device_id)->where('phone', $request->phone)->update(['otp' => $otp]);
+        User::where('phone', $request->phone)->update(['otp' => $otp]);
         return ResponseUtil::successWithMessage("OTP resent successfully.", true, 200);
     }
 
@@ -267,7 +267,7 @@ class UsersController extends Controller
         }
 
         // Getting users data from the phone and device_id
-        $user  = User::where('device_id',$request->device_id)->where('phone', $request->phone)->first();
+        $user  = User::where('phone', $request->phone)->first();
         
         // If users exists
         if($user) {
@@ -288,7 +288,7 @@ class UsersController extends Controller
 
                 // Updating fields for the player and users table
                 auth()->login($user, true);
-                User::where('device_id',$request->device_id)->where('phone', $request->phone)->update(['otp' => null, 'isOtpVerified' => '1']);
+                User::where('phone', $request->phone)->update(['otp' => null, 'isOtpVerified' => '1']);
                 $player = $this->playersRepository->getPlayerDetailsByUser($user['id']);
                 $player_id = $player['id'];
 
