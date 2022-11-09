@@ -19,7 +19,8 @@ class Booking extends Model
         'batPrice',
         'coach_id',
         'booking_date',
-        'order_id'
+        'order_id',
+        'status'
     ];
 
     public function clubs()

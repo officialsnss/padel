@@ -29,7 +29,7 @@ class BookingController extends Controller
         if($data) {
             return ResponseUtil::successWithData($data, 'List of all bookings by user', true, 200);
         }
-        return ResponseUtil::errorWithMessage(201, 'No bookings', true, 201);
+        return ResponseUtil::errorWithMessage(201, 'No bookings', false, 201);
     }
 
     public function addBooking(Request $request)

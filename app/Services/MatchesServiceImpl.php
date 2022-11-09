@@ -211,6 +211,7 @@ class MatchesServiceImpl implements MatchesService
 
             // Getting list of all the players playing this match
             $arrayIds = explode(',', $row['playersIds']); 
+            $dataArray[$i]['playerIds'] = $arrayIds;
             $dataArray[$i]['players'] = $this->getPlayersList($arrayIds);
             
             // If match is public i.e. match type is 1. Then getting listing of all requetsed players for this match
@@ -245,6 +246,12 @@ class MatchesServiceImpl implements MatchesService
 
         // Getting list of match by match_id
         $data = $this->matchesRepository->getMatchDetails($request->match_id);
+        
+        // Match not booked due to payment fail
+        if($data['status'] == '4') {
+            return ['error' => 'This match is not been booked due to payment failure!'];
+        }
+
         $dataArray = [];
         if($data) {
 
@@ -502,6 +509,11 @@ class MatchesServiceImpl implements MatchesService
         // No match exists for entered match_id
         if(!$data) {
             return ['message' => "No match data for this match_id"];
+        }
+
+        // Unbooked match
+        if($data['status'] == '4') {
+            return ['error' => 'This match is not been booked due to payment failure. So, you cannot see players list associated with this match!'];
         }
 
         // Getting player_id of logged in player

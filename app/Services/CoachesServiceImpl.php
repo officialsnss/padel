@@ -218,7 +218,7 @@ class CoachesServiceImpl implements CoachesService
 
             // Removing coaches if they are not assigned to a particular club
             if(!in_array($request->club_id, $coach['clubs_assigned'])) {
-                array_splice($coachesList, [$i], 1);
+                array_splice($coachesList, $i, 1);
             }
         }
         return $coachesList;
