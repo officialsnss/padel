@@ -56,11 +56,6 @@ class ClubDataRepository extends BaseRepository
         return ['data' => $data, 'bookingsCount' => $bookingsCount];
     }
 
-    public function getCourtsCount($id)
-    {
-        return Court::where('club_id', $id)->count();
-    }
-
     public function getAmenities($data)
     {
         return Amenities::whereIn('id', $data)->get();

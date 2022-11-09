@@ -1,75 +1,89 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use App\Models\Order;
-use App\Models\Payment;
-use App\Traits\PaymentRes;
-use App\Traits\ReqPayment;
 use Illuminate\Http\Request;
-use App\Traits\NotificationTrait;
-use App\Notifications\UserNotification;
-use Illuminate\Support\Facades\Notification;
+use App\Http\Controllers\Controller;
+use App\Utils\ResponseUtil;
 
 class PaymentController extends Controller
 {
-
-    use PaymentRes, NotificationTrait,ReqPayment;
-
-
-    public function payment(Request $request, $id)
+    public function payment(Request $request)
     {
-        // dd($id);
-        $this->paymentReq($id);
+        $user = auth()->user();
 
-        // return view('payment', compact('amount','get_order'));
+        // Validation for no value entered of amount
+        if(!$request->amount) {
+            return ResponseUtil::errorWithMessage(201, 'Please enter the value of the amount', false, 201); 
+        }
+
+        // Validation for invalid amount value
+        if(!is_numeric($request->amount)) {
+            return ResponseUtil::errorWithMessage(201, 'Please enter a valid value of the amount', false, 201); 
+        }
+
+        $data['amount'] = $request->amount;
+        $data['currency'] = 'KWD';
+        $data['customer']['first_name'] = $user['name'];
+        $data['customer']['email'] = $user['email'];
+        // $data['customer']['phone']['country_code'] = "91";
+        $data['customer']['phone']['number'] = $user['phone'];
+        $data['source']['id'] = "src_card";
+        $data['redirect']['url'] = "https://mastersofphp.com/padel/dev/api/get/payment_response";
+
+        //User defined fields custom
+        $data['metadata']['udf1'] = 1;
+        $data['metadata']['udf2'] = '8277509474';
+
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: Bearer sk_test_A43uH86gXOZQ7pYkEtJfwlbM",
+        ];
+
+        $ch  = curl_init();
+        $url = "https://api.tap.company/v2/charges";
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_POST,true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+        $response = json_decode($output);
+        return ResponseUtil::successWithData($response->transaction->url, 'Payment Gateway Url', true, 200);
     }
 
-    public function paymentRes(Request $request)
+    public function paymentResponse(Request $request)
     {
-        $paymentId = $request->paymentId;
-        $id = $request->Id;
-        $json = $this->responce($id);
+        $input = $request->all();
 
-        // echo '<pre>';
-        // print_r($json->Data);
-    // exit;
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: Bearer sk_test_A43uH86gXOZQ7pYkEtJfwlbM",
+        ];
+        $ch  = curl_init();
+        $url = "https://api.tap.company/v2/charges/".$input['tap_id'];
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER,true);
+        $output = curl_exec($ch);
 
+        curl_close($ch);
 
-     if($json->Data->InvoiceStatus == 'Paid'){
+        $response = json_decode($output);
+        $responseArray = [];
 
-
-
-            $payment = Payment::where('invoice',$json->Data->UserDefinedField)->first();
-            $payment->payment_status = 3;
-            $payment->transaction_id = $id;
-            $payment->save();
-            // return redirect()->route('paymentSuccess');
-            return ['message'=> 'Booking successfull'];
-        //   return view('payment-success');
-
-            // echo 'Payment status is ' . $json->Data->InvoiceStatus;
-     }else{
-        return ['message'=> 'Booking failed'];
-        // return redirect()->route('paymentFail');
-        // return view('payment-fail');
-     }
-
-        // return view('check-payment', compact('id','paymentId'));
-        // $this->checkPaymentStatus($paymentId);
-        // return $request->all();
-    }
-
-
-    public function paymentSuccess()
-    {
-        return view('payment-success');
-    }
-
-    public function paymentFail()
-    {
-        return view('payment-fail');
+        if($response->response->code == 000) {
+            $responseArray['status'] = 'success';
+        } else {
+            $responseArray['status'] = 'fail';
+        }
+        $responseArray['transaction_id'] = $response->id;
+        $responseArray['payment_status'] = $response->status;
+        $responseArray['amount'] = number_format((float)$response->amount, 3, '.', '');
+        return $responseArray;
     }
 
 }

@@ -69,36 +69,29 @@ class CoachesServiceImpl implements CoachesService
             $dataPacket[$key]['price'] = $row['price'];
             $dataPacket[$key]['clubs_assigned'] = explode(',', $row['clubs_assigned']);
             $dataPacket[$key]['image'] = $row['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$row['users'][0]['profile_pic'] : null;  
+            $dataPacket[$key]['experience'] = $row['experience'];
 
-            //Calculating expirence of the coach
-            for($i=0; $i<=$row['experience']; $i++) {
-                if(!is_float($i/12)) {
-                    if($lang == "en") {
-                        $years = floor($i / 12).' Year';
-                        $years = $years.(floor($i / 12) > 1 ? 's' : '');
-                    } elseif ($lang == "ar") {
-                        $years = floor($i / 12).'سنة';
-                        $years = $years.(floor($i / 12) > 1 ? 'س' : '');
-                    }
-                    
-                    if($years == 0) {
-                        $years = '';
-                    }
-                }
-                if($lang == "en") {
-                    $months = ' '.($i % 12).' Month';
-                    if($months == 0 or $months > 1) {
-                        $months = $months.'s';
-                    }
-                } elseif ($lang == "ar") {
-                    $months = ' '.($i % 12).' شهر';
-                    if($months == 0 or $months > 1) {
-                        $months = $months.'س';
-                    }
-                }
-                $experience[$i] = $years.' '.$months;
-            }
-            $dataPacket[$key]['experience'] = end($experience);
+            // //Calculating expirence fof the coach
+            // for($i=0; $i<=$data['experience']; $i++) {
+            //     if(!is_float($i/12)) {
+            //         $years = floor($i / 12);
+            //     }
+                
+            //     if($years == 0.0) {
+            //         if($lang == "en") {
+            //             $months =$i % 12;
+            //             $experience[$i] = $months. " Month(s)";
+            //         } elseif ($lang == "ar") {
+            //             $months = ($i % 12).' شهر';
+            //             $experience[$i] = $months;
+            //         }
+            //     } else if($months == 0) {
+            //         $experience[$i] = $years."";
+            //     } else {
+            //         $experience[$i] = $years.'+';
+            //     }
+            // }
+            // $dataPacket[$key]['experience'] = end($experience);
 
             // Getting rating of all the coaches
             $dataPacket[$key]['rating'] = $this->getCoachRating($row['rating']);
@@ -173,35 +166,7 @@ class CoachesServiceImpl implements CoachesService
         $dataPacket['completed_bookings'] = $this->coachesRepository->getCoachesCompletedBookings($data['id'], $current);
         $dataPacket['clubs_assigned'] = explode(',', $data['clubs_assigned']);
         $dataPacket['image'] = $data['users'][0]['profile_pic'] ? getenv("IMAGES")."coach_images/".$data['users'][0]['profile_pic'] : null;  
-
-        //Calculating expirence fof the coach
-        for($i=0; $i<=$data['experience']; $i++) {
-            if(!is_float($i/12)) {
-                if($lang == "en") {
-                    $years = floor($i / 12).' Year';
-                    $years = $years.(floor($i / 12) > 1 ? 's' : '');
-                } elseif ($lang == "ar") {
-                    $years = floor($i / 12).'سنة';
-                    $years = $years.(floor($i / 12) > 1 ? 'س' : '');
-                }
-                if($years == 0) {
-                    $years = '';
-                }
-            }
-            if($lang == "en") {
-                $months = ' '.($i % 12).' Month';
-                if($months == 0 or $months > 1) {
-                    $months = $months.'s';
-                }
-            } elseif ($lang == "ar") {
-                $months = ' '.($i % 12).' شهر';
-                if($months == 0 or $months > 1) {
-                    $months = $months.'س';
-                }
-            }
-            $experience[$i] = $years.''.$months;
-        }
-        $dataPacket['experience'] = end($experience);
+        $dataPacket['experience'] = $data['experience'];
 
         // getting rating of a coach
         $dataPacket['rating'] = $this->getCoachRating($data['rating']);
@@ -248,12 +213,12 @@ class CoachesServiceImpl implements CoachesService
         foreach ($coachesList as $i => $coach) {
             // Removing coaches if they are already booked
             if(in_array($coach['id'], $coaches)) {
-                unset($coachesList[$i]);
+                array_splice($coachesList, $i, 1);
             }
 
             // Removing coaches if they are not assigned to a particular club
             if(!in_array($request->club_id, $coach['clubs_assigned'])) {
-                unset($coachesList[$i]);
+                array_splice($coachesList, [$i], 1);
             }
         }
         return $coachesList;
