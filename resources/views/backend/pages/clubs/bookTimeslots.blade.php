@@ -30,7 +30,7 @@
 
                       $indoorbooking =   \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
                        ->leftJoin('payments','payments.booking_id', '=','bookings.id')
-                        ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '1','bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
+                        ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '1','bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0','booking_slots.status'=>'1'])
                        ->count();
 
 
@@ -40,7 +40,7 @@
                       $totalindoorbooking =  $indoorbooking+$outsideindoorbooking;
                       $outdoorbooking =    \App\Models\Booking::leftJoin('booking_slots','booking_slots.booking_id', '=','bookings.id')
                       ->leftJoin('payments','payments.booking_id', '=','bookings.id')
-                      ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '2', 'bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0'])
+                      ->where(['bookings.booking_date'=> date('Y-m-d'),'bookings.court_type' => '2', 'bookings.club_id' => $clubId, 'booking_slots.slots'=> $time, 'payments.isRefunded' => '0','booking_slots.status'=>'1'])
                       ->count();
 
                       $outsideoutdoorbooking =   DB::table('outside_bookings')->where(['club_id'=> $clubId, 'slot'=> $time, 'booking_date'=>date('Y-m-d'),'court_type' => '2'])
