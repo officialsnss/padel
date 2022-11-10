@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Countries;
 use App\Models\TimeSlots;
 use App\Models\ClubImages;
+use App\Models\ClubRating;
 use Illuminate\Http\Request;
 use Illuminate\Http\Uploaded;
 use Redirect;
@@ -72,6 +73,7 @@ class ClubController extends Controller
             $amList = implode(',', $request->amenities);
 
            $data['amenities'] = $amList;
+           $data['rating'] = $request->club_rating;
            if($request->file('featured_image')){
             $file= $request->file('featured_image');
             $filename= date('YmdHi').str_replace(' ', '-', $file->getClientOriginalName());
@@ -101,7 +103,7 @@ class ClubController extends Controller
               return Redirect::back()->with('success', 'Club Updated successfully');
         }
          catch (\Exception $e) {
-           // dd($e->getMessage());
+           dd($e->getMessage());
             return redirect('/admin/clubs')->with('error', 'Something went wrong.');
 
         }

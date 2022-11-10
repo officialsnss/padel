@@ -54,9 +54,14 @@ return this.optional(element) || /^[a-z," "]+$/i.test(value);
 $("#vendorform").validate({
 
   rules: {
+    club_rating: {
+      required: true,
+      number: true,
+      max: 5
+    },
     fullname: {
-    required: true,
-    lettersonly: true
+      required: true,
+      lettersonly: true
     },
     full_name_arabic: {
       required: true,
@@ -127,7 +132,7 @@ $("#vendorform").validate({
     },
     featured_image: {
       extension: "jpg|jpeg|png"
-    }
+    },
 
   },
   messages: {
@@ -147,6 +152,11 @@ $("#vendorform").validate({
 $("#club-edit").validate({
   ignore: [],
   rules: {
+    club_rating: {
+      required: true,
+      number: true,
+      max: 5
+    },
     fullname:{
       required : function(element) {
         var action = $("#userrole").val();

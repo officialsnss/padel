@@ -11,4 +11,10 @@ class ClubRating extends Model
 
     protected $table = "club_rating";
 
+    protected $fillable = [
+        'club_id',
+        'rate',
+        'user_id',
+    ];
+
 }

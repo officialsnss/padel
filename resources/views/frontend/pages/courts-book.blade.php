@@ -212,5 +212,9 @@
     </div>
     <!--Add Player-->
 
-
+<script>
+    $(document).ready(function () {
+        alert($('.gate-type').selected());
+    });
+</script>
 @endsection

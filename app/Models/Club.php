@@ -39,6 +39,7 @@ class Club extends Model
         'ordering',
         'featured_image',
         'commission',
+        'rating',
         //'created_at',
        // 'updated_at',
     ];

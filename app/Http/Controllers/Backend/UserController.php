@@ -12,6 +12,7 @@ use App\Models\Countries;
 use App\Models\Wallets;
 use App\Models\Players;
 use App\Models\TimeSlots;
+use App\Models\ClubRating;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Notifications\PasswordReset as ResetPasswordRequest;
@@ -157,10 +158,13 @@ class UserController extends Controller
 
     public function add(Request $request)
     {
+      // dd($request->all());
+      // dd(auth()->user()->id);
       $request->validate([
                 // 'fullname' => 'required|string',
                 'clubname' => 'required|string|unique:clubs,name',
                 'email'=> 'required|email|unique:users' ,
+                'club_rating' => 'required|numeric|max:5'
                 // 'password' => 'required|min:8',
                 // 'password_confirmation' => 'required|same:password'
             ]);
@@ -177,12 +181,13 @@ class UserController extends Controller
 
         if($result){
            $clubName = $request->clubname;
-          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation','start_time','end_time','full_name_arabic');
+          $data = $request->except('_method','clubname','fullname','email','phone', 'password','_token','submit', 'password_confirmation','start_time','end_time','full_name_arabic','club_rating');
           $amList = implode(',', $request->amenities);
 
           $data['amenities'] = $amList;
           $data['user_id'] =  $result->id;
           $data['name'] =  $clubName;
+          $data['rating'] = $request->club_rating;
 
           if($request->file('featured_image')){
             $file= $request->file('featured_image');
