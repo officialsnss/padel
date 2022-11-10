@@ -175,17 +175,17 @@
                                 <fieldset id="referenceFields" style="background-color:#fff;border-color:#2bce01;">
                                     <div class="row" style="margin-left:80px;">
                                         <h4 style="margin-left: 16px; margin-top: 8px;" > Trans. ID :
-                                        <span id="lblreceiptnumber" style="float: right; color: #60606a; margin-right: 165px;">{{$payment['transaction_id']}}</span>
+                                        <span id="transaction" style="float: right; color: #60606a; margin-right: 165px;">{{$payment['transaction_id']}}</span>
                                         </h4>
                                     </div>
                                     <div id="paymentDiv" class="row" style="margin-left:80px;">
                                         <h4 style="margin-left: 16px; margin-top: 8px;" > Amount :
-                                        <span id="lblreceiptnumber" style="float: right; color: #60606a; margin-right: 306px;">{{$payment['amount']}} {{$payment['currency']}}</span>
+                                        <span id="amount" style="float: right; color: #60606a; margin-right: 306px;">{{$payment['amount']}} {{$payment['currency']}}</span>
                                         </h4>
                                     </div>
                                     <div id="bankReferenceDiv" class="row" style="margin-left:80px;">
                                         <h4 style="margin-left: 16px; margin-top: 8px;" > Payment Status :
-                                        <span id="lblreceiptnumber" style="float: right; color: #60606a; margin-right: 310px;">{{$payment['payment_status']}}</span>
+                                        <span id="status" style="float: right; color: #60606a; margin-right: 310px;">{{$payment['payment_status']}}</span>
                                         </h4>
                                     </div>
                                 </fieldset>
@@ -193,17 +193,17 @@
                                 <fieldset id="referenceFields" style="background-color:#fff;border-color:#ff0000;">
                                     <div class="row" style="margin-left:80px;">
                                         <h4 style="margin-left: 16px; margin-top: 8px;" > Trans. ID :
-                                        <span id="lblreceiptnumber" style="float: right; color: #60606a; margin-right: 165px;">{{$payment['transaction_id']}}</span>
+                                        <span id="transaction" style="float: right; color: #60606a; margin-right: 165px;">{{$payment['transaction_id']}}</span>
                                         </h4>
                                     </div>
                                     <div id="paymentDiv" class="row" style="margin-left:80px;">
                                         <h4 style="margin-left: 16px; margin-top: 8px;" > Amount :
-                                        <span id="lblreceiptnumber" style="float: right; color: #60606a; margin-right: 306px;">{{$payment['amount']}} {{$payment['currency']}}</span>
+                                        <span id="amount" style="float: right; color: #60606a; margin-right: 306px;">{{$payment['amount']}} {{$payment['currency']}}</span>
                                         </h4>
                                     </div>
                                     <div id="bankReferenceDiv" class="row" style="margin-left:80px;">
                                         <h4 style="margin-left: 16px; margin-top: 8px;" > Payment Status :
-                                        <span id="lblreceiptnumber" style="float: right; color: #60606a; margin-right: 310px;">{{$payment['payment_status']}}</span>
+                                        <span id="status" style="float: right; color: #60606a; margin-right: 310px;">{{$payment['payment_status']}}</span>
                                         </h4>
                                     </div>
                                 </fieldset>
