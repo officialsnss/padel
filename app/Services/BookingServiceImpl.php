@@ -283,7 +283,11 @@ class BookingServiceImpl implements BookingService
 
         // Storing payment data in the db
         $payment = $this->bookingRepository->storePaymentData($paymentArray);
-        return ['message'=> 'Booking successfull'];
+        if($request->paymentStatus == "CAPTURED") {
+            return ['message'=> 'Booking successfull'];
+        } else {
+            return ['error'=> 'Booking fail, please try again!'];
+        }
     }
 
 
