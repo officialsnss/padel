@@ -3,12 +3,12 @@
 namespace App\Repositories;
 use Auth;
 use App\Utils\ResponseUtil;
-use App\Models\Club;
-use App\Models\Court;
-use App\Models\ClubRating;
-use App\Models\Cities;
-use App\Models\Booking;
-use App\Models\Amenities;
+use App\Models\Club; 
+use App\Models\Court; 
+use App\Models\ClubRating; 
+use App\Models\Cities; 
+use App\Models\Booking; 
+use App\Models\Amenities; 
 use App\Models\ClubImages;
 
 /**
@@ -33,12 +33,14 @@ class ClubDataRepository extends BaseRepository
             ->with('club_rating')
             ->with('currencies')
             ->with('cities')
-            ->get();
+            ->with('images')
+            ->get(); 
         }
         return Club::where('status', '1')->with('court')
                 ->with('club_rating')
                 ->with('currencies')
                 ->with('cities')
+                ->with('images')
                 ->get();
     }
 
@@ -49,6 +51,7 @@ class ClubDataRepository extends BaseRepository
                 ->with('club_rating')
                 ->with('currencies')
                 ->with('cities')
+                ->with('images')
                 ->first();
 
         $bookingsCount = Booking::where('club_id', $id)->where('status', '1')->count();

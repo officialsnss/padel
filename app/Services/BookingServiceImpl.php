@@ -7,8 +7,7 @@ use App\Services\MatchesServiceImpl;
 use App\Services\PlayersServiceImpl;
 use App\Repositories\ClubDataRepository;
 use App\Repositories\CoachesRepository;
-use App\Traits\PaymentRes;
-use App\Traits\ReqPayment;
+use App\Repositories\PlayersRepository;
 use Carbon\Carbon;
 /**
  * Class BookingServiceImpl
@@ -17,10 +16,6 @@ use Carbon\Carbon;
  */
 class BookingServiceImpl implements BookingService
 {
-
-    use PaymentRes,ReqPayment;
-
-
     /**
      * BookingServiceImpl constructor.
      *
@@ -29,13 +24,15 @@ class BookingServiceImpl implements BookingService
                                 PlayersServiceImpl $playersServiceImpl,
                                 BookingRepository $bookingRepository,
                                 ClubDataRepository $clubDataRepository,
-                                CoachesRepository $coachesRepository)
+                                CoachesRepository $coachesRepository,
+                                PlayersRepository $playersRepository)
     {
         $this->matchesServiceImpl = $matchesServiceImpl;
         $this->playersServiceImpl = $playersServiceImpl;
         $this->bookingRepository = $bookingRepository;
         $this->clubDataRepository = $clubDataRepository;
         $this->coachesRepository = $coachesRepository;
+        $this->playersRepository = $playersRepository;
     }
 
 
@@ -49,11 +46,15 @@ class BookingServiceImpl implements BookingService
         // Getting match data from getMatches function
         $matchData = $this->matchesServiceImpl->getBookedMatches($request);
         $bookedMatches = [];
+
+        // Getting player details from user id
         $userId = auth()->user()->id;
+        $userData = $this->playersRepository->getPlayerDetailsByUser($userId);
 
         foreach($matchData as $match) {
             // We are getting all matches above, so check on only players bookings
-            if($match['booked_by'] == $userId) {
+            if(in_array($userData['id'], $match['playerIds'])) {
+                unset($match['playerIds']);
                 unset($match['booked_by']);
                 array_push($bookedMatches, $match);
             }
@@ -134,7 +135,12 @@ class BookingServiceImpl implements BookingService
 
         $bookingArray['court_type'] = $request->match_type;
         $bookingArray['currency_id'] = 129;
-        $bookingArray['status'] = 1;
+
+        if($request->paymentStatus == "CAPTURED") {
+            $bookingArray['status'] = 1;
+        } else {
+            $bookingArray['status'] = 4;
+        }
 
         //Adding bat price in booking table
         $batArray = [];
@@ -172,6 +178,11 @@ class BookingServiceImpl implements BookingService
         foreach($dateTime as $i => $time) {
             $slotArray['booking_id'] = $booked;
             $slotArray['slots'] = date('H:i:s', $time);
+            if($request->paymentStatus == "CAPTURED") {
+                $slotArray['status'] = "1";
+            } else {
+                $slotArray['status'] = "2";
+            }
             $slot[$i] = $this->bookingRepository->storeSlotsData($slotArray);
         }
 
@@ -191,7 +202,12 @@ class BookingServiceImpl implements BookingService
         $matchArray['game_type'] = $request->game_type;
         $matchArray['court_type'] = $request->court_type;
         $matchArray['is_friendly'] = $request->isFriendly;
-        $matchArray['status'] = "1";
+
+        if($request->paymentStatus == "CAPTURED") {
+            $matchArray['status'] = "1";
+        } else {
+            $matchArray['status'] = "4";
+        }
 
         //store the match data in the database
         $match = $this->bookingRepository->storeMatchesData($matchArray);
@@ -205,7 +221,7 @@ class BookingServiceImpl implements BookingService
         $paymentArray['payment_method'] = $request->payment_method;
         $paymentArray['isRefunded'] = "0";
         $paymentArray['isCancellationRequest'] = "0";
-        $paymentArray['transaction_id'] = "";
+        $paymentArray['transaction_id'] = $request->transactionId;
 
         // Calculating total price of the booking based on coupons
         if($request->coupon_id) {
@@ -218,12 +234,18 @@ class BookingServiceImpl implements BookingService
                     $paymentArray['discount_price'] = $couponData->amount * $paymentArray['price'] * 0.01;
                 }
                 $paymentArray['total_amount'] = number_format((float)$paymentArray['price'] - $paymentArray['discount_price'], 3, '.', '');
+            } else {
+                $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
             }
-            $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
         } else {
             $paymentArray['total_amount'] = number_format((float)$paymentArray['price'], 3, '.', '');
         }
-        $paymentArray['payment_status'] = "2";
+
+        if($request->paymentStatus == "CAPTURED") {
+            $paymentArray['payment_status'] = "1";
+        } else {
+            $paymentArray['payment_status'] = "3";
+        }
 
         // Checking if player is using wallet for the booking
         if($request->isWallet == 0) {
@@ -261,10 +283,11 @@ class BookingServiceImpl implements BookingService
 
         // Storing payment data in the db
         $payment = $this->bookingRepository->storePaymentData($paymentArray);
-
-        $this->paymentReq($payment['id']);
-
-        // return ['message'=> 'Booking successfull'.$payment['id']];
+        if($request->paymentStatus == "CAPTURED") {
+            return ['message'=> 'Booking successfull'];
+        } else {
+            return ['error'=> 'Booking fail, please try again!'];
+        }
     }
 
 

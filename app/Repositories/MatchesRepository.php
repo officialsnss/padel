@@ -31,7 +31,8 @@ class MatchesRepository extends BaseRepository
     {
       $userId = auth()->user()->id;
       $date = Carbon::now()->toDateString();
-      return Matches::with('slots')
+      return Matches::whereIn('status', [1,2])
+              ->with('slots')
               ->with('clubs.cities')
               ->with('bookingSlots')
               ->with('booking')
@@ -48,7 +49,7 @@ class MatchesRepository extends BaseRepository
     {
       if($request->dateData) {
         $date = date('Y-m-d', $request->dateData);
-        return Matches::where('match_type', 1)
+        return Matches::where('match_type', 1)->whereIn('status', [1,2])
                 ->with('booking')
                 ->whereHas('booking', function ($q) use ($date) {
                           $q->where('booking_date', '=', $date);
@@ -59,16 +60,18 @@ class MatchesRepository extends BaseRepository
                           $q->where('name', 'like', '%' . $request->searchData . '%');
                 })->get(); 
       }
-      return Matches::where('match_type', 1)
+      return Matches::where('match_type', 1)->whereIn('status', [1,2])
               ->with('slots')
-              ->with('clubs.cities')
               ->with('bookedBats')
-              ->get(); 
+              ->with('clubs.cities')->whereHas('clubs', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->searchData . '%');
+              })->get(); 
     }
 
     public function getBookedMatches()
     {
-      return Matches::with('slots')
+      return Matches::where('status', '=', '1')
+              ->with('slots')
               ->with('clubs.cities')
               ->with('bookedBats')
               ->get(); 
@@ -119,7 +122,10 @@ class MatchesRepository extends BaseRepository
 
     public function filterMatchData($request)
     {
-      $query = Matches::where('match_type', 1)->with('booking')->with('slots')->with('clubs.cities'); 
+      $query = Matches::where('match_type', 1)->whereIn('status', [1,2])
+                  ->with('booking')
+                  ->with('slots')
+                  ->with('clubs.cities'); 
                   
       if(!is_null($request->gender)) {
         $query->where('gender_allowed', $request->gender);

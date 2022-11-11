@@ -28,6 +28,7 @@ class Payment extends Model
         'wallet_amount',
         'refund_price',
         'currency_id',
+        'payment_status',
         'created_at',
         'updated_at'
     ];

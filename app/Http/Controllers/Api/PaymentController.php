@@ -83,7 +83,9 @@ class PaymentController extends Controller
         $responseArray['transaction_id'] = $response->id;
         $responseArray['payment_status'] = $response->status;
         $responseArray['amount'] = number_format((float)$response->amount, 3, '.', '');
-        return $responseArray;
+        $responseArray['currency'] = $response->currency;
+
+        return view('payment', ['payment' => $responseArray]);
     }
 
 }

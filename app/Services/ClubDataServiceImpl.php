@@ -76,6 +76,13 @@ class ClubDataServiceImpl implements ClubDataService
                 }
                 $dataPacket[$i]['address'] = $address . ', ' . $city;
 
+                // Getting images of the clubs
+                $dataPacket[$i]['images'] = [];
+                $images = $row['images'];
+                foreach($images as $key => $image) {
+                    $dataPacket[$i]['images'][$key] = getenv("IMAGES")."club_images/".$image['image'];
+                }
+
                 $dataPacket[$i]['price'] = $row['single_price'];
                 $dataPacket[$i]['featured_image'] = getenv("IMAGES")."club_images/".$row['featured_image'];
                 $dataPacket[$i]['courtsCount'] = $row['indoor_courts'] + $row['outdoor_courts'];
@@ -242,8 +249,14 @@ class ClubDataServiceImpl implements ClubDataService
             } else {
                 $city = null;
             }
-
             $dataPacket['address'] = $address . ',' . $city;
+
+            // Getting images of the clubs
+            $dataPacket['images'] = [];
+            $images = $clubData['images'];
+            foreach($images as $i => $image) {
+                $dataPacket['images'][$i] = getenv("IMAGES")."club_images/".$image['image'];
+            }
 
             $dataPacket['price'] = $clubData['single_price'];
             $dataPacket['distance'] = number_format($this->getDistance($request->latitude, $request->longitude, $clubLatitude, $clubLongitude, 'K'), 1,'.','');

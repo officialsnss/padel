@@ -14,6 +14,7 @@ class BookingSlots extends Model
     protected $fillable = [
         'booking_id',
         'slots',
+        'status',
         'created_at',
         'updated_at',
     ];
