@@ -9,6 +9,7 @@ use App\Models\ClubRating;
 use App\Models\Cities; 
 use App\Models\Booking; 
 use App\Models\Amenities; 
+use App\Models\ClubImages;
 
 /**
  * Class PropertyRepository
@@ -32,12 +33,14 @@ class ClubDataRepository extends BaseRepository
             ->with('club_rating')
             ->with('currencies')
             ->with('cities')
+            ->with('images')
             ->get(); 
         }
         return Club::where('status', '1')->with('court')
                 ->with('club_rating')
                 ->with('currencies')
                 ->with('cities')
+                ->with('images')
                 ->get();
     }
 
@@ -48,6 +51,7 @@ class ClubDataRepository extends BaseRepository
                 ->with('club_rating')
                 ->with('currencies')
                 ->with('cities')
+                ->with('images')
                 ->first();
 
         $bookingsCount = Booking::where('club_id', $id)->where('status', '1')->count();
