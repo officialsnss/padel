@@ -29,7 +29,6 @@ $(document).ready(function () {
         // },
         success: function (data) {
             // alert(lang);
-            // console.log(data);
             var res = "";
             for (var i = 0; i < data.data.length; i++) {
                 res += '<div class="swiper-slide">';
@@ -40,14 +39,14 @@ $(document).ready(function () {
                 res += '<div class="line-b"><div class="rateyo" id="rateyo" data-rateyo-rating="' + rating + '"></div></div>';
                 res += '<div class="line-c">';
                 res += '<div class="row g-4 justify-content-between align-items-center">';
-                res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/wallet-icon.png" alt=""> ' + data.data[i].price + ' KD/hr</div>';
+                res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/wallet-icon.png" alt=""> ' + data.data[i].price + ' KD/hr </div>';
                 res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/location-icon.png" alt=""> ' + data.data[i].address + '</div>';
                 res += '</div>';
                 res += '</div>';
                 res += '<div class="line-d">';
                 res += '<div class="row g-2">';
                 for (var j = 0; j < data.data[i].amenities.length; j++) {
-                    res += '<div class="col-auto"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="http://127.0.0.1:8000/Images/' + data.data[i].amenities[j].image + '" alt="' + data.data[i].amenities[j].name + '"></a></div>';
+                    res += '<div class="col-auto"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="http://127.0.0.1:8000/Images/' + data.data[i].amenities[j].image + '" alt=" "></a></div>';
                 }
                 res += '</div>';
                 res += '</div>';
@@ -152,13 +151,33 @@ $(document).ready(function () {
         // data: formData.serialize(),
         success: function (coachslistdata) {
             var coa = "";
-            // console.log(coachslistdata);
             for (var i = 0; i < coachslistdata.data.length; i++) {
                 coa += '<div class="swiper-slide">';
                 coa += '<div class="players-coach-block">';
                 coa += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/' + coachslistdata.data[i].image + '" alt="" class="img-fluid"></div>';
                 coa += '<div class="line-b">' + coachslistdata.data[i].name + '</div>';
-                coa += '<div class="line-c">Experience: ' + coachslistdata.data[i].experience + '</div>';
+                
+                if (coachslistdata.data[i].experience < 12 && coachslistdata.data[i].experience > 1) {
+                    // When exp is less than a year but more than a month
+                    coa += '<div class="line-c">Experience: ' + coachslistdata.data[i].experience  + ' months' +'</div>'; 
+                } else if (coachslistdata.data[i].experience == 1) {
+                    // When exp is exactly equal to a month
+                    coa += '<div class="line-c">Experience: ' + coachslistdata.data[i].experience  + ' month' +'</div>';
+                } else{
+                    var rem =  (coachslistdata.data[i].experience % 12)
+                    var year =  Math.floor(coachslistdata.data[i].experience / 12)
+                    if(year == 1) {
+                        // When exp is exactly equal to a year
+                        coa += '<div class="line-c">Experience: ' + year  + ' year' +'</div>';
+                    } else if (rem > 0) {
+                        // When exp is in year and some months e.g 3yrs4months
+                        coa += '<div class="line-c">Experience: ' + year  + '+' + ' years' +'</div>';
+                    } else{
+                        // When exp is more than a year e.g 5yrs
+                        coa += '<div class="line-c">Experience: ' + year  + ' years' +'</div>';
+                    }
+                }
+
                 coa += '<div class="line-d"><img src="images/star.png" alt=""></div>';
                 coa += '</div>';
                 coa += '</div>';
