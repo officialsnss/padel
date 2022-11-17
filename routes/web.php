@@ -65,9 +65,12 @@ Route::get('clear', function () {
 
     Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
 
+    Route::post('/signup', 'App\Http\Controllers\Frontend\AuthController@signup')->name('signup');
     Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
     Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
     Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
+    Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
+    Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
 
 // Website Routes Ends Here
 

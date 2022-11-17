@@ -9,7 +9,7 @@
                         <form action="{{route('authenticate')}}" method="POST">
                             @csrf
                             <h1 class="mb-5">Sign in</h1>
-                            <div class="text-danger" id="error-class"><p id="error-text"></p></div>
+                            <div class="text-danger"><p>@if($errors->all() != []){{$errors->getMessages()[0][0]}}@endif</p></div>
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control" id="login-email" placeholder="name@example.com"
                                     name="email">

@@ -15,7 +15,7 @@
                                 <input type="hidden" class="form-control" id="ip" value="{{$ip}}">
                                 <input type="hidden" class="form-control" id="phone" value="{{$phone}}">
                                 <input type="text" class="form-control" id="otp" placeholder="1234">
-                                <label for="forgot-email">Enter OPT</label>
+                                <label for="forgot-email">Enter OTP</label>
                             </div>
 
                             <div class="d-grid mb-5"><a class="btn-gradient" type="button" id="verify">Verify</a></div>
