@@ -57,16 +57,6 @@
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            // toastr.options.timeOut = 10000;
-            @if (Session::has('error'))
-            // Swal.fire('{{ Session::get('error') }}')
-
-                toastr.error('{{ Session::get('error') }}');
-            @elseif(Session::has('success'))
-                toastr.success('{{ Session::get('success') }}');
-            @endif
-        });
 
     </script>
 @endsection
