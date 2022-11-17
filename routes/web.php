@@ -61,24 +61,12 @@ Route::get('/refund-policy', 'App\Http\Controllers\Frontend\HomeController@refun
 Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name('login-user');
 Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
 
-// Register 
-Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register-user');
-Route::get('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController@verify')->name('verify');
-
-// Club 
-Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
-Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courtsbook');
-
-// Players 
-Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
-
-Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
-
-Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
-Route::get('/change-password', 'App\Http\Controllers\Frontend\AuthController@changePassword')->name('changePassword'); #changePassword
-Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
-Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
-Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
+    Route::post('/signup', 'App\Http\Controllers\Frontend\AuthController@signup')->name('signup');
+    Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
+    Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
+    Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
+    Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
+    Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
 
 // Website Routes Ends Here
 

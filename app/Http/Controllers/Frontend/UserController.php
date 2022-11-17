@@ -14,6 +14,13 @@ class UserController extends Controller
 
     public function myProfile()
     {
-        return view('frontend.pages.profile');
+        $user = auth()->user();
+        return view('frontend.pages.profile', ['user' => $user]);
+    }
+
+    public function editProfile()
+    {
+        $user = auth()->user();
+        return view('frontend.pages.changeprofile', ['user' => $user]);
     }
 }

@@ -35,7 +35,7 @@
                                 
                                 <div class="dropdown"><a href="#" class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill"></i> {{Auth::user()->name}}</a>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="my-account.html">Profile</a></li>
+                                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
                                         <li>
                                             <div class="form-check form-switch">
                                                 <label class="form-check-label" for="flexSwitchCheckDefault2">Notification</label><input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
