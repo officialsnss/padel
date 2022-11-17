@@ -167,8 +167,31 @@
     </div>
 </div>
 
-<!--Add Player-->
-<div class="modal fade" id="add-player" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!--Add Player-->
+    <div class="modal fade" id="add-player" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="w-100">
+                        <h1 class="modal-title w-100 fs-5 mb-3 position-relative" id="exampleModalLabel">
+                        @if (App::getLocale() == 'en')
+                            Add Player
+                        @else 
+                            اضافة لاعب      
+                        @endif
+                            <button type="button" class="btn-close top-0 end-0 position-absolute"
+                                data-bs-dismiss="modal" aria-label="Close"></button></h1>
+                        <div class="form-group w-100 search-input mb-1 position-relative"><input type="text"
+                                class="form-control" placeholder="Search Players" />
+                                <button class="btn button position-absolute">
+                                @if (App::getLocale() == 'en')
+                                    Search
+                                @else
+                                    يبحث
+                                @endif
+                            </button></div>
+                    </div>
 
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -179,30 +202,10 @@
                     </h1>
                     <div class="form-group w-100 search-input mb-1 position-relative"><input type="text" class="form-control" placeholder="Search Players" /><button class="btn button position-absolute">Search</button></div>
                 </div>
+                <div class="modal-body">
+                <div class="row g-4 list-players">
 
-            </div>
-            <div class="modal-body">
-                @foreach ($getPlayers as $getPlayer)
-                <div class="add-player-row">
-                    <div class="row g-4 align-items-center">
-                        
-                        <div class="col-auto">
-                            <div class="add-player-img">
-                                <img src="{{ asset('/images/player_images') }}/{{$getPlayer->profile_pic}}" alt="" class="img-fluid">
-                            </div>
-                        </div>
-                       
-                        <div class="col">
-                            @if (App::getLocale() == 'en')
-                            <h6>{{$getPlayer->name}}</h6>
-                            @else
-                            <h6>{{$getPlayer->name_arabic}}</h6>
-                            @endif
-                        </div>
-                       
-                        <div class="col-auto"><a class="btn btn-dark" onclick="addPlayer('<?php echo $getPlayer; ?>')" role="button">Add</a></div>
-                        <!-- <input type="hidden" id="playerData" value="{{ $getPlayer }}"> -->
-                    </div>
+                </div>
                 </div>
                 @endforeach
             </div>

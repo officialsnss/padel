@@ -48,9 +48,9 @@
 
 <script src="{{ asset('frontend/js/jpreloader.js') }}"></script>
 <script>
-    $(document).ready(function() {
-        $('body').jpreLoader();
-    });
+    // $(document).ready(function() {
+    //     $('body').jpreLoader();
+    // });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
@@ -188,6 +188,12 @@ var swiper4 = new Swiper(".coach-swiper", {
         var language = "{{App::getLocale()}}";
     </script>
     <script src="{{asset('js/api.js')}}"></script>
+	<!-- CSS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.0/css/toastr.css" rel="stylesheet" />
+
+	<!-- JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.0/js/toastr.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
 
 </body>
 </html>

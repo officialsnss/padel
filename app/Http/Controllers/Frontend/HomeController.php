@@ -14,6 +14,8 @@ use App\Models\Currencies;
 use App\Models\Setting;
 use App\Models\ContactUs;
 use App\Models\CmsPages;
+use Auth; 
+
 class HomeController extends Controller
 {
     public function index()
@@ -102,4 +104,9 @@ class HomeController extends Controller
 
     }
 
+    public function header(Request $request)
+    {
+        $data = $request->all();
+        return view('frontend.layouts.partials.header', ['token' => 1,'data' => $data]);
+    }
 }

@@ -11,4 +11,9 @@ class UserController extends Controller
     {
         return view('frontend.pages.players');
     }
+
+    public function myProfile()
+    {
+        return view('frontend.pages.profile');
+    }
 }
