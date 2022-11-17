@@ -1,6 +1,6 @@
 <div class="header-area" id="demo-header">
     <div class="header-a">
-        <div class="header-a-logo"><a href="/"><img src="{{ asset('frontend/images/logo.svg') }}" alt=""
+        <div class="header-a-logo"><a href="{{ url('/') }}"><img src="{{ asset('frontend/images/logo.svg') }}" alt=""
                     class="img-fluid"></a></div>
         <div class="container">
             <div class="row g-3">
@@ -23,8 +23,8 @@
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="header-a-right">
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="/login"><i class="bi bi-person-fill"></i>
-                                {{ (__('home.header.login')) }}</a> | <a href="/register"><i class="bi bi-person-fill"></i> {{ (__('home.header.register')) }}</a>
+                            <li class="list-inline-item"><a href="{{ url('/login') }}"><i class="bi bi-person-fill"></i>
+                                {{ (__('home.header.login')) }}</a> | <a href="{{ url('/register') }}"><i class="bi bi-person-fill"></i> {{ (__('home.header.register')) }}</a>
                             </li>
                             <li class="list-inline-item"><a href="#"><i class="bi bi-search"></i> {{ (__('home.header.search')) }}</a></li>
                             @if (App::getLocale() == 'ar')
@@ -66,14 +66,14 @@
                     </div>
                     <div class="offcanvas-body">
                         <ul class="navbar-nav mb-0 mx-auto">
-                            <li class="nav-item"><a class="nav-link" href="/">{{ (__('home.menu.Home')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/courts">{{ (__('home.menu.Courts')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/players">{{ (__('home.menu.Players')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/booking">{{ (__('home.menu.Booking')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/games">{{ (__('home.menu.Games')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/coaches">{{ (__('home.menu.Coaches')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/pages/about-us">{{ (__('home.menu.About')) }}</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/contact_us">{{ (__('home.menu.Contact_us')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">{{ (__('home.menu.Home')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/courts') }}">{{ (__('home.menu.Courts')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/players') }}">{{ (__('home.menu.Players')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/booking') }}">{{ (__('home.menu.Booking')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/games') }}">{{ (__('home.menu.Games')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/coaches') }}">{{ (__('home.menu.Coaches')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/pages/about-us') }}">{{ (__('home.menu.About')) }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/contact_us') }}">{{ (__('home.menu.Contact_us')) }}</a></li>
                         </ul>
                     </div>
                 </div>
