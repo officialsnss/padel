@@ -109,4 +109,20 @@ class HomeController extends Controller
         $data = $request->all();
         return view('frontend.layouts.partials.header', ['token' => 1,'data' => $data]);
     }
+
+    public function games()
+    {
+        return view('frontend.pages.games');
+    }
+
+
+    public function coaches()
+    {
+        return view('frontend.pages.coaches');
+    }
+
+    public function wallet()
+    {
+        return view('frontend.pages.wallet');
+    }
 }

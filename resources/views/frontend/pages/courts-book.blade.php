@@ -155,7 +155,7 @@
                 </div>
 
 
-                <div class="d-grid"><a class="modal-button" href="courts-book-next.html" role="button">NEXT</a>
+                <div class="d-grid"><a class="modal-button" href="/courts-book-next" role="button">NEXT</a>
                 </div>
 
 

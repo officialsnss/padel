@@ -49,4 +49,10 @@ class AuthController extends Controller
         Auth::logout();
         return redirect('/login');
     }
+
+    public function changePassword()
+    {
+        return view('frontend.pages.auth.changePassword');
+        
+    }
 }

@@ -36,6 +36,12 @@ Route::get('clear', function () {
     Route::get('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact');
     Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us')->name('contact.store');
 
+    // Header.Games
+    Route::get('/games', 'App\Http\Controllers\Frontend\HomeController@games');
+
+    // Header.coaches
+    Route::get('/coaches', 'App\Http\Controllers\Frontend\HomeController@coaches');
+
     // Language Switcher
     Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
 
@@ -59,6 +65,8 @@ Route::get('clear', function () {
     // Club 
     Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
     Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courtsbook');
+    Route::get('/courts-book-next', 'App\Http\Controllers\Frontend\ClubController@courts_book_next')->name('courts_book_next');
+    Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');
 
     // Players 
     Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
@@ -66,8 +74,10 @@ Route::get('clear', function () {
     Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
 
     Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
-    Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
+    Route::get('/change-password', 'App\Http\Controllers\Frontend\AuthController@changePassword')->name('changePassword');  #changePassword
+    Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header_ss');
     Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
+    Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
 
 // Website Routes Ends Here
 
@@ -160,7 +170,6 @@ Route::get('clear', function () {
                 Route::get('/slide/edit/{id}', 'App\Http\Controllers\Backend\HomeController@slideEdit')->name('slide.edit');
                 Route::post('/slide/update/{id}', 'App\Http\Controllers\Backend\HomeController@slideUpdate')->name('slide.update');
                 Route::get('/slide/delete/{id}', 'App\Http\Controllers\Backend\HomeController@slideDelete')->name('slide.delete');
-
 
                 //Refunds Listing
                 Route::get('/refunds', 'App\Http\Controllers\Backend\RefundController@index');

@@ -41,8 +41,8 @@
                                                 <label class="form-check-label" for="flexSwitchCheckDefault2">Notification</label><input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
                                             </div>
                                         </li>
-                                        <li><a class="dropdown-item" href="change-password.html">Change password</a></li>
-                                        <li><a class="dropdown-item" href="wallet.html">Wallet</a></li>
+                                        <li><a class="dropdown-item" href="/change-password">Change password</a></li>
+                                        <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
                                         <li><a class="dropdown-item" href="/logout">Logout</a></li>
                                     </ul>
                                 </div>
