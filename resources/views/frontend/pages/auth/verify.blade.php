@@ -21,7 +21,7 @@
                             <div class="d-grid mb-5"><a class="btn-gradient" type="button" id="verify">Verify</a></div>
                         </form>
                         <p class="mb-0">
-                            <center>Back to <a href="login.html">Login</a></center>
+                            <center>Back to <a href="/login">Login</a></center>
                         </p>
 
 

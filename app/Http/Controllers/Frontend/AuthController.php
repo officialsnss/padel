@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Players;
 use App\Repositories\PlayersRepository;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\Register as NewRegister;
 
 class AuthController extends Controller
 {
@@ -130,6 +131,12 @@ class AuthController extends Controller
     public function changePassword()
     {
         return view('frontend.pages.auth.changePassword');
+        
+    }
+
+    public function forgotPassword()
+    {
+        return view('frontend.pages.auth.forgotPassword');
         
     }
 }

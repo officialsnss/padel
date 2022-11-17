@@ -39,8 +39,8 @@ $(document).ready(function () {
                 res += '<div class="line-b"><div class="rateyo" id="rateyo" data-rateyo-rating="' + rating + '"></div></div>';
                 res += '<div class="line-c">';
                 res += '<div class="row g-4 justify-content-between align-items-center">';
-                res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/wallet-icon.png" alt=""> ' + data.data[i].price + ' KD/hr </div>';
-                res += '<div class="col-auto"><img src="http://127.0.0.1:8000/frontend/images/location-icon.png" alt=""> ' + data.data[i].address + '</div>';
+                res += '<div class="col-auto"><img src="/frontend/images/wallet-icon.png" alt=""> ' + data.data[i].price + ' KD/hr </div>';
+                res += '<div class="col-auto"><img src="/frontend/images/location-icon.png" alt=""> ' + data.data[i].address + '</div>';
                 res += '</div>';
                 res += '</div>';
                 res += '<div class="line-d">';
@@ -378,7 +378,7 @@ $(document).ready(function () {
 
                 coa += '<div class="swiper-slide">';
                 coa += '<div class="playerscoach-div">';
-                coa += '<img src="http://127.0.0.1:8000/Images/' + coachslistdata.data[i].image + '" class="img-fluid players-coach-img" alt="">';
+                coa += '<img src="' + coachslistdata.data[i].image + '" class="img-fluid players-coach-img" alt="">';
                 coa += '</div>';
                 coa += '<div class="playerscoach-details">';
                 coa += '<h4>' + coachslistdata.data[i].name + '</h4>';
@@ -539,7 +539,7 @@ $(document).ready(function () {
                 res += '<div class="swiper mySwiper mb-4">';
                 res += '<div class="swiper-wrapper">';
                 for(var i=0;i<data.data.club_images.length;i++){
-                res += '<div class="swiper-slide"><img src="http://127.0.0.1:8000/Images/'+data.data.club_images[i].image+'" alt="" class="img-fluid"></div>';
+                res += '<div class="swiper-slide"><img src="'+data.data.club_images[i].image+'" alt="" class="img-fluid"></div>';
                 }
                 res += '</div>';
                 res += '<div class="swiper-pagination"></div>';
