@@ -23,8 +23,30 @@
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="header-a-right">
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="/login"><i class="bi bi-person-fill"></i>
-                                {{ (__('home.header.login')) }}</a> | <a href="/register"><i class="bi bi-person-fill"></i> {{ (__('home.header.register')) }}</a>
+                            <li class="list-inline-item">
+                                @if(!Auth::user())
+                                <a href="/login"><i class="bi bi-person-fill"></i>
+                                    {{ (__('home.header.login')) }}
+                                </a> | 
+                                <a href="/register"><i class="bi bi-person-fill"></i> 
+                                    {{ (__('home.header.register')) }}
+                                </a>
+                                @else
+                                
+                                <div class="dropdown"><a href="#" class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill"></i> {{Auth::user()->name}}</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="my-account.html">Profile</a></li>
+                                        <li>
+                                            <div class="form-check form-switch">
+                                                <label class="form-check-label" for="flexSwitchCheckDefault2">Notification</label><input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
+                                            </div>
+                                        </li>
+                                        <li><a class="dropdown-item" href="change-password.html">Change password</a></li>
+                                        <li><a class="dropdown-item" href="wallet.html">Wallet</a></li>
+                                        <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                                    </ul>
+                                </div>
+                                @endif
                             </li>
                             <li class="list-inline-item"><a href="#"><i class="bi bi-search"></i> {{ (__('home.header.search')) }}</a></li>
                             @if (App::getLocale() == 'ar')
@@ -81,3 +103,6 @@
         </nav>
     </div>
 </div>
+<script>
+
+</script>

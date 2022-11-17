@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -15,8 +16,7 @@ class AuthController extends Controller
 
     public function authenticate(Request $request)
     {
-        // dd($request->all());
-        dd($bearer=$request->header('Authorization'));
+        
     }
 
     public function register()
@@ -27,5 +27,11 @@ class AuthController extends Controller
     public function verify($ip,$phone)
     {
         return view('frontend.pages.auth.verify',compact('ip','phone'));
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
     }
 }

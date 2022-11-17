@@ -50,7 +50,7 @@ class UsersController extends Controller
 
         // Check for the not registered email
         if(!$user) {
-            return ResponseUtil::errorWithMessage('422', 'The entered email is not registered with us.', false, 422);
+            return ResponseUtil::errorWithMessage('201', 'The entered email is not registered with us.', false, 201);
         }
 
         // Check for wrong password

@@ -211,7 +211,7 @@ background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
 
 
 
-.mid-area-wrap			{padding-top: var(--padding); padding-bottom: var(--padding);}
+.mid-area-wrap			{padding-top: var(--padding); padding-bottom: var(--padding); min-height: 100vh}
 .login-register			{background-color: #f2f2f2;}
 
 

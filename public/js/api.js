@@ -46,7 +46,8 @@ $(document).ready(function () {
                 res += '<div class="line-d">';
                 res += '<div class="row g-2">';
                 for (var j = 0; j < data.data[i].amenities.length; j++) {
-                    res += '<div class="col-auto"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="http://127.0.0.1:8000/Images/' + data.data[i].amenities[j].image + '" alt=" "></a></div>';
+                    console.log(data.data[i].amenities)
+                    res += '<div class="col-auto"><a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="' + data.data[i].amenities[j].image + '" alt=" "></a></div>';
                 }
                 res += '</div>';
                 res += '</div>';
@@ -55,7 +56,7 @@ $(document).ready(function () {
                 } else {
                     featured_image = data.data[i].featured_image;
                 }
-                res += '<div class="line-e"><img src="http://127.0.0.1:8000/Images/' + featured_image + '" alt="" class="img-fluid"></div>';
+                res += '<div class="line-e"><img src="' + featured_image + '" alt="" class="img-fluid"></div>';
                 res += '</div>';
                 res += '</div>';
             }
@@ -96,7 +97,7 @@ $(document).ready(function () {
                 if (playerslistdata.data[i].image == '') {
                     ply += '<div class="line-a"><img src="images/player-coach/a.jpg" alt="" class="img-fluid"></div>';
                 } else {
-                    ply += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/' + playerslistdata.data[i].image + '" alt="" class="img-fluid"></div>';
+                    ply += '<div class="line-a"><img src="' + playerslistdata.data[i].image + '" alt="" class="img-fluid"></div>';
                 }
                 ply += '<div class="line-b">' + playerslistdata.data[i].name + '</div>';
                 ply += '<div class="line-c">Experience: 12 years</div>';
@@ -127,7 +128,7 @@ $(document).ready(function () {
                     ply +=
                         '<div class="line-a"><img src="images/player-coach/a.jpg" alt="" class="img-fluid"></div>';
                 } else {
-                    ply += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/' + playerslistdata
+                    ply += '<div class="line-a"><img src="' + playerslistdata
                         .data[i].image + '" alt="" class="img-fluid"></div>';
                 }
                 ply += '<div class="line-b">' + playerslistdata.data[i].name + '</div>';
@@ -154,7 +155,7 @@ $(document).ready(function () {
             for (var i = 0; i < coachslistdata.data.length; i++) {
                 coa += '<div class="swiper-slide">';
                 coa += '<div class="players-coach-block">';
-                coa += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/' + coachslistdata.data[i].image + '" alt="" class="img-fluid"></div>';
+                coa += '<div class="line-a"><img src="' + coachslistdata.data[i].image + '" alt="" class="img-fluid"></div>';
                 coa += '<div class="line-b">' + coachslistdata.data[i].name + '</div>';
                 
                 if (coachslistdata.data[i].experience < 12 && coachslistdata.data[i].experience > 1) {
@@ -195,9 +196,6 @@ $(document).ready(function () {
         var formData = {
             email: $("#login-email").val(),
             password: $("#login-password").val(),
-
-            // email: "enridise@gmail.com",
-            // password: "12345678",
         };
 
         $.ajax({
@@ -210,25 +208,26 @@ $(document).ready(function () {
 
                 if (data.success === true) {
                     $('#error-class').hide();
-                    console.log(data);
-                    writeCookie('token',data.token,1);
-                    writeCookie('data',data.data,1);
-                    console.log(document.cookie);
-                    alert(document.cookie.token);
-                    localStorage.setItem('token', data.token);
-                    // window.location.href = "/authenticate";
+                    // console.log(data.data);
+                    // writeCookie('token',data.token,1);
+                    // writeCookie('data',data.data,1);
+                    document.cookie = data.data
+                    var cd = document.cookie
+                    console.log('cd', cd)
+                    localStorage.setItem('data', JSON.stringify(data));
+                    sessionStorage.setItem('token', data.token);
+                    window.location.href = "/";
                 } else {
                     $('#error-text').html(data.message);
                     $('#error-class').show();
-                    // console.log(data.message);
+                    console.log(data.message);
+                    // window.location.href = "/login";
+
                 }
-            }
-            // error: function (data) {
-            //     console.log(data);
-            // }
+            },
         });
 
-        // event.preventDefault();
+        event.preventDefault();
     });
 
     function writeCookie(name,value,days) {
@@ -465,7 +464,7 @@ $(document).ready(function () {
             // alert(lang);
 
             var res = "";
-            // console.log(data);
+            console.log(data);
             for (var i = 0; i < data.data.length; i++) {
                 res += '<div class="col-12 col-sm-12 col-md-6 col-lg-4">';
                 res += '<div class="courts-block">';
@@ -476,7 +475,7 @@ $(document).ready(function () {
                 } else {
                     featured_image = data.data[i].featured_image;
                 }
-                res += '<img src="http://127.0.0.1:8000/Images/' + featured_image + '" alt="' + featured_image + '" class="img-fluid">';
+                res += '<img src="' + featured_image + '" alt="' + featured_image + '" class="img-fluid">';
                 var rating = data.data[i].rating;
                 res += '<span class="rating"><i class="bi bi-star-fill"></i> '+data.data[i].rating+'</span>';
                 res += '<span class="price"><i class="bi bi-ticket-fill"></i> ' + data.data[i].price + ' KWD/hr</span>';
@@ -486,7 +485,7 @@ $(document).ready(function () {
                 res += '<div class="line-b">';
                 res += '<div class="row g-1">';
                 for (var j = 0; j < data.data[i].amenities.length; j++) {
-                res += '<div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="http://127.0.0.1:8000/Images/' + data.data[i].amenities[j].image + '" alt="' + data.data[i].amenities[j].name + '" class="img-fluid"></div></div>';
+                res += '<div class="col-2"><div class="courts-icons" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="' + data.data[i].amenities[j].name + '" data-bs-custom-class="custom-tooltip"><img title="' + data.data[i].amenities[j].name + '" src="' + data.data[i].amenities[j].image + '" alt="' + data.data[i].amenities[j].name + '" class="img-fluid"></div></div>';
                 }
                 res += '</div>';
                 res += '</div>';
@@ -564,7 +563,7 @@ $(document).ready(function () {
                 for(var j=0;j<data.data.amenities.length;j++){
                 res += '<div class="col-6 col-sm-6 col-md-4 col-lg-2">';
                 res += '<div class="facilities-block-modal">';
-                res += '<div class="line-a"><img src="http://127.0.0.1:8000/Images/'+data.data.amenities[j].image+'" alt="" class="img-fluid"></div>';
+                res += '<div class="line-a"><img src="'+data.data.amenities[j].image+'" alt="" class="img-fluid"></div>';
                 res += '<div class="line-b">'+data.data.amenities[j].name+'</div>';
                 res += '</div>';
                 res += '</div>';
@@ -611,6 +610,16 @@ $(document).ready(function () {
                 res += '<div class="container-fluid">';
                 res += '<div class="row justify-content-between g-4 align-items-center">';
                 res += '<div class="col-auto"><h3 class="mb-0">'+data.data.price+' KWD / Hour</h3></div>';
+                
+                jQuery(window).load(function() {
+                    sessionStorage.setItem('status','loggedIn') 
+                });
+                if (sessionStorage.getItem('status') != null) {
+                        console.log('first')
+                } else {
+                    console.log('secomd')
+                }
+
                 res += '<div class="col-auto"><a class="modal-button" href="/courts-book/'+dataId+'" role="button">BOOK NOW</a></div>';
                 res += '</div>';
                 res += '</div>';
@@ -625,4 +634,65 @@ $(document).ready(function () {
         });
     });
 
+    $.ajax({
+        type: 'get',
+        url: '../api/get/players',
+        // data: formData.serialize(),
+        // headers: {
+        //     'Accept-Language' : language,
+        // },
+        success: function (data) {
+            // alert(lang);
+
+            var res = "";
+            // console.log(data);
+            for (var i = 0; i < data.data.length; i++) {
+                res += '<div class="add-player-row">';
+                res += '<div class="row g-4 align-items-center">';
+                res += '<div class="col-auto">';
+                res += '<div class="add-player-img">';
+                // res += '<img src="{{ asset('/images/player_images') }}/{{$getPlayer->profile_pic}}" alt="player_img" class="img-fluid">';
+                res += '</div>'
+                res += '</div>'
+                res += '<div class="col">'
+                res += '<h6>{{$getPlayer->name}}</h6>'
+                res += '</div>'
+                res += '<div class="col-auto">'
+                res += '<a class="btn btn-dark" href="#" role="button">'
+                res += 'Add'
+                res += '</a>'
+                res += '</div>'
+                res += '</div>'
+                res += '</div>'
+            }
+            $(".list-players").append(res);
+        },
+        error: function (error) {
+            // alert("Error");
+            // console.log(error);
+        }
+    });
+
+});
+
+
+
+
+$.ajax({
+    success: function (data) {
+
+    var data = JSON.parse(localStorage.getItem('data'))
+    console.log(data.data)
+
+    $.ajax({
+        url: "/header",
+        type: "GET",
+        data: {
+            user: data.data,
+            token: data.token
+        },
+       
+    });
+
+    }
 });

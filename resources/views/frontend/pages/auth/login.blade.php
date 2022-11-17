@@ -6,7 +6,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-5">
                     <div class="login-register-in">
-                        <form method="POST">
+                        <form action="">
                             @csrf
                             <h1 class="mb-5">Sign in</h1>
                             <div class="text-danger" id="error-class"><p id="error-text"></p></div>
@@ -56,4 +56,17 @@
 
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            // toastr.options.timeOut = 10000;
+            @if (Session::has('error'))
+            // Swal.fire('{{ Session::get('error') }}')
+
+                toastr.error('{{ Session::get('error') }}');
+            @elseif(Session::has('success'))
+                toastr.success('{{ Session::get('success') }}');
+            @endif
+        });
+
+    </script>
 @endsection

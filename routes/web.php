@@ -5,6 +5,8 @@ use App\Http\Controllers\backend\HomeController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Middleware\Language;
 
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,11 +48,11 @@ Route::get('/privacy-policy', 'App\Http\Controllers\Frontend\HomeController@priv
 Route::get('/refund-policy', 'App\Http\Controllers\Frontend\HomeController@refund_policy')->name('refund_policy');
 
 // // Login route
-Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name('login');
-Route::get('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
+Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name('login-user');
+Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
 
 // // Register Route
-Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register');
+Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register-user');
 Route::get('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController@verify')->name('verify');
 
 // // Club Route
@@ -66,6 +68,8 @@ Route::prefix('/admin')->group(function () {
 Route::post('/users/email', 'App\Http\Controllers\Backend\UserController@sendMail')->name('user.password.email');
 Route::post('/users/reset/', 'App\Http\Controllers\Backend\UserController@reset')->name('user.password.update');
 });
+Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
+Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
 
 Route::prefix('/admin')->group(function () {
   Auth::routes();
