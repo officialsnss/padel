@@ -6,7 +6,7 @@
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-5">
                     <div class="login-register-in">
-                        <form action="">
+                        <form action="{{route('authenticate')}}" method="POST">
                             @csrf
                             <h1 class="mb-5">Sign in</h1>
                             <div class="text-danger" id="error-class"><p id="error-text"></p></div>
@@ -31,7 +31,7 @@
                             <p class="mb-3" style="text-align: right;"><small><a href="/forgot-password">Forgot your
                                         Password</a></small></p>
 
-                            <div class="d-grid mb-5"><button class="btn-gradient" type="submit" id="login">LOGIN</button></div>
+                            <div class="d-grid mb-5"><button class="btn-gradient" type="submit" id="loginss">LOGIN</button></div>
                         </form>
                         <p>
                             <center>EASILY USING</center>
