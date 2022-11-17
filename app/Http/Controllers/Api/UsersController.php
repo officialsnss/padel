@@ -269,13 +269,8 @@ class UsersController extends Controller
         }
 
         // Getting users data from the phone and device_id
-<<<<<<< HEAD
-        $user  = User::where('device_id',$request->device_id)->where('phone', $request->phone)->first();
-
-=======
         $user  = User::where('phone', $request->phone)->first();
         
->>>>>>> 98db7092d52d24fe3c85ac775b3dde0f68cf124f
         // If users exists
         if($user) {
             if(!$user['otp']) {

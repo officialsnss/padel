@@ -176,9 +176,6 @@ $(document).ready(function () {
         var formData = {
             email: $("#login-email").val(),
             password: $("#login-password").val(),
-
-            // email: "enridise@gmail.com",
-            // password: "12345678",
         };
 
         $.ajax({

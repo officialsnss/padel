@@ -31,7 +31,7 @@
                             <p class="mb-3" style="text-align: right;"><small><a href="/forgot-password">Forgot your
                                         Password</a></small></p>
 
-                            <div class="d-grid mb-5"><button class="btn-gradient" type="submit" id="login">LOGIN</button></div>
+                            <div class="d-grid mb-5"><button class="btn-gradient" type="button" id="login">LOGIN</button></div>
                         </form>
                         <p>
                             <center>EASILY USING</center>
