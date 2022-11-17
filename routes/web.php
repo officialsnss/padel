@@ -67,6 +67,7 @@ Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authe
     Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
     Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
     Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
+    Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
 
 // Website Routes Ends Here
 
