@@ -38,7 +38,6 @@ Route::get('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact'
 Route::post('/contact_us', 'App\Http\Controllers\Frontend\HomeController@contact_us')->name('contact.store');
 
 // Header.Games
-Route::get('/games', 'App\Http\Controllers\Frontend\HomeController@games');
 
 // Header.coaches
 Route::get('/coaches', 'App\Http\Controllers\Frontend\HomeController@coaches');
@@ -62,22 +61,26 @@ Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name
 Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
 Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register');
 Route::post('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController@verify')->name('verify');
-    Route::post('/signup', 'App\Http\Controllers\Frontend\AuthController@signup')->name('signup');
-    Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
-    Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
-    Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
-    Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
-    Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
-    Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
-    Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
-    Route::get('/change-password', 'App\Http\Controllers\Frontend\AuthController@changePassword')->name('changePassword');
-    Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
-    Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courts_book');
-    Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
-    Route::get('/courts-book-next', 'App\Http\Controllers\Frontend\ClubController@courts_book_next')->name('courts_book_next');
-    Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');
-    Route::get('/forgot-password', 'App\Http\Controllers\Frontend\AuthController@forgotPassword')->name('forgotPassword');
-    
+Route::post('/signup', 'App\Http\Controllers\Frontend\AuthController@signup')->name('signup');
+Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
+
+ Route::group(['middleware' => ['userAuth:3']], function () {
+        Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
+        Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
+        Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
+        Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
+        Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
+        Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
+        Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
+        Route::get('/change-password', 'App\Http\Controllers\Frontend\AuthController@changePassword')->name('changePassword');
+        Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courts_book');
+        Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
+        Route::get('/courts-book-next', 'App\Http\Controllers\Frontend\ClubController@courts_book_next')->name('courts_book_next');
+        Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');
+        Route::get('/forgot-password', 'App\Http\Controllers\Frontend\AuthController@forgotPassword')->name('forgotPassword');
+        Route::get('/games', 'App\Http\Controllers\Frontend\HomeController@games');
+
+    }); 
 // Website Routes Ends Here
 
 // Admin Routes Starts Here

@@ -20,6 +20,8 @@
 <link href="{{ asset('frontend/css/custom.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('frontend/css/jquery.datetimepicker.css') }}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="{{ asset('css/jquery.rateyo.min.css') }}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+
     <link rel="stylesheet" href="{{ asset('css/jquery.rateyo.css') }}"/>
     {{-- <link rel="stylesheet" href="{{ asset('starrr.css') }}"/> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -195,5 +197,6 @@ var swiper4 = new Swiper(".coach-swiper", {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.0/js/toastr.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 </body>
 </html>
