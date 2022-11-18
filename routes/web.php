@@ -63,6 +63,9 @@ Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')
 Route::post('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController@verify')->name('verify');
 Route::post('/signup', 'App\Http\Controllers\Frontend\AuthController@signup')->name('signup');
 Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->name('courts');
+Route::get('/forgot-password', 'App\Http\Controllers\Frontend\AuthController@forgotPassword')->name('forgotPassword');
+Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
+Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
 
  Route::group(['middleware' => ['userAuth:3']], function () {
         Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
@@ -71,13 +74,10 @@ Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->nam
         Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
         Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
         Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
-        Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
         Route::get('/change-password', 'App\Http\Controllers\Frontend\AuthController@changePassword')->name('changePassword');
         Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courts_book');
-        Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
         Route::get('/courts-book-next', 'App\Http\Controllers\Frontend\ClubController@courts_book_next')->name('courts_book_next');
         Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');
-        Route::get('/forgot-password', 'App\Http\Controllers\Frontend\AuthController@forgotPassword')->name('forgotPassword');
         Route::get('/games', 'App\Http\Controllers\Frontend\HomeController@games');
 
     }); 
