@@ -12,6 +12,7 @@ use App\Models\Players;
 use App\Repositories\PlayersRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\Register as NewRegister;
+use App\Rules\MatchOldPassword;
 
 class AuthController extends Controller
 {
@@ -132,6 +133,30 @@ class AuthController extends Controller
     {
         return view('frontend.pages.auth.changePassword');
         
+    }
+
+    public function updatePassword(Request $request)
+    {
+         // Validation for the credentials
+         $rules = [
+            'old_password' => ['required', new MatchOldPassword],
+            'new_password' => ['required'],
+            'confirm_password' => ['same:new_password'],
+        ];
+        $input = $request->only('old_password', 'new_password', 'confirm_password');
+
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) {
+            $error = head($validator->messages()->messages());
+            return back()->withErrors($error[0]);
+        }
+
+        // Saving new password to the db
+        User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
+        return redirect()->back()->withErrors('Password changed successfully');
+
+
     }
 
     public function forgotPassword()

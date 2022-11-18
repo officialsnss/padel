@@ -73,8 +73,9 @@ Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_list
         Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
         Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
         Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
-        Route::get('/wallet', 'App\Http\Controllers\Frontend\HomeController@wallet')->name('wallet');
+        Route::get('/wallet', 'App\Http\Controllers\Frontend\BookingController@wallet')->name('wallet');
         Route::get('/change-password', 'App\Http\Controllers\Frontend\AuthController@changePassword')->name('changePassword');
+        Route::post('/update-password', 'App\Http\Controllers\Frontend\AuthController@updatePassword')->name('updatePassword');
         Route::get('/courts-book/{id}', 'App\Http\Controllers\Frontend\ClubController@courts_book')->name('courts_book');
         Route::get('/courts-book-next', 'App\Http\Controllers\Frontend\ClubController@courts_book_next')->name('courts_book_next');
         Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');

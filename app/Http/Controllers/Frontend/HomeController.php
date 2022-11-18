@@ -14,7 +14,9 @@ use App\Models\Currencies;
 use App\Models\Setting;
 use App\Models\ContactUs;
 use App\Models\CmsPages;
-use Auth; 
+use App\Models\Wallets;
+use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class HomeController extends Controller
 {
@@ -121,8 +123,5 @@ class HomeController extends Controller
         return view('frontend.pages.coaches');
     }
 
-    public function wallet()
-    {
-        return view('frontend.pages.wallet');
-    }
+   
 }
