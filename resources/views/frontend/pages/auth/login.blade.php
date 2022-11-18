@@ -5,6 +5,9 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-5">
+                @if(Session::has('message'))
+                            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                            @endif
                     <div class="login-register-in">
                         <form action="{{route('authenticate')}}" method="POST">
                             @csrf
@@ -56,7 +59,4 @@
 
         </div>
     </div>
-    <script>
-
-    </script>
 @endsection
