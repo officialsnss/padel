@@ -72,7 +72,7 @@ Route::get('/notifications', 'App\Http\Controllers\Frontend\UserController@notif
  Route::group(['middleware' => ['userAuth:3']], function () {
         Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
         Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
-        Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('header');
+        Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('booking');
         Route::get('/profile', 'App\Http\Controllers\Frontend\UserController@myProfile')->name('profile');
         Route::get('/editProfile', 'App\Http\Controllers\Frontend\UserController@EditProfile')->name('editProfile');
         Route::get('/wallet', 'App\Http\Controllers\Frontend\BookingController@wallet')->name('wallet');
@@ -82,6 +82,7 @@ Route::get('/notifications', 'App\Http\Controllers\Frontend\UserController@notif
         Route::get('/courts-book-next', 'App\Http\Controllers\Frontend\ClubController@courts_book_next')->name('courts_book_next');
         Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');
         Route::get('/games', 'App\Http\Controllers\Frontend\HomeController@games');
+        Route::get('/playerAddInMatch', 'App\Http\Controllers\Frontend\BookingController@playerAddInMatch')->name('playerAddInMatch');
 
     }); 
 // Website Routes Ends Here

@@ -20,17 +20,7 @@ class BookingController extends Controller
     public function booking(Request $request)
     {
         $bookingData = $this->bookingService->getBookingsList($request);
-        $playerData =  $this->playersService->getPlayersList($request);
-        foreach ($bookingData as $data) {
-            foreach ($data['players'] as $row) {
-                foreach($playerData as $key => $player) {
-                    if($row['id'] == $player['id']) {
-                        unset($playerData[$key]);
-                    }
-                 }
-            }
-        }
-        return view('frontend.pages.booking', ['bookingData' => $bookingData, 'playerData' => $playerData]);
+        return view('frontend.pages.booking', ['bookingData' => $bookingData]);
     }
     
     public function wallet()
@@ -39,4 +29,20 @@ class BookingController extends Controller
         
         return view('frontend.pages.wallet',['data' => $data]);
     }
+
+    public function playerAddInMatch(Request $request)
+    {
+        $playerList =  $this->playersService->getPlayersList($request);
+        $playerInMatch =  $this->playersService->playersListInMatch($request);
+
+        foreach ($playerList as $key => $player) {
+            foreach($playerInMatch as $data) {
+                if($data['id'] == $player['id']) {
+                    array_splice($playerList, $key, 1);
+                }
+            }
+        }
+        return $playerList;
+    }
+
 }

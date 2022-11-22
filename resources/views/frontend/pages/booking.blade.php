@@ -9,6 +9,7 @@
 				@foreach($bookingData as $row)
 					<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
 						<div class="court-book-row mb-4">
+							<input type="hidden" id="matchId-<?php echo $row['id']?>" value="{{$row['id']}}">
 							<h3>{{$row['name']}}</h3>
 							<p>{{$row['address']}}</p>
 							<div class="date-game d-flex w-100 justify-content-between">
@@ -28,7 +29,7 @@
 								<li class="col-auto"><a href="javascript:void(0)"><div><img src="{{$player['image']}}" alt="" class="img-fluid"></div><span>{{$player['level']}}</span></a></li>
 								@endforeach
 								@for($i=0; $i< 4-$key; $i++)
-								<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player" onClick="playersList()"><div><img src="Images/icons/plus.png" alt=""></div></a></li>
+								<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player" onClick="playersList('<?php echo $row['id'];?>')"><div><img src="Images/icons/plus.png" alt=""></div></a></li>
 								@endfor
 							</ul>
 							<div class="request-players d-flex w-100 justify-content-between">
@@ -42,10 +43,7 @@
 		</div>
 	</div>
 	
-	
-	
-	
-	
+<!-- This modal is going to replace with the javascript used below. We are going to replace the static data in the modal with dynamic data -->
 <!--Add Player-->
 	<div class="modal fade" id="add-player" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -58,15 +56,13 @@
 					
 				</div>
 				<div class="modal-body">
-					@foreach($playerData as $player)
 						<div class="add-player-row">
 							<div class="row g-4 align-items-center">
-								<div class="col-auto"><div class="add-player-img"><img src="{{$player['image']}}" alt="" class="img-fluid"></div></div>
-								<div class="col"><h6>{{$player['name']}}</h6></div>
+								<div class="col-auto"><div class="add-player-img"><img src="" alt="" class="img-fluid"></div></div>
+								<div class="col"><h6></h6></div>
 								<div class="col-auto"><a class="btn btn-dark" href="#" role="button">Add</a></div>
 							</div>
 						</div>
-					@endforeach
 				</div>
 			</div>
 		</div>
@@ -153,7 +149,32 @@
     @endsection
 
 	<script>
-		function playersList() {
-			alert('hello')
+		// Used to append the players list data in the modal
+		function playersList(key) {
+			let id = $('#matchId-' + key).val();
+			console.log(id)
+			$.ajax({
+            url: "{{route('playerAddInMatch')}}",
+            type: "GET",
+            data: {
+                match_id: id,
+            },
+            success: function(response) {
+				var res = '';
+					for (var i = 0; i < response.length; i++) {
+						res += '<div class="add-player-row">';
+						res += '<div class="row g-4 align-items-center">';
+						res += '<div class="col-auto"><div class="add-player-img"><img src="'+response[i].image+'" alt="" class="img-fluid"></div></div>';
+						res += '<div class="col"><h6>'+ response[i].name+'</h6></div>';
+						res += '<div class="col-auto"><a class="btn btn-dark" href="#" role="button">Add</a></div>';
+						res += '</div>';
+						res += '</div>';
+						res += '</div>';
+						res += '</div>';
+						res += '</div>';
+					}
+				$(".modal-body").html(res);
+            },
+        });
 		}
 	</script>
