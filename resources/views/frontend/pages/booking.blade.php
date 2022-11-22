@@ -6,129 +6,39 @@
 	<div class="mid-area-wrap">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
-					<div class="court-book-row mb-4">
-						<h3>Salem Padel Club</h3>
-						<p>Salmiya</p>
-						<div class="date-game d-flex w-100 justify-content-between">
-							<p>Mon 13 Jun, 20:00 - 21:00</p>
-							<p>Friendly Game</p>
-						</div>	
-						<ul class="games-ul d-flex">
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/b.jpg" alt="" class="img-fluid"></div><span>1</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/e.jpg" alt="" class="img-fluid"></div><span>5</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/d.jpg" alt="" class="img-fluid"></div><span>3</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player"><div><img src="images/plus.png" alt=""></div></a></li>
-						</ul>
-						<div class="request-players d-flex w-100 justify-content-between">
-							<p>Request From : <strong>3 Players</strong></p>
-							<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
+				@foreach($bookingData as $row)
+					<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
+						<div class="court-book-row mb-4">
+							<h3>{{$row['name']}}</h3>
+							<p>{{$row['address']}}</p>
+							<div class="date-game d-flex w-100 justify-content-between">
+								<?php 
+									$date = date('d M', $row['startTime']); 
+									$day = date('D', $row['startTime']);
+									$startTime = date('H:i', $row['startTime']);
+									$endTime = date('H:i', $row['endTime']);
+								?>
+								<p>{{$day}} {{$date}}, {{$startTime}} - {{$endTime}}</p>
+								<p>{{$row['isFriendly']}}</p>
+							</div>
+							<ul class="games-ul d-flex">
+								<?php $key = 0; ?>
+								@foreach($row['players'] as $player)
+								<?php ++$key;?>
+								<li class="col-auto"><a href="javascript:void(0)"><div><img src="{{$player['image']}}" alt="" class="img-fluid"></div><span>{{$player['level']}}</span></a></li>
+								@endforeach
+								@for($i=0; $i< 4-$key; $i++)
+								<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player" onClick="playersList()"><div><img src="Images/icons/plus.png" alt=""></div></a></li>
+								@endfor
+							</ul>
+							<div class="request-players d-flex w-100 justify-content-between">
+								<p>Request From : <strong>{{$row['requestedPlayersCount']}} Players</strong></p>
+								<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
-					<div class="court-book-row mb-4">
-						<h3>Salem Padel Club</h3>
-						<p>Salmiya</p>
-						<div class="date-game d-flex w-100 justify-content-between">
-							<p>Mon 13 Jun, 20:00 - 21:00</p>
-							<p>Friendly Game</p>
-						</div>	
-						<ul class="games-ul d-flex">
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/b.jpg" alt="" class="img-fluid"></div><span>1</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/e.jpg" alt="" class="img-fluid"></div><span>5</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/d.jpg" alt="" class="img-fluid"></div><span>3</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player"><div><img src="images/plus.png" alt=""></div></a></li>
-						</ul>
-						<div class="request-players d-flex w-100 justify-content-between">
-							<p>Request From : <strong>3 Players</strong></p>
-							<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
-					<div class="court-book-row mb-4">
-						<h3>Salem Padel Club</h3>
-						<p>Salmiya</p>
-						<div class="date-game d-flex w-100 justify-content-between">
-							<p>Mon 13 Jun, 20:00 - 21:00</p>
-							<p>Friendly Game</p>
-						</div>	
-						<ul class="games-ul d-flex">
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/b.jpg" alt="" class="img-fluid"></div><span>1</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/e.jpg" alt="" class="img-fluid"></div><span>5</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/d.jpg" alt="" class="img-fluid"></div><span>3</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player"><div><img src="images/plus.png" alt=""></div></a></li>
-						</ul>
-						<div class="request-players d-flex w-100 justify-content-between">
-							<p>Request From : <strong>3 Players</strong></p>
-							<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
-					<div class="court-book-row mb-4">
-						<h3>Salem Padel Club</h3>
-						<p>Salmiya</p>
-						<div class="date-game d-flex w-100 justify-content-between">
-							<p>Mon 13 Jun, 20:00 - 21:00</p>
-							<p>Friendly Game</p>
-						</div>	
-						<ul class="games-ul d-flex">
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/b.jpg" alt="" class="img-fluid"></div><span>1</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/e.jpg" alt="" class="img-fluid"></div><span>5</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/d.jpg" alt="" class="img-fluid"></div><span>3</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player"><div><img src="images/plus.png" alt=""></div></a></li>
-						</ul>
-						<div class="request-players d-flex w-100 justify-content-between">
-							<p>Request From : <strong>3 Players</strong></p>
-							<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
-					<div class="court-book-row mb-4">
-						<h3>Salem Padel Club</h3>
-						<p>Salmiya</p>
-						<div class="date-game d-flex w-100 justify-content-between">
-							<p>Mon 13 Jun, 20:00 - 21:00</p>
-							<p>Friendly Game</p>
-						</div>	
-						<ul class="games-ul d-flex">
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/b.jpg" alt="" class="img-fluid"></div><span>1</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/e.jpg" alt="" class="img-fluid"></div><span>5</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/d.jpg" alt="" class="img-fluid"></div><span>3</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player"><div><img src="images/plus.png" alt=""></div></a></li>
-						</ul>
-						<div class="request-players d-flex w-100 justify-content-between">
-							<p>Request From : <strong>3 Players</strong></p>
-							<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-4 booking-col">
-					<div class="court-book-row mb-4">
-						<h3>Salem Padel Club</h3>
-						<p>Salmiya</p>
-						<div class="date-game d-flex w-100 justify-content-between">
-							<p>Mon 13 Jun, 20:00 - 21:00</p>
-							<p>Friendly Game</p>
-						</div>	
-						<ul class="games-ul d-flex">
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/b.jpg" alt="" class="img-fluid"></div><span>1</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/e.jpg" alt="" class="img-fluid"></div><span>5</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)"><div><img src="images/player-coach/d.jpg" alt="" class="img-fluid"></div><span>3</span></a></li>
-							<li class="col-auto"><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player"><div><img src="images/plus.png" alt=""></div></a></li>
-						</ul>
-						<div class="request-players d-flex w-100 justify-content-between">
-							<p>Request From : <strong>3 Players</strong></p>
-							<p><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#add-player2">View All</a></p>
-						</div>
-					</div>
-				</div>
-				
+				@endforeach
 			</div>
-		
 		</div>
 	</div>
 	
@@ -148,28 +58,15 @@
 					
 				</div>
 				<div class="modal-body">
-					
-					<div class="add-player-row">
-						<div class="row g-4 align-items-center">
-							<div class="col-auto"><div class="add-player-img"><img src="images/add-player-a.jpg" alt="" class="img-fluid"></div></div>
-							<div class="col"><h6>Player Name</h6></div>
-							<div class="col-auto"><a class="btn btn-dark" href="#" role="button">Add</a></div>
+					@foreach($playerData as $player)
+						<div class="add-player-row">
+							<div class="row g-4 align-items-center">
+								<div class="col-auto"><div class="add-player-img"><img src="{{$player['image']}}" alt="" class="img-fluid"></div></div>
+								<div class="col"><h6>{{$player['name']}}</h6></div>
+								<div class="col-auto"><a class="btn btn-dark" href="#" role="button">Add</a></div>
+							</div>
 						</div>
-					</div>
-					<div class="add-player-row">
-						<div class="row g-4 align-items-center">
-							<div class="col-auto"><div class="add-player-img"><img src="images/add-player-a.jpg" alt="" class="img-fluid"></div></div>
-							<div class="col"><h6>Player Name</h6></div>
-							<div class="col-auto"><a class="btn btn-dark" href="#" role="button">Add</a></div>
-						</div>
-					</div>
-					<div class="add-player-row">
-						<div class="row g-4 align-items-center">
-							<div class="col-auto"><div class="add-player-img"><img src="images/add-player-a.jpg" alt="" class="img-fluid"></div></div>
-							<div class="col"><h6>Player Name</h6></div>
-							<div class="col-auto"><a class="btn btn-dark" href="#" role="button">Add</a></div>
-						</div>
-					</div>
+					@endforeach
 				</div>
 			</div>
 		</div>
@@ -254,3 +151,9 @@
 	</div>
 	<!--Add Player-->	
     @endsection
+
+	<script>
+		function playersList() {
+			alert('hello')
+		}
+	</script>
