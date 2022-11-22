@@ -14,9 +14,10 @@ use App\Models\Currencies;
 use App\Models\Setting;
 use App\Models\ContactUs;
 use App\Models\CmsPages;
+use App\Models\User;
 use App\Models\Wallets;
 use Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Contracts\Session\Session;
 
 class HomeController extends Controller
 {
@@ -109,6 +110,7 @@ class HomeController extends Controller
     public function header(Request $request)
     {
         $data = $request->all();
+
         return view('frontend.layouts.partials.header', ['token' => 1,'data' => $data]);
     }
 

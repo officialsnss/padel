@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -13,6 +12,13 @@ use App\Repositories\PlayersRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Notifications\Register as NewRegister;
 use App\Rules\MatchOldPassword;
+use App\Notifications\PasswordReset as ResetPasswordRequest;
+use App\Models\Api\PasswordReset;
+use App\Notifications\PasswordResetSuccess;
+use Redirect;
+use Str;
+use Carbon\Carbon;
+use App\Utils\ResponseUtil;
 
 class AuthController extends Controller
 {
@@ -155,13 +161,45 @@ class AuthController extends Controller
         // Saving new password to the db
         User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
         return redirect()->back()->withErrors('Password changed successfully');
-
-
     }
 
     public function forgotPassword()
     {
         return view('frontend.pages.auth.forgotPassword');
         
+    }
+
+    public function sendMail(Request $request)
+    {   
+        // Validations for the credientails
+        $rules = [
+            'email'    => 'required|email',
+        ];
+        $input = $request->only('email');
+        $validator = Validator::make($input, $rules);
+        if ($validator->fails()) {
+            $error = head($validator->messages()->messages());
+            return back()->withErrors($error[0]);
+        }
+
+        // Getting data from the users table
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return redirect()->back()->withErrors("The entered email id is not registerd with us");
+        }
+
+        // Updating or creating token value in password_reset table
+        $passwordReset = PasswordReset::updateOrCreate([
+            'email' => $user->email,
+        ], [
+            'token' => Str::random(60),
+        ]);
+
+        // Calling Noitication to send mail to the user
+        if ($passwordReset) {
+            $user->notify(new ResetPasswordRequest($passwordReset->token, $passwordReset->email));
+        }
+        return redirect()->back()->withErrors("We have sent a link to your email. Please check and follow the instructions!");
     }
 }

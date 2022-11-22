@@ -58,6 +58,7 @@ Route::get('/refund-policy', 'App\Http\Controllers\Frontend\HomeController@refun
 
 // Login 
 Route::get('/login', 'App\Http\Controllers\Frontend\AuthController@login')->name('login-user');
+Route::post('/sendMail', 'App\Http\Controllers\Frontend\AuthController@sendMail')->name('sendMail');
 Route::post('/authenticate', 'App\Http\Controllers\Frontend\AuthController@authenticate')->name('authenticate');
 Route::get('/register', 'App\Http\Controllers\Frontend\AuthController@register')->name('register');
 Route::post('/verify/{ip}/{phone}', 'App\Http\Controllers\Frontend\AuthController@verify')->name('verify');
@@ -66,6 +67,7 @@ Route::get('/courts', 'App\Http\Controllers\Frontend\ClubController@index')->nam
 Route::get('/forgot-password', 'App\Http\Controllers\Frontend\AuthController@forgotPassword')->name('forgotPassword');
 Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
 Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
+Route::get('/notifications', 'App\Http\Controllers\Frontend\UserController@notificationSettings')->name('notificationSettings');
 
  Route::group(['middleware' => ['userAuth:3']], function () {
         Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
