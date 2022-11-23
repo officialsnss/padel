@@ -68,8 +68,9 @@ Route::get('/forgot-password', 'App\Http\Controllers\Frontend\AuthController@for
 Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_pages');
 Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
 Route::get('/notifications', 'App\Http\Controllers\Frontend\UserController@notificationSettings')->name('notificationSettings');
+Route::get('/players/add-remove', 'App\Http\Controllers\Frontend\PlayersController@addOrRemovePlayer')->name('addOrRemovePlayer');
 
- Route::group(['middleware' => ['userAuth:3']], function () {
+Route::group(['middleware' => ['userAuth:3']], function () {
         Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
         Route::get('/header', 'App\Http\Controllers\Frontend\HomeController@header')->name('header');
         Route::get('/booking', 'App\Http\Controllers\Frontend\BookingController@booking')->name('booking');

@@ -42,7 +42,7 @@ class BookingController extends Controller
                 }
             }
         }
-        return $playerList;
+        return ['players' => $playerList, 'match_id' => $request->match_id];
     }
 
 }
