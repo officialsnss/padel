@@ -69,6 +69,7 @@ Route::get('/pages/{slug}', 'App\Http\Controllers\Frontend\HomeController@extra_
 Route::get('/players', 'App\Http\Controllers\Frontend\UserController@player_lists')->name('frontend.player_lists');
 Route::get('/notifications', 'App\Http\Controllers\Frontend\UserController@notificationSettings')->name('notificationSettings');
 Route::get('/players/add-remove', 'App\Http\Controllers\Frontend\PlayersController@addOrRemovePlayer')->name('addOrRemovePlayer');
+Route::get('/players/viewAll', 'App\Http\Controllers\Frontend\BookingController@viewAllPlayers')->name('viewAllPlayers');
 
 Route::group(['middleware' => ['userAuth:3']], function () {
         Route::get('/logout', 'App\Http\Controllers\Frontend\AuthController@logout')->name('logout');
@@ -84,6 +85,7 @@ Route::group(['middleware' => ['userAuth:3']], function () {
         Route::get('/courts-book-coach', 'App\Http\Controllers\Frontend\ClubController@courts_book_coach')->name('courts_book_coach');
         Route::get('/games', 'App\Http\Controllers\Frontend\HomeController@games');
         Route::get('/playerAddInMatch', 'App\Http\Controllers\Frontend\BookingController@playerAddInMatch')->name('playerAddInMatch');
+        Route::get('/playerList', 'App\Http\Controllers\Frontend\BookingController@playerList')->name('playerList');
 
     }); 
 // Website Routes Ends Here

@@ -9,7 +9,7 @@ use App\Repositories\MatchesRepository;
 
 class PlayersController extends Controller
 {
-     /**
+    /**
      * @var PlayersService
      */
     private $playersService;
@@ -18,10 +18,10 @@ class PlayersController extends Controller
      * PlayersController constructor.
      *
      */
-    public function __construct(PlayersService $playersService,
-                                MatchesRepository $matchesRepository)
-
-    {
+    public function __construct(
+        PlayersService $playersService,
+        MatchesRepository $matchesRepository
+    ) {
         $this->playersService = $playersService;
         $this->matchesRepository = $matchesRepository;
     }
@@ -31,7 +31,7 @@ class PlayersController extends Controller
 
         // Getting match data with match_id
         $matchData = $this->matchesRepository->getMatchData($request->matchId);
-        if($matchData) {
+        if ($matchData) {
             // Converting string to array of players to add
             $playerId = $request->playerId;
 
@@ -39,17 +39,17 @@ class PlayersController extends Controller
             $addedPlayers = explode(',', $matchData['playersIds']);
 
             // If players to add and already added players in the match are same then it will overwrite
-            foreach($addedPlayers as $key => $data) {
-                if($playerId == $data) {
+            if (in_array($playerId, $addedPlayers)) {
+                if (($key = array_search($playerId, $addedPlayers)) !== false) {
                     unset($addedPlayers[$key]);
-                } else {
-                    array_push($addedPlayers, $playerId);
                 }
+            } else {
+                array_push($addedPlayers, $playerId);
             }
-
-            $playersPacket = implode(',', $addedPlayers);
-            $data = $this->matchesRepository->addPlayer($request->matchId, $playersPacket);
-            return $data;
         }
+
+        $playersPacket = implode(',', $addedPlayers);
+        $data = $this->matchesRepository->addPlayer($request->matchId, $playersPacket);
+        return $data;
     }
 }

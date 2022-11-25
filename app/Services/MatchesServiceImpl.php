@@ -228,6 +228,7 @@ class MatchesServiceImpl implements MatchesService
     }
     public function getMatchDetails($request)
     {
+     
         $lang = auth()->user()->lang;
 
         // Check for no language in the header
