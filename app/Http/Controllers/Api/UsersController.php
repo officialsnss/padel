@@ -46,12 +46,10 @@ class UsersController extends Controller
         }
 
         // Getting data of the user from email
-
         $user = USER::where('email', $request->email)->first();
 
         // Check for the not registered email
         if(!$user) {
-
             return ResponseUtil::errorWithMessage('201', 'The entered email is not registered with us.', false, 201);
         }
 

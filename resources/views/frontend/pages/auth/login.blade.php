@@ -5,11 +5,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-5">
+                @if(Session::has('message'))
+                            <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                            @endif
                     <div class="login-register-in">
-                        <form method="POST">
+                        <form action="{{route('authenticate')}}" method="POST">
                             @csrf
                             <h1 class="mb-5">Sign in</h1>
-                            <div class="text-danger" id="error-class"><p id="error-text"></p></div>
+                            <div class="text-danger"><p>@if($errors->all() != []){{$errors->getMessages()[0][0]}}@endif</p></div>
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control" id="login-email" placeholder="name@example.com"
                                     name="email">
@@ -31,6 +34,7 @@
                             <p class="mb-3" style="text-align: right;"><small><a href="/forgot-password">Forgot your
                                         Password</a></small></p>
 
+                            <div class="d-grid mb-5"><button class="btn-gradient" type="submit" id="loginss">LOGIN</button></div>
                             <div class="d-grid mb-5"><button class="btn-gradient" type="button" id="login">LOGIN</button></div>
                         </form>
                         <p>

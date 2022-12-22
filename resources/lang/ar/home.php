@@ -27,6 +27,14 @@
         'tnc' => 'أحكام وشروط',
         'privacy_policy' => 'سياسة الخصوصية',
         'refund_policy' => 'سياسة الاسترجاع'
+    ],
+    'footer' => [
+        'copyright_text' => 'حقوق النشر
+2022-2023 - Tbaree. كل الحقوق محفوظة.',
+        'terms_and_condition' => 'الأحكام والشروط',
+        'refund_policy' => 'سياسة الاسترجاع',
+        'privacy_policy' => 'سياسة الخصوصية',
+        'footer_extra_text' => 'المُدار بواسطة: أحداث ماجستير التصميم'
     ]
 
 

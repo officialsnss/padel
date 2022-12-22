@@ -27,6 +27,13 @@
         'tnc' =>'Terms and Condition',
         'privacy_policy' => 'Privacy Policy',
         'refund_policy' => 'Refund Policy'
+    ],
+    'footer' => [
+        'copyright_text' => 'Copyright 2022-2023 - Tbaree. All Rights Reserved.',
+        'terms_and_condition' => 'Terms & Conditions',
+        'refund_policy' => 'Refund policy',
+        'privacy_policy' => 'Privacy Policy',
+        'footer_extra_text' => 'Managed by: Design Master Events'
     ]
 ];
 

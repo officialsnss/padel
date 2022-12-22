@@ -201,7 +201,7 @@ background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
 
 
 
-.footer-wrap			{padding-top: 1rem; padding-bottom: 1rem; color: #FFFFFF; font-size: 87.5%;}
+.footer-wrap			{padding-top: 1rem; padding-bottom: 1rem; color: #FFFFFF; font-size: 87.5%; width: 100%;}
 .footer-wrap			{background: rgb(255,0,112); background: linear-gradient(90deg, rgba(255,0,112,1) 0%, rgba(164,49,163,1) 35%, rgba(21,127,243,1) 75%, rgba(0,255,250,1) 100%);}
 .footer-wrap a 			{color: #FFFFFF; text-decoration: underline;}
 .footer-wrap a:hover,.footer-wrap a.active 	{color: #000000; text-decoration: none;}
@@ -211,7 +211,7 @@ background:linear-gradient(0deg,#ff0070,#a431a3,#157ff3,#00fffa);
 
 
 
-.mid-area-wrap			{padding-top: var(--padding); padding-bottom: var(--padding);}
+.mid-area-wrap			{padding-top: var(--padding); padding-bottom: var(--padding); min-height: 100vh}
 .login-register			{background-color: #f2f2f2;}
 
 

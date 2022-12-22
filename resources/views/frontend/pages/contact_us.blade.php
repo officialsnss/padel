@@ -22,7 +22,7 @@
                     <div class="form-box">
                         <form method="POST">
                             @csrf
-                            <h2>Feedbck</h2>
+                            <h2>Feedback</h2>
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-control-group"><input class="form-control" placeholder="First Name"

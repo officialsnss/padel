@@ -14,6 +14,11 @@ use App\Models\Currencies;
 use App\Models\Setting;
 use App\Models\ContactUs;
 use App\Models\CmsPages;
+use App\Models\User;
+use App\Models\Wallets;
+use Auth;
+use Illuminate\Contracts\Session\Session;
+
 class HomeController extends Controller
 {
     public function index()
@@ -102,4 +107,23 @@ class HomeController extends Controller
 
     }
 
+    public function header(Request $request)
+    {
+        $data = $request->all();
+
+        return view('frontend.layouts.partials.header', ['token' => 1,'data' => $data]);
+    }
+
+    public function games()
+    {
+        return view('frontend.pages.games');
+    }
+
+
+    public function coaches()
+    {
+        return view('frontend.pages.coaches');
+    }
+
+   
 }
